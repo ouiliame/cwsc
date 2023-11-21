@@ -1,5 +1,45 @@
 import * as CG from './codegen';
 
+function createModule(name: string, body: Stmt[]): Module {
+  return new Module(name, body);
+}
+
+function createUseStmt(path: string): UseStmt {
+  return new UseStmt(path);
+}
+
+function createConstStmt(name: string, ty: string, value: Render): ConstStmt {
+  return new ConstStmt(name, ty, value);
+}
+
+function createEnumDefn(name: string, variants: EnumVariant[]): EnumDefn {
+  return new EnumDefn(name, variants);
+}
+
+function createEnumVariantStruct(name: string, fields: StructField[]): EnumVariantStruct {
+  return new EnumVariantStruct(name, fields);
+}
+
+function createEnumVariantTuple(name: string, fields: string[]): EnumVariantTuple {
+  return new EnumVariantTuple(name, fields);
+}
+
+function createEnumVariantUnit(name: string): EnumVariantUnit {
+  return new EnumVariantUnit(name);
+}
+
+function createStructField(name: string, type: string): StructField {
+  return new StructField(name, type);
+}
+
+function createFunctionParam(name: string, type: string): FunctionParam {
+  return new FunctionParam(name, type);
+}
+
+function createFunctionDefn(name: string, params: FunctionParam[], returnType: string, body: Render[]): FunctionDefn {
+  return new FunctionDefn(name, params, returnType, body);
+}
+
 export interface Render {
   render(): string;
 }
