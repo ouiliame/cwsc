@@ -6,7 +6,7 @@ pub mod counter {
         use cosmwasm_std::Addr;
         use cw_storage_plus::Item;
 
-        pub const COUNT: Item<Uint32> = Item::new("state");
+        pub const COUNT: Item<u32> = Item::new("state");
         pub const OWNER: Item<Addr> = Item::new("owner");
     }
 
@@ -16,6 +16,8 @@ pub mod counter {
 
         #[derive(Error, Debug)]
         pub enum ContractError {
+            #[error("StdError")]
+            StdError(#[from] StdError),
             #[error("Unauthorized")]
             Unauthorized {},
             #[error("CountIsZeroError")]
@@ -25,10 +27,11 @@ pub mod counter {
 
     pub mod msg {
         use cosmwasm_schema::{cw_serde, QueryResponses};
+        use cosmwasm_std::*;
 
         #[cw_serde]
         pub struct InstantiateMsg {
-            pub count: Option<Uint32>,
+            pub count: Option<u32>,
             pub owner: Option<Addr>,
         }
 
@@ -36,50 +39,85 @@ pub mod counter {
         pub enum ExecuteMsg {
             Increment {},
             Decrement {},
-            Reset { count: Option<Uint32> },
+            Reset { count: Option<u32> },
         }
 
         #[cw_serde]
-        #[derive(QueryResponses)]
         pub enum QueryMsg {
             // GetCount returns the current count as a json-encoded number
-            #[returns(CountResponse)]
             Count {},
-            #[returns(OwnerResponse)]
             Owner {},
         }
 
-        // We define a custom struct for each query response
         #[cw_serde]
-        pub struct CountResponse {
-            pub count: Uint32, // u32 and Uint32
-        }
-
-        #[cw_serde]
-        pub struct OwnerResponse {
-            pub owner: Addr,
-        }
+        pub struct CWSQueryResponse<T>(pub T);
     }
 
     // TODO: to be added to stdlib or runtime
     pub mod cws {
-        pub struct InstantiateCtx(DepsMut, Env, MessageInfo);
-        pub struct ExecuteCtx(DepsMut, Env, MessageInfo);
-        pub struct QueryCtx(Deps, Env);
+        use cosmwasm_std::*;
+        pub struct InstantiateCtx<'a>(pub DepsMut<'a>, pub Env, pub MessageInfo);
+        pub struct ExecuteCtx<'a>(pub DepsMut<'a>, pub Env, pub MessageInfo);
+        pub struct QueryCtx<'a>(pub Deps<'a>, pub Env);
     }
 
     pub mod implementation {
+        use super::cws::*;
+        use super::error::*;
+        use super::msg::*;
+        use super::state::*;
+        use cosmwasm_std::*;
+
         pub fn instantiate_impl(
             ctx: InstantiateCtx,
-            count: Option<Uint32>,
+            count: Option<u32>,
             owner: Option<Addr>,
         ) -> Result<Response, ContractError> {
-            let count = count.unwrap_or(0);
-            let owner = owner.unwrap_or(ctx.env.message.sender);
-            let state = State { count, owner };
-            state::COUNT.save(ctx.storage, &state.count)?;
-            state::OWNER.save(ctx.storage, &state.owner)?;
+            let count = count.unwrap();
+            let owner = owner.unwrap_or(ctx.2.sender);
+            COUNT.save(ctx.0.storage, &count)?;
+            OWNER.save(ctx.0.storage, &owner)?;
             Ok(Response::new())
+        }
+
+        pub fn exec_reset_impl(
+            ctx: ExecuteCtx,
+            count: Option<u32>,
+        ) -> Result<Response, ContractError> {
+            let mut owner = OWNER.load(ctx.0.storage)?;
+            let mut count = COUNT.load(ctx.0.storage)?;
+            if owner != ctx.2.sender {
+                return Err(ContractError::Unauthorized {});
+            }
+            COUNT.save(ctx.0.storage, &count)?;
+            Ok(Response::new())
+        }
+
+        pub fn exec_increment_impl(ctx: ExecuteCtx) -> Result<Response, ContractError> {
+            let mut count = COUNT.load(ctx.0.storage)?;
+            count += 1;
+            COUNT.save(ctx.0.storage, &count)?;
+            Ok(Response::new())
+        }
+
+        pub fn exec_decrement_impl(ctx: ExecuteCtx) -> Result<Response, ContractError> {
+            let mut count = COUNT.load(ctx.0.storage)?;
+            if count == 0 {
+                return Err(ContractError::CountIsZeroError {});
+            }
+            count -= 1;
+            COUNT.save(ctx.0.storage, &count)?;
+            Ok(Response::new())
+        }
+
+        pub fn query_count_impl(ctx: QueryCtx) -> StdResult<CWSQueryResponse<u32>> {
+            let count = COUNT.load(ctx.0.storage)?;
+            Ok(CWSQueryResponse(count))
+        }
+
+        pub fn query_owner_impl(ctx: QueryCtx) -> StdResult<CWSQueryResponse<Addr>> {
+            let owner = OWNER.load(ctx.0.storage)?;
+            Ok(CWSQueryResponse(owner))
         }
     }
 
@@ -88,6 +126,8 @@ pub mod counter {
         use super::cws::*;
         use super::error::ContractError;
         use super::implementation::*;
+        use super::msg::*;
+        use cosmwasm_std::*;
 
         #[cfg_attr(not(feature = "library"), entry_point)]
         pub fn instantiate(
@@ -98,7 +138,7 @@ pub mod counter {
         ) -> Result<Response, ContractError> {
             // build a instantiate ctx
             let ctx = InstantiateCtx(deps, env, info);
-            instantiate_impl(ctx, msg.count, msg.owner);
+            instantiate_impl(ctx, msg.count, msg.owner)
         }
 
         #[cfg_attr(not(feature = "library"), entry_point)]
@@ -109,18 +149,20 @@ pub mod counter {
             msg: ExecuteMsg,
         ) -> Result<Response, ContractError> {
             // build a execute ctx
+            let ctx = ExecuteCtx(deps, env, info);
             match msg {
-                ExecuteMsg::Increment {} => execute::increment(deps),
-                ExecuteMsg::Decrement {} => execute::decrement(deps),
-                ExecuteMsg::Reset { count } => execute::reset(deps, info, count),
+                ExecuteMsg::Increment {} => exec_increment_impl(ctx),
+                ExecuteMsg::Decrement {} => exec_decrement_impl(ctx),
+                ExecuteMsg::Reset { count } => exec_reset_impl(ctx, count),
             }
         }
 
         #[cfg_attr(not(feature = "library"), entry_point)]
         pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
+            let ctx = QueryCtx(deps, env);
             match msg {
-                QueryMsg::Count {} => to_json_binary(&query::count(deps)?),
-                QueryMsg::Owner {} => to_json_binary(&query::owner(deps)?),
+                QueryMsg::Count {} => to_json_binary(&query_count_impl(ctx)?),
+                QueryMsg::Owner {} => to_json_binary(&query_owner_impl(ctx)?),
             }
         }
     }
