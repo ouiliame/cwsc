@@ -8,8 +8,19 @@ contract Counter {
   error Unauthorized();
 
   #instantiate(count: U32?, owner: Addr?) {
-    $state.count = count ?? 0;
-    $state.owner = owner ?? $info.sender; 
+    // $state.count = count + 1; // should error because type of count is U32 | None
+    // solution is -- "unwrap" or "??" or type guard / null check
+    if count? {
+      // here, count must be U32
+    }
+
+/*
+    if let Some(count) = count {
+
+    }
+*/
+    $state.count = count ?? 0; // count.unwrap_or(0)
+    $state.owner = owner ?? $info.sender; // owner.unwrap_or(ctx.info.sender)
   }
 
   exec #increment() {
