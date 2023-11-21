@@ -31,7 +31,7 @@ export class ConstStmt implements Render {
   ) {}
 
   public render(): string {
-    return `const ${this.name}: ${this.ty} = ${this.value.render()};`;
+    return `pub const ${this.name}: ${this.ty} = ${this.value.render()};`;
   }
 }
 
@@ -68,7 +68,9 @@ export class TupleStructDefn implements Render {
   ) {}
 
   public render(): string {
-    return `pub struct ${this.name}(${this.fields.join(', ')});`;
+    return `pub struct ${this.name}(${this.fields
+      .map((x) => 'pub ' + x)
+      .join(', ')});`;
   }
 }
 
@@ -82,7 +84,11 @@ export class EnumVariantStruct implements Render {
   constructor(
     public name: string,
     public fields: StructField[]
-  ) {}
+  ) {
+    for (let field of fields) {
+      field.pub = false;
+    }
+  }
 
   public render(): string {
     return `${this.name} {
@@ -115,11 +121,12 @@ export class EnumVariantUnit implements Render {
 export class StructField implements Render {
   constructor(
     public name: string,
-    public type: string
+    public type: string,
+    public pub: boolean = true
   ) {}
 
   public render(): string {
-    return `${this.name}: ${this.type}`;
+    return `${this.pub ? 'pub ' : ''}${this.name}: ${this.type}`;
   }
 }
 
@@ -178,8 +185,12 @@ function variantUnit(name: string): EnumVariantUnit {
   return new EnumVariantUnit(name);
 }
 
-function structField(name: string, type: string): StructField {
-  return new StructField(name, type);
+function structField(
+  name: string,
+  type: string,
+  pub: boolean = true
+): StructField {
+  return new StructField(name, type, pub);
 }
 
 function fnParam(name: string, type: string): FunctionParam {
@@ -650,16 +661,20 @@ let instantiateImplFn = fnDefn(
       fnCallExpr('ctx.info.sender.to_string', [])
     ),
     stmt(
-      fnCallExpr('COUNT.save', [
-        identExpr('ctx.deps.storage'),
-        identExpr('count'),
-      ])
+      tryExpr(
+        fnCallExpr('COUNT.save', [
+          identExpr('ctx.deps.storage'),
+          refExpr(identExpr('count')),
+        ])
+      )
     ),
     stmt(
-      fnCallExpr('OWNER.save', [
-        identExpr('ctx.deps.storage'),
-        identExpr('owner'),
-      ])
+      tryExpr(
+        fnCallExpr('OWNER.save', [
+          identExpr('ctx.deps.storage'),
+          refExpr(identExpr('owner')),
+        ])
+      )
     ),
     fnCallExpr('Ok', [fnCallExpr('Response::new', [])]),
   ]
@@ -674,13 +689,13 @@ let execResetImplFn = fnDefn(
       'owner',
       true,
       'String',
-      fnCallExpr('OWNER.load', [identExpr('ctx.deps.storage')])
+      tryExpr(fnCallExpr('OWNER.load', [identExpr('ctx.deps.storage')]))
     ),
     letStmt(
       'count',
       true,
       'u32',
-      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+      tryExpr(fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')]))
     ),
     ifExpr(
       binExpr(
@@ -717,7 +732,7 @@ let execIncrementImplFn = fnDefn(
       'count',
       true,
       'u32',
-      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+      tryExpr(fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')]))
     ),
     letStmt(
       'count',
@@ -746,7 +761,7 @@ let execDecrementImplFn = fnDefn(
       'count',
       true,
       'u32',
-      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+      tryExpr(fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')]))
     ),
     ifExpr(
       binExpr(identExpr('count'), '==', litExpr('0')),
@@ -785,7 +800,7 @@ let queryCountImplFn = fnDefn(
       'count',
       false,
       'u32',
-      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+      tryExpr(fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')]))
     ),
     fnCallExpr('Ok', [
       tupleStructExpr('CWSQueryResponse', [identExpr('count')]),
@@ -802,7 +817,7 @@ let queryOwnerImplFn = fnDefn(
       'owner',
       false,
       'String',
-      fnCallExpr('OWNER.load', [identExpr('ctx.deps.storage')])
+      tryExpr(fnCallExpr('OWNER.load', [identExpr('ctx.deps.storage')]))
     ),
     fnCallExpr('Ok', [
       tupleStructExpr('CWSQueryResponse', [identExpr('owner')]),
@@ -833,6 +848,7 @@ let instantiateFn = entryPoint(
     [
       fnParam('deps', 'DepsMut'),
       fnParam('env', 'Env'),
+      fnParam('info', 'MessageInfo'),
       fnParam('msg', 'InstantiateMsg'),
     ],
     'Result<Response, ContractError>',
@@ -862,6 +878,7 @@ let executeFn = entryPoint(
     [
       fnParam('deps', 'DepsMut'),
       fnParam('env', 'Env'),
+      fnParam('info', 'MessageInfo'),
       fnParam('msg', 'ExecuteMsg'),
     ],
     'Result<Response, ContractError>',
@@ -947,7 +964,7 @@ let contractMod = mod('contract', [
 ]);
 
 let cwsMod = mod('cws', [
-  use('super::cosmwasm_std::*'),
+  use('cosmwasm_std::*'),
   structDefn("InstantiateCtx<'a>", [
     structField('deps', "DepsMut<'a>"),
     structField('env', 'Env'),
