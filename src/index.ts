@@ -1,42 +1,18 @@
 import * as CG from './codegen';
 
-export interface Render {
-  render(): string;
-}
+import { Module, UseStmt, ConstStmt } from './codegen';
 
-export type Stmt = UseStmt | ConstStmt | EnumDefn | ModuleDefn;
-export class Module implements Render {
-  constructor(
-    public name: string,
-    public body: Stmt[]
-  ) {}
+const countItem = new ConstStmt('COUNT', 'Item<u32>', new CG.Literal('Item::new("count")'));
+const ownerItem = new ConstStmt('OWNER', 'Item<String>', new CG.Literal('Item::new("owner")'));
 
-  public render() {
-    return `pub mod ${this.name} {
-      ${this.body.map((statement) => statement.render()).join('\n')}
-    }`;
-  }
-}
+const stateModule = new Module('state', [
+  new UseStmt('cw_storage_plus::Item'),
+  countItem,
+  ownerItem,
+]);
 
-export class UseStmt implements Render {
-  constructor(public path: string) {}
-
-  public render() {
-    return `use ${this.path};`;
-  }
-}
-
-export class ConstStmt implements Render {
-  constructor(
-    public name: string,
-    public ty: string,
-    public value: Render
-  ) {}
-
-  public render() {
-    return `const ${this.name}: ${this.ty} = ${this.value.render()};`;
-  }
-}
+// Export the stateModule if needed elsewhere
+export { stateModule };
 
 export class EnumDefn implements Render {
   constructor(
