@@ -1,0 +1,43 @@
+contract Counter {
+  state {
+    count: U32,
+    owner: Addr
+  }
+
+  error CountIsZeroError();
+  error Unauthorized();
+
+  #instantiate(count: U32?, owner: Addr?) {
+    $state.count = count ?? 0;
+    $state.owner = owner ?? $info.sender; 
+  }
+
+  exec #increment() {
+    $state.count += 1;
+  }
+
+  exec #decrement() {
+    let current_count = $state.count;
+    if current_count == 0 {
+      fail! CountIsZeroError();
+    }
+  }
+
+  exec #reset(count: U32?) {
+    // make sure sender is owner
+    if $info.sender != $state.owner {
+      fail! Unauthorized();  
+    }
+
+    $state.count = count! else 0;
+  }
+
+  query #count() -> U32 {
+    return $state.count;
+  }
+
+  query #owner() -> Addr {
+    return $state.owner;
+  }
+
+}
