@@ -4,6 +4,35 @@ export interface Render {
   render(): string;
 }
 
+export class Item implements Render {
+  constructor(
+    public name: string,
+    public type: string
+  ) {}
+
+  public render() {
+    return `pub const ${this.name}: Item<${this.type}> = Item::new("${this.name.toLowerCase()}");`;
+  }
+}
+
+export class ModuleState implements Render {
+  public items: Item[];
+
+  constructor(
+    public name: string,
+    items: Item[]
+  ) {
+    this.items = items;
+  }
+
+  public render() {
+    return `pub mod ${this.name.toLowerCase()} {
+      use cw_storage_plus::Item;
+      ${this.items.map(item => item.render()).join('\n  ')}
+    }`;
+  }
+}
+
 export type Stmt = UseStmt | ConstStmt | EnumDefn | ModuleDefn;
 export class Module implements Render {
   constructor(
