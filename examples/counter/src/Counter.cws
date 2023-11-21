@@ -29,7 +29,7 @@ contract Counter {
       fail! Unauthorized();  
     }
 
-    $state.count = count! else 0;
+    $state.count = count ?? 0;
   }
 
   query #count() -> U32 {

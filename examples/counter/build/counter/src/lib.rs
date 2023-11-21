@@ -3,11 +3,10 @@ pub mod counter {
         use schemars::JsonSchema;
         use serde::{Deserialize, Serialize};
 
-        use cosmwasm_std::Addr;
         use cw_storage_plus::Item;
 
         pub const COUNT: Item<u32> = Item::new("state");
-        pub const OWNER: Item<Addr> = Item::new("owner");
+        pub const OWNER: Item<String> = Item::new("owner");
     }
 
     pub mod error {
@@ -32,7 +31,7 @@ pub mod counter {
         #[cw_serde]
         pub struct InstantiateMsg {
             pub count: Option<u32>,
-            pub owner: Option<Addr>,
+            pub owner: Option<String>,
         }
 
         #[cw_serde]
@@ -71,10 +70,10 @@ pub mod counter {
         pub fn instantiate_impl(
             ctx: InstantiateCtx,
             count: Option<u32>,
-            owner: Option<Addr>,
+            owner: Option<String>,
         ) -> Result<Response, ContractError> {
-            let count = count.unwrap();
-            let owner = owner.unwrap_or(ctx.2.sender);
+            let count = 0;
+            let owner = ctx.2.sender.to_string();
             COUNT.save(ctx.0.storage, &count)?;
             OWNER.save(ctx.0.storage, &owner)?;
             Ok(Response::new())
@@ -115,7 +114,7 @@ pub mod counter {
             Ok(CWSQueryResponse(count))
         }
 
-        pub fn query_owner_impl(ctx: QueryCtx) -> StdResult<CWSQueryResponse<Addr>> {
+        pub fn query_owner_impl(ctx: QueryCtx) -> StdResult<CWSQueryResponse<String>> {
             let owner = OWNER.load(ctx.0.storage)?;
             Ok(CWSQueryResponse(owner))
         }

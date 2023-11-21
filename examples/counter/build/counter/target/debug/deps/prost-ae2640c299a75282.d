@@ -1,0 +1,11 @@
+/Users/william/cwscript/cwsc-v1/examples/counter/build/counter/target/debug/deps/prost-ae2640c299a75282.rmeta: /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/lib.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/error.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/message.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/name.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/types.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/encoding.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/../README.md
+
+/Users/william/cwscript/cwsc-v1/examples/counter/build/counter/target/debug/deps/prost-ae2640c299a75282.d: /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/lib.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/error.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/message.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/name.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/types.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/encoding.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/../README.md
+
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/lib.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/error.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/message.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/name.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/types.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/encoding.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/prost-0.12.2/src/../README.md:

@@ -1,0 +1,11 @@
+/Users/william/cwscript/cwsc-v1/examples/counter/build/counter/target/debug/deps/const_oid-4bc90947c85a78ab.rmeta: /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/lib.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/checked.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/arcs.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/encoder.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/error.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/parser.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/../README.md
+
+/Users/william/cwscript/cwsc-v1/examples/counter/build/counter/target/debug/deps/const_oid-4bc90947c85a78ab.d: /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/lib.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/checked.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/arcs.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/encoder.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/error.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/parser.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/../README.md
+
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/lib.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/checked.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/arcs.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/encoder.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/error.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/parser.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/const-oid-0.9.5/src/../README.md:

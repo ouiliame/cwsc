@@ -1,0 +1,12 @@
+/Users/william/cwscript/cwsc-v1/examples/counter/build/counter/target/debug/deps/ecdsa-c0df7cb112e1fb03.rmeta: /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/lib.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/normalized.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/recovery.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/der.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/hazmat.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/signing.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/verifying.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/../README.md
+
+/Users/william/cwscript/cwsc-v1/examples/counter/build/counter/target/debug/deps/ecdsa-c0df7cb112e1fb03.d: /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/lib.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/normalized.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/recovery.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/der.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/hazmat.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/signing.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/verifying.rs /Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/../README.md
+
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/lib.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/normalized.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/recovery.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/der.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/hazmat.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/signing.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/verifying.rs:
+/Users/william/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ecdsa-0.16.9/src/../README.md:
