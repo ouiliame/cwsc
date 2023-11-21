@@ -1,3 +1,4 @@
+import { Expr } from '.';
 import * as Rust from './rust-syntax';
 
 export type ContractItem =
@@ -128,6 +129,160 @@ export interface QueryFnDefn {
   body: Stmt[];
 }
 
+// STATEMENTS
+
+export type Stmt =
+  | LetStmt
+  | StateItemAssignStmt
+  | StateMapAssignStmt
+  | IfStmt
+  | FailStmt
+  | ReturnStmt
+  | ExprStmt;
+
+export interface LetStmt {
+  $type: 'stmt.let';
+  name: string;
+  type: string;
+  value: Expr;
+}
+
+export interface StateItemAssignStmt {
+  $type: 'stmt.assign.state.item';
+  key: string;
+  value: Expr;
+  op: '=' | '+=' | '-=' | '*=' | '/=' | '%=';
+}
+
+export interface StateMapAssignStmt {
+  $type: 'stmt.assign.state.map';
+  key: string;
+  index: Expr;
+  value: Expr;
+  op: '=' | '+=' | '-=' | '*=' | '/=' | '%=';
+}
+
+export interface IfStmt {
+  $type: 'stmt.if';
+  predicate: Expr;
+  then_branch: Stmt[];
+  else_branch?: Stmt[];
+}
+
+export interface FailStmt {
+  $type: 'stmt.fail';
+  error: Expr;
+}
+
+export interface ReturnStmt {
+  $type: 'stmt.return';
+  value: Expr;
+}
+
+export interface ExprStmt {
+  $type: 'stmt.expr';
+  expr: Expr;
+}
+
+// END STATEMENTS
+
+// EXPRESSIONS
+
+export type Expr =
+  | IdentExpr
+  | NotNullExpr
+  | OtherwiseExpr
+  | BinOpExpr
+  | FnCallExpr
+  | MemberExpr
+  | IntLitExpr
+  | StringLitExpr
+  | BoolLitExpr
+  | StructExpr
+  | EnumStructExpr
+  | EnumTupleExpr
+  | EnumUnitExpr;
+
+export interface IdentExpr {
+  $type: 'expr.ident';
+  name: string;
+}
+
+export interface NotNullExpr {
+  $type: 'expr.q';
+  expr: Expr;
+}
+
+export interface OtherwiseExpr {
+  $type: 'expr.otherwise';
+  lhs: Expr;
+  rhs: Expr;
+}
+
+export interface BinOpExpr {
+  $type: 'expr.binop';
+  lhs: Expr;
+  op: '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '>' | '<=' | '>=';
+  rhs: Expr;
+}
+
+export interface FnCallExpr {
+  $type: 'expr.fn-call';
+  fn: Expr;
+  pos_args: Expr[];
+  named_args: { name: string; value: Expr }[];
+}
+
+export interface MemberExpr {
+  $type: 'expr.member';
+  expr: Expr;
+  member: string;
+}
+
+export interface IntLitExpr {
+  $type: 'expr.lit.int';
+  value: string;
+  ty: string;
+}
+
+export interface StringLitExpr {
+  $type: 'expr.lit.string';
+  value: string;
+}
+
+export interface BoolLitExpr {
+  $type: 'expr.lit.bool';
+  value: boolean;
+}
+
+export interface StructExpr {
+  $type: 'expr.struct';
+  ty: string;
+  fields: { name: string; value: Expr }[];
+}
+
+export interface EnumStructExpr {
+  $type: 'expr.enum.struct';
+  enumTy: string;
+  variant: string;
+  fields: { name: string; value: Expr }[];
+}
+
+export interface EnumTupleExpr {
+  $type: 'expr.enum.tuple';
+  enumTy: string;
+  variant: string;
+  fields: Expr[];
+}
+
+export interface EnumUnitExpr {
+  $type: 'expr.enum.unit';
+  ty: string;
+  variant: string;
+}
+
+// END EXPRESSIONS
+
 function contractDefn(name: string, body: ContractItem[]): ContractDefn {
   return {
     $type: 'defn.contract',
@@ -172,12 +327,14 @@ function execFn(name: string, params: FnParamDefn[], body: Stmt[]): ExecFnDefn {
 function queryFn(
   name: string,
   params: FnParamDefn[],
+  returnTy: string,
   body: Stmt[]
 ): QueryFnDefn {
   return {
     $type: 'defn.fn.query',
     name,
     params,
+    returnTy,
     body,
   };
 }
@@ -421,6 +578,10 @@ export class IRCodegenVisitor {
 
       responseWrapper,
     ]);
+  }
+
+  visitStmt(stmt: Stmt): Rust.Stmt[] {
+    return [];
   }
 
   buildCwsModule(contract: ParsedContractDefn): Rust.ModuleDefn {
