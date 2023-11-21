@@ -48,6 +48,30 @@ export class EnumDefn implements Render {
   }
 }
 
+export class StructDefn implements Render {
+  constructor(
+    public name: string,
+    public fields: StructField[]
+  ) {}
+
+  public render(): string {
+    return `pub struct ${this.name} {
+      ${this.fields.map((field) => field.render()).join(',\n')}
+    }`;
+  }
+}
+
+export class TupleStructDefn implements Render {
+  constructor(
+    public name: string,
+    public fields: string[]
+  ) {}
+
+  public render(): string {
+    return `pub struct ${this.name}(${this.fields.join(', ')});`;
+  }
+}
+
 export type EnumVariant =
   | EnumVariantStruct
   | EnumVariantTuple
@@ -121,7 +145,7 @@ export class FunctionDefn implements Render {
   public render(): string {
     return `pub fn ${this.name}(${this.params
       .map((param) => param.render())
-      .join(', ')}): ${this.returnType} {
+      .join(', ')}) -> ${this.returnType} {
       ${this.body.map((statement) => statement.render()).join('\n')}
     }`;
   }
@@ -171,7 +195,13 @@ function fnDefn(
   return new FunctionDefn(name, params, returnType, body);
 }
 
-function structDefn(name: string, fields: StructField[]): StructDefn {}
+function structDefn(name: string, fields: StructField[]): StructDefn {
+  return new StructDefn(name, fields);
+}
+
+function tupleStructDefn(name: string, fields: string[]): TupleStructDefn {
+  return new TupleStructDefn(name, fields);
+}
 
 export class Expr implements Render {
   constructor(public text: string) {}
@@ -226,36 +256,6 @@ let errorMod = mod('error', [
   ),
 ]);
 
-/*
-    pub mod msg {
-        use cosmwasm_schema::{cw_serde, QueryResponses};
-        use cosmwasm_std::*;
-
-        #[cw_serde]
-        pub struct InstantiateMsg {
-            pub count: Option<u32>,
-            pub owner: Option<String>,
-        }
-
-        #[cw_serde]
-        pub enum ExecuteMsg {
-            Increment {},
-            Decrement {},
-            Reset { count: Option<u32> },
-        }
-
-        #[cw_serde]
-        pub enum QueryMsg {
-            // GetCount returns the current count as a json-encoded number
-            Count {},
-            Owner {},
-        }
-
-        #[cw_serde]
-        pub struct CWSQueryResponse<T>(pub T);
-    }
-*/
-
 let msgMod = mod('msg', [
   use('cosmwasm_schema::{cw_serde, QueryResponses}'),
   use('cosmwasm_std::*'),
@@ -285,6 +285,125 @@ let msgMod = mod('msg', [
   ann('#[cw_serde]', tupleStructDefn('CWSQueryResponse<T>', ['T'])),
 ]);
 
-let counterMod = mod('counter', [stateMod, errorMod, msgMod]);
+let instantiateImplFn = fnDefn(
+  'instantiate_impl',
+  [
+    fnParam('ctx', 'InstantiateCtx'),
+    fnParam('count', 'Option<u32>'),
+    fnParam('owner', 'Option<String>'),
+  ],
+  'Result<Response, ContractError>',
+  []
+);
+
+let execResetImplFn = fnDefn(
+  'exec_reset_impl',
+  [fnParam('ctx', 'ExecuteCtx'), fnParam('count', 'Option<u32>')],
+  'Result<Response, ContractError>',
+  []
+);
+
+let execIncrementImplFn = fnDefn(
+  'exec_increment_impl',
+  [fnParam('ctx', 'ExecuteCtx')],
+  'Result<Response, ContractError>',
+  []
+);
+
+let execDecrementImplFn = fnDefn(
+  'exec_decrement_impl',
+  [fnParam('ctx', 'ExecuteCtx')],
+  'Result<Response, ContractError>',
+  []
+);
+
+let queryCountImplFn = fnDefn(
+  'query_count_impl',
+  [fnParam('ctx', 'QueryCtx')],
+  'StdResult<CWSQueryResponse<u32>>',
+  []
+);
+
+let queryOwnerImplFn = fnDefn(
+  'query_owner_impl',
+  [fnParam('ctx', 'QueryCtx')],
+  'StdResult<CWSQueryResponse<String>>',
+  []
+);
+
+let implementationMod = mod('implementation', [
+  use('super::cws::*'),
+  use('super::error::*'),
+  use('super::msg::*'),
+  use('super::state::*'),
+  use('cosmwasm_std::*'),
+  instantiateImplFn,
+  execIncrementImplFn,
+  execDecrementImplFn,
+  execResetImplFn,
+  queryCountImplFn,
+  queryOwnerImplFn,
+]);
+
+let entryPoint = (fn: FunctionDefn) =>
+  ann(`#[cfg_attr(not(feature = "library"), entry_point)]`, fn);
+
+let instantiateFn = entryPoint(
+  fnDefn(
+    'instantiate',
+    [
+      fnParam('deps', 'DepsMut'),
+      fnParam('env', 'Env'),
+      fnParam('msg', 'InstantiateMsg'),
+    ],
+    'Result<Response, ContractError>',
+    []
+  )
+);
+
+let executeFn = entryPoint(
+  fnDefn(
+    'execute',
+    [
+      fnParam('deps', 'DepsMut'),
+      fnParam('env', 'Env'),
+      fnParam('msg', 'ExecuteMsg'),
+    ],
+    'Result<Response, ContractError>',
+    []
+  )
+);
+
+let queryFn = entryPoint(
+  fnDefn(
+    'query',
+    [
+      fnParam('deps', 'Deps'),
+      fnParam('env', 'Env'),
+      fnParam('msg', 'QueryMsg'),
+    ],
+    'StdResult<Binary>',
+    []
+  )
+);
+
+let contractMod = mod('contract', [
+  use('super::cws::*'),
+  use('super::error::*'),
+  use('super::msg::*'),
+  use('super::implementation::*'),
+  use('cosmwasm_std::*'),
+  instantiateFn,
+  executeFn,
+  queryFn,
+]);
+
+let counterMod = mod('counter', [
+  stateMod,
+  errorMod,
+  msgMod,
+  implementationMod,
+  contractMod,
+]);
 
 console.log(counterMod.render());
