@@ -203,13 +203,210 @@ function tupleStructDefn(name: string, fields: string[]): TupleStructDefn {
   return new TupleStructDefn(name, fields);
 }
 
-export class Expr implements Render {
-  constructor(public text: string) {}
+export class StructExpr implements Render {
+  constructor(
+    public ty: string,
+    public fields: StructFieldAssignment[]
+  ) {}
+
   public render(): string {
-    return this.text;
+    return `${this.ty} {
+      ${this.fields.map((field) => field.render()).join(',\n')}
+    }`;
   }
 }
 
+export class TupleStructExpr implements Render {
+  constructor(
+    public ty: string,
+    public fields: Render[]
+  ) {}
+
+  public render(): string {
+    return `${this.ty}(${this.fields
+      .map((field) => field.render())
+      .join(', ')})`;
+  }
+}
+
+export class StructFieldAssignment implements Render {
+  constructor(
+    public name: string,
+    public value: Render
+  ) {}
+
+  public render(): string {
+    return `${this.name}: ${this.value.render()}`;
+  }
+}
+
+export class EnumVariantStructExpr implements Render {
+  constructor(
+    public enumTy: string,
+    public variantName: string,
+    public fields: StructFieldAssignment[]
+  ) {}
+
+  public render(): string {
+    return `${this.enumTy}::${this.variantName} {
+      ${this.fields.map((field) => field.render()).join(',\n')}
+    }`;
+  }
+}
+
+export class EnumVariantTupleExpr implements Render {
+  constructor(
+    public enumTy: string,
+    public variantName: string,
+    public fields: Render[]
+  ) {}
+
+  public render(): string {
+    return `${this.enumTy}::${this.variantName}(${this.fields
+      .map((field) => field.render())
+      .join(', ')})`;
+  }
+}
+
+export class EnumVariantUnitExpr implements Render {
+  constructor(
+    public enumTy: string,
+    public variantName: string
+  ) {}
+
+  public render(): string {
+    return `${this.enumTy}::${this.variantName}`;
+  }
+}
+
+export type Expr =
+  | StructExpr
+  | TupleStructExpr
+  | EnumVariantStructExpr
+  | EnumVariantTupleExpr
+  | EnumVariantUnitExpr
+  | Annotated<Expr>
+  | Block
+  | IdentifierExpr
+  | LiteralExpr
+  | TryExpr
+  | MethodCallExpr
+  | FnCallExpr
+  | BinaryExpr
+  | ReturnStmt
+  | IfExpr;
+
+export class ExprStmt implements Render {
+  constructor(public expr: Expr) {}
+  public render(): string {
+    return `${this.expr.render()};`;
+  }
+}
+export class LetStmt implements Render {
+  constructor(
+    public name: string,
+    public mutable: boolean,
+    public type: string,
+    public expr: Expr
+  ) {}
+
+  public render(): string {
+    return `let ${this.mutable ? 'mut ' : ''}${this.name}${
+      this.type ? `: ${this.type}` : ''
+    } = ${this.expr.render()};`;
+  }
+}
+
+export class Block implements Render {
+  constructor(public statements: Render[]) {}
+
+  public render(): string {
+    return `{\n${this.statements.map((s) => s.render()).join('\n')}\n}`;
+  }
+}
+
+export class LiteralExpr implements Render {
+  constructor(public value: string) {}
+
+  public render(): string {
+    return this.value;
+  }
+}
+export class IdentifierExpr implements Render {
+  constructor(public name: string) {}
+
+  public render(): string {
+    return this.name;
+  }
+}
+
+export class TryExpr implements Render {
+  constructor(public expr: Expr) {}
+
+  public render(): string {
+    return `${this.expr.render()}?`;
+  }
+}
+
+export class MethodCallExpr implements Render {
+  constructor(
+    public expr: Expr,
+    public name: string,
+    public args: Expr[]
+  ) {}
+
+  public render(): string {
+    return `${this.expr.render()}.${this.name}(${this.args
+      .map((a) => a.render())
+      .join(', ')})`;
+  }
+}
+
+export class FnCallExpr implements Render {
+  constructor(
+    public fn: string,
+    public args: Expr[]
+  ) {}
+
+  public render(): string {
+    return `${this.fn}(${this.args.map((a) => a.render()).join(', ')})`;
+  }
+}
+
+export class IfExpr {
+  constructor(
+    public condition: Expr,
+    public consequent: Block,
+    public alternative?: Block
+  ) {}
+
+  public render(): string {
+    return `if ${this.condition.render()} { 
+      ${this.consequent.render()}}${
+        this.alternative ? ` else { ${this.alternative.render()} }` : ''
+      }`;
+  }
+}
+
+export class BinaryExpr {
+  constructor(
+    public left: Expr,
+    public operator: string,
+    public right: Expr
+  ) {}
+
+  public render(): string {
+    return `${this.left.render()} ${this.operator} ${this.right.render()}`;
+  }
+}
+
+export class ReturnStmt {
+  constructor(public expression: Expr) {}
+
+  public render(): string {
+    return `return ${this.expression.render()};`;
+  }
+}
 export class Annotated<T extends Render> implements Render {
   constructor(
     public annotation: string,
@@ -221,20 +418,166 @@ export class Annotated<T extends Render> implements Render {
   }
 }
 
-function expr(text: string): Expr {
-  return new Expr(text);
+export class MatchExpr implements Render {
+  constructor(
+    public expr: Expr,
+    public arms: MatchArm[]
+  ) {}
+
+  public render(): string {
+    return `match ${this.expr.render()} {
+      ${this.arms.map((arm) => arm.render()).join(',\n')}
+    }`;
+  }
+}
+
+export class MatchArm implements Render {
+  constructor(
+    public pattern: string,
+    public expr: Expr
+  ) {}
+
+  public render(): string {
+    return `${this.pattern} => ${this.expr.render()}`;
+  }
+}
+
+export class RefExpr implements Render {
+  constructor(public expr: Expr) {}
+
+  public render(): string {
+    return `&${this.expr.render()}`;
+  }
+}
+
+export class Raw implements Render {
+  constructor(public text: string) {}
+
+  public render(): string {
+    return this.text;
+  }
+}
+
+function raw(text: string): Raw {
+  return new Raw(text);
+}
+
+function stmt(expr: Expr): ExprStmt {
+  return new ExprStmt(expr);
 }
 
 function ann<T extends Render>(annotation: string, target: T): Annotated<T> {
   return new Annotated(annotation, target);
 }
 
+function letStmt(
+  name: string,
+  mutable: boolean,
+  type: string,
+  expr: Expr
+): LetStmt {
+  return new LetStmt(name, mutable, type, expr);
+}
+
+function block(statements: Render[]): Block {
+  return new Block(statements);
+}
+
+function litExpr(value: string): LiteralExpr {
+  return new LiteralExpr(value);
+}
+
+function identExpr(name: string): IdentifierExpr {
+  return new IdentifierExpr(name);
+}
+
+function structExpr(ty: string, fields: StructFieldAssignment[]): StructExpr {
+  return new StructExpr(ty, fields);
+}
+
+function tupleStructExpr(ty: string, fields: Render[]): TupleStructExpr {
+  return new TupleStructExpr(ty, fields);
+}
+
+function structFieldAssn(name: string, value: Render): StructFieldAssignment {
+  return new StructFieldAssignment(name, value);
+}
+
+function enumStructExpr(
+  enumTy: string,
+  variantName: string,
+  fields: StructFieldAssignment[]
+): EnumVariantStructExpr {
+  return new EnumVariantStructExpr(enumTy, variantName, fields);
+}
+
+function enumTupleExpr(
+  enumTy: string,
+  variantName: string,
+  fields: Render[]
+): EnumVariantTupleExpr {
+  return new EnumVariantTupleExpr(enumTy, variantName, fields);
+}
+
+function enumUnitExpr(
+  enumTy: string,
+  variantName: string
+): EnumVariantUnitExpr {
+  return new EnumVariantUnitExpr(enumTy, variantName);
+}
+
+function tryExpr(expr: Expr): TryExpr {
+  return new TryExpr(expr);
+}
+
+function methodCallExpr(
+  expr: Expr,
+  name: string,
+  args: Expr[]
+): MethodCallExpr {
+  return new MethodCallExpr(expr, name, args);
+}
+
+function fnCallExpr(fn: string, args: Expr[]): FnCallExpr {
+  return new FnCallExpr(fn, args);
+}
+
+function matchExpr(expr: Expr, arms: MatchArm[]): MatchExpr {
+  return new MatchExpr(expr, arms);
+}
+
+function arm(pattern: string, expr: Expr): MatchArm {
+  return new MatchArm(pattern, expr);
+}
+
+function refExpr(expr: Expr): RefExpr {
+  return new RefExpr(expr);
+}
+
+type Statement = Expr | LetStmt;
+
+function ifExpr(
+  condition: Expr,
+  consequent: Block,
+  alternative?: Block
+): IfExpr {
+  return new IfExpr(condition, consequent, alternative);
+}
+
+function returnStmt(expression: Expr): ReturnStmt {
+  return new ReturnStmt(expression);
+}
+
+function binExpr(left: Expr, operator: string, right: Expr): BinaryExpr {
+  return new BinaryExpr(left, operator, right);
+}
+
 let stateMod = mod('state', [
   use('schemars::JsonSchema'),
   use('serde::{Deserialize, Serialize}'),
   use('cw_storage_plus::Item'),
-  konst('COUNT', 'Item<u32>', expr('Item::new("count")')),
-  konst('OWNER', 'Item<String>', expr('Item::new("owner")')),
+  konst('COUNT', 'Item<u32>', raw('Item::new("count")')),
+  konst('OWNER', 'Item<String>', raw('Item::new("owner")')),
 ]);
 
 let errorMod = mod('error', [
@@ -245,7 +588,7 @@ let errorMod = mod('error', [
     enumDefn('ContractError', [
       ann(
         '#[error("StdError")]',
-        variantTuple('StdError', [ann('#[from]', expr('StdError'))])
+        variantTuple('StdError', [ann('#[from]', raw('StdError'))])
       ),
       ann('#[error("Unauthorized")]', variantStruct('Unauthorized', [])),
       ann(
@@ -293,42 +636,178 @@ let instantiateImplFn = fnDefn(
     fnParam('owner', 'Option<String>'),
   ],
   'Result<Response, ContractError>',
-  []
+  [
+    letStmt(
+      'count',
+      false,
+      'u32',
+      fnCallExpr('count.unwrap_or', [litExpr('0')])
+    ),
+    letStmt(
+      'owner',
+      false,
+      'String',
+      fnCallExpr('ctx.info.sender.to_string', [])
+    ),
+    stmt(
+      fnCallExpr('COUNT.save', [
+        identExpr('ctx.deps.storage'),
+        identExpr('count'),
+      ])
+    ),
+    stmt(
+      fnCallExpr('OWNER.save', [
+        identExpr('ctx.deps.storage'),
+        identExpr('owner'),
+      ])
+    ),
+    fnCallExpr('Ok', [fnCallExpr('Response::new', [])]),
+  ]
 );
 
 let execResetImplFn = fnDefn(
   'exec_reset_impl',
   [fnParam('ctx', 'ExecuteCtx'), fnParam('count', 'Option<u32>')],
   'Result<Response, ContractError>',
-  []
+  [
+    letStmt(
+      'owner',
+      true,
+      'String',
+      fnCallExpr('OWNER.load', [identExpr('ctx.deps.storage')])
+    ),
+    letStmt(
+      'count',
+      true,
+      'u32',
+      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+    ),
+    ifExpr(
+      binExpr(
+        identExpr('owner'),
+        '!=',
+        fnCallExpr('ctx.info.sender.to_string', [])
+      ),
+      block([
+        returnStmt(
+          fnCallExpr('Err', [
+            enumStructExpr('ContractError', 'Unauthorized', []),
+          ])
+        ),
+      ])
+    ),
+    stmt(
+      tryExpr(
+        fnCallExpr('COUNT.save', [
+          identExpr('ctx.deps.storage'),
+          refExpr(identExpr('count')),
+        ])
+      )
+    ),
+    fnCallExpr('Ok', [fnCallExpr('Response::new', [])]),
+  ]
 );
 
 let execIncrementImplFn = fnDefn(
   'exec_increment_impl',
   [fnParam('ctx', 'ExecuteCtx')],
   'Result<Response, ContractError>',
-  []
+  [
+    letStmt(
+      'count',
+      true,
+      'u32',
+      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+    ),
+    letStmt(
+      'count',
+      true,
+      'u32',
+      binExpr(identExpr('count'), '+', litExpr('1'))
+    ),
+    stmt(
+      tryExpr(
+        fnCallExpr('COUNT.save', [
+          identExpr('ctx.deps.storage'),
+          refExpr(identExpr('count')),
+        ])
+      )
+    ),
+    fnCallExpr('Ok', [fnCallExpr('Response::new', [])]),
+  ]
 );
 
 let execDecrementImplFn = fnDefn(
   'exec_decrement_impl',
   [fnParam('ctx', 'ExecuteCtx')],
   'Result<Response, ContractError>',
-  []
+  [
+    letStmt(
+      'count',
+      true,
+      'u32',
+      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+    ),
+    ifExpr(
+      binExpr(identExpr('count'), '==', litExpr('0')),
+      block([
+        returnStmt(
+          fnCallExpr('Err', [
+            enumStructExpr('ContractError', 'CountIsZeroError', []),
+          ])
+        ),
+      ])
+    ),
+    letStmt(
+      'count',
+      true,
+      'u32',
+      binExpr(identExpr('count'), '-', litExpr('1'))
+    ),
+    stmt(
+      tryExpr(
+        fnCallExpr('COUNT.save', [
+          identExpr('ctx.deps.storage'),
+          refExpr(identExpr('count')),
+        ])
+      )
+    ),
+    fnCallExpr('Ok', [fnCallExpr('Response::new', [])]),
+  ]
 );
 
 let queryCountImplFn = fnDefn(
   'query_count_impl',
   [fnParam('ctx', 'QueryCtx')],
   'StdResult<CWSQueryResponse<u32>>',
-  []
+  [
+    letStmt(
+      'count',
+      false,
+      'u32',
+      fnCallExpr('COUNT.load', [identExpr('ctx.deps.storage')])
+    ),
+    fnCallExpr('Ok', [
+      tupleStructExpr('CWSQueryResponse', [identExpr('count')]),
+    ]),
+  ]
 );
 
 let queryOwnerImplFn = fnDefn(
   'query_owner_impl',
   [fnParam('ctx', 'QueryCtx')],
   'StdResult<CWSQueryResponse<String>>',
-  []
+  [
+    letStmt(
+      'owner',
+      false,
+      'String',
+      fnCallExpr('OWNER.load', [identExpr('ctx.deps.storage')])
+    ),
+    fnCallExpr('Ok', [
+      tupleStructExpr('CWSQueryResponse', [identExpr('owner')]),
+    ]),
+  ]
 );
 
 let implementationMod = mod('implementation', [
@@ -357,7 +836,23 @@ let instantiateFn = entryPoint(
       fnParam('msg', 'InstantiateMsg'),
     ],
     'Result<Response, ContractError>',
-    []
+    [
+      letStmt(
+        'ctx',
+        false,
+        'InstantiateCtx',
+        structExpr('InstantiateCtx', [
+          structFieldAssn('deps', identExpr('deps')),
+          structFieldAssn('env', identExpr('env')),
+          structFieldAssn('info', identExpr('info')),
+        ])
+      ),
+      fnCallExpr('instantiate_impl', [
+        identExpr('ctx'),
+        identExpr('msg.count'),
+        identExpr('msg.owner'),
+      ]),
+    ]
   )
 );
 
@@ -370,7 +865,32 @@ let executeFn = entryPoint(
       fnParam('msg', 'ExecuteMsg'),
     ],
     'Result<Response, ContractError>',
-    []
+    [
+      letStmt(
+        'ctx',
+        false,
+        'ExecuteCtx',
+        structExpr('ExecuteCtx', [
+          structFieldAssn('deps', identExpr('deps')),
+          structFieldAssn('env', identExpr('env')),
+          structFieldAssn('info', identExpr('info')),
+        ])
+      ),
+      matchExpr(identExpr('msg'), [
+        arm(
+          'ExecuteMsg::Increment {}',
+          fnCallExpr('exec_increment_impl', [identExpr('ctx')])
+        ),
+        arm(
+          'ExecuteMsg::Decrement {}',
+          fnCallExpr('exec_decrement_impl', [identExpr('ctx')])
+        ),
+        arm(
+          'ExecuteMsg::Reset { count }',
+          fnCallExpr('exec_reset_impl', [identExpr('ctx'), identExpr('count')])
+        ),
+      ]),
+    ]
   )
 );
 
@@ -383,7 +903,35 @@ let queryFn = entryPoint(
       fnParam('msg', 'QueryMsg'),
     ],
     'StdResult<Binary>',
-    []
+    [
+      letStmt(
+        'ctx',
+        false,
+        'QueryCtx',
+        structExpr('QueryCtx', [
+          structFieldAssn('deps', identExpr('deps')),
+          structFieldAssn('env', identExpr('env')),
+        ])
+      ),
+      matchExpr(identExpr('msg'), [
+        arm(
+          'QueryMsg::Count {}',
+          fnCallExpr('to_json_binary', [
+            tryExpr(
+              refExpr(fnCallExpr('query_count_impl', [identExpr('ctx')]))
+            ),
+          ])
+        ),
+        arm(
+          'QueryMsg::Owner {}',
+          fnCallExpr('to_json_binary', [
+            tryExpr(
+              refExpr(fnCallExpr('query_owner_impl', [identExpr('ctx')]))
+            ),
+          ])
+        ),
+      ]),
+    ]
   )
 );
 
@@ -398,10 +946,29 @@ let contractMod = mod('contract', [
   queryFn,
 ]);
 
+let cwsMod = mod('cws', [
+  use('super::cosmwasm_std::*'),
+  structDefn("InstantiateCtx<'a>", [
+    structField('deps', "DepsMut<'a>"),
+    structField('env', 'Env'),
+    structField('info', 'MessageInfo'),
+  ]),
+  structDefn("ExecuteCtx<'a>", [
+    structField('deps', "DepsMut<'a>"),
+    structField('env', 'Env'),
+    structField('info', 'MessageInfo'),
+  ]),
+  structDefn("QueryCtx<'a>", [
+    structField('deps', "Deps<'a>"),
+    structField('env', 'Env'),
+  ]),
+]);
+
 let counterMod = mod('counter', [
   stateMod,
   errorMod,
   msgMod,
+  cwsMod,
   implementationMod,
   contractMod,
 ]);
