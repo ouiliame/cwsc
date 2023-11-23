@@ -1,11 +1,11 @@
 contract Counter {
   state {
-    count: U32,
+    count: U32
     owner: Addr
   }
 
-  error CountIsZeroError();
-  error Unauthorized();
+  error CountIsZeroError()
+  error Unauthorized()
 
   #instantiate(count: U32?, owner: Addr?) {
     // $state.count = count + 1; // should error because type of count is U32 | None
@@ -14,11 +14,6 @@ contract Counter {
       // here, count must be U32
     }
 
-/*
-    if let Some(count) = count {
-
-    }
-*/
     $state.count = count ?? 0; // count.unwrap_or(0)
     $state.owner = owner ?? $info.sender; // owner.unwrap_or(ctx.info.sender)
   }

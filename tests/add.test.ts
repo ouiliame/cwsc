@@ -1,4 +1,4 @@
-import { add } from '../src';
+import { add } from '../src/codegen';
 
 describe('add', () => {
   it('should add two numbers', () => {

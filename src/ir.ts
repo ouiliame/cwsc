@@ -1,4 +1,4 @@
-import { Expr } from '.';
+import { Expr } from './codegen';
 import * as Rust from './rust-syntax';
 
 export type ContractItem =
