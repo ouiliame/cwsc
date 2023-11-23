@@ -1,16 +1,16 @@
 // @ts-nocheck
 import { ANTLRErrorListener, CharStreams, CommonTokenStream } from 'antlr4ts';
+import { RecognitionException } from 'antlr4ts/RecognitionException';
+import path from 'path';
+import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
+import * as AST from '../ast';
 import { CWScriptLexer as ANTLRCWScriptLexer } from '../grammar/CWScriptLexer';
 import {
   CWScriptParser as ANTLRCWScriptParser,
   SourceFileContext,
 } from '../grammar/CWScriptParser';
-import { CWSASTBuilderVisitor } from './visitor';
-import * as AST from '../ast';
 import { TextView } from '../util/position';
-import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
-import path from 'path';
-import { RecognitionException } from 'antlr4ts/RecognitionException';
+import { CWSASTBuilderVisitor } from './visitor';
 
 export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
   public diagnostics: Diagnostic[] = [];

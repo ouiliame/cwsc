@@ -1,0 +1,3 @@
+export class CWScriptCompiler {
+  constructor() {}
+}
