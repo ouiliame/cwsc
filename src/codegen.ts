@@ -1,8 +1,11 @@
 import * as IR from './ir';
 import { CWScriptProject } from './projects';
 import * as Rust from './rust-syntax';
+import { pascalToSnake, snakeToPascal } from './util/strings';
 
 import * as toml from '@iarna/toml';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface Package {
   name: string;
@@ -165,6 +168,22 @@ const DOTCARGO_CONFIG = toml.stringify({
 
 export class CGEnv {
   constructor(public crates: { [name: string]: Crate } = {}) {}
+  public writeToDisk(buildDir: string) {
+    let root = path.resolve(buildDir);
+    for (let crateName in this.crates) {
+      let crate = this.crates[crateName];
+      let crateDir = path.join(root, crateName.split('-')[1]);
+      fs.mkdirSync(crateDir, { recursive: true });
+      fs.writeFileSync(path.join(crateDir, 'Cargo.toml'), crate.cargoToml());
+      for (let filePath in crate.files) {
+        let file = crate.files[filePath];
+        // if directory for file does not exist, create it
+        let dir = path.dirname(filePath);
+        fs.mkdirSync(path.join(crateDir, dir), { recursive: true });
+        fs.writeFileSync(path.join(crateDir, filePath), file);
+      }
+    }
+  }
 }
 
 /**
@@ -182,7 +201,7 @@ export class RustCodegen {
   public buildContract(contract: IR.Value.Contract) {
     const { config } = this.project;
     let cargoToml = DEFAULT_CARGO_TOML;
-    let crateName = config.name.toLowerCase() + '-' + contract.name;
+    let crateName = config.name + '-' + pascalToSnake(contract.name);
     cargoToml.package.name = crateName;
     cargoToml.package.version = config.version;
     cargoToml.package.authors = config.authors;
@@ -190,22 +209,46 @@ export class RustCodegen {
     // build crate
     let crate = new Crate(cargoToml);
 
-    crate.setFile('./cargo/config', DOTCARGO_CONFIG);
-    crate.setFile('src/lib.rs', this.genContract(contract));
+    crate.setFile('.cargo/config', DOTCARGO_CONFIG);
+    crate.setFile('src/lib.rs', this.genContract(contract).render());
 
     // add crate to env
-    this.env.crates[crateName] = new Crate(cargoToml);
+    this.env.crates[crateName] = crate;
   }
 
-  public genContract(contract: IR.Value.Contract): string {
-    const stateMod = this.buildStateModule(contract);
-    const errorMod = this.buildErrorModule(contract);
-    const msgMod = this.buildMsgModule(contract);
-    const cwsMod = this.buildCwsModule(contract);
-    const implMod = this.buildImplModule(contract);
-    const contractMod = this.buildContractModule(contract);
+  public genContractStateMod(contract: IR.Value.Contract): Rust.ModuleDefn {
+    return Rust.mod('state', []);
+  }
+
+  public genContractErrorMod(contract: IR.Value.Contract): Rust.ModuleDefn {
+    return Rust.mod('error', []);
+  }
+
+  public genContractMsgMod(contract: IR.Value.Contract): Rust.ModuleDefn {
+    return Rust.mod('msg', []);
+  }
+
+  public genCwsMod(contract: IR.Value.Contract): Rust.ModuleDefn {
+    return Rust.mod('cws', []);
+  }
+
+  public genContractImplMod(contract: IR.Value.Contract): Rust.ModuleDefn {
+    return Rust.mod('impl', []);
+  }
+
+  public genContractMod(contract: IR.Value.Contract): Rust.ModuleDefn {
+    return Rust.mod('contract', []);
+  }
+
+  public genContract(contract: IR.Value.Contract): Rust.ModuleDefn {
+    const stateMod = this.genContractStateMod(contract);
+    const errorMod = this.genContractErrorMod(contract);
+    const msgMod = this.genContractMsgMod(contract);
+    const cwsMod = this.genCwsMod(contract);
+    const implMod = this.genContractImplMod(contract);
+    const contractMod = this.genContractMod(contract);
     // make the contract top-level module
-    const mod = Rust.mod(defn.name, [
+    const mod = Rust.mod(pascalToSnake(contract.name), [
       stateMod,
       errorMod,
       msgMod,
@@ -214,6 +257,6 @@ export class RustCodegen {
       contractMod,
     ]);
 
-    return mod.render();
+    return mod;
   }
 }

@@ -1,4 +1,4 @@
-import { IR } from './ir-base';
+import { IR, Param } from './ir-base';
 
 // #region Types
 export class CWSType extends IR {
@@ -100,7 +100,7 @@ export class CWSArrayType<T extends CWSType = CWSType> extends CWSType {
 export class CWSStructType extends CWSType {
   constructor(
     public name: string,
-    public fields: CWSStructField[]
+    public fields: Param[]
   ) {
     super(name);
   }
@@ -151,7 +151,7 @@ export class CWSStructType extends CWSType {
     }
   }
 
-  public field(fieldName: string): CWSStructField {
+  public field(fieldName: string): Param {
     let fd = this.fields.find((x) => x.name === fieldName);
     if (fd === undefined) {
       throw new Error(
@@ -162,11 +162,19 @@ export class CWSStructType extends CWSType {
   }
 }
 
-export class CWSStructField {
+export class CWSTupleType extends CWSType {
   constructor(
     public name: string,
-    public ty: CWSType
-  ) {}
+    public elementTys: CWSType[]
+  ) {
+    super(name);
+  }
+}
+
+export class CWSMessageType extends CWSType {
+  constructor() {
+    super('Message');
+  }
 }
 
 export class CWSFnType extends CWSType {
@@ -230,7 +238,7 @@ export class CWSContractResponseType extends CWSType {
 }
 
 export class CWSInstantiateFnType extends CWSFnType {
-  constructor(public params: CWSFnParam[]) {
+  constructor(public params: Param[]) {
     super(
       true,
       params.map((x) => x.ty),
@@ -274,7 +282,7 @@ export class CWSInstantiateFnType extends CWSFnType {
 export class CWSExecFnType extends CWSFnType {
   constructor(
     public execName: string,
-    public params: CWSFnParam[]
+    public params: Param[]
   ) {
     super(
       true,
@@ -322,7 +330,7 @@ export class CWSExecFnType extends CWSFnType {
 export class CWSQueryFnType extends CWSFnType {
   constructor(
     public queryName: string,
-    public params: CWSFnParam[]
+    public params: Param[]
   ) {
     super(
       true,
@@ -368,14 +376,6 @@ export class CWSQueryFnType extends CWSFnType {
       return false;
     }
   }
-}
-
-export class CWSFnParam {
-  constructor(
-    public name: string,
-    public ty: CWSType,
-    public optional: boolean = false
-  ) {}
 }
 
 export class CWSInterfaceType extends CWSType {
@@ -459,6 +459,30 @@ export class CWSInterfaceType extends CWSType {
       }
 
       return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+export class CWSListType<T extends CWSType = CWSType> extends CWSType {
+  constructor(public ty: T) {
+    super(`List[${ty.name}]`);
+  }
+
+  public isEqualTo(other: CWSType): boolean {
+    if (other instanceof CWSListType) {
+      return this.ty.isEqualTo(other.ty);
+    }
+    return false;
+  }
+
+  public isSubtypeOf(other: CWSType): boolean {
+    // List[U] <: List[T] if U <: T
+    if (other instanceof CWSListType) {
+      return this.ty.isSubtypeOf(other.ty);
+    } else {
+      return false;
     }
   }
 }
@@ -477,9 +501,12 @@ export function structTy(
   name: string,
   fields: { [k: string]: CWSType }
 ): CWSStructType {
-  let fieldsArr: CWSStructField[] = [];
+  let fieldsArr: Param[] = [];
   for (let k in fields) {
-    fieldsArr.push(new CWSStructField(k, fields[k]));
+    fieldsArr.push({
+      name: k,
+      ty: fields[k],
+    });
   }
   return new CWSStructType(name, fieldsArr);
 }

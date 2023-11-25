@@ -1,10 +1,27 @@
-import { IR } from './ir-base';
+import { IR, Param } from './ir-base';
 import * as Type from './types';
 
 export abstract class CWSValue extends IR {
   public isType = false;
   abstract get ty(): Type.CWSType;
 }
+
+export type StateItem = {
+  item: {
+    ty: Type.CWSType;
+  };
+};
+
+export type StateMap = {
+  map: {
+    indexTy: Type.CWSType;
+    ty: Type.CWSType;
+  };
+};
+
+export type ContractState = {
+  [k: string]: StateItem | StateMap;
+};
 
 export class Contract extends CWSValue {
   public get ty(): Type.CWSType {
@@ -13,13 +30,13 @@ export class Contract extends CWSValue {
 
   constructor(
     public name: string,
-    public state: ContractState,
-    public instantiate: InstantiateFn,
+    public state: ContractState = {},
+    public instantiate: InstantiateFn = new InstantiateFn(),
     public exec: ExecFn[] = [],
     public query: QueryFn[] = [],
     public events: Event[] = [],
     public errors: Error[] = [],
-    public typedefs: Type[] = []
+    public typedefs: Type.CWSType[] = []
   ) {
     super();
   }
@@ -27,7 +44,11 @@ export class Contract extends CWSValue {
 
 export class Fn extends CWSValue {
   public get ty(): Type.CWSFnType {
-    return new Type.CWSFnType(this.fallible, this.params, this.returnTy);
+    return new Type.CWSFnType(
+      this.fallible,
+      this.params.map((x) => x.ty),
+      this.returnTy
+    );
   }
 
   public get fallible(): boolean {
@@ -53,13 +74,13 @@ export class InstantiateFn extends Fn {
     public params: Param[] = [],
     public body: IR[] = []
   ) {
-    super('#instantiate', params, new CWSMessageType());
+    super('#instantiate', params, new Type.CWSMessageType());
   }
 }
 
 export class ExecFn extends Fn {
   public get ty() {
-    return new CWSExecFnType(this.name, this.params);
+    return new Type.CWSExecFnType(this.name, this.params);
   }
 
   constructor(
@@ -67,7 +88,7 @@ export class ExecFn extends Fn {
     public params: Param[] = [],
     public body: IR[] = []
   ) {
-    super('exec #' + name, params, new CWSMessageType());
+    super('exec #' + name, params, new Type.CWSMessageType());
   }
 }
 
@@ -81,7 +102,7 @@ export class QueryFn extends Fn {
     public params: Param[] = [],
     public body: IR[] = []
   ) {
-    super('query #' + name, params, new CWSMessageType());
+    super('query #' + name, params, new Type.CWSMessageType());
   }
 }
 

@@ -6,5 +6,9 @@ export function snakeToPascal(s: string): string {
 }
 
 export function pascalToSnake(s: string): string {
-  return s.replace(/([A-Z])/g, '_$1').toLowerCase();
+  // do not convert first character
+  return s
+    .split(/(?=[A-Z])/)
+    .map((x) => x.toLowerCase())
+    .join('_');
 }

@@ -1,6 +1,8 @@
 import { CWScriptParser } from './parser';
-import * as AST from './ast';
 import { SymbolIndex, SymbolTable } from './symbol-table';
+import * as AST from './ast';
+import * as IR from './ir';
+import { RustCodegen } from './codegen';
 
 import * as fs from 'fs';
 export interface CompilerExtensionConfig {
@@ -66,7 +68,8 @@ export class BuildContext<I> {
   }
 
   update<T>(path: string, info: T) {
-    this.into<T>().sources[path] = info;
+    let source = this.sources[path];
+    this.into<I & T>().sources[path] = { ...source, ...info };
   }
 
   into<O>(): BuildContext<O> {
@@ -136,7 +139,7 @@ export type SymbolsCtx = ParseCtx & {
 export type Entries<T> = { [key: string]: T };
 
 export class CWScriptCompiler {
-  constructor(public config: CompilerConfig) {}
+  constructor(public project: CWScriptProject) {}
 
   public get loadSourcesStage() {
     return stage((ctx: BuildContext<{}>) =>
@@ -162,11 +165,40 @@ export class CWScriptCompiler {
     });
   }
 
+  public get irStage() {
+    return stage((ctx: BuildContext<SymbolsCtx>) => {
+      return ctx.updateSources((path, src) => {
+        let ir = src.ast;
+        return { ir };
+      });
+    });
+  }
+
+  public get codegenStage() {
+    return stage((ctx: BuildContext<any>) => {
+      return ctx.updateSources((path, src) => {
+        let cg = new RustCodegen(this.project);
+        src.ir
+          .descendantsOfType(AST.ContractDefn)
+          .forEach((contract: AST.ContractDefn) => {
+            let contractIR = new IR.Value.Contract(contract.name.value);
+            cg.buildContract(contractIR);
+          });
+        cg.env.writeToDisk(this.project.buildDir);
+        return {
+          code: cg.env,
+        };
+      });
+    });
+  }
+
   public get pipeline() {
     return BuildPipeline.from(
       this.loadSourcesStage,
       this.parseStage,
-      this.indexSymbolsStage
+      this.indexSymbolsStage,
+      this.irStage,
+      this.codegenStage
     );
   }
 
@@ -182,15 +214,9 @@ import { CWScriptProject } from './projects';
 
 let projectRoot = './examples/terraswap';
 let project = CWScriptProject.fromProjectRoot(projectRoot);
-let compiler = new CWScriptCompiler({});
+let compiler = new CWScriptCompiler(project);
 let buildCfg: BuildConfig = {
   sources: project.sourceFiles,
   targets: [],
 };
 let tree = compiler.build(buildCfg);
-console.table(
-  tree.symbolIndex.entries.map((x) => [
-    x.file.substring(project.sourceDir.length + 1),
-    x.name,
-  ])
-);
