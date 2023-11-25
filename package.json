@@ -17,6 +17,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "antlr4ts": "^0.5.0-alpha.4",
     "glob": "^10.3.10",
     "handlebars": "^4.7.8",

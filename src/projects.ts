@@ -47,8 +47,10 @@ export type CwscConfig = zod.infer<typeof CwscConfigSchema>;
 export const CWScriptProjectConfigSchema = zod.object({
   name: zod.string(),
   version: zod.string(),
-  sourceDir: zod.string().optional(),
-  buildDir: zod.string().optional(),
+  sourceDir: zod.string().default('src'),
+  buildDir: zod.string().default('build'),
+  packagesDir: zod.string().default('packages'),
+  package: zod.boolean().default(false),
   description: zod.string().optional(),
   authors: zod.array(zod.string()).optional(),
   license: zod.string().optional(),
@@ -63,82 +65,73 @@ export type CWScriptProjectConfig = zod.infer<
   typeof CWScriptProjectConfigSchema
 >;
 
-export class CWScriptProject implements CWScriptProjectConfig {
-  public name: string;
-  public version: string;
-  public sourceDir: string;
-  public buildDir: string;
-  public description?: string;
-  public authors?: string[];
-  public license?: string;
-  public website?: string;
-  public repository?: string;
-  public dependencies?: ProjectDependencies;
-  public readme?: string;
-  public cwsc?: CwscConfig;
+export class CWScriptProject {
+  public config: CWScriptProjectConfig;
 
-  constructor(config: CWScriptProjectConfig) {
-    const parsedConfig = CWScriptProjectConfigSchema.parse(config);
-    this.name = parsedConfig.name;
-    this.version = parsedConfig.version;
-    this.sourceDir = parsedConfig.sourceDir || 'src';
-    this.buildDir = parsedConfig.buildDir || 'build';
-    this.description = parsedConfig.description;
-    this.authors = parsedConfig.authors;
-    this.license = parsedConfig.license;
-    this.website = parsedConfig.website;
-    this.repository = parsedConfig.repository;
-    this.dependencies = parsedConfig.dependencies;
-    this.readme = parsedConfig.readme;
-    this.cwsc = parsedConfig.cwsc;
-  }
-}
-
-export class FsProjectManager {
-  public projectRoot: string;
-  public configLastLoaded?: number;
-  private _project?: CWScriptProject; // cached
-
-  constructor(projectRoot: string) {
-    this.projectRoot = path.resolve(projectRoot);
-    // determine if this is a cwsc project
-    // if not, throw an error
-    if (!fs.existsSync(this.configPath)) {
-      throw new Error(
-        `${projectRoot} is not a CWScript project: missing cwsproject.json`
-      );
-    }
+  constructor(
+    public projectRoot: string,
+    config: CWScriptProjectConfig
+  ) {
+    this.config = CWScriptProjectConfigSchema.parse(config);
   }
 
-  /** Get the absolute path to the project's cwsproject.json */
-  public get configPath(): string {
-    return path.join(this.projectRoot, 'cwsproject.json');
+  public static create(projectRoot: string, config: CWScriptProjectConfig) {
+    return new CWScriptProject(projectRoot, config);
   }
 
-  /** Get the time the parsedconfiguration file was last changed. */
-  public get configLastModified(): number {
-    return fs.statSync(this.configPath).mtimeMs;
+  public update(newConfig: Partial<CWScriptProjectConfig> = {}) {
+    let config = {
+      ...this.config,
+      ...newConfig,
+    };
+    this.config = CWScriptProjectConfigSchema.parse(config);
+    // write the new config to the project config file
+    fs.writeFileSync(
+      path.join(this.projectRoot, 'cwsproject.json'),
+      JSON.stringify(config, null, 2)
+    );
   }
 
-  public get project(): CWScriptProject {
-    // check if the project parsedconfig has been modified
-    // if so, reload the project
-    if (
-      !this._project ||
-      !this.configLastLoaded ||
-      this.configLastLoaded < this.configLastModified
-    ) {
-      let configJson = fs.readFileSync(this.configPath, 'utf8');
-      this.configLastLoaded = this.configLastModified;
-      this._project = new CWScriptProject(JSON.parse(configJson));
-      return this._project;
-    } else {
-      return this._project;
-    }
+  public get sourceDir(): string {
+    // get absolute path from project root
+    return path.resolve(this.projectRoot, this.config.sourceDir);
+  }
+
+  public get buildDir(): string {
+    return path.resolve(this.projectRoot, this.config.buildDir);
+  }
+
+  public get packagesDir(): string {
+    return path.resolve(this.projectRoot, this.config.packagesDir);
+  }
+
+  public static fromConfigFile(configPath: string): CWScriptProject {
+    let absPath = path.resolve(configPath);
+    let configJson = fs.readFileSync(absPath, 'utf8');
+    return new CWScriptProject(path.dirname(absPath), JSON.parse(configJson));
+  }
+
+  public static fromProjectRoot(projectRoot: string): CWScriptProject {
+    return CWScriptProject.fromConfigFile(
+      path.join(projectRoot, 'cwsproject.json')
+    );
   }
 
   public get sourceFiles(): string[] {
-    let sourceDirPath = path.join(this.projectRoot, this.project.sourceDir);
-    return globSync('**/*.cws', { cwd: sourceDirPath, absolute: true });
+    return globSync('**/*.cws', { cwd: this.sourceDir, absolute: true });
   }
+
+  public get packages(): CWScriptProject[] {
+    let packagesDirPath = path.join(this.projectRoot, this.packagesDir);
+    let packageCfgs = globSync('**/cwsproject.json', {
+      cwd: packagesDirPath,
+      absolute: true,
+    });
+    return packageCfgs.map((cfgPath) => {
+      // read the package's cwsproject.json
+      return CWScriptProject.fromConfigFile(cfgPath);
+    });
+  }
+
+  public build() {}
 }

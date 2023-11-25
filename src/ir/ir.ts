@@ -1,5 +1,5 @@
-import { Expr } from './codegen';
 import * as Rust from './rust-syntax';
+import * as AST from './ast';
 
 export type ContractItem =
   | InstantiateFnDefn
@@ -14,12 +14,53 @@ export type ContractItem =
   | EnumDefn
   | FnDefn;
 
-export interface ContractDefn {
-  $type: 'defn.contract';
-  name: string;
-  body: ContractItem[];
+export abstract class IR {
+  abstract get isType(): boolean;
 }
 
+export class CWSType extends IR {
+  public isType = true;
+  constructor(
+    public name: string,
+    public supertypes: CWSType[] = []
+  ) {
+    super();
+  }
+
+  public option(): CWSOptionType<this> {
+    return new CWSOptionType(this);
+  }
+
+  public isEqualTo(other: CWSType): boolean {
+    return this.name === other.name;
+  }
+
+  public isSubtypeOf(other: CWSType): boolean {
+    return (
+      this.isEqualTo(other) || this.supertypes.some((x) => x.isSubtypeOf(other))
+    );
+  }
+}
+
+export interface Namespace {
+  get members(): { [key: string]: IR };
+}
+export class Contract extends IR {
+  constructor(
+    public name: string,
+    public state: ContractState,
+    public instantiate: InstantiateFn,
+    public exec: ExecFn[] = [],
+    public query: QueryFn[] = [],
+    public events: Event[] = [],
+    public errors: Error[] = [],
+    public typedefs: Type[] = []
+  ) {
+    super();
+  }
+}
+
+export class Interface extends IR {}
 export interface StructDefn {
   $type: 'defn.struct';
   name: string;

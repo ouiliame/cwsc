@@ -43,6 +43,21 @@ export class CWScriptParser {
     this.sourceFile = sourceFile ? path.resolve(sourceFile) : null;
   }
 
+  public static parse(
+    sourceInput: string,
+    sourceFile: string | null = null
+  ): AST.AST {
+    let parser = new CWScriptParser(sourceInput, sourceFile);
+    return parser.parse();
+  }
+
+  public static parseFile(sourceFile: string): AST.SourceFile {
+    // read the file
+    let sourceInput = fs.readFileSync(sourceFile, 'utf8');
+    let parser = new CWScriptParser(sourceInput, sourceFile);
+    return parser.parse();
+  }
+
   /**
    * This is the public-facing interface for parsing a source file.
    */

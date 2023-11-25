@@ -1,9 +1,15 @@
+import { IR } from './ir-base';
+
 // #region Types
-export class CWSType {
+export class CWSType extends IR {
+  public isType = true;
+
   constructor(
     public name: string,
     public supertypes: CWSType[] = []
-  ) {}
+  ) {
+    super();
+  }
 
   public option(): CWSOptionType<this> {
     return new CWSOptionType(this);
