@@ -1,14 +1,34 @@
 import { SymbolTable } from '../symbol-table';
-import { IR, Param, Arg } from './ir-base';
+import { IR, Param, Arg, ValueMember, TypeMember } from './ir-base';
 import * as Type from './types';
 import * as Stmt from './stmts';
-import { Value } from '.';
 
 export abstract class CWSValue extends IR {
-  public isType = false;
+  public isType(): this is Type.CWSType {
+    return false;
+  }
   abstract get ty(): Type.CWSType;
   public eval(symbols: SymbolTable): CWSValue {
     return this;
+  }
+
+  public get members(): (ValueMember | TypeMember)[] {
+    return [
+      {
+        name: 'Type',
+        ty: this.ty,
+      },
+    ];
+  }
+
+  public getMember(name: string): CWSValue | Type.CWSType | undefined {
+    // if the member doesn't exist on this value, check the type
+    const member = super.getMember(name);
+    if (member === undefined) {
+      return this.ty.getMember(name);
+    } else {
+      return member;
+    }
   }
 }
 
@@ -40,8 +60,8 @@ export class Contract extends CWSValue {
     public instantiate: InstantiateFn = new InstantiateFn(),
     public exec: ExecFn[] = [],
     public query: QueryFn[] = [],
-    public events: Event[] = [],
-    public errors: Error[] = [],
+    public events: Type.CWSEventType[] = [],
+    public errors: Type.CWSErrorType[] = [],
     public typedefs: Type.CWSType[] = []
   ) {
     super();
@@ -49,12 +69,25 @@ export class Contract extends CWSValue {
 }
 
 export class Fn extends CWSValue {
+  constructor(
+    public name: string,
+    public params: Param[],
+    public returnTy: Type.CWSType,
+    public body: IR[] = []
+  ) {
+    super();
+  }
+
   public get ty(): Type.CWSFnType {
     return new Type.CWSFnType(
       this.fallible,
       this.params.map((x) => x.ty),
       this.returnTy
     );
+  }
+
+  public get isMethod(): boolean {
+    return this.params.length > 0 && this.params[0].name === 'self';
   }
 
   public get fallible(): boolean {
@@ -111,20 +144,11 @@ export class Fn extends CWSValue {
     let result: CWSValue | Type.CWSType = NoneValue;
     for (const stmt of this.body) {
       if (stmt instanceof Stmt.Return) {
-        return stmt.expr.eval(scope) as Value.CWSValue;
+        return stmt.expr.eval(scope) as CWSValue;
       }
       result = stmt.eval(scope);
     }
     return result;
-  }
-
-  constructor(
-    public name: string,
-    public params: Param[],
-    public returnTy: Type.CWSType,
-    public body: IR[] = []
-  ) {
-    super();
   }
 }
 
@@ -170,8 +194,21 @@ export class QueryFn extends Fn {
 }
 
 export class Struct extends CWSValue {
+  public get ty(): Type.CWSStructType {
+    return this.structTy;
+  }
+
+  public get members(): (ValueMember | TypeMember)[] {
+    let fields = Object.keys(this.fields).map((x) => {
+      return {
+        name: x,
+        value: this.fields[x],
+      };
+    });
+    return [...super.members, ...fields];
+  }
   constructor(
-    public ty: Type.CWSStructType,
+    public structTy: Type.CWSStructType,
     public fields: { [name: string]: CWSValue } = {}
   ) {
     super();
@@ -239,6 +276,18 @@ export class Bool extends CWSValue {
 export class None extends CWSValue {
   public get ty(): Type.CWSType {
     return Type.CWSNoneType;
+  }
+}
+
+export class CWSError extends Struct {
+  public get ty(): Type.CWSErrorType {
+    return new Type.CWSErrorType(super.ty.name, super.ty.fields);
+  }
+}
+
+export class Event extends Struct {
+  public get ty(): Type.CWSEventType {
+    return new Type.CWSEventType(super.ty.name, super.ty.fields);
   }
 }
 

@@ -168,7 +168,8 @@ export class CWScriptCompiler {
   public get irStage() {
     return stage((ctx: BuildContext<SymbolsCtx>) => {
       return ctx.updateSources((path, src) => {
-        let ir = src.ast;
+        let builder = new IRBuilder();
+        let ir = builder.visitSourceFile(src.ast);
         return { ir };
       });
     });
@@ -211,6 +212,7 @@ export class CWScriptCompiler {
 // enter project root
 
 import { CWScriptProject } from './projects';
+import { IRBuilder } from './ir-builder';
 
 let projectRoot = './examples/terraswap';
 let project = CWScriptProject.fromProjectRoot(projectRoot);

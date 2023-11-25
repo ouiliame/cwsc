@@ -1,4 +1,4 @@
-import * as AST from './ast';
+import * as AST from './ir/ast';
 import * as IR from './ir';
 
 export interface SymbolTableEntry {

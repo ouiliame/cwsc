@@ -4,7 +4,9 @@ import type * as Expr from './exprs';
 import { SymbolTable } from '../symbol-table';
 
 export abstract class IR {
-  abstract get isType(): boolean;
+  public isType(): this is Type.CWSType {
+    return false;
+  }
   public get members(): (ValueMember | TypeMember)[] {
     return [];
   }
@@ -36,7 +38,7 @@ export interface Param {
 
 export interface Arg {
   name?: string;
-  value: Expr.Expr;
+  value: Expr.CWSExpr;
 }
 
 export interface ValueMember {

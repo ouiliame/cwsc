@@ -2,16 +2,19 @@ import { SymbolTable } from '../symbol-table';
 import { IR, Arg } from './ir-base';
 import * as Type from './types';
 import * as Value from './values';
+import type { Op } from '../ast';
 
-export abstract class Expr extends IR {
-  public isType = false;
+export abstract class CWSExpr extends IR {
+  public isType(): this is Type.CWSType {
+    return false;
+  }
 
   abstract eval(symbols: SymbolTable): Value.CWSValue | Type.CWSType;
 }
 
-export class Dot extends Expr {
+export class Dot extends CWSExpr {
   constructor(
-    public expr: Expr | Value.CWSValue,
+    public expr: CWSExpr | Value.CWSValue,
     public memberName: string
   ) {
     super();
@@ -27,10 +30,10 @@ export class Dot extends Expr {
   }
 }
 
-export class Index extends Expr {
+export class Index extends CWSExpr {
   constructor(
-    public expr: Expr | Value.CWSValue,
-    public index: Expr | Value.CWSValue
+    public expr: CWSExpr | Value.CWSValue,
+    public index: CWSExpr | Value.CWSValue
   ) {
     super();
   }
@@ -46,9 +49,9 @@ export class Index extends Expr {
   }
 }
 
-export class Call extends Expr {
+export class Call extends CWSExpr {
   constructor(
-    public fn: Expr,
+    public fn: CWSExpr,
     public args: Arg[]
   ) {
     super();
@@ -69,9 +72,9 @@ export class Call extends Expr {
   }
 }
 
-export class As extends Expr {
+export class As extends CWSExpr {
   constructor(
-    public expr: Expr,
+    public expr: CWSExpr,
     public ty: Type.CWSType
   ) {
     super();
@@ -83,8 +86,71 @@ export class As extends Expr {
   }
 }
 
-export class Exists extends Expr {
-  constructor(public expr: Expr) {
+export class In extends CWSExpr {
+  constructor(
+    public lhs: CWSExpr,
+    public rhs: CWSExpr
+  ) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    throw new Error('Not implemented');
+    return new Value.None();
+  }
+}
+
+export class Is extends CWSExpr {
+  constructor(
+    public negative: boolean,
+    public lhs: CWSExpr,
+    public rhs: Type.CWSType
+  ) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    throw new Error('Not implemented');
+    return new Value.None();
+  }
+}
+
+export class Try extends CWSExpr {
+  constructor(public expr: CWSExpr) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    throw new Error('Not implemented');
+    return new Value.None();
+  }
+}
+
+export class TryCatchElse extends CWSExpr {
+  constructor(
+    public body: IR[],
+    public catch_: CatchClause[],
+    public else_: IR[] | null
+  ) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    throw new Error('Not implemented');
+    return new Value.None();
+  }
+}
+
+export class CatchClause {
+  constructor(
+    public matchErr: Type.CWSType,
+    public binding: string | null,
+    public body: IR[]
+  ) {}
+}
+
+export class Exists extends CWSExpr {
+  constructor(public expr: CWSExpr) {
     super();
   }
 
@@ -101,8 +167,25 @@ export class Exists extends Expr {
   }
 }
 
-export class Not extends Expr {
-  constructor(public expr: Expr) {
+export class BinOp extends CWSExpr {
+  constructor(
+    public lhs: CWSExpr,
+    public op: Op,
+    public rhs: CWSExpr
+  ) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    const lhs = this.lhs.eval(symbols);
+    const rhs = this.rhs.eval(symbols);
+    return lhs;
+    throw new Error('Not implemented');
+  }
+}
+
+export class Not extends CWSExpr {
+  constructor(public expr: CWSExpr) {
     super();
   }
 
@@ -115,8 +198,44 @@ export class Not extends Expr {
   }
 }
 
-export class Query extends Expr {
-  constructor(public expr: Expr) {
+export class And extends CWSExpr {
+  constructor(
+    public lhs: CWSExpr,
+    public rhs: CWSExpr
+  ) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    const lhs = this.lhs.eval(symbols);
+    const rhs = this.rhs.eval(symbols);
+    if (lhs instanceof Value.Bool && rhs instanceof Value.Bool) {
+      return new Value.Bool(lhs.value && rhs.value);
+    }
+    throw new Error('Cannot AND non-booleans');
+  }
+}
+
+export class Or extends CWSExpr {
+  constructor(
+    public lhs: CWSExpr,
+    public rhs: CWSExpr
+  ) {
+    super();
+  }
+
+  public eval(symbols: SymbolTable) {
+    const lhs = this.lhs.eval(symbols);
+    const rhs = this.rhs.eval(symbols);
+    if (lhs instanceof Value.Bool && rhs instanceof Value.Bool) {
+      return new Value.Bool(lhs.value || rhs.value);
+    }
+    throw new Error('Cannot OR non-booleans');
+  }
+}
+
+export class Query extends CWSExpr {
+  constructor(public expr: CWSExpr) {
     super();
   }
 
@@ -126,8 +245,8 @@ export class Query extends Expr {
   }
 }
 
-export class QueryNow extends Expr {
-  constructor(public expr: Expr) {
+export class QueryNow extends CWSExpr {
+  constructor(public expr: CWSExpr) {
     super();
   }
 
@@ -137,8 +256,8 @@ export class QueryNow extends Expr {
   }
 }
 
-export class Fail extends Expr {
-  constructor(public expr: Expr) {
+export class Fail extends CWSExpr {
+  constructor(public expr: CWSExpr) {
     super();
   }
 
@@ -148,10 +267,10 @@ export class Fail extends Expr {
   }
 }
 
-export class Tuple extends Expr {
+export class Tuple extends CWSExpr {
   constructor(
     public tupleTy: Type.CWSTupleType,
-    public elements: Expr[] = []
+    public elements: CWSExpr[] = []
   ) {
     super();
   }
@@ -164,7 +283,7 @@ export class Tuple extends Expr {
   }
 }
 
-export class Ident extends Expr {
+export class Ident extends CWSExpr {
   constructor(public name: string) {
     super();
   }

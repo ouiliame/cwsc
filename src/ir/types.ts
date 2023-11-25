@@ -4,7 +4,9 @@ import { SymbolTable } from '../symbol-table';
 
 // #region Types
 export class CWSType extends IR {
-  public isType = true;
+  public isType(): this is CWSType {
+    return true;
+  }
 
   constructor(
     public name: string,
@@ -55,7 +57,7 @@ export class CWSTypeFn {
   }
 }
 
-export class CWSOptionType<T extends CWSType> extends CWSType {
+export class CWSOptionType<T extends CWSType = CWSType> extends CWSType {
   constructor(public ty: T) {
     super(`${ty.name}?`);
   }
@@ -174,6 +176,63 @@ export class CWSTupleType extends CWSType {
     public elementTys: CWSType[]
   ) {
     super(name);
+  }
+}
+
+export class CWSEnumType extends CWSType {
+  constructor(
+    public name: string,
+    public variants: CWSEnumVariant[]
+  ) {
+    super(name);
+  }
+}
+
+export class CWSEnumVariantStructType extends CWSStructType {}
+
+export class CWSEnumVariantUnitType extends CWSType {}
+
+export type CWSEnumVariant = CWSEnumVariantStructType | CWSEnumVariantUnitType;
+
+export class CWSErrorType extends CWSStructType {}
+
+export class CWSEventType extends CWSStructType {}
+
+export class CWSTypeAliasType extends CWSType {
+  constructor(
+    public name: string,
+    public value: CWSType
+  ) {
+    super(name);
+  }
+}
+
+export class CWSTypePathType extends CWSType {
+  constructor(public segments: string[]) {
+    super(segments.join('.'));
+  }
+
+  public eval(symbols: SymbolTable): CWSType {
+    let initial = symbols.lookup(this.segments[0]);
+    if (!initial) {
+      throw new Error(`Type '${this.name}' not found`);
+    }
+    let result = initial.ty ?? initial.value;
+    if (result === undefined) {
+      throw new Error(`TODO: SHOULD NOT HAPPEN`);
+    } else {
+      for (let i = 1; i < this.segments.length; i++) {
+        result = result.getMember(this.segments[i]);
+        if (result === undefined) {
+          throw new Error(`Type '${this.name}' not found`);
+        }
+      }
+      if (result.isType()) {
+        return result;
+      } else {
+        throw new Error(`Type '${this.name}' not found`);
+      }
+    }
   }
 }
 
@@ -492,6 +551,8 @@ export class CWSListType<T extends CWSType = CWSType> extends CWSType {
     }
   }
 }
+
+export const Infer = new CWSType('Infer');
 
 export const CWSBoolType = new CWSType('Bool');
 export const CWSIntType = new CWSType('Int');
