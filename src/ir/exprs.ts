@@ -33,14 +33,14 @@ export class Dot extends CWSExpr {
 export class Index extends CWSExpr {
   constructor(
     public expr: CWSExpr | Value.CWSValue,
-    public index: CWSExpr | Value.CWSValue
+    public index: Arg
   ) {
     super();
   }
 
   public eval(symbols: SymbolTable) {
     const obj = this.expr.eval(symbols);
-    const index = this.index.eval(symbols);
+    const index = this.index.value.eval(symbols);
     if (index instanceof Type.CWSType) {
       throw new Error('Tried to index using a type');
     }

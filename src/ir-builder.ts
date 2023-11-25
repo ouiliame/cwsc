@@ -1,19 +1,29 @@
 import * as AST from './ast';
 import * as IR from './ir';
+import { SymbolTable } from './symbol-table';
+import { CWSTupleType, CWSType } from './ir/types';
 
 export class IRBuilder extends AST.ASTVisitor<IR.IR> {
+  constructor(public symbols: SymbolTable = new SymbolTable()) {
+    super();
+  }
+
   visitSourceFile(node: AST.SourceFile): IR.SourceFile {
     // visit children
     let children = node.children.map((x) => this.visit(x));
+    children.forEach((x) => x.eval(this.symbols));
     return new IR.SourceFile(children);
   }
 
   visitImportAllStmt(node: AST.ImportAllStmt): IR.Stmt.ImportAll {
-    return new IR.Stmt.ImportAll(node.path.value);
+    return new IR.Stmt.ImportAll(node.src);
   }
 
   visitImportItemsStmt(node: AST.ImportItemsStmt): IR.Stmt.ImportItems {
-    return new IR.Stmt.ImportItems(node.path.value, node.name.value);
+    return new IR.Stmt.ImportItems(
+      node.items.map((x) => x.value),
+      node.src
+    );
   }
 
   visitContractDefn(node: AST.ContractDefn): IR.Value.Contract {
@@ -71,6 +81,10 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     );
   }
 
+  public visitInterfaceDefn(node: AST.InterfaceDefn): IR.Type.CWSInterfaceType {
+    return new IR.Type.CWSInterfaceType(node.name.value, []);
+  }
+
   public visitBlock(node: AST.Block): IR.IR[] {
     return node.children.map((x) => this.visit(x));
   }
@@ -78,7 +92,7 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   public visitParam(node: AST.Param): IR.Param {
     return {
       name: node.name.value,
-      ty: this.visit(node.ty!) as IR.Type.CWSType,
+      ty: node.ty ? this.visitTypeExpr(node.ty) : IR.Type.Infer,
       optional: node.optional,
     };
   }
@@ -89,6 +103,13 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
       throw new Error('Expected a type');
     }
     return res;
+  }
+
+  public visitTypeVariant(node: AST.TypeVariant): IR.Type.CWSType {
+    const name = this.visitTypeExpr(node.name);
+    const variant = node.variant ? '.#' + node.variant.value : '';
+    // TODO: fix
+    return new IR.Type.CWSType(name + variant);
   }
 
   public visitFnDefn(node: AST.FnDefn): IR.Value.Fn {
@@ -187,24 +208,69 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   }
 
   public visitExpr(node: AST.Expr): IR.Expr.CWSExpr | IR.Value.CWSValue {
+    console.log(`${node.constructor.name} -- ${node.$ctx!.text}`);
     let expr = this.visit(node);
+    console.log(expr);
     if (
       !(expr instanceof IR.Expr.CWSExpr) &&
       !(expr instanceof IR.Value.CWSValue)
     ) {
-      throw new Error('Expected an expression or value');
+      throw new Error(
+        'Expected an expression or value, got ' + expr.constructor.name
+      );
     }
     return expr;
   }
 
+  public visitStructExpr(node: AST.StructExpr): IR.Value.Struct {
+    // turn args to object of fields
+    let fields: { [name: string]: IR.Value.CWSValue } = {};
+    node.args.map((x) => {
+      // TODO: this needs to eval
+      fields[x.name.value] = x.value
+        ? (this.visitExpr(x.value) as IR.Value.CWSValue)
+        : IR.Value.NoneValue;
+    });
+
+    return new IR.Value.Struct(
+      node.ty ? this.visitTypeExpr(node.ty) : IR.Type.Infer,
+      fields
+    );
+  }
+
+  public visitTupleExpr(node: AST.TupleExpr): IR.Value.Tuple {
+    const elements = node.exprs.map(
+      (x) => this.visitExpr(x) as IR.Value.CWSValue
+    );
+
+    return new IR.Value.Tuple(IR.Type.Infer, elements);
+  }
+
+  public visitClosure(node: AST.Closure): IR.Value.Fn {
+    const params = node.params.map((x) => this.visitParam(x));
+    const fallible = node.fallible;
+    const returnTy = node.retTy
+      ? this.visitTypeExpr(node.retTy)
+      : IR.Type.Infer;
+    const body = this.visitBlock(node.body);
+    return new IR.Value.Fn(
+      `<closure>${fallible ? '!' : ''}`,
+      params,
+      returnTy,
+      body
+    );
+  }
+
   public visitDotExpr(node: AST.DotExpr): IR.Expr.Dot {
+    console.log(node.$ctx!.text);
     return new IR.Expr.Dot(this.visitExpr(node.obj), node.member.value);
   }
 
   public visitIndexExpr(node: AST.IndexExpr): IR.Expr.Index {
+    console.log(node.$ctx!.text);
     return new IR.Expr.Index(
       this.visitExpr(node.obj),
-      this.visitExpr(node.args.at(0)!)
+      this.visitArg(node.args.at(0)!)
     );
   }
 
@@ -216,10 +282,15 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   }
 
   public visitFnCallExpr(node: AST.FnCallExpr): IR.Expr.Call {
-    const expr = this.visitExpr(node.func as AST.Expr);
     const args = node.args.map((x) => this.visitArg(x));
-
-    return new IR.Expr.Call(expr, args);
+    if (node.func instanceof AST.Expr) {
+      const expr = this.visitExpr(node.func);
+      return new IR.Expr.Call(expr, args);
+    } else {
+      const typeExpr = this.visitTypeExpr(node.func);
+      console.log(typeExpr);
+      throw new Error('TODO: type call');
+    }
   }
 
   public visitNoneCheckExpr(node: AST.NoneCheckExpr): IR.Expr.Exists {
@@ -250,6 +321,10 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     return new IR.Expr.Query(this.visitExpr(node.expr));
   }
 
+  public visitQueryNowExpr(node: AST.QueryNowExpr): IR.Expr.QueryNow {
+    return new IR.Expr.QueryNow(this.visitExpr(node.expr));
+  }
+
   public visitFailExpr(node: AST.FailExpr): IR.Expr.Fail {
     return new IR.Expr.Fail(this.visitExpr(node.expr));
   }
@@ -259,6 +334,7 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   }
 
   public visitIdentExpr(node: AST.IdentExpr): IR.Expr.Ident {
+    this.symbols.set(node.symbol.value, {)
     return new IR.Expr.Ident(node.symbol.value);
   }
 
@@ -330,6 +406,116 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
       node.name ? node.name.value : null,
       this.visitBlock(node.body)
     );
+  }
+
+  public visitLetStmt(node: AST.LetStmt): IR.Stmt.Let {
+    if (node.binding instanceof AST.IdentBinding) {
+      return new IR.Stmt.Let(
+        {
+          ident: {
+            name: node.binding.name.value,
+            ty: node.binding.ty
+              ? this.visitTypeExpr(node.binding.ty)
+              : IR.Type.Infer,
+          },
+        },
+        node.expr ? this.visitExpr(node.expr) : IR.Value.NoneValue
+      );
+    } else if (node.binding instanceof AST.TupleBinding) {
+      return new IR.Stmt.Let(
+        {
+          tuple: node.binding.bindings.map((x) => ({
+            name: x.name.value,
+            ty: x.ty ? this.visitTypeExpr(x.ty) : IR.Type.Infer,
+          })),
+        },
+        node.expr ? this.visitExpr(node.expr) : IR.Value.NoneValue
+      );
+    } else if (node.binding instanceof AST.StructBinding) {
+      return new IR.Stmt.Let(
+        {
+          struct: node.binding.bindings.map((x) => ({
+            name: x.name.value,
+            ty: x.ty ? this.visitTypeExpr(x.ty) : IR.Type.Infer,
+          })),
+        },
+        node.expr ? this.visitExpr(node.expr) : IR.Value.NoneValue
+      );
+    } else {
+      throw new Error('TODO: pattern let');
+    }
+  }
+
+  public visitIfStmt(node: AST.IfStmt): IR.Stmt.If {
+    return new IR.Stmt.If(
+      this.visitExpr(node.pred),
+      this.visitBlock(node.then),
+      node.else_ ? this.visitBlock(node.else_) : null
+    );
+  }
+
+  public visitForStmt(node: AST.ForStmt): IR.Stmt.For {
+    const binding = node.binding;
+    if (binding instanceof AST.IdentBinding) {
+      return new IR.Stmt.For(
+        {
+          ident: {
+            name: binding.name.value,
+            ty: binding.ty ? this.visitTypeExpr(binding.ty) : IR.Type.Infer,
+          },
+        },
+        this.visitExpr(node.iter),
+        this.visitBlock(node.body)
+      );
+    } else if (binding instanceof AST.TupleBinding) {
+      return new IR.Stmt.For(
+        {
+          tuple: binding.bindings.map((x) => ({
+            name: x.name.value,
+            ty: x.ty ? this.visitTypeExpr(x.ty) : IR.Type.Infer,
+          })),
+        },
+        this.visitExpr(node.iter),
+        this.visitBlock(node.body)
+      );
+    } else if (binding instanceof AST.StructBinding) {
+      return new IR.Stmt.For(
+        {
+          struct: binding.bindings.map((x) => ({
+            name: x.name.value,
+            ty: x.ty ? this.visitTypeExpr(x.ty) : IR.Type.Infer,
+          })),
+        },
+        this.visitExpr(node.iter),
+        this.visitBlock(node.body)
+      );
+    } else {
+      throw new Error('TODO: pattern for');
+    }
+  }
+
+  public visitAssignStmt(
+    node: AST.AssignStmt
+  ): IR.Stmt.Assign | IR.Stmt.AssignMember | IR.Stmt.AssignIndex {
+    let { lhs, rhs } = node;
+    let expr = this.visitExpr(rhs);
+    if (lhs instanceof AST.IdentLHS) {
+      return new IR.Stmt.Assign(lhs.symbol.value, expr);
+    } else if (lhs instanceof AST.DotLHS) {
+      return new IR.Stmt.AssignMember(
+        this.visitExpr(lhs.obj),
+        lhs.member.value,
+        expr
+      );
+    } else if (lhs instanceof AST.IndexLHS) {
+      return new IR.Stmt.AssignIndex(
+        this.visitExpr(lhs.obj),
+        this.visitExpr(lhs.args.at(0)!),
+        expr
+      );
+    } else {
+      throw new Error('TODO: pattern assign');
+    }
   }
 
   public visitExecStmt(node: AST.ExecStmt): IR.Stmt.Exec {

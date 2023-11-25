@@ -1,8 +1,8 @@
 import { ParserRuleContext } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import * as AST from '../ir/ast';
-import { Expr } from '../ir/ast';
+import * as AST from '../ast';
+import { Expr } from '../ast';
 import * as P from '../grammar/CWScriptParser';
 import { CWScriptParserVisitor as ANTLRCWScriptParserVisitor } from '../grammar/CWScriptParserVisitor';
 
@@ -474,15 +474,6 @@ export class CWSASTBuilderVisitor
     return new AST.FnCallExpr(func, fallible, args).$(ctx);
   }
 
-  visitTypeFnCallExpr(ctx: P.TypeFnCallExprContext): AST.FnCallExpr {
-    const func = this.visit(ctx.typeExpr()) as AST.TypeExpr;
-    const fallible = !!ctx._fallible;
-    const args = new AST.List<AST.Arg>(
-      ctx._args.map((arg) => this.visitArg(arg))
-    );
-    return new AST.FnCallExpr(func, fallible, args).$(ctx);
-  }
-
   visitMulExpr(ctx: P.MulExprContext): AST.BinOpExpr {
     const lhs = this.visit(ctx.expr()[0]) as AST.Expr;
     const op = ctx._op.text as AST.Op;
@@ -642,6 +633,10 @@ export class CWSASTBuilderVisitor
 
   visitIdent(ctx: P.IdentContext): AST.Ident {
     return new AST.Ident(ctx.text).$(ctx);
+  }
+
+  visitIdentExpr(ctx: P.IdentExprContext): AST.IdentExpr {
+    return new AST.IdentExpr(this.visitIdent(ctx.ident())).$(ctx);
   }
 
   // Create a virtual AST List node of AST nodes from a list of parser contexts

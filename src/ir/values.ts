@@ -2,6 +2,7 @@ import { SymbolTable } from '../symbol-table';
 import { IR, Param, Arg, ValueMember, TypeMember } from './ir-base';
 import * as Type from './types';
 import * as Stmt from './stmts';
+import { CWSExpr } from './exprs';
 
 export abstract class CWSValue extends IR {
   public isType(): this is Type.CWSType {
@@ -194,7 +195,7 @@ export class QueryFn extends Fn {
 }
 
 export class Struct extends CWSValue {
-  public get ty(): Type.CWSStructType {
+  public get ty(): Type.CWSType {
     return this.structTy;
   }
 
@@ -205,11 +206,12 @@ export class Struct extends CWSValue {
         value: this.fields[x],
       };
     });
+
     return [...super.members, ...fields];
   }
   constructor(
-    public structTy: Type.CWSStructType,
-    public fields: { [name: string]: CWSValue } = {}
+    public structTy: Type.CWSType,
+    public fields: { [member: string]: CWSValue } = {}
   ) {
     super();
   }
@@ -217,7 +219,7 @@ export class Struct extends CWSValue {
 
 export class Tuple extends CWSValue {
   constructor(
-    public ty: Type.CWSTupleType,
+    public ty: Type.CWSType,
     public elements: CWSValue[] = []
   ) {
     super();
@@ -280,14 +282,16 @@ export class None extends CWSValue {
 }
 
 export class CWSError extends Struct {
-  public get ty(): Type.CWSErrorType {
-    return new Type.CWSErrorType(super.ty.name, super.ty.fields);
+  public get ty(): Type.CWSType {
+    const ty = super.ty as Type.CWSStructType;
+    return new Type.CWSErrorType(ty.name, ty.fields);
   }
 }
 
 export class Event extends Struct {
-  public get ty(): Type.CWSEventType {
-    return new Type.CWSEventType(super.ty.name, super.ty.fields);
+  public get ty(): Type.CWSType {
+    const ty = super.ty as Type.CWSStructType;
+    return new Type.CWSEventType(ty.name, ty.fields);
   }
 }
 

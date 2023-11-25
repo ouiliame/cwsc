@@ -179,12 +179,9 @@ export class CWScriptCompiler {
     return stage((ctx: BuildContext<any>) => {
       return ctx.updateSources((path, src) => {
         let cg = new RustCodegen(this.project);
-        src.ir
-          .descendantsOfType(AST.ContractDefn)
-          .forEach((contract: AST.ContractDefn) => {
-            let contractIR = new IR.Value.Contract(contract.name.value);
-            cg.buildContract(contractIR);
-          });
+        src.ir.contracts.forEach((contract: IR.Value.Contract) => {
+          cg.buildContract(contract);
+        });
         cg.env.writeToDisk(this.project.buildDir);
         return {
           code: cg.env,

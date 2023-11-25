@@ -24,7 +24,6 @@ import { IndexExprContext } from "./CWScriptParser";
 import { DColonExprContext } from "./CWScriptParser";
 import { TypeDColonExprContext } from "./CWScriptParser";
 import { FnCallExprContext } from "./CWScriptParser";
-import { TypeFnCallExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
 import { AddExprContext } from "./CWScriptParser";
 import { CompExprContext } from "./CWScriptParser";
@@ -47,6 +46,7 @@ import { UnitVariantExprContext } from "./CWScriptParser";
 import { LiteralExprContext } from "./CWScriptParser";
 import { IdentExprContext } from "./CWScriptParser";
 import { Grouped2ExprContext } from "./CWScriptParser";
+import { TypeAppTContext } from "./CWScriptParser";
 import { PathTContext } from "./CWScriptParser";
 import { VariantTContext } from "./CWScriptParser";
 import { LensTContext } from "./CWScriptParser";
@@ -54,6 +54,7 @@ import { FnTContext } from "./CWScriptParser";
 import { OptionTContext } from "./CWScriptParser";
 import { ListTContext } from "./CWScriptParser";
 import { TupleTContext } from "./CWScriptParser";
+import { ParamzdTContext } from "./CWScriptParser";
 import { DefnTContext } from "./CWScriptParser";
 import { IdentBindingContext } from "./CWScriptParser";
 import { StructBindingContext } from "./CWScriptParser";
@@ -102,6 +103,7 @@ import { Variant_Context } from "./CWScriptParser";
 import { Variant_structContext } from "./CWScriptParser";
 import { Variant_unitContext } from "./CWScriptParser";
 import { TypeExprContext } from "./CWScriptParser";
+import { TypeArgContext } from "./CWScriptParser";
 import { FnTypeContext } from "./CWScriptParser";
 import { TypeLensContext } from "./CWScriptParser";
 import { TypePathContext } from "./CWScriptParser";
@@ -313,14 +315,6 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitFnCallExpr?: (ctx: FnCallExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `TypeFnCallExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeFnCallExpr?: (ctx: TypeFnCallExprContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `MulExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
@@ -497,6 +491,14 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitGrouped2Expr?: (ctx: Grouped2ExprContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `TypeAppT`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeAppT?: (ctx: TypeAppTContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `PathT`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
@@ -551,6 +553,14 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitTupleT?: (ctx: TupleTContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ParamzdT`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParamzdT?: (ctx: ParamzdTContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `DefnT`
@@ -905,6 +915,13 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitTypeExpr?: (ctx: TypeExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.typeArg`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeArg?: (ctx: TypeArgContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.fnType`.

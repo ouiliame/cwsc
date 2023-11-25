@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as AST from './ir/ast';
+import * as AST from './ast';
 import { CWScriptParser } from './parser';
 
 let examplePath = path.resolve('./examples/counter/src/Counter.cws');

@@ -56,7 +56,7 @@ contract TerraswapFactory {
     let { tmp_pair_info } = $state
     // parse_response!
     // the parse_response!() function expects the context variable "$"
-    let response = Wasm.Instantiate::parse_response!($data)
+    let response = Wasm.Instantiate.parse_response!($data)
     let pair_contract = response.address
     let pair_info = query! TerraswapPair(pair_contract).#pair() ~ .token_supply
     $state.pairs = PairInfo(

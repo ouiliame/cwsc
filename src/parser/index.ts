@@ -3,7 +3,7 @@ import { ANTLRErrorListener, CharStreams, CommonTokenStream } from 'antlr4ts';
 import { RecognitionException } from 'antlr4ts/RecognitionException';
 import path from 'path';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
-import * as AST from '../ir/ast';
+import * as AST from '../ast';
 import { CWScriptLexer as ANTLRCWScriptLexer } from '../grammar/CWScriptLexer';
 import {
   CWScriptParser as ANTLRCWScriptParser,

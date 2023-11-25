@@ -1,4 +1,4 @@
-import * as AST from './ir/ast';
+import * as AST from './ast';
 import * as IR from './ir';
 
 export interface SymbolTableEntry {
@@ -35,7 +35,7 @@ export class SymbolTable {
 
   public static fromAST(node: AST.AST): SymbolTable {
     let table = new SymbolTable();
-    node.descendants.forEach((node) => {
+    node.descendants.forEach((node: AST.AST) => {
       // find all declarations
       if (node instanceof AST.TypeAliasDefn) {
         table.set(node.name.value, {
@@ -154,7 +154,7 @@ export class SymbolIndex {
 
   public static fromFile(file: string, ast: AST.SourceFile): SymbolIndex {
     let res = new SymbolIndex();
-    ast.descendants.forEach((node) => {
+    ast.descendants.forEach((node: AST.AST) => {
       if ('name' in node) {
         let name: string;
         if (typeof node.name === 'string') {

@@ -24,7 +24,6 @@ import { IndexExprContext } from "./CWScriptParser";
 import { DColonExprContext } from "./CWScriptParser";
 import { TypeDColonExprContext } from "./CWScriptParser";
 import { FnCallExprContext } from "./CWScriptParser";
-import { TypeFnCallExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
 import { AddExprContext } from "./CWScriptParser";
 import { CompExprContext } from "./CWScriptParser";
@@ -47,6 +46,7 @@ import { UnitVariantExprContext } from "./CWScriptParser";
 import { LiteralExprContext } from "./CWScriptParser";
 import { IdentExprContext } from "./CWScriptParser";
 import { Grouped2ExprContext } from "./CWScriptParser";
+import { TypeAppTContext } from "./CWScriptParser";
 import { PathTContext } from "./CWScriptParser";
 import { VariantTContext } from "./CWScriptParser";
 import { LensTContext } from "./CWScriptParser";
@@ -54,6 +54,7 @@ import { FnTContext } from "./CWScriptParser";
 import { OptionTContext } from "./CWScriptParser";
 import { ListTContext } from "./CWScriptParser";
 import { TupleTContext } from "./CWScriptParser";
+import { ParamzdTContext } from "./CWScriptParser";
 import { DefnTContext } from "./CWScriptParser";
 import { IdentBindingContext } from "./CWScriptParser";
 import { StructBindingContext } from "./CWScriptParser";
@@ -102,6 +103,7 @@ import { Variant_Context } from "./CWScriptParser";
 import { Variant_structContext } from "./CWScriptParser";
 import { Variant_unitContext } from "./CWScriptParser";
 import { TypeExprContext } from "./CWScriptParser";
+import { TypeArgContext } from "./CWScriptParser";
 import { FnTypeContext } from "./CWScriptParser";
 import { TypeLensContext } from "./CWScriptParser";
 import { TypePathContext } from "./CWScriptParser";
@@ -415,19 +417,6 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitFnCallExpr?: (ctx: FnCallExprContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `TypeFnCallExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 */
-	enterTypeFnCallExpr?: (ctx: TypeFnCallExprContext) => void;
-	/**
-	 * Exit a parse tree produced by the `TypeFnCallExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 */
-	exitTypeFnCallExpr?: (ctx: TypeFnCallExprContext) => void;
-
-	/**
 	 * Enter a parse tree produced by the `MulExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
@@ -714,6 +703,19 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitGrouped2Expr?: (ctx: Grouped2ExprContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `TypeAppT`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeAppT?: (ctx: TypeAppTContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TypeAppT`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeAppT?: (ctx: TypeAppTContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `PathT`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
@@ -803,6 +805,19 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTupleT?: (ctx: TupleTContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `ParamzdT`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 */
+	enterParamzdT?: (ctx: ParamzdTContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ParamzdT`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 */
+	exitParamzdT?: (ctx: ParamzdTContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `DefnT`
@@ -1367,6 +1382,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeExpr?: (ctx: TypeExprContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.typeArg`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeArg?: (ctx: TypeArgContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.typeArg`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeArg?: (ctx: TypeArgContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.fnType`.

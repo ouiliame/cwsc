@@ -73,3 +73,100 @@ export class Fail extends Stmt {
     super();
   }
 }
+
+export interface IdentBinding {
+  ident: {
+    name: string;
+    ty: Type.CWSType;
+  };
+}
+
+export type TupleBinding = {
+  tuple: {
+    name: string;
+    ty: Type.CWSType;
+  }[];
+};
+
+export type StructBinding = {
+  struct: {
+    name: string;
+    ty: Type.CWSType;
+  }[];
+};
+export class Let extends Stmt {
+  constructor(
+    public binding: IdentBinding | TupleBinding | StructBinding,
+    public value: Expr.CWSExpr | Value.CWSValue
+  ) {
+    super();
+  }
+}
+
+export class Const extends Stmt {
+  constructor(
+    public name: string,
+    public type: Type.CWSType,
+    public value: Expr.CWSExpr | Value.CWSValue
+  ) {
+    super();
+  }
+}
+
+export class If extends Stmt {
+  constructor(
+    public cond: Expr.CWSExpr | Value.CWSValue,
+    public then: IR[],
+    public else_: IR[] | null
+  ) {
+    super();
+  }
+}
+
+export class Assign extends Stmt {
+  constructor(
+    public name: string,
+    public value: Expr.CWSExpr | Value.CWSValue
+  ) {
+    super();
+  }
+}
+
+export class AssignMember extends Stmt {
+  constructor(
+    public obj: Expr.CWSExpr | Value.CWSValue,
+    public member: string,
+    public value: Expr.CWSExpr | Value.CWSValue
+  ) {
+    super();
+  }
+}
+
+export class AssignIndex extends Stmt {
+  constructor(
+    public obj: Expr.CWSExpr | Value.CWSValue,
+    public index: Expr.CWSExpr | Value.CWSValue,
+    public value: Expr.CWSExpr | Value.CWSValue
+  ) {
+    super();
+  }
+}
+
+export class For extends Stmt {
+  constructor(
+    public bindings: IdentBinding | TupleBinding | StructBinding,
+    public iterable: Expr.CWSExpr | Value.CWSValue,
+    public body: IR[]
+  ) {
+    super();
+  }
+}
+
+export class While extends Stmt {
+  constructor(
+    public cond: Expr.CWSExpr | Value.CWSValue,
+    public body: IR[]
+  ) {
+    super();
+  }
+}

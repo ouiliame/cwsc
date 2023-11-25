@@ -15,4 +15,31 @@ export class SourceFile extends IR {
   eval(symbols: SymbolTable): Value.CWSValue | Type.CWSType {
     return Value.NoneValue;
   }
+
+  public get contracts(): Value.Contract[] {
+    return this.children.filter(
+      (child) => child instanceof Value.Contract
+    ) as Value.Contract[];
+  }
+
+  public get interfaces(): Type.CWSInterfaceType[] {
+    return this.children.filter(
+      (child) => child instanceof Type.CWSInterfaceType
+    ) as Type.CWSInterfaceType[];
+  }
+
+  public get typedefs(): Type.CWSType[] {
+    return this.children.filter(
+      (child) =>
+        child instanceof Type.CWSStructType ||
+        child instanceof Type.CWSEnumType ||
+        child instanceof Type.CWSTypeAliasType
+    ) as Type.CWSType[];
+  }
+
+  public get fns(): Value.Fn[] {
+    return this.children.filter(
+      (child) => child instanceof Value.Fn
+    ) as Value.Fn[];
+  }
 }

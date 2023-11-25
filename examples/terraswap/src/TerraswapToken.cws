@@ -281,7 +281,7 @@ contract TerraswapToken implements CW20 {
       // which is the smart state object that abstracts access to state.allowances
       // at that the key for $state.allowances[$info.sender, spender_addr].
       // then ::remove!() deletes the key
-      $state.allowances[$info.sender, spender_addr]::remove!()
+      $state.allowances[$info.sender, spender_addr].remove!()
     }
 
     emit DecreaseAllowance($info.sender, spender, amount)
@@ -302,7 +302,7 @@ contract TerraswapToken implements CW20 {
     let owner_addr = Address!(owner)
     deduct_allowance!(owner_addr, $info.sender, $env.block, amount)
 
-    $state.balances[owner_addr]::update!(|s| s.checked_sub!(amount))
+    $state.balances[owner_addr].update!(|s| s.checked_sub!(amount))
     $state.token_info.total_supply -= amount
 
     emit BurnFrom(owner, $info.sender, amount)
@@ -349,7 +349,7 @@ contract TerraswapToken implements CW20 {
 
   query #all_allowances(owner: String, start_after?: String, limit?: Int) -> AllowanceResponse {
     let limit = (limit ?? DEFAULT_LIMIT).min(MAX_LIMIT)
-    let allowances = $state.allowances[owner_addr]::range(start, None)
+    let allowances = $state.allowances[owner_addr].range(start, None)
       .take(limit)
       .map(|item| item.map(|addr, allow| AllowanceInfo {
           spender: addr,

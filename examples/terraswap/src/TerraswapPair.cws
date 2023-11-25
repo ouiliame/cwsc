@@ -69,9 +69,10 @@ contract TerraswapPair {
         fail! Unauthorized()
       }
 
-      let to_addr = if to? {
-      	Address.validate!(to)
-      } else none
+      let to_addr: String?; 
+      if to? {
+        to_addr = Address.validate!(to);
+      }
 
       delegate_exec! #swap(
         Address(msg.sender),
@@ -147,15 +148,17 @@ contract TerraswapPair {
     let { liquidity_token } = pair_info
     let total_share = query! $.token_info() ~ .total_supply
 
-    let share = if total_share == 0 {
+    let share: U128;
+
+    if total_share == 0 {
       let deposit0 = U256!(deposits[0])
       let deposit1 = U256!(deposits[1])
 
-      let share = U128!(
+      share = U128!(
         Dec256.ratio!(deposit0 * deposit1, 1).sqrt() * U256!(1)
       ) ?? fail! ConversionError()
     } else {
-      U128.min(
+      share = U128.min(
         deposits[0].multiply_ratio(total_share, pools[0].amount),
         deposits[1].multiply_ratio(total_share, pools[1].amount)
       )

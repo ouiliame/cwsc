@@ -572,13 +572,15 @@ export class IndexLHS extends AST {
 
 export type AssignLHS = IdentLHS | DotLHS | IndexLHS;
 
-export class TupleExpr extends AST {
+export class Expr extends AST {}
+
+export class TupleExpr extends Expr {
   constructor(public exprs: List<Expr>) {
     super();
   }
 }
 
-export class StructExpr extends AST {
+export class StructExpr extends Expr {
   constructor(
     public ty: TypeExpr | null,
     public args: List<MemberVal>
@@ -587,7 +589,7 @@ export class StructExpr extends AST {
   }
 }
 
-export class MemberVal extends AST {
+export class MemberVal extends Expr {
   constructor(
     public name: Ident,
     public value: Expr | null
@@ -616,7 +618,7 @@ export class ForStmt extends AST {
   }
 }
 
-export class GroupedExpr extends AST {
+export class GroupedExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
@@ -627,7 +629,7 @@ export enum UnwrapOp {
   OR_NONE = '?',
 }
 
-export class DotExpr extends AST {
+export class DotExpr extends Expr {
   constructor(
     public obj: Expr,
     public unwrap: UnwrapOp | null,
@@ -637,7 +639,7 @@ export class DotExpr extends AST {
   }
 }
 
-export class AsExpr extends AST {
+export class AsExpr extends Expr {
   constructor(
     public expr: Expr,
     public ty: TypeExpr
@@ -646,7 +648,7 @@ export class AsExpr extends AST {
   }
 }
 
-export class IndexExpr extends AST {
+export class IndexExpr extends Expr {
   constructor(
     public obj: Expr,
     public args: List<Arg>
@@ -655,7 +657,7 @@ export class IndexExpr extends AST {
   }
 }
 
-export class DColonExpr extends AST {
+export class DColonExpr extends Expr {
   constructor(
     public obj: Expr | TypeExpr,
     public member: Ident
@@ -664,7 +666,7 @@ export class DColonExpr extends AST {
   }
 }
 
-export class FnCallExpr extends AST {
+export class FnCallExpr extends Expr {
   constructor(
     public func: Expr | TypeExpr,
     public fallible: boolean,
@@ -688,7 +690,7 @@ export enum Op {
   MOD = '%',
 }
 
-export class BinOpExpr extends AST {
+export class BinOpExpr extends Expr {
   constructor(
     public lhs: Expr,
     public op: Op,
@@ -698,7 +700,7 @@ export class BinOpExpr extends AST {
   }
 }
 
-export class AndExpr extends AST {
+export class AndExpr extends Expr {
   constructor(
     public lhs: Expr,
     public rhs: Expr
@@ -707,7 +709,7 @@ export class AndExpr extends AST {
   }
 }
 
-export class OrExpr extends AST {
+export class OrExpr extends Expr {
   constructor(
     public lhs: Expr,
     public rhs: Expr
@@ -716,7 +718,7 @@ export class OrExpr extends AST {
   }
 }
 
-export class IsExpr extends AST {
+export class IsExpr extends Expr {
   constructor(
     public negative: boolean,
     public lhs: Expr,
@@ -726,7 +728,7 @@ export class IsExpr extends AST {
   }
 }
 
-export class InExpr extends AST {
+export class InExpr extends Expr {
   constructor(
     public lhs: Expr,
     public rhs: Expr
@@ -735,19 +737,19 @@ export class InExpr extends AST {
   }
 }
 
-export class NoneCheckExpr extends AST {
+export class NoneCheckExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
 
-export class ShortTryExpr extends AST {
+export class ShortTryExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
 
-export class TryCatchElseExpr extends AST {
+export class TryCatchElseExpr extends Expr {
   constructor(
     public body: Block,
     public catch_: List<CatchClause>,
@@ -757,7 +759,7 @@ export class TryCatchElseExpr extends AST {
   }
 }
 
-export class CatchClause extends AST {
+export class CatchClause extends Expr {
   constructor(
     public name: Ident | null,
     public ty: TypeExpr,
@@ -767,69 +769,47 @@ export class CatchClause extends AST {
   }
 }
 
-export class NotExpr extends AST {
+export class NotExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
 
-export class QueryExpr extends AST {
+export class QueryExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
 
-export class QueryNowExpr extends AST {
+export class QueryNowExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
 
-export class FailExpr extends AST {
+export class FailExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
 
-export class UnitVariantExpr extends AST {
+export class UnitVariantExpr extends Expr {
   constructor(public ty: TypeVariant) {
     super();
   }
 }
 
-export class IdentExpr extends AST {
+export class IdentExpr extends Expr {
   constructor(public symbol: Ident) {
     super();
   }
 }
 
-export class Grouped2Expr extends AST {
+export class Grouped2Expr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
 }
-
-export type Expr =
-  | GroupedExpr
-  | Grouped2Expr
-  | DotExpr
-  | AsExpr
-  | IndexExpr
-  | DColonExpr
-  | FnCallExpr
-  | NoneCheckExpr
-  | ShortTryExpr
-  | TryCatchElseExpr
-  | NotExpr
-  | QueryExpr
-  | QueryNowExpr
-  | FailExpr
-  | UnitVariantExpr
-  | IdentExpr
-  | TupleExpr
-  | StructExpr
-  | Literal
-  | Closure;
 
 export type TypeExpr =
   | TypePath
@@ -886,7 +866,7 @@ export class Arg extends AST {
   }
 }
 
-export class Closure extends AST {
+export class Closure extends Expr {
   constructor(
     public fallible: boolean,
     public params: List<Param>,
@@ -897,7 +877,7 @@ export class Closure extends AST {
   }
 }
 
-export class Literal extends AST {
+export class Literal extends Expr {
   constructor(public value: string) {
     super();
   }

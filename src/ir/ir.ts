@@ -1,5 +1,5 @@
 import * as Rust from './rust-syntax';
-import * as AST from './ast';
+import * as AST from '../ast';
 
 export type ContractItem =
   | InstantiateFnDefn
