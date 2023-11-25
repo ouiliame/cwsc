@@ -1,4 +1,6 @@
 import { IR, Param } from './ir-base';
+import * as Value from './values';
+import { SymbolTable } from '../symbol-table';
 
 // #region Types
 export class CWSType extends IR {
@@ -9,6 +11,10 @@ export class CWSType extends IR {
     public supertypes: CWSType[] = []
   ) {
     super();
+  }
+
+  public eval(symbols: SymbolTable): CWSType {
+    return this;
   }
 
   public option(): CWSOptionType<this> {
@@ -487,6 +493,10 @@ export class CWSListType<T extends CWSType = CWSType> extends CWSType {
   }
 }
 
+export const CWSBoolType = new CWSType('Bool');
+export const CWSIntType = new CWSType('Int');
+export const CWSStringType = new CWSType('String');
+export const CWSNoneType = new CWSType('None');
 export class CWSContractType extends CWSType {
   constructor(name: string) {
     super('contract ${name}');

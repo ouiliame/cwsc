@@ -1,9 +1,15 @@
-import { IR, Param } from './ir-base';
+import { SymbolTable } from '../symbol-table';
+import { IR, Param, Arg } from './ir-base';
 import * as Type from './types';
+import * as Stmt from './stmts';
+import { Value } from '.';
 
 export abstract class CWSValue extends IR {
   public isType = false;
   abstract get ty(): Type.CWSType;
+  public eval(symbols: SymbolTable): CWSValue {
+    return this;
+  }
 }
 
 export type StateItem = {
@@ -53,6 +59,63 @@ export class Fn extends CWSValue {
 
   public get fallible(): boolean {
     return this.name.endsWith('!');
+  }
+
+  public call(symbols: SymbolTable, args: Arg[]): CWSValue | Type.CWSType {
+    const scope = new SymbolTable(symbols);
+    // args must be in canonical order -- positional first, then named
+    // if a named arg follows a positional arg, it is invalid
+
+    const orderIsValid = args.every((arg, i) => {
+      if (arg.name) {
+        return args.slice(i + 1).every((x) => !x.name);
+      } else {
+        return true;
+      }
+    });
+    if (!orderIsValid) {
+      throw new Error(
+        'Invalid argument order -- positional arguments must come before named arguments'
+      );
+    }
+
+    const posArgs = args.filter((x) => !x.name);
+    const namedArgs = args.filter((x) => x.name);
+
+    // go through positional arguments first
+    posArgs.forEach((arg, i) => {
+      // make sure we have enough positional arguments
+      if (i >= this.params.length) {
+        throw new Error('Too many arguments');
+      }
+      scope.set(this.params[i].name, {
+        type: 'value',
+        value: arg.value.eval(symbols) as CWSValue,
+      });
+    });
+
+    // go thru named arguments
+    namedArgs.forEach((arg) => {
+      // find the param with the same name
+      const param = this.params.find((x) => x.name === arg.name);
+      if (!param) {
+        throw new Error('Invalid argument name: ' + arg.name);
+      }
+      scope.set(arg.name!, {
+        type: 'value',
+        value: arg.value.eval(symbols) as CWSValue,
+      });
+    });
+
+    // evaluate the body
+    let result: CWSValue | Type.CWSType = NoneValue;
+    for (const stmt of this.body) {
+      if (stmt instanceof Stmt.Return) {
+        return stmt.expr.eval(scope) as Value.CWSValue;
+      }
+      result = stmt.eval(scope);
+    }
+    return result;
   }
 
   constructor(
@@ -142,3 +205,41 @@ export class List extends CWSValue {
     super();
   }
 }
+
+export class String extends CWSValue {
+  public get ty(): Type.CWSType {
+    return Type.CWSStringType;
+  }
+
+  constructor(public value: string) {
+    super();
+  }
+}
+
+export class Int extends CWSValue {
+  public get ty(): Type.CWSType {
+    return Type.CWSIntType;
+  }
+
+  constructor(public value: string) {
+    super();
+  }
+}
+
+export class Bool extends CWSValue {
+  public get ty(): Type.CWSType {
+    return Type.CWSBoolType;
+  }
+
+  constructor(public value: boolean) {
+    super();
+  }
+}
+
+export class None extends CWSValue {
+  public get ty(): Type.CWSType {
+    return Type.CWSNoneType;
+  }
+}
+
+export const NoneValue = new None();

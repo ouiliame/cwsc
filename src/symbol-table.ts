@@ -1,8 +1,11 @@
 import * as AST from './ast';
+import * as IR from './ir';
 
 export interface SymbolTableEntry {
   type: string;
   ast?: AST.AST;
+  value?: IR.Value.CWSValue;
+  ty?: IR.Type.CWSType;
 }
 
 export class SymbolTable {
