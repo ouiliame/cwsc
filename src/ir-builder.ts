@@ -2,9 +2,14 @@ import * as AST from './ast';
 import * as IR from './ir';
 import { SymbolTable } from './symbol-table';
 import { CWSTupleType, CWSType } from './ir/types';
+import { CWScriptProject } from './projects';
 
 export class IRBuilder extends AST.ASTVisitor<IR.IR> {
-  constructor(public symbols: SymbolTable = new SymbolTable()) {
+  constructor(
+    public project: CWScriptProject,
+    public path: string,
+    public symbols: SymbolTable = new SymbolTable()
+  ) {
     super();
   }
 
@@ -334,7 +339,6 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   }
 
   public visitIdentExpr(node: AST.IdentExpr): IR.Expr.Ident {
-    this.symbols.set(node.symbol.value, {)
     return new IR.Expr.Ident(node.symbol.value);
   }
 

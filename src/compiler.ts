@@ -168,8 +168,9 @@ export class CWScriptCompiler {
   public get irStage() {
     return stage((ctx: BuildContext<SymbolsCtx>) => {
       return ctx.updateSources((path, src) => {
-        let builder = new IRBuilder();
+        let builder = new IRBuilder(this.project, path);
         let ir = builder.visitSourceFile(src.ast);
+        console.log(JSON.stringify(ir, null, 2));
         return { ir };
       });
     });

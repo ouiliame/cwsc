@@ -1,5 +1,8 @@
 import { IR, Param } from './ir-base';
 import * as Value from './values';
+import * as Expr from './exprs';
+import * as Stmt from './stmts';
+
 import { SymbolTable } from '../symbol-table';
 
 // #region Types
@@ -111,6 +114,20 @@ export class CWSStructType extends CWSType {
     public fields: Param[]
   ) {
     super(name);
+  }
+
+  public get structFn(): Value.Fn {
+    let fieldsMap = this.fields.reduce(
+      (acc: { [k: string]: Expr.Ident }, x) => {
+        acc[x.name] = new Expr.Ident(x.name);
+        return acc;
+      },
+      {}
+    );
+
+    return new Value.Fn(this.name, this.fields, this, [
+      new Stmt.Return(new Value.Struct(this, fieldsMap)),
+    ]);
   }
 
   public isEqualTo(other: CWSType): boolean {

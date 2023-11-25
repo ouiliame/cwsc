@@ -203,15 +203,16 @@ export class Struct extends CWSValue {
     let fields = Object.keys(this.fields).map((x) => {
       return {
         name: x,
-        value: this.fields[x],
+        value: this.fields[x] as CWSValue,
       };
     });
 
     return [...super.members, ...fields];
   }
+
   constructor(
     public structTy: Type.CWSType,
-    public fields: { [member: string]: CWSValue } = {}
+    public fields: { [member: string]: CWSValue | CWSExpr } = {}
   ) {
     super();
   }

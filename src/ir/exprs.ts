@@ -39,12 +39,8 @@ export class Index extends CWSExpr {
   }
 
   public eval(symbols: SymbolTable) {
-    const obj = this.expr.eval(symbols);
-    const index = this.index.value.eval(symbols);
-    if (index instanceof Type.CWSType) {
-      throw new Error('Tried to index using a type');
-    }
-
+    const obj = this.expr.evalValue(symbols);
+    const index = this.index.value.evalValue(symbols);
     return obj.getIndex(index);
   }
 }
@@ -66,8 +62,14 @@ export class Call extends CWSExpr {
         value: x.value.eval(symbols),
       }));
       return fn.call(symbols, this.args);
-    } else {
-      throw new Error('Tried to call non-function');
+    } else if (fn instanceof Type.CWSStructType) {
+      // evaluate arguments
+      const args = this.args.map((x) => ({
+        name: x.name,
+        value: x.value.eval(symbols),
+      }));
+
+      fn.structFn.call(symbols, this.args);
     }
   }
 }
