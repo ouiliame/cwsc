@@ -574,23 +574,18 @@ export class FailExpr extends Expr {
   }
 }
 
-export class UnitVariantExpr extends Expr {
-  constructor(public ty: TypeVariant) {
+export class UnitExpr extends Expr {
+  constructor(public ty: TypeExpr) {
     super();
   }
 }
 
 export class IdentExpr extends Expr {
-  constructor(public symbol: Ident) {
+  constructor(public ident: Ident) {
     super();
   }
 }
 
-export class Grouped2Expr extends Expr {
-  constructor(public expr: Expr) {
-    super();
-  }
-}
 //#endregion Expressions
 //#region Definitions
 export class Defn extends AST {}
@@ -648,6 +643,36 @@ export class EnumDefn extends Defn {
   }
 }
 
+export class EnumVariantDefn extends Defn {
+  constructor(public name: Ident) {
+    super();
+  }
+}
+
+export class EnumVariantStructDefn extends EnumVariantDefn {
+  constructor(
+    public name: Ident,
+    public fields: List<Param>
+  ) {
+    super(name);
+  }
+}
+
+export class EnumVariantTupleDefn extends EnumVariantDefn {
+  constructor(
+    public name: Ident,
+    public fields: List<TypeExpr>
+  ) {
+    super(name);
+  }
+}
+
+export class EnumVariantUnitDefn extends EnumVariantDefn {
+  constructor(public name: Ident) {
+    super(name);
+  }
+}
+
 export class TypeAliasDefn extends Defn {
   constructor(
     public name: Ident,
@@ -664,7 +689,7 @@ export class FnDefn extends Defn {
     public fallible: boolean,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: Block
+    public body: List<Stmt>
   ) {
     super();
   }
@@ -674,7 +699,7 @@ export class InstantiateDefn extends Defn {
   constructor(
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: Block
+    public body: List<Stmt>
   ) {
     super();
   }
@@ -685,7 +710,7 @@ export class ExecDefn extends Defn {
     public name: Ident,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: Block
+    public body: List<Stmt>
   ) {
     super();
   }
@@ -696,7 +721,7 @@ export class QueryDefn extends Defn {
     public name: Ident,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: Block
+    public body: List<Stmt>
   ) {
     super();
   }
@@ -723,7 +748,7 @@ export class EventDefn extends Defn {
 export class StateBlockDefn extends Defn {
   constructor(
     public name: Ident,
-    public fields: List<StateField>
+    public stateFields: List<StateItemDefn | StateBlockDefn>
   ) {
     super();
   }
@@ -806,6 +831,12 @@ export class UnitDefnTypeExpr extends TypeExpr {
 
 export class OptionTypeExpr extends TypeExpr {
   constructor(public ty: TypeExpr) {
+    super();
+  }
+}
+
+export class TypeVar extends AST {
+  constructor(public value: string) {
     super();
   }
 }

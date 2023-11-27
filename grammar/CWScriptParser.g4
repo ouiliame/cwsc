@@ -114,29 +114,29 @@ interfaceDefn:
 	)? LBRACE (body += stmt)* RBRACE SEMI?;
 
 structDefn:
-	STRUCT (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
-		fields = paramList
-	)? RBRACE
+	STRUCT (name = ident) (
+		LBRACK typeParams = typeVarList RBRACK
+	)? LBRACE (fields = paramList)? RBRACE
 	| STRUCT (name = ident) (
-		LBRACK typeVars = typeVarList RBRACK
+		LBRACK typeParams = typeVarList RBRACK
 	)? LPAREN (fields = paramList) RPAREN SEMI?;
 
 tupleDefn:
-	TUPLE (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACK (
+	TUPLE (name = ident) (LBRACK typeParams = typeVarList RBRACK)? LBRACK (
 		elements = typeExprList
 	)? RPAREN SEMI?;
 
 unitDefn:
-	UNIT (LBRACK typeVars = typeVarList RBRACK)? (name = ident) SEMI?;
+	UNIT (LBRACK typeParams = typeVarList RBRACK)? (name = ident) SEMI?;
 
 enumDefn:
-	ENUM (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
-		variants = enumVariantList
+	ENUM (name = ident) (LBRACK typeParams = typeVarList RBRACK)? LBRACE (
+		variants = enumVariantDefnList
 	)? RBRACE SEMI?;
 
-enumVariantList: (enumVariant (COMMA enumVariant)*);
+enumVariantDefnList: (enumVariantDefn (COMMA enumVariantDefn)*);
 
-enumVariant:
+enumVariantDefn:
 	enumVariantStructDefn
 	| enumVariantTupleDefn
 	| enumVariantUnitDefn;
@@ -152,7 +152,7 @@ enumVariantTupleDefn: (name = ident) LBRACK (
 enumVariantUnitDefn: (name = ident);
 
 typeAliasDefn:
-	TYPE (name = ident) (LBRACK typeVars = typeVarList RBRACK)? EQ (
+	TYPE (name = ident) (LBRACK typeParams = typeVarList RBRACK)? EQ (
 		ty = typeExpr
 	) SEMI?;
 
@@ -199,9 +199,13 @@ stateMapDefn:
 // END DEFINITIONS
 
 expr:
-	expr DOT (memberName = ident)					# DotExpr
+	/* f[A, B]() */
+	// f[T](x) //I:s it parameterized function call or call to the closure stored in the array?
+	expr DOT (memberName = ident) # DotExpr
+	| expr (LBRACK (typeArgs += typeExpr)* RBRACK)? LPAREN (
+		args = argList
+	)? RPAREN										# CallExpr
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
-	| expr LPAREN (args = argList) RPAREN			# CallExpr
 	| expr AS (ty = typeExpr)						# AsExpr
 	| expr QUEST									# ExistsExpr
 	| expr (op = MUL | DIV | MOD) expr				# MulExpr

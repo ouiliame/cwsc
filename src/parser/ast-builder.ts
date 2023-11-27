@@ -124,7 +124,7 @@ export class ASTBuilderVisitor
     const binding = this.visit(ctx._binding) as AST.Binding;
     const iter = this.visit(ctx._iter);
     const body = ctx._body.map((s) => this.visit(s));
-    return new AST.ForStmt(binding, iter, new AST.Block(body));
+    return new AST.ForStmt(binding, iter, block);
   }
 
   visitExecStmt(ctx: P.ExecStmtContext): AST.ExecStmt {
@@ -144,42 +144,44 @@ export class ASTBuilderVisitor
 
   visitIfExpr_(ctx: P.IfExpr_Context): AST.IfExpr {
     const cond = this.visit(ctx._cond);
-    const thenBody = ctx._thenBody.map((s) => this.visit(s));
-    const elseBody = ctx._elseBody.map((s) => this.visit(s));
+    const thenBody = ctx._thenBody.map((s) => this.visit(s)) as List<AST.Stmt>;
+    const elseBody = ctx._elseBody.map((s) => this.visit(s)) as List<AST.Stmt>;
     return new AST.IfStmt(cond, thenBody, elseBody);
   }
 
-  visitTryCatchElseExpr_(ctx: P.TryCatchElseExpr_Context): AST.TryCatchElseExpr {
+  visitTryCatchElseExpr_(
+    ctx: P.TryCatchElseExpr_Context
+  ): AST.TryCatchElseExpr {
     const tryBody = ctx._tryBody.map((s) => this.visit(s));
     const catchClauses = ctx._catchClauses.map((s) => this.visit(s));
     const elseBody = ctx._elseBody.map((s) => this.visit(s));
-    return new AST.TryCatchElseExpr(
-      tryBody,
-      catchClauses,
-      elseBody
-    );
+    return new AST.TryCatchElseExpr(tryBody, catchClauses, elseBody);
   }
 
   visitCatchClause(ctx: P.CatchClauseContext): AST.CatchClause {
     const ty = this.visit(ctx._ty);
     const body = ctx._body.map((s) => this.visit(s));
-    return new AST.CatchClause(null, ty, new AST.Block(body));  
+    return new AST.CatchClause(ty, body);
   }
 
   // Definitions
   visitContractDefn(ctx: P.ContractDefnContext): AST.ContractDefn {
     const name = this.visitIdent(ctx._name);
-    const extends = ctx._base ? this.visitIdentList(ctx._base) : null;
-    const implements = ctx._interfaces ? this.visit(ctx._interfaces) : null;
+    const extend = ctx._base ? this.visitIdentList(ctx._base) : null;
+    const implement = ctx._interfaces
+      ? (this.visit(ctx._interfaces) as List<TypeExpr>)
+      : null;
     const body = ctx._body.map((s) => this.visit(s));
-    return new AST.ContractDefn(name, extends, implements, new AST.Block(body));
+    return new AST.ContractDefn(name, extend, implement, body);
   }
 
   visitInterfaceDefn(ctx: P.InterfaceDefnContext): AST.InterfaceDefn {
     const name = this.visitIdent(ctx._name);
-    const extends = ctx._baseInterfaces ? this.visit(ctx._baseInterfaces) : null;
+    const extend = ctx._baseInterfaces
+      ? (this.visit(ctx._baseInterfaces) as List<TypeExpr>)
+      : null;
     const body = ctx._body.map((s) => this.visit(s));
-    return new AST.InterfaceDefn(name, extends, new AST.Block(body));
+    return new AST.InterfaceDefn(name, extend, body);
   }
 
   visitStructDefn(ctx: P.StructDefnContext): AST.StructDefn {
@@ -205,21 +207,33 @@ export class ASTBuilderVisitor
   visitEnumDefn(ctx: P.EnumDefnContext): AST.EnumDefn {
     const name = this.visitIdent(ctx._name);
     const typeVars = ctx._typeVars ? this.visit(ctx._typeVars) : null;
-    const variants = ctx._variants.map((v) => this.visit(v));
+    const variants = ctx._variants ? this.visit(ctx._variants) : null;
     return new AST.EnumDefn(name, typeVars, variants);
   }
 
-  
+  visitEnumVariantList(ctx: P.EnumVariantListContext): AST.EnumVariantList {
+    return new AST.EnumVariantList(ctx._variants.map((v) => this.visit(v)));
+  }
+
+  visitEnumVariantStructDefn(
+    ctx: P.EnumVariantStructDefnContext
+  ): AST.EnumVariantStructDefn {
+    const name = this.visitIdent(ctx._name);
+    const fields = ctx._fields
+      ? (this.visit(ctx._fields) as List<Param>)
+      : null;
+    return new AST.EnumVariantStructDefn(name, fields);
+  }
 
   // Expressions
 
   visitClosureExpr_(ctx: P.ClosureExpr_Context): AST.ClosureExpr {
-    throw "unimplemented: visitClosureExpr";
+    throw 'unimplemented: visitClosureExpr';
   }
 
   visitStructExpr_(ctx: P.StructExpr_Context): AST.StructExpr {
     let ty = this.visit(ctx._ty);
-    let fields = this.visit(ctx._fields)
+    let fields = this.visit(ctx._fields) as List<MemberVar>;
     return new AST.StructExpr(ty, fields);
   }
 
