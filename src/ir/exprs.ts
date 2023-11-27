@@ -117,17 +117,6 @@ export class Is extends CWSExpr {
   }
 }
 
-export class Try extends CWSExpr {
-  constructor(public expr: CWSExpr) {
-    super();
-  }
-
-  public eval(symbols: SymbolTable) {
-    throw new Error('Not implemented');
-    return new Value.None();
-  }
-}
-
 export class TryCatchElse extends CWSExpr {
   constructor(
     public body: IR[],
@@ -146,7 +135,6 @@ export class TryCatchElse extends CWSExpr {
 export class CatchClause {
   constructor(
     public matchErr: Type.CWSType,
-    public binding: string | null,
     public body: IR[]
   ) {}
 }
@@ -271,7 +259,7 @@ export class Fail extends CWSExpr {
 
 export class Tuple extends CWSExpr {
   constructor(
-    public tupleTy: Type.CWSTupleType,
+    public tupleTy: Type.CWSType,
     public elements: CWSExpr[] = []
   ) {
     super();

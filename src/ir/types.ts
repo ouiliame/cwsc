@@ -207,6 +207,8 @@ export class CWSEnumType extends CWSType {
 
 export class CWSEnumVariantStructType extends CWSStructType {}
 
+export class CWSEnumVariantTupleType extends CWSTupleType {}
+
 export class CWSEnumVariantUnitType extends CWSType {}
 
 export type CWSEnumVariant = CWSEnumVariantStructType | CWSEnumVariantUnitType;

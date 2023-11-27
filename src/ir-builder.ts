@@ -20,12 +20,11 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     return new IR.SourceFile(children);
   }
 
-  visitImportAllStmt(node: AST.ImportAllStmt): IR.Stmt.ImportAll {
-    return new IR.Stmt.ImportAll(node.src);
-  }
-
-  visitImportItemsStmt(node: AST.ImportItemsStmt): IR.Stmt.ImportItems {
-    return new IR.Stmt.ImportItems(
+  visitImportStmt(node: AST.ImportStmt): IR.Stmt.Import {
+    if (!node.items) {
+      throw new Error('No items in import statement');
+    }
+    return new IR.Stmt.Import(
       node.items.map((x) => x.value),
       node.src
     );
@@ -97,8 +96,8 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   public visitParam(node: AST.Param): IR.Param {
     return {
       name: node.name.value,
-      ty: node.ty ? this.visitTypeExpr(node.ty) : IR.Type.Infer,
       optional: node.optional,
+      ty: node.ty ? this.visitTypeExpr(node.ty) : IR.Type.Infer,
     };
   }
 
@@ -108,13 +107,6 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
       throw new Error('Expected a type');
     }
     return res;
-  }
-
-  public visitTypeVariant(node: AST.TypeVariant): IR.Type.CWSType {
-    const name = this.visitTypeExpr(node.name);
-    const variant = node.variant ? '.#' + node.variant.value : '';
-    // TODO: fix
-    return new IR.Type.CWSType(name + variant);
   }
 
   public visitFnDefn(node: AST.FnDefn): IR.Value.Fn {

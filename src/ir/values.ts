@@ -72,6 +72,7 @@ export class Contract extends CWSValue {
 export class Fn extends CWSValue {
   constructor(
     public name: string,
+    public typeParams: Type.CWSTypeParam[],
     public params: Param[],
     public returnTy: Type.CWSType,
     public body: IR[] = []
@@ -87,6 +88,10 @@ export class Fn extends CWSValue {
     );
   }
 
+  public get isGeneric(): boolean {
+    return this.typeParams.length > 0;
+  }
+
   public get isMethod(): boolean {
     return this.params.length > 0 && this.params[0].name === 'self';
   }
@@ -95,10 +100,20 @@ export class Fn extends CWSValue {
     return this.name.endsWith('!');
   }
 
-  public call(symbols: SymbolTable, args: Arg[]): CWSValue | Type.CWSType {
+  public call(
+    symbols: SymbolTable,
+    typeArgs: Type.CWSType[],
+    args: Arg[]
+  ): CWSValue | Type.CWSType {
     const scope = new SymbolTable(symbols);
     // args must be in canonical order -- positional first, then named
     // if a named arg follows a positional arg, it is invalid
+
+    // resolve type arguments
+    const typeArgMap = new Map<string, Type.CWSType>();
+    this.typeParams.forEach((param, i) => {
+      typeArgMap.set(param.name, typeArgs[i]);
+    });
 
     const orderIsValid = args.every((arg, i) => {
       if (arg.name) {
@@ -200,19 +215,12 @@ export class Struct extends CWSValue {
   }
 
   public get members(): (ValueMember | TypeMember)[] {
-    let fields = Object.keys(this.fields).map((x) => {
-      return {
-        name: x,
-        value: this.fields[x] as CWSValue,
-      };
-    });
-
-    return [...super.members, ...fields];
+    return [...super.members, ...this.fields];
   }
 
   constructor(
     public structTy: Type.CWSType,
-    public fields: { [member: string]: CWSValue | CWSExpr } = {}
+    public fields: { name: string; value: CWSValue }[] = []
   ) {
     super();
   }

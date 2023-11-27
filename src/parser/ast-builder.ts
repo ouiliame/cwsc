@@ -27,7 +27,7 @@ export class ASTBuilderVisitor
   implements ANTLRCWScriptParserVisitor<AST.AST>
 {
   protected defaultResult(): AST.AST {
-    throw new Error('Method not implemented.');
+    return new AST.AST();
   }
 
   visitSourceFile(ctx: P.SourceFileContext): AST.SourceFile {

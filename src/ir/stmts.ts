@@ -14,17 +14,11 @@ export class Stmt extends IR {
   }
 }
 
-export class ImportItems extends Stmt {
+export class Import extends Stmt {
   constructor(
     public items: string[],
     public src: string
   ) {
-    super();
-  }
-}
-
-export class ImportAll extends Stmt {
-  constructor(public src: string) {
     super();
   }
 }
