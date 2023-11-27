@@ -10,10 +10,60 @@ sourceFile: (stmts += stmt)* EOF;
 
 stmt: importStmt;
 
+importStmt:
+	IMPORT LBRACE (items = identList)? RBRACE FROM (
+		src = StringLiteral
+	);
+
+letStmt: LET (binding = binding_) (EQ value = expr);
+
+binding_:
+	(name = ident) (COLON ty = typeExpr)?	# IdentBinding
+	| LBRACK (names = identList) RBRACK		# TupleBinding
+	| LBRACE (names = identList) RBRACE		# StructBinding;
+
+constStmt:
+	CONST (name = ident) (COLON* ty = typeExpr)? (
+		EQ value = expr
+	);
+
+assignStmt:
+	(name = ident) assignOp = (
+		EQ
+		| PLUS_EQ
+		| MINUS_EQ
+		| MUL_EQ
+		| DIV_EQ
+		| MOD_EQ
+	) value = expr;
+
+memberAssignStmt:
+	(obj = expr) DOT (memberName = ident) assignOp = (
+		EQ
+		| PLUS_EQ
+		| MINUS_EQ
+		| MUL_EQ
+		| DIV_EQ
+		| MOD_EQ
+	) value = expr;
+
+indexAssignStmt:
+	(obj = expr) LBRACK index = expr RBRACK assignOp = (
+		EQ
+		| PLUS_EQ
+		| MINUS_EQ
+		| MUL_EQ
+		| DIV_EQ
+		| MOD_EQ
+	) value = expr;
+
+returnStmt: RETURN (value = expr)?;
+
+failStmt: FAIL (value = expr)?;
+
 // END STATEMENTS
 
 // DEFINITIONS
-
 contractDefn:
 	CONTRACT (name = ident) (EXTENDS (base = ident))? (
 		IMPLEMENTS (interfaces = typeExprList)
@@ -98,14 +148,14 @@ stateMapDefn:
 // EXPRESSIONS
 expr:
 	LPAREN expr RPAREN									# GroupedExpr
-	| expr DOT (name = ident)							# DotExpr
-	| expr LBRACK expr RBRACK							# IndexExpr
-	| expr LPAREN (args = argsList)? RPAREN				# CallExpr
+	| expr DOT (memberName = ident)						# DotExpr
+	| expr LBRACK (index = expr) RBRACK					# IndexExpr
+	| expr LPAREN (args = argList)? RPAREN				# CallExpr
 	| NOT expr											# NotExpr
 	| expr QUEST										# ExistsExpr
 	| expr AS typeExpr									# AsExpr
 	| expr (op = MUL | DIV | MOD) (rhs = expr)			# MulExpr
-	| expr (op = ADD | SUB) (rhs = expr)				# AddExpr
+	| expr (op = PLUS | SUB) (rhs = expr)				# AddExpr
 	| expr (op = LT | GT | LT_EQ | GT_EQ) (rhs = expr)	# CompExpr
 	| expr (op = EQ | NOT_EQ) (rhs = expr)				# EqExpr
 	| expr IN (rhs = expr)								# InExpr
@@ -125,11 +175,23 @@ ifExpr_:
 	)?;
 
 closureExpr_:
-	BAR (params = paramList)? BAR (ARROW (returnTy = typeExpr))? (
-		LBRACE ( body += stmt)* RBRACE
-	);
+	(fallible = BANG)? BAR (params = paramList)? BAR (
+		ARROW (returnTy = typeExpr)
+	)? (LBRACE ( body += stmt)* RBRACE);
 
+structExpr_: (ty = typeExpr) LBRACE (fields = fieldList)? RBRACE;
+tupleExpr_: LBRACK (elements += expr)* RBRACK;
 // END EXPRESSIONS
+
+// LITERALS
+literal:
+	StringLiteral	# StringLit
+	| IntLiteral	# IntLit
+	| DecLiteral	# DecLit
+	| BoolLiteral	# BoolLit
+	| NONE			# NoneLit;
+
+// END LITERALS
 
 // TYPE EXPRESSIONS
 typeExpr: paramzdTypeExpr | ident;
@@ -139,12 +201,47 @@ paramzdTypeExpr: typeExpr LBRACK args = typeExprList RBRACK;
 
 // COMMON ELEMENTS
 
-ident: Ident;
+ident: Ident | reservedKeyword;
 param: (name = ident) (optional = QUEST)? COLON (
 		(ty = typeExpr)?
 	);
+field: (name = ident) COLON (ty = typeExpr);
+namedArg: (name = ident) EQ (value = expr);
+arg: (expr | namedArg);
+
 identList: (ident (COMMA ident)*);
 paramList: (param (COMMA param)*);
 typeExprList: (typeExpr (COMMA typeExpr)*);
+fieldList: (field (COMMA field)*);
+argList: (arg (COMMA arg)*);
+
+reservedKeyword:
+	CONTRACT
+	| INTERFACE
+	| IMPORT
+	| IMPLEMENTS
+	| EXTENDS
+	| ERROR
+	| EVENT
+	| INSTANTIATE
+	| EXEC
+	| QUERY
+	| REPLY
+	| FOR
+	| IN
+	| FROM
+	| STATE
+	| IF
+	| FN
+	| ELSE
+	| AND
+	| OR
+	| TRUE
+	| FALSE
+	| LET
+	| STRUCT
+	| ENUM
+	| TYPE
+	| EMIT;
 
 // END COMMON ELEMENTS
