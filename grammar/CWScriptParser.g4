@@ -15,9 +15,12 @@ stmt:
 	| assignStmt
 	| memberAssignStmt
 	| indexAssignStmt
+	| ifExpr_
+	| tryCatchElseExpr_
 	| forStmt
 	| execStmt
 	| instantiateStmt
+	| emitStmt
 	| failStmt
 	| returnStmt
 	| defn
@@ -195,32 +198,52 @@ stateMapDefn:
 
 // END DEFINITIONS
 
-// EXPRESSIONS
 expr:
-	LPAREN expr RPAREN									# GroupedExpr
-	| expr DOT (memberName = ident)						# DotExpr
-	| expr LBRACK (index = expr) RBRACK					# IndexExpr
-	| expr LPAREN (args = argList)? RPAREN				# CallExpr
-	| NOT expr											# NotExpr
-	| expr QUEST										# ExistsExpr
-	| expr AS typeExpr									# AsExpr
-	| expr (op = MUL | DIV | MOD) (rhs = expr)			# MulExpr
-	| expr (op = PLUS | MINUS) (rhs = expr)				# AddExpr
-	| expr (op = LT | GT | LT_EQ | GT_EQ) (rhs = expr)	# CompExpr
-	| expr (op = EQ | NEQ) (rhs = expr)					# EqExpr
-	| expr IN (rhs = expr)								# InExpr
-	| expr IS (rhs = typeExpr)							# IsExpr
-	| expr AND (rhs = expr)								# AndExpr
-	| expr OR (rhs = expr)								# OrExpr
-	| ifExpr_											# IfExpr
-	| QUERY_NOW expr									# QueryExpr
-	| expr D_QUEST (rhs = expr)							# ShortTryExpr
-	| tryCatchElseExpr_									# TryCatchElseExpr
-	| closureExpr_										# ClosureExpr
-	| structExpr_										# StructExpr
-	| tupleExpr_										# TupleExpr
-	| literal											# LiteralExpr
-	| ident												# IdentExpr;
+	dotExpr
+	| indexExpr
+	| callExpr
+	| existsExpr
+	| asExpr
+	| mulExpr
+	| addExpr
+	| compExpr
+	| eqExpr
+	| inExpr
+	| isExpr
+	| andExpr
+	| orExpr
+	| queryExpr
+	| shortTryExpr
+	| ifExpr_
+	| tryCatchElseExpr_
+	| closureExpr_
+	| structExpr_
+	| tupleExpr_
+	| literal
+	| ident;
+
+dotExpr: exprAtom (DOT memberName = ident)*;
+indexExpr: exprAtom (LBRACK index = expr RBRACK)*;
+callExpr: exprAtom (LPAREN args = argList RPAREN)*;
+existsExpr: exprAtom (QUEST)*;
+asExpr: exprAtom AS (ty = typeExpr);
+mulExpr: exprAtom (mulOp = MUL | DIV | MOD) (rhs = expr);
+addExpr: exprAtom (addOp = PLUS | MINUS) (rhs = expr);
+compExpr:
+	exprAtom (compOp = LT | GT | LT_EQ | GT_EQ) (rhs = expr);
+eqExpr: exprAtom (eqOp = EQ_EQ | NEQ) (rhs = expr);
+inExpr: exprAtom IN (rhs = expr);
+isExpr: exprAtom IS (rhs = typeExpr);
+andExpr: exprAtom AND (rhs = expr);
+orExpr: exprAtom OR (rhs = expr);
+queryExpr: QUERY_NOW expr;
+shortTryExpr: exprAtom D_QUEST (rhs = expr);
+
+exprAtom:
+	literal					# LiteralExpr
+	| ident					# IdentExpr
+	| exprAtom DOT ident	# MemberExpr
+	| LPAREN expr RPAREN	# GroupedExpr;
 
 ifExpr_:
 	IF (cond = expr) LBRACE (thenBody += stmt)* RBRACE (

@@ -11,9 +11,22 @@
 // a -= 5;
 // a.item[item][item] = 5;
 
-return None;
-fail! None;
+// return None;
+// exec! None;
+// instantiate! None;
+// fail! None;
+// emit None;
 
-for [] in expr {
-  
-}
+// for [a, b] in expr {
+  // None;
+// }
+
+a + b == 5
+
+a + b * 5
+
+// if a + b == 5 {
+  // a
+// } else {
+  // b
+// }
