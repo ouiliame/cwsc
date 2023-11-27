@@ -9,10 +9,7 @@ sourceFile: (stmts += stmt)* EOF;
 // STATEMENTS
 
 stmt:
-	defn
-	| typeExpr
-	| expr
-	| importStmt
+	importStmt
 	| letStmt
 	| constStmt
 	| assignStmt
@@ -22,14 +19,17 @@ stmt:
 	| execStmt
 	| instantiateStmt
 	| failStmt
-	| returnStmt;
+	| returnStmt
+	| defn
+	| expr
+	| typeExpr;
 
 importStmt:
 	IMPORT LBRACE (items = identList)? RBRACE FROM (
 		src = StringLiteral
-	);
+	) SEMI;
 
-letStmt: LET (binding = binding_) (EQ value = expr);
+letStmt: LET (binding = binding_) (EQ value = expr) SEMI;
 
 binding_:
 	(name = ident) (COLON ty = typeExpr)?	# IdentBinding
@@ -39,7 +39,7 @@ binding_:
 constStmt:
 	CONST (name = ident) (COLON* ty = typeExpr)? (
 		EQ value = expr
-	);
+	) SEMI;
 
 assignStmt:
 	(name = ident) assignOp = (
@@ -49,7 +49,7 @@ assignStmt:
 		| MUL_EQ
 		| DIV_EQ
 		| MOD_EQ
-	) value = expr;
+	) (value = expr) SEMI;
 
 memberAssignStmt:
 	(obj = expr) DOT (memberName = ident) assignOp = (
@@ -59,7 +59,7 @@ memberAssignStmt:
 		| MUL_EQ
 		| DIV_EQ
 		| MOD_EQ
-	) value = expr;
+	) (value = expr) SEMI;
 
 indexAssignStmt:
 	(obj = expr) LBRACK index = expr RBRACK assignOp = (
@@ -69,19 +69,19 @@ indexAssignStmt:
 		| MUL_EQ
 		| DIV_EQ
 		| MOD_EQ
-	) value = expr;
+	) value = expr SEMI;
 
-returnStmt: RETURN (value = expr)?;
-failStmt: FAIL (value = expr)?;
+returnStmt: RETURN (value = expr) SEMI;
+failStmt: FAIL (value = expr) SEMI;
 
 forStmt:
 	FOR (binding = binding_) IN (iter = expr) LBRACE (
 		body += stmt
 	)* RBRACE;
 
-execStmt: EXEC_NOW expr;
-instantiateStmt: INSTANTIATE_NOW expr;
-emitStmt: EMIT expr;
+execStmt: EXEC_NOW expr SEMI;
+instantiateStmt: INSTANTIATE_NOW expr SEMI;
+emitStmt: EMIT expr SEMI;
 
 // END STATEMENTS
 
@@ -118,20 +118,20 @@ structDefn:
 	) RBRACE
 	| STRUCT (name = ident) (
 		LBRACK typeVars = typeVarList RBRACK
-	)? LPAREN (fields = paramList) RPAREN;
+	)? LPAREN (fields = paramList) RPAREN SEMI?;
 
 tupleDefn:
 	TUPLE (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACK (
 		elements = typeExprList
-	) RPAREN;
+	) RPAREN SEMI;
 
 unitDefn:
-	UNIT (LBRACK typeVars = typeVarList RBRACK)? (name = ident);
+	UNIT (LBRACK typeVars = typeVarList RBRACK)? (name = ident) SEMI;
 
 enumDefn:
 	ENUM (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
 		variants = enumVariantList
-	) RBRACE;
+	) RBRACE SEMI?;
 
 enumVariantList: (enumVariant (COMMA enumVariant)*);
 
@@ -144,12 +144,13 @@ enumVariantStructDefn:
 	(name = ident) LBRACE (fields = paramList) RBRACE
 	| (name = ident) LPAREN (fields = paramList) RPAREN;
 
-enumVariantTupleDefn:
-	(name = ident) LBRACK (elements = typeExprList) RPAREN;
+enumVariantTupleDefn: (name = ident) LBRACK (
+		elements = typeExprList
+	) RPAREN;
 
 enumVariantUnitDefn: (name = ident);
 
-typeAliasDefn: TYPE (name = ident) EQ (ty = typeExpr);
+typeAliasDefn: TYPE (name = ident) EQ (ty = typeExpr) SEMI;
 
 fnDefn:
 	FN (name = ident) LPAREN (params = paramList)? RPAREN (
@@ -179,16 +180,16 @@ errorDefn:
 eventDefn:
 	EVENT (name = ident) LPAREN (params = paramList) RPAREN;
 
-stateBlockDefn: STATE LBRACK (vars += stateDefn) RBRACK;
+stateBlockDefn: STATE LBRACK (stateVars += stateDefn)* RBRACK;
 
 stateDefn: stateItemDefn | stateMapDefn;
 
-stateItemDefn: (name = ident) COLON (ty = typeExpr);
+stateItemDefn: (name = ident) COLON (ty = typeExpr) SEMI;
 
 stateMapDefn:
 	(name = ident) LBRACK (indexTy = typeExpr) RBRACK COLON (
 		ty = typeExpr
-	);
+	) SEMI;
 
 // END DEFINITIONS
 

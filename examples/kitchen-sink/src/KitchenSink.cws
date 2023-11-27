@@ -1,0 +1,2 @@
+import { } from "./TestImport.cws"
+import { A } from "./TestImport.cws"
