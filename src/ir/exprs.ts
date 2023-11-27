@@ -9,7 +9,7 @@ export abstract class CWSExpr extends IR {
     return false;
   }
 
-  abstract eval(symbols: SymbolTable): Value.CWSValue | Type.CWSType;
+  abstract eval(symbols: SymbolTable): Value.CWSValue | CWSExpr | Type.CWSType;
 }
 
 export class Dot extends CWSExpr {
@@ -33,14 +33,14 @@ export class Dot extends CWSExpr {
 export class Index extends CWSExpr {
   constructor(
     public expr: CWSExpr | Value.CWSValue,
-    public index: Arg
+    public index: CWSExpr | Value.CWSValue
   ) {
     super();
   }
 
   public eval(symbols: SymbolTable) {
     const obj = this.expr.evalValue(symbols);
-    const index = this.index.value.evalValue(symbols);
+    const index = this.index.evalValue(symbols);
     return obj.getIndex(index);
   }
 }
@@ -48,6 +48,7 @@ export class Index extends CWSExpr {
 export class Call extends CWSExpr {
   constructor(
     public fn: CWSExpr,
+    public typeArgs: Type.CWSType[],
     public args: Arg[]
   ) {
     super();
@@ -61,7 +62,7 @@ export class Call extends CWSExpr {
         name: x.name,
         value: x.value.eval(symbols),
       }));
-      return fn.call(symbols, this.args);
+      return fn.call(symbols, [], this.args);
     } else if (fn instanceof Type.CWSStructType) {
       // evaluate arguments
       const args = this.args.map((x) => ({
@@ -69,7 +70,9 @@ export class Call extends CWSExpr {
         value: x.value.eval(symbols),
       }));
 
-      fn.structFn.call(symbols, this.args);
+      return fn.structFn.call(symbols, [], this.args);
+    } else {
+      throw new Error('Cannot call non-function');
     }
   }
 }

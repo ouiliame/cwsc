@@ -11,7 +11,9 @@ export abstract class IR {
     return [];
   }
 
-  public getMember(name: string): Value.CWSValue | Type.CWSType | undefined {
+  public getMember(
+    name: string
+  ): Value.CWSValue | Type.CWSType | Expr.CWSExpr | undefined {
     const candidates = this.members.filter((x) => x.name === name);
     if (candidates.length === 0) {
       return undefined;
@@ -29,7 +31,9 @@ export abstract class IR {
   }
 
   /** Function for resolving complex forms into simpler ones, validations, type inference. */
-  abstract eval(symbols: SymbolTable): Value.CWSValue | Type.CWSType;
+  abstract eval(
+    symbols: SymbolTable
+  ): Value.CWSValue | Type.CWSType | Expr.CWSExpr;
 
   public evalValue(symbols: SymbolTable): Value.CWSValue {
     const val = this.eval(symbols);
@@ -56,13 +60,13 @@ export interface Param {
 }
 
 export interface Arg {
-  name?: string;
-  value: Expr.CWSExpr;
+  name: string;
+  value: Value.CWSValue | Expr.CWSExpr;
 }
 
 export interface ValueMember {
   name: string;
-  value: Value.CWSValue;
+  value: Value.CWSValue | Expr.CWSExpr;
 }
 
 export interface TypeMember {

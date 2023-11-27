@@ -120,6 +120,7 @@ export class If extends Stmt {
 export class Assign extends Stmt {
   constructor(
     public name: string,
+    public op: string,
     public value: Expr.CWSExpr | Value.CWSValue
   ) {
     super();
@@ -129,7 +130,8 @@ export class Assign extends Stmt {
 export class AssignMember extends Stmt {
   constructor(
     public obj: Expr.CWSExpr | Value.CWSValue,
-    public member: string,
+    public memberName: string,
+    public op: string,
     public value: Expr.CWSExpr | Value.CWSValue
   ) {
     super();
@@ -140,6 +142,7 @@ export class AssignIndex extends Stmt {
   constructor(
     public obj: Expr.CWSExpr | Value.CWSValue,
     public index: Expr.CWSExpr | Value.CWSValue,
+    public op: string,
     public value: Expr.CWSExpr | Value.CWSValue
   ) {
     super();

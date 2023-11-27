@@ -4,7 +4,7 @@ import * as IR from './ir';
 export interface SymbolTableEntry {
   type: string;
   ast?: AST.AST;
-  value?: IR.Value.CWSValue;
+  value?: IR.Value.CWSValue | IR.Expr.CWSExpr;
   ty?: IR.Type.CWSType;
 }
 

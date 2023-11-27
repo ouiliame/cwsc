@@ -2,7 +2,7 @@ import { SymbolTable } from '../symbol-table';
 import { IR, Param, Arg, ValueMember, TypeMember } from './ir-base';
 import * as Type from './types';
 import * as Stmt from './stmts';
-import { CWSExpr } from './exprs';
+import * as Expr from './exprs';
 
 export abstract class CWSValue extends IR {
   public isType(): this is Type.CWSType {
@@ -22,7 +22,9 @@ export abstract class CWSValue extends IR {
     ];
   }
 
-  public getMember(name: string): CWSValue | Type.CWSType | undefined {
+  public getMember(
+    name: string
+  ): CWSValue | Type.CWSType | Expr.CWSExpr | undefined {
     // if the member doesn't exist on this value, check the type
     const member = super.getMember(name);
     if (member === undefined) {
@@ -104,7 +106,7 @@ export class Fn extends CWSValue {
     symbols: SymbolTable,
     typeArgs: Type.CWSType[],
     args: Arg[]
-  ): CWSValue | Type.CWSType {
+  ): CWSValue | Type.CWSType | Expr.CWSExpr {
     const scope = new SymbolTable(symbols);
     // args must be in canonical order -- positional first, then named
     // if a named arg follows a positional arg, it is invalid
@@ -157,7 +159,7 @@ export class Fn extends CWSValue {
     });
 
     // evaluate the body
-    let result: CWSValue | Type.CWSType = NoneValue;
+    let result: CWSValue | Expr.CWSExpr | Type.CWSType = NoneValue;
     for (const stmt of this.body) {
       if (stmt instanceof Stmt.Return) {
         return stmt.expr.eval(scope) as CWSValue;
@@ -177,7 +179,7 @@ export class InstantiateFn extends Fn {
     public params: Param[] = [],
     public body: IR[] = []
   ) {
-    super('#instantiate', params, new Type.CWSMessageType());
+    super('#instantiate', [], params, new Type.CWSMessageType());
   }
 }
 
@@ -191,7 +193,7 @@ export class ExecFn extends Fn {
     public params: Param[] = [],
     public body: IR[] = []
   ) {
-    super('exec #' + name, params, new Type.CWSMessageType());
+    super('exec #' + name, [], params, new Type.CWSMessageType());
   }
 }
 
@@ -205,7 +207,7 @@ export class QueryFn extends Fn {
     public params: Param[] = [],
     public body: IR[] = []
   ) {
-    super('query #' + name, params, new Type.CWSMessageType());
+    super('query #' + name, [], params, new Type.CWSMessageType());
   }
 }
 
@@ -220,7 +222,7 @@ export class Struct extends CWSValue {
 
   constructor(
     public structTy: Type.CWSType,
-    public fields: { name: string; value: CWSValue }[] = []
+    public fields: { name: string; value: Expr.CWSExpr | CWSValue }[] = []
   ) {
     super();
   }
@@ -267,6 +269,16 @@ export class String extends CWSValue {
 export class Int extends CWSValue {
   public get ty(): Type.CWSType {
     return Type.CWSIntType;
+  }
+
+  constructor(public value: string) {
+    super();
+  }
+}
+
+export class Dec extends CWSValue {
+  public get ty(): Type.CWSType {
+    return Type.CWSDecType;
   }
 
   constructor(public value: string) {

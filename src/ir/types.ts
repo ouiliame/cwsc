@@ -117,16 +117,18 @@ export class CWSStructType extends CWSType {
   }
 
   public get structFn(): Value.Fn {
-    let fieldsMap = this.fields.reduce(
-      (acc: { [k: string]: Expr.Ident }, x) => {
-        acc[x.name] = new Expr.Ident(x.name);
-        return acc;
-      },
-      {}
-    );
-
-    return new Value.Fn(this.name, this.fields, this, [
-      new Stmt.Return(new Value.Struct(this, fieldsMap)),
+    return new Value.Fn(this.name, [], this.fields, this, [
+      new Stmt.Return(
+        new Value.Struct(
+          this,
+          this.fields.map((x) => {
+            return {
+              name: x.name,
+              value: new Expr.Ident(x.name),
+            };
+          })
+        )
+      ),
     ]);
   }
 
@@ -575,6 +577,7 @@ export const Infer = new CWSType('Infer');
 
 export const CWSBoolType = new CWSType('Bool');
 export const CWSIntType = new CWSType('Int');
+export const CWSDecType = new CWSType('Dec');
 export const CWSStringType = new CWSType('String');
 export const CWSNoneType = new CWSType('None');
 export class CWSContractType extends CWSType {

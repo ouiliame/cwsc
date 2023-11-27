@@ -528,7 +528,7 @@ export class GroupedExpr extends Expr {
     super();
   }
 
-  toIR(): IR.Expr {
+  toIR(): IR.Expr.CWSExpr {
     return this.expr.toIR();
   }
 }
@@ -614,8 +614,8 @@ export class IfExpr extends Expr {
     super();
   }
 
-  toIR(): IR.Expr.If {
-    return new IR.Expr.If(
+  toIR(): IR.Stmt.If {
+    return new IR.Stmt.If(
       this.pred.toIR(),
       this.thenBody.toIR(),
       this.elseBody?.toIR() ?? []
@@ -706,18 +706,14 @@ export class InExpr extends Expr {
 
 export class ShortTryExpr extends Expr {
   constructor(
-    public test: Expr,
-    public elseExpr: Expr
+    public lhs: Expr,
+    public rhs: Expr
   ) {
     super();
   }
 
   toIR(): IR.Expr.TryCatchElse {
-    return new IR.Expr.TryCatchElse(
-      this.test.toIR(),
-      [],
-      [this.elseExpr.toIR()]
-    );
+    return new IR.Expr.TryCatchElse([this.lhs.toIR()], [], [this.rhs.toIR()]);
   }
 }
 
@@ -765,6 +761,7 @@ export class ClosureExpr extends Expr {
   toIR(): IR.Value.Fn {
     return new IR.Value.Fn(
       this.fallible ? '<anon>!' : '<anon>',
+      [],
       this.params?.map((x) => x.toIR()) ?? [],
       this.returnTy?.toIR() ?? IR.Type.Infer,
       this.body.toIR()
@@ -872,7 +869,6 @@ export class StructDefn extends Defn {
   toIR(): IR.Type.CWSStructType {
     return new IR.Type.CWSStructType(
       this.name.value,
-      this.typeParams?.map((x) => x.toIR()) ?? [],
       this.fields.map((x) => x.toIR())
     );
   }
@@ -890,7 +886,6 @@ export class TupleDefn extends Defn {
   toIR(): IR.Type.CWSTupleType {
     return new IR.Type.CWSTupleType(
       this.name.value,
-      this.typeParams?.map((x) => x.toIR()) ?? [],
       this.elements.map((x) => x.toIR())
     );
   }
@@ -917,10 +912,18 @@ export class EnumDefn extends Defn {
   ) {
     super();
   }
+
+  toIR(): IR.Type.CWSEnumType {
+    return new IR.Type.CWSEnumType(
+      this.name.value,
+      this.variants.map((x) => x.toIR())
+    );
+  }
 }
 
 export abstract class EnumVariantDefn extends Defn {
   abstract name: Ident;
+  abstract toIR(): IR.Type.CWSEnumVariant;
 }
 
 export class EnumVariantStructDefn extends EnumVariantDefn {
@@ -929,6 +932,13 @@ export class EnumVariantStructDefn extends EnumVariantDefn {
     public fields: List<Param>
   ) {
     super();
+  }
+
+  toIR(): IR.Type.CWSEnumVariantStructType {
+    return new IR.Type.CWSEnumVariantStructType(
+      this.name.value,
+      this.fields.map((x) => x.toIR())
+    );
   }
 }
 
@@ -968,11 +978,7 @@ export class TypeAliasDefn extends Defn {
   }
 
   toIR(): IR.Type.CWSTypeAliasType {
-    return new IR.Type.CWSTypeAliasType(
-      this.name.value,
-      this.typeParams?.map((x) => x.toIR()) ?? [],
-      this.ty.toIR()
-    );
+    return new IR.Type.CWSTypeAliasType(this.name.value, this.ty.toIR());
   }
 }
 
@@ -1032,7 +1038,6 @@ export class ExecDefn extends Defn {
     return new IR.Value.ExecFn(
       this.name.value,
       this.params.map((x) => x.toIR()),
-      this.returnTy?.toIR() ?? IR.Type.Infer,
       this.body.toIR()
     );
   }
@@ -1052,7 +1057,6 @@ export class QueryDefn extends Defn {
     return new IR.Value.QueryFn(
       this.name.value,
       this.params.map((x) => x.toIR()),
-      this.returnTy?.toIR() ?? IR.Type.Infer,
       this.body.toIR()
     );
   }
@@ -1093,7 +1097,7 @@ export class EventDefn extends Defn {
 export class StateBlockDefn extends Defn {
   constructor(
     public name: Ident,
-    public stateFields: List<StateItemDefn | StateBlockDefn>
+    public stateFields: List<StateItemDefn | StateMapDefn>
   ) {
     super();
   }
