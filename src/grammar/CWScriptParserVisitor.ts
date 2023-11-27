@@ -9,8 +9,8 @@ import { DecLitContext } from "./CWScriptParser";
 import { BoolLitContext } from "./CWScriptParser";
 import { NoneLitContext } from "./CWScriptParser";
 import { DotExprContext } from "./CWScriptParser";
-import { IndexExprContext } from "./CWScriptParser";
 import { CallExprContext } from "./CWScriptParser";
+import { IndexExprContext } from "./CWScriptParser";
 import { AsExprContext } from "./CWScriptParser";
 import { ExistsExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
@@ -32,7 +32,7 @@ import { LiteralExprContext } from "./CWScriptParser";
 import { IdentExprContext } from "./CWScriptParser";
 import { GroupedExprContext } from "./CWScriptParser";
 import { GroupedTypeExprContext } from "./CWScriptParser";
-import { ParamzdTypeExprContext } from "./CWScriptParser";
+import { ParameterizedTypeExprContext } from "./CWScriptParser";
 import { MemberTypeExprContext } from "./CWScriptParser";
 import { ArrayTypeExprContext } from "./CWScriptParser";
 import { StructDefnTypeExprContext } from "./CWScriptParser";
@@ -67,8 +67,8 @@ import { StructDefnContext } from "./CWScriptParser";
 import { TupleDefnContext } from "./CWScriptParser";
 import { UnitDefnContext } from "./CWScriptParser";
 import { EnumDefnContext } from "./CWScriptParser";
-import { EnumVariantListContext } from "./CWScriptParser";
-import { EnumVariantContext } from "./CWScriptParser";
+import { EnumVariantDefnListContext } from "./CWScriptParser";
+import { EnumVariantDefnContext } from "./CWScriptParser";
 import { EnumVariantStructDefnContext } from "./CWScriptParser";
 import { EnumVariantTupleDefnContext } from "./CWScriptParser";
 import { EnumVariantUnitDefnContext } from "./CWScriptParser";
@@ -104,6 +104,7 @@ import { ParamListContext } from "./CWScriptParser";
 import { TypeExprListContext } from "./CWScriptParser";
 import { FieldListContext } from "./CWScriptParser";
 import { ArgListContext } from "./CWScriptParser";
+import { BlockContext } from "./CWScriptParser";
 import { ReservedKeywordContext } from "./CWScriptParser";
 
 
@@ -164,20 +165,20 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitDotExpr?: (ctx: DotExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `IndexExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIndexExpr?: (ctx: IndexExprContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `CallExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitCallExpr?: (ctx: CallExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `IndexExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIndexExpr?: (ctx: IndexExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `AsExpr`
@@ -348,12 +349,12 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitGroupedTypeExpr?: (ctx: GroupedTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `ParamzdTypeExpr`
+	 * Visit a parse tree produced by the `ParameterizedTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitParamzdTypeExpr?: (ctx: ParamzdTypeExprContext) => Result;
+	visitParameterizedTypeExpr?: (ctx: ParameterizedTypeExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `MemberTypeExpr`
@@ -606,18 +607,18 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitEnumDefn?: (ctx: EnumDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.enumVariantList`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariantDefnList`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitEnumVariantList?: (ctx: EnumVariantListContext) => Result;
+	visitEnumVariantDefnList?: (ctx: EnumVariantDefnListContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.enumVariant`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitEnumVariant?: (ctx: EnumVariantContext) => Result;
+	visitEnumVariantDefn?: (ctx: EnumVariantDefnContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.enumVariantStructDefn`.
@@ -863,6 +864,13 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitArgList?: (ctx: ArgListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.block`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBlock?: (ctx: BlockContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.reservedKeyword`.

@@ -9,8 +9,8 @@ import { DecLitContext } from "./CWScriptParser";
 import { BoolLitContext } from "./CWScriptParser";
 import { NoneLitContext } from "./CWScriptParser";
 import { DotExprContext } from "./CWScriptParser";
-import { IndexExprContext } from "./CWScriptParser";
 import { CallExprContext } from "./CWScriptParser";
+import { IndexExprContext } from "./CWScriptParser";
 import { AsExprContext } from "./CWScriptParser";
 import { ExistsExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
@@ -32,7 +32,7 @@ import { LiteralExprContext } from "./CWScriptParser";
 import { IdentExprContext } from "./CWScriptParser";
 import { GroupedExprContext } from "./CWScriptParser";
 import { GroupedTypeExprContext } from "./CWScriptParser";
-import { ParamzdTypeExprContext } from "./CWScriptParser";
+import { ParameterizedTypeExprContext } from "./CWScriptParser";
 import { MemberTypeExprContext } from "./CWScriptParser";
 import { ArrayTypeExprContext } from "./CWScriptParser";
 import { StructDefnTypeExprContext } from "./CWScriptParser";
@@ -67,8 +67,8 @@ import { StructDefnContext } from "./CWScriptParser";
 import { TupleDefnContext } from "./CWScriptParser";
 import { UnitDefnContext } from "./CWScriptParser";
 import { EnumDefnContext } from "./CWScriptParser";
-import { EnumVariantListContext } from "./CWScriptParser";
-import { EnumVariantContext } from "./CWScriptParser";
+import { EnumVariantDefnListContext } from "./CWScriptParser";
+import { EnumVariantDefnContext } from "./CWScriptParser";
 import { EnumVariantStructDefnContext } from "./CWScriptParser";
 import { EnumVariantTupleDefnContext } from "./CWScriptParser";
 import { EnumVariantUnitDefnContext } from "./CWScriptParser";
@@ -104,6 +104,7 @@ import { ParamListContext } from "./CWScriptParser";
 import { TypeExprListContext } from "./CWScriptParser";
 import { FieldListContext } from "./CWScriptParser";
 import { ArgListContext } from "./CWScriptParser";
+import { BlockContext } from "./CWScriptParser";
 import { ReservedKeywordContext } from "./CWScriptParser";
 
 
@@ -191,19 +192,6 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitDotExpr?: (ctx: DotExprContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `IndexExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 */
-	enterIndexExpr?: (ctx: IndexExprContext) => void;
-	/**
-	 * Exit a parse tree produced by the `IndexExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 */
-	exitIndexExpr?: (ctx: IndexExprContext) => void;
-
-	/**
 	 * Enter a parse tree produced by the `CallExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
@@ -215,6 +203,19 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitCallExpr?: (ctx: CallExprContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `IndexExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterIndexExpr?: (ctx: IndexExprContext) => void;
+	/**
+	 * Exit a parse tree produced by the `IndexExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitIndexExpr?: (ctx: IndexExprContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `AsExpr`
@@ -490,17 +491,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitGroupedTypeExpr?: (ctx: GroupedTypeExprContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `ParamzdTypeExpr`
+	 * Enter a parse tree produced by the `ParameterizedTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 */
-	enterParamzdTypeExpr?: (ctx: ParamzdTypeExprContext) => void;
+	enterParameterizedTypeExpr?: (ctx: ParameterizedTypeExprContext) => void;
 	/**
-	 * Exit a parse tree produced by the `ParamzdTypeExpr`
+	 * Exit a parse tree produced by the `ParameterizedTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 */
-	exitParamzdTypeExpr?: (ctx: ParamzdTypeExprContext) => void;
+	exitParameterizedTypeExpr?: (ctx: ParameterizedTypeExprContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `MemberTypeExpr`
@@ -901,26 +902,26 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitEnumDefn?: (ctx: EnumDefnContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `CWScriptParser.enumVariantList`.
+	 * Enter a parse tree produced by `CWScriptParser.enumVariantDefnList`.
 	 * @param ctx the parse tree
 	 */
-	enterEnumVariantList?: (ctx: EnumVariantListContext) => void;
+	enterEnumVariantDefnList?: (ctx: EnumVariantDefnListContext) => void;
 	/**
-	 * Exit a parse tree produced by `CWScriptParser.enumVariantList`.
+	 * Exit a parse tree produced by `CWScriptParser.enumVariantDefnList`.
 	 * @param ctx the parse tree
 	 */
-	exitEnumVariantList?: (ctx: EnumVariantListContext) => void;
+	exitEnumVariantDefnList?: (ctx: EnumVariantDefnListContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `CWScriptParser.enumVariant`.
+	 * Enter a parse tree produced by `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 */
-	enterEnumVariant?: (ctx: EnumVariantContext) => void;
+	enterEnumVariantDefn?: (ctx: EnumVariantDefnContext) => void;
 	/**
-	 * Exit a parse tree produced by `CWScriptParser.enumVariant`.
+	 * Exit a parse tree produced by `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 */
-	exitEnumVariant?: (ctx: EnumVariantContext) => void;
+	exitEnumVariantDefn?: (ctx: EnumVariantDefnContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.enumVariantStructDefn`.
@@ -1306,6 +1307,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitArgList?: (ctx: ArgListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.block`.
+	 * @param ctx the parse tree
+	 */
+	enterBlock?: (ctx: BlockContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.block`.
+	 * @param ctx the parse tree
+	 */
+	exitBlock?: (ctx: BlockContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.reservedKeyword`.

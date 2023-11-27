@@ -75,10 +75,7 @@ indexAssignStmt:
 returnStmt: RETURN (value = expr) SEMI?;
 failStmt: FAIL (value = expr) SEMI?;
 
-forStmt:
-	FOR (binding = binding_) IN (iter = expr) LBRACE (
-		body += stmt
-	)* RBRACE SEMI?;
+forStmt: FOR (binding = binding_) IN (iter = expr) body = block;
 
 execStmt: EXEC_NOW value = expr SEMI?;
 instantiateStmt: INSTANTIATE_NOW value = expr SEMI?;
@@ -106,12 +103,12 @@ defn:
 contractDefn:
 	CONTRACT (name = ident) (EXTENDS (base = typeExpr))? (
 		IMPLEMENTS (interfaces = typeExprList)
-	)? LBRACE (body += stmt)* RBRACE SEMI?;
+	)? (body = block) SEMI?;
 
 interfaceDefn:
 	INTERFACE (name = ident) (
 		EXTENDS (baseInterfaces = typeExprList)
-	)? LBRACE (body += stmt)* RBRACE SEMI?;
+	)? (body = block) SEMI?;
 
 structDefn:
 	STRUCT (name = ident) (
@@ -157,35 +154,33 @@ typeAliasDefn:
 	) SEMI?;
 
 fnDefn:
-	FN (name = ident) LPAREN (params = paramList)? RPAREN (
-		ARROW (returnTy = typeExpr)
-	)? LBRACE (body += stmt)* RBRACE SEMI?;
+	FN (name = ident) (LBRACK typeParams = typeVarList RBRACK)? LPAREN (
+		params = paramList
+	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 instantiateDefn:
 	INSTANTIATE (name = ident) (ARROW (returnTy = typeExpr))? LPAREN (
 		params = paramList
-	)? RPAREN LBRACE (body += stmt)* RBRACE SEMI?;
+	)? RPAREN (body = block) SEMI?;
 
 execDefn:
 	EXEC (name = ident) LPAREN (params = paramList)? (
 		ARROW (returnTy = typeExpr)
-	)? RPAREN LBRACE (body += stmt)* RBRACE SEMI?;
+	)? RPAREN (body = block) SEMI?;
 
 queryDefn:
 	QUERY (name = ident) LPAREN (params = paramList)? (
 		ARROW (returnTy = typeExpr)
-	)? RPAREN LBRACE (body += stmt)* RBRACE SEMI?;
+	)? RPAREN (body = block) SEMI?;
 
 errorDefn:
-	ERROR (name = ident) LPAREN (params = paramList)? (
-		ARROW (returnTy = typeExpr)
-	)? LBRACE (body += stmt)* RBRACE SEMI?;
+	ERROR (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
 
 eventDefn:
 	EVENT (name = ident) LPAREN (params = paramList) RPAREN SEMI?;
 
 stateBlockDefn:
-	STATE LBRACK (stateFields += stateDefn)* RBRACK SEMI?;
+	STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;
 
 stateDefn: stateItemDefn | stateMapDefn;
 
@@ -202,48 +197,45 @@ expr:
 	/* f[A, B]() */
 	// f[T](x) //I:s it parameterized function call or call to the closure stored in the array?
 	expr DOT (memberName = ident) # DotExpr
-	| expr (LBRACK (typeArgs += typeExpr)* RBRACK)? LPAREN (
+	| expr (LBRACK (typeArgs = typeExprList) RBRACK)? LPAREN (
 		args = argList
-	)? RPAREN										# CallExpr
-	| expr LBRACK (index = expr) RBRACK				# IndexExpr
-	| expr AS (ty = typeExpr)						# AsExpr
-	| expr QUEST									# ExistsExpr
-	| expr (op = MUL | DIV | MOD) expr				# MulExpr
-	| expr (addOp = PLUS | MINUS) expr				# AddExpr
-	| expr (compOp = LT | GT | LT_EQ | GT_EQ) expr	# CompExpr
-	| QUERY_NOW expr								# QueryExpr
-	| expr D_QUEST expr								# ShortTryExpr
-	| expr IN expr									# InExpr
-	| expr IS (ty = typeExpr)						# IsExpr
-	| expr (eqOp = EQ_EQ | NEQ) expr				# EqExpr
-	| expr AND expr									# AndExpr
-	| expr OR expr									# OrExpr
-	| ifExpr_										# IfExpr
-	| tryCatchElseExpr_								# TryCatchElseExpr
-	| closureExpr_									# ClosureExpr
-	| structExpr_									# StructExpr
-	| tupleExpr_									# TupleExpr
-	| literal										# LiteralExpr
-	| ident											# IdentExpr
-	| LPAREN expr RPAREN							# GroupedExpr;
+	)? RPAREN									# CallExpr
+	| expr LBRACK (index = expr) RBRACK			# IndexExpr
+	| expr AS (ty = typeExpr)					# AsExpr
+	| expr QUEST								# ExistsExpr
+	| expr (op = MUL | DIV | MOD) expr			# MulExpr
+	| expr (op = PLUS | MINUS) expr				# AddExpr
+	| expr (op = LT | GT | LT_EQ | GT_EQ) expr	# CompExpr
+	| QUERY_NOW expr							# QueryExpr
+	| expr D_QUEST expr							# ShortTryExpr
+	| expr IN expr								# InExpr
+	| expr IS (ty = typeExpr)					# IsExpr
+	| expr (op = EQ_EQ | NEQ) expr				# EqExpr
+	| expr AND expr								# AndExpr
+	| expr OR expr								# OrExpr
+	| ifExpr_									# IfExpr
+	| tryCatchElseExpr_							# TryCatchElseExpr
+	| closureExpr_								# ClosureExpr
+	| structExpr_								# StructExpr
+	| tupleExpr_								# TupleExpr
+	| literal									# LiteralExpr
+	| ident										# IdentExpr
+	| LPAREN expr RPAREN						# GroupedExpr;
 
 ifExpr_:
-	IF (cond = expr) LBRACE (thenBody += stmt)* RBRACE (
-		ELSE LBRACE (elseBody += stmt)* RBRACE
-	)?;
+	IF (pred = expr) (thenBody = block) (ELSE (elseBody = block))? SEMI?;
 
 tryCatchElseExpr_:
-	TRY LBRACE (tryBody += stmt)* RBRACE (
-		catchClauses += catchClause
-	)* (ELSE LBRACE (elseBody += stmt)* RBRACE)?;
+	TRY (body = block) (catchClauses += catchClause)* (
+		ELSE (elseBody = block)
+	)? SEMI?;
 
-catchClause:
-	CATCH (ty = typeExpr) LBRACE (body += stmt)* RBRACE;
+catchClause: CATCH (ty = typeExpr) (body = block);
 
 closureExpr_:
 	(fallible = BANG)? BAR (params = paramList)? BAR (
 		ARROW (returnTy = typeExpr)
-	)? (LBRACE ( body += stmt)* RBRACE);
+	)? (body = block);
 
 structExpr_: (ty = typeExpr) LBRACE (fields = fieldList)? RBRACE;
 tupleExpr_: LBRACK (elements += expr)* RBRACK;
@@ -262,7 +254,7 @@ literal:
 // TYPE EXPRESSIONS
 typeExpr:
 	LPAREN typeExpr RPAREN									# GroupedTypeExpr
-	| typeExpr LBRACK typeArgs = typeExprList RBRACK		# ParamzdTypeExpr
+	| typeExpr LBRACK typeArgs = typeExprList RBRACK		# ParameterizedTypeExpr
 	| typeExpr DOT (memberName = ident)						# MemberTypeExpr
 	| LBRACK ty = typeExpr SEMI size = IntLiteral RBRACK	# ArrayTypeExpr
 	| structDefn											# StructDefnTypeExpr
@@ -293,6 +285,7 @@ paramList: (param (COMMA param)*);
 typeExprList: (typeExpr (COMMA typeExpr)*);
 fieldList: (field (COMMA field)*);
 argList: (arg (COMMA arg)*);
+block: LBRACE (stmts += stmt)* RBRACE;
 
 reservedKeyword:
 	CONTRACT

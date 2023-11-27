@@ -325,8 +325,8 @@ export class IndexAssignStmt extends AST {
 export class IfStmt extends AST {
   constructor(
     public pred: Expr,
-    public thenBody: List<Stmt>,
-    public elseBody: List<Stmt> | null
+    public thenBody: Block,
+    public elseBody: Block | null
   ) {
     super();
   }
@@ -336,7 +336,7 @@ export class ForStmt extends AST {
   constructor(
     public binding: Binding,
     public iter: Expr,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -414,8 +414,7 @@ export enum UnwrapOp {
 export class DotExpr extends Expr {
   constructor(
     public obj: Expr,
-    public unwrap: UnwrapOp | null,
-    public member: Ident
+    public memberName: Ident
   ) {
     super();
   }
@@ -433,26 +432,33 @@ export class AsExpr extends Expr {
 export class IndexExpr extends Expr {
   constructor(
     public obj: Expr,
-    public args: List<Arg>
+    public index: Expr
   ) {
     super();
   }
 }
 
-export class DColonExpr extends Expr {
+export class CallExpr extends Expr {
   constructor(
-    public obj: Expr | TypeExpr,
-    public member: Ident
+    public fn: Expr,
+    public typeArgs: List<TypeExpr> | null,
+    public args: List<Arg> | null
   ) {
     super();
   }
 }
 
-export class FnCallExpr extends Expr {
+export class ExistsExpr extends Expr {
+  constructor(public expr: Expr) {
+    super();
+  }
+}
+
+export class IfExpr extends Expr {
   constructor(
-    public func: Expr | TypeExpr,
-    public fallible: boolean,
-    public args: List<Arg>
+    public pred: Expr,
+    public thenBody: Block,
+    public elseBody: Block | null
   ) {
     super();
   }
@@ -533,9 +539,9 @@ export class ShortTryExpr extends Expr {
 
 export class TryCatchElseExpr extends Expr {
   constructor(
-    public body: List<Stmt>,
-    public catchClauses: List<CatchClause>,
-    public elseBody: List<Stmt> | null
+    public body: Block,
+    public catchClauses: List<CatchClause> | null,
+    public elseBody: Block | null
   ) {
     super();
   }
@@ -544,7 +550,7 @@ export class TryCatchElseExpr extends Expr {
 export class CatchClause extends AST {
   constructor(
     public ty: TypeExpr,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -594,7 +600,7 @@ export class ContractDefn extends Defn {
     public name: Ident,
     public base: TypeExpr | null,
     public interfaces: List<TypeExpr> | null,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -604,7 +610,7 @@ export class InterfaceDefn extends Defn {
   constructor(
     public name: Ident,
     public baseInterfaces: List<TypeExpr> | null,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -613,6 +619,7 @@ export class InterfaceDefn extends Defn {
 export class StructDefn extends Defn {
   constructor(
     public name: Ident,
+    public typeParams: List<TypeVar> | null,
     public fields: List<Param>
   ) {
     super();
@@ -622,14 +629,18 @@ export class StructDefn extends Defn {
 export class TupleDefn extends Defn {
   constructor(
     public name: Ident,
-    public fields: List<Param>
+    public typeParams: List<TypeVar> | null,
+    public elements: List<TypeExpr>
   ) {
     super();
   }
 }
 
 export class UnitDefn extends Defn {
-  constructor(public name: Ident) {
+  constructor(
+    public name: Ident,
+    public typeParams: List<TypeVar> | null
+  ) {
     super();
   }
 }
@@ -637,7 +648,8 @@ export class UnitDefn extends Defn {
 export class EnumDefn extends Defn {
   constructor(
     public name: Ident,
-    public variants: List<EnumVariant>
+    public typeParams: List<TypeVar> | null,
+    public variants: List<EnumVariantDefn>
   ) {
     super();
   }
@@ -677,7 +689,7 @@ export class TypeAliasDefn extends Defn {
   constructor(
     public name: Ident,
     public typeParams: List<TypeVar> | null,
-    public value: TypeExpr
+    public ty: TypeExpr
   ) {
     super();
   }
@@ -686,10 +698,10 @@ export class TypeAliasDefn extends Defn {
 export class FnDefn extends Defn {
   constructor(
     public name: Ident,
-    public fallible: boolean,
+    public typeParams: List<TypeVar> | null,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -699,7 +711,7 @@ export class InstantiateDefn extends Defn {
   constructor(
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -710,7 +722,7 @@ export class ExecDefn extends Defn {
     public name: Ident,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -721,7 +733,7 @@ export class QueryDefn extends Defn {
     public name: Ident,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
-    public body: List<Stmt>
+    public body: Block
   ) {
     super();
   }
@@ -882,8 +894,8 @@ export class Ident extends AST {
 export class Param extends AST {
   constructor(
     public name: Ident,
-    public ty: TypeExpr | null,
-    public optional: boolean
+    public optional: boolean,
+    public ty: TypeExpr | null
   ) {
     super();
   }
@@ -906,6 +918,8 @@ export class Arg extends AST {
     super();
   }
 }
+
+export class Block extends List<Stmt> {}
 
 //#endregion Common
 
