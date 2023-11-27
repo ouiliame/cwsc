@@ -8,7 +8,21 @@ sourceFile: (stmts += stmt)* EOF;
 
 // STATEMENTS
 
-stmt: importStmt;
+stmt:
+	defn
+	| typeExpr
+	| expr
+	| importStmt
+	| letStmt
+	| constStmt
+	| assignStmt
+	| memberAssignStmt
+	| indexAssignStmt
+	| forStmt
+	| execStmt
+	| instantiateStmt
+	| failStmt
+	| returnStmt;
 
 importStmt:
 	IMPORT LBRACE (items = identList)? RBRACE FROM (
@@ -58,12 +72,36 @@ indexAssignStmt:
 	) value = expr;
 
 returnStmt: RETURN (value = expr)?;
-
 failStmt: FAIL (value = expr)?;
+
+forStmt:
+	FOR (binding = binding_) IN (iter = expr) LBRACE (
+		body += stmt
+	)* RBRACE;
+
+execStmt: EXEC_NOW expr;
+instantiateStmt: INSTANTIATE_NOW expr;
+emitStmt: EMIT expr;
 
 // END STATEMENTS
 
 // DEFINITIONS
+defn:
+	contractDefn
+	| interfaceDefn
+	| structDefn
+	| tupleDefn
+	| unitDefn
+	| enumDefn
+	| typeAliasDefn
+	| fnDefn
+	| instantiateDefn
+	| execDefn
+	| queryDefn
+	| errorDefn
+	| eventDefn
+	| stateBlockDefn;
+
 contractDefn:
 	CONTRACT (name = ident) (EXTENDS (base = ident))? (
 		IMPLEMENTS (interfaces = typeExprList)
@@ -75,16 +113,25 @@ interfaceDefn:
 	)? LBRACE (body += stmt)* RBRACE;
 
 structDefn:
-	STRUCT (name = ident) LBRACE (fields = paramList) RBRACE
-	| STRUCT (name = ident) LPAREN (fields = paramList) RPAREN;
+	STRUCT (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
+		fields = paramList
+	) RBRACE
+	| STRUCT (name = ident) (
+		LBRACK typeVars = typeVarList RBRACK
+	)? LPAREN (fields = paramList) RPAREN;
 
 tupleDefn:
-	TUPLE (name = ident) LBRACK (elements = typeExprList) RPAREN;
+	TUPLE (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACK (
+		elements = typeExprList
+	) RPAREN;
 
-unitDefn: UNIT (name = ident);
+unitDefn:
+	UNIT (LBRACK typeVars = typeVarList RBRACK)? (name = ident);
 
 enumDefn:
-	ENUM (name = ident) LBRACE (variants = enumVariantList) RBRACE;
+	ENUM (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
+		variants = enumVariantList
+	) RBRACE;
 
 enumVariantList: (enumVariant (COMMA enumVariant)*);
 
@@ -98,7 +145,7 @@ enumVariantStructDefn:
 	| (name = ident) LPAREN (fields = paramList) RPAREN;
 
 enumVariantTupleDefn:
-	(name = ident) LBRACK (elements = typeExprList) RRPAREN;
+	(name = ident) LBRACK (elements = typeExprList) RPAREN;
 
 enumVariantUnitDefn: (name = ident);
 
@@ -155,14 +202,17 @@ expr:
 	| expr QUEST										# ExistsExpr
 	| expr AS typeExpr									# AsExpr
 	| expr (op = MUL | DIV | MOD) (rhs = expr)			# MulExpr
-	| expr (op = PLUS | SUB) (rhs = expr)				# AddExpr
+	| expr (op = PLUS | MINUS) (rhs = expr)				# AddExpr
 	| expr (op = LT | GT | LT_EQ | GT_EQ) (rhs = expr)	# CompExpr
-	| expr (op = EQ | NOT_EQ) (rhs = expr)				# EqExpr
+	| expr (op = EQ | NEQ) (rhs = expr)					# EqExpr
 	| expr IN (rhs = expr)								# InExpr
-	| expr IS (rhs = expr)								# IsExpr
+	| expr IS (rhs = typeExpr)							# IsExpr
 	| expr AND (rhs = expr)								# AndExpr
 	| expr OR (rhs = expr)								# OrExpr
 	| ifExpr_											# IfExpr
+	| QUERY_NOW expr									# QueryExpr
+	| expr D_QUEST (rhs = expr)							# ShortTryExpr
+	| tryCatchElseExpr_									# TryCatchElseExpr
 	| closureExpr_										# ClosureExpr
 	| structExpr_										# StructExpr
 	| tupleExpr_										# TupleExpr
@@ -173,6 +223,11 @@ ifExpr_:
 	IF (cond = expr) LBRACE (thenBody += stmt)* RBRACE (
 		ELSE LBRACE (elseBody += stmt)* RBRACE
 	)?;
+
+tryCatchElseExpr_:
+	TRY LBRACE (tryBody += stmt)* RBRACE (
+		CATCH (catchParam = param)? LBRACE (catchBody += stmt)* RBRACE
+	);
 
 closureExpr_:
 	(fallible = BANG)? BAR (params = paramList)? BAR (
@@ -194,8 +249,24 @@ literal:
 // END LITERALS
 
 // TYPE EXPRESSIONS
-typeExpr: paramzdTypeExpr | ident;
-paramzdTypeExpr: typeExpr LBRACK args = typeExprList RBRACK;
+typeExpr:
+	ident													# IdentTypeExpr
+	| typeVar												# TypeVarExpr
+	| typeExpr LBRACK typeArgs = typeExprList RBRACK		# ParamzdTypeExpr
+	| typeExpr DOT (memberName = ident)						# MemberTypeExpr
+	| typeExpr QUEST										# OptionTypeExpr
+	| LBRACK ty = typeExpr SEMI size = IntLiteral RBRACK	# ArrayTypeExpr
+	| TILDE typeExpr										# NegationTypeExpr
+	| lhs = typeExpr AMP rhs = typeExpr						# IntersectionTypeExpr
+	| lhs = typeExpr BAR rhs = typeExpr						# UnionTypeExpr
+	| structDefn											# StructDefnTypeExpr
+	| tupleDefn												# TupleDefnTypeExpr
+	| unitDefn												# UnitDefnTypeExpr
+	| typeAliasDefn											# TypeAliasDefnTypeExpr
+	| enumDefn												# EnumDefnTypeExpr;
+
+typeVar: TypeVar;
+typeVarList: (typeVar (COMMA typeVar)*);
 
 // END TYPE EXPRESSIONS
 

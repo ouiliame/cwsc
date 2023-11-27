@@ -40,6 +40,8 @@ CONST: 'const';
 FAIL: 'fail!';
 RETURN: 'return';
 STRUCT: 'struct';
+TUPLE: 'tuple';
+UNIT: 'unit';
 ENUM: 'enum';
 TYPE: 'type';
 EMIT: 'emit';
@@ -90,6 +92,9 @@ POW: '**';
 
 // Identifiers
 Ident: [_a-zA-Z$][_a-zA-Z0-9]*;
+
+// TypeVar names
+TypeVar: '%' [_a-zA-Z][_a-zA-Z0-9]*;
 
 // Strings
 StringLiteral: D_QUOTE DoubleQuotedStringCharacter* D_QUOTE;
