@@ -82,12 +82,57 @@ errorDefn:
 eventDefn:
 	EVENT (name = ident) LPAREN (params = paramList) RPAREN;
 
+stateBlockDefn: STATE LBRACK (vars += stateDefn) RBRACK;
+
+stateDefn: stateItemDefn | stateMapDefn;
+
+stateItemDefn: (name = ident) COLON (ty = typeExpr);
+
+stateMapDefn:
+	(name = ident) LBRACK (indexTy = typeExpr) RBRACK COLON (
+		ty = typeExpr
+	);
+
 // END DEFINITIONS
 
+// EXPRESSIONS
+expr:
+	LPAREN expr RPAREN									# GroupedExpr
+	| expr DOT (name = ident)							# DotExpr
+	| expr LBRACK expr RBRACK							# IndexExpr
+	| expr LPAREN (args = argsList)? RPAREN				# CallExpr
+	| NOT expr											# NotExpr
+	| expr QUEST										# ExistsExpr
+	| expr AS typeExpr									# AsExpr
+	| expr (op = MUL | DIV | MOD) (rhs = expr)			# MulExpr
+	| expr (op = ADD | SUB) (rhs = expr)				# AddExpr
+	| expr (op = LT | GT | LT_EQ | GT_EQ) (rhs = expr)	# CompExpr
+	| expr (op = EQ | NOT_EQ) (rhs = expr)				# EqExpr
+	| expr IN (rhs = expr)								# InExpr
+	| expr IS (rhs = expr)								# IsExpr
+	| expr AND (rhs = expr)								# AndExpr
+	| expr OR (rhs = expr)								# OrExpr
+	| ifExpr_											# IfExpr
+	| closureExpr_										# ClosureExpr
+	| structExpr_										# StructExpr
+	| tupleExpr_										# TupleExpr
+	| literal											# LiteralExpr
+	| ident												# IdentExpr;
+
+ifExpr_:
+	IF (cond = expr) LBRACE (thenBody += stmt)* RBRACE (
+		ELSE LBRACE (elseBody += stmt)* RBRACE
+	)?;
+
+closureExpr_:
+	BAR (params = paramList)? BAR (ARROW (returnTy = typeExpr))? (
+		LBRACE ( body += stmt)* RBRACE
+	);
+
+// END EXPRESSIONS
+
 // TYPE EXPRESSIONS
-
 typeExpr: paramzdTypeExpr | ident;
-
 paramzdTypeExpr: typeExpr LBRACK args = typeExprList RBRACK;
 
 // END TYPE EXPRESSIONS
