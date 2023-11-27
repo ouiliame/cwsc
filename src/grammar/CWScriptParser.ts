@@ -2773,7 +2773,7 @@ export class CWScriptParser extends Parser {
 						case CWScriptParser.PLUS:
 							{
 							this.state = 557;
-							(_localctx as AddExprContext)._addOp = this.match(CWScriptParser.PLUS);
+							(_localctx as AddExprContext)._op = this.match(CWScriptParser.PLUS);
 							}
 							break;
 						case CWScriptParser.MINUS:
@@ -2804,7 +2804,7 @@ export class CWScriptParser extends Parser {
 						case CWScriptParser.LT:
 							{
 							this.state = 563;
-							(_localctx as CompExprContext)._compOp = this.match(CWScriptParser.LT);
+							(_localctx as CompExprContext)._op = this.match(CWScriptParser.LT);
 							}
 							break;
 						case CWScriptParser.GT:
@@ -2877,7 +2877,7 @@ export class CWScriptParser extends Parser {
 						case CWScriptParser.EQ_EQ:
 							{
 							this.state = 577;
-							(_localctx as EqExprContext)._eqOp = this.match(CWScriptParser.EQ_EQ);
+							(_localctx as EqExprContext)._op = this.match(CWScriptParser.EQ_EQ);
 							}
 							break;
 						case CWScriptParser.NEQ:
@@ -6749,7 +6749,7 @@ export class MulExprContext extends ExprContext {
 	}
 }
 export class AddExprContext extends ExprContext {
-	public _addOp!: Token;
+	public _op!: Token;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -6787,7 +6787,7 @@ export class AddExprContext extends ExprContext {
 	}
 }
 export class CompExprContext extends ExprContext {
-	public _compOp!: Token;
+	public _op!: Token;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -6963,7 +6963,7 @@ export class IsExprContext extends ExprContext {
 	}
 }
 export class EqExprContext extends ExprContext {
-	public _eqOp!: Token;
+	public _op!: Token;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {

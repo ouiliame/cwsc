@@ -1,4 +1,5 @@
 import { ParserRuleContext } from 'antlr4ts';
+import { boolean } from 'zod';
 
 export class AST {
   public $ctx: ParserRuleContext | null = null;
@@ -234,7 +235,7 @@ export class SourceFile extends List<Stmt> {}
 export class Stmt extends AST {}
 export class ImportStmt extends Stmt {
   constructor(
-    public items: List<Ident>,
+    public items: List<Ident> | null,
     public src: string
   ) {
     super();
@@ -384,8 +385,8 @@ export class TupleExpr extends Expr {
 
 export class StructExpr extends Expr {
   constructor(
-    public ty: TypeExpr | null,
-    public args: List<MemberVal>
+    public ty: TypeExpr,
+    public fields: List<Field> | null
   ) {
     super();
   }
@@ -532,7 +533,10 @@ export class NoneCheckExpr extends Expr {
 }
 
 export class ShortTryExpr extends Expr {
-  constructor(public expr: Expr) {
+  constructor(
+    public test: Expr,
+    public elseExpr: Expr
+  ) {
     super();
   }
 }
@@ -550,6 +554,17 @@ export class TryCatchElseExpr extends Expr {
 export class CatchClause extends AST {
   constructor(
     public ty: TypeExpr,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+export class ClosureExpr extends Expr {
+  constructor(
+    public fallible: boolean,
+    public params: List<Param> | null,
+    public returnTy: TypeExpr | null,
     public body: Block
   ) {
     super();
@@ -673,7 +688,7 @@ export class EnumVariantStructDefn extends EnumVariantDefn {
 export class EnumVariantTupleDefn extends EnumVariantDefn {
   constructor(
     public name: Ident,
-    public fields: List<TypeExpr>
+    public fields: List<TypeExpr> | null
   ) {
     super(name);
   }
@@ -841,6 +856,12 @@ export class UnitDefnTypeExpr extends TypeExpr {
   }
 }
 
+export class EnumDefnTypeExpr extends TypeExpr {
+  constructor(public enumDefn: EnumDefn) {
+    super();
+  }
+}
+
 export class OptionTypeExpr extends TypeExpr {
   constructor(public ty: TypeExpr) {
     super();
@@ -868,19 +889,19 @@ export class IdentTypeExpr extends TypeExpr {
 //#endregion Type Expressions
 
 //#region Literals
-export class Literal extends Expr {
-  constructor(public value: string) {
+export class Literal<T> extends Expr {
+  constructor(public value: T) {
     super();
   }
 }
 
-export class StringLit extends Literal {}
-export class IntLit extends Literal {}
-export class DecLit extends Literal {}
-export class BoolLit extends Literal {}
-export class NoneLit extends Literal {
+export class StringLit extends Literal<string> {}
+export class IntLit extends Literal<string> {}
+export class DecLit extends Literal<string> {}
+export class BoolLit extends Literal<boolean> {}
+export class NoneLit extends Literal<null> {
   constructor() {
-    super('None');
+    super(null);
   }
 }
 //#endregion Literals
