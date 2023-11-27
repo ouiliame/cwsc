@@ -1,4 +1,5 @@
 // @ts-nocheck
+import * as fs from 'fs';
 import { ANTLRErrorListener, CharStreams, CommonTokenStream } from 'antlr4ts';
 import { RecognitionException } from 'antlr4ts/RecognitionException';
 import path from 'path';
@@ -10,7 +11,7 @@ import {
   SourceFileContext,
 } from '../grammar/CWScriptParser';
 import { TextView } from '../util/position';
-import { CWSASTBuilderVisitor } from './visitor';
+import { ASTBuilderVisitor } from './ast-builder';
 
 export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
   public diagnostics: Diagnostic[] = [];
@@ -63,8 +64,8 @@ export class CWScriptParser {
    */
   public parse(): AST.SourceFile {
     let parseTree = this.antlrParse();
-    let visitor = new CWSASTBuilderVisitor();
-    return visitor.visitSourceFile(parseTree);
+    let astBuilder = new ASTBuilderVisitor(this.sourceText);
+    return astBuilder.visitSourceFile(parseTree);
   }
 
   protected antlrParse(): SourceFileContext {

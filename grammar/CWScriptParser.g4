@@ -104,7 +104,7 @@ defn:
 	| stateBlockDefn;
 
 contractDefn:
-	CONTRACT (name = ident) (EXTENDS (base = ident))? (
+	CONTRACT (name = ident) (EXTENDS (base = typeExpr))? (
 		IMPLEMENTS (interfaces = typeExprList)
 	)? LBRACE (body += stmt)* RBRACE SEMI?;
 
@@ -185,7 +185,7 @@ eventDefn:
 	EVENT (name = ident) LPAREN (params = paramList) RPAREN SEMI?;
 
 stateBlockDefn:
-	STATE LBRACK (stateVars += stateDefn)* RBRACK SEMI?;
+	STATE LBRACK (stateFields += stateDefn)* RBRACK SEMI?;
 
 stateDefn: stateItemDefn | stateMapDefn;
 
@@ -280,7 +280,7 @@ ident: Ident | reservedKeyword;
 param: (name = ident) (optional = QUEST)? COLON (
 		(ty = typeExpr)?
 	);
-field: (name = ident) COLON (ty = typeExpr);
+field: (name = ident) COLON (value = expr);
 namedArg: (name = ident) EQ (value = expr);
 arg: (expr | namedArg);
 

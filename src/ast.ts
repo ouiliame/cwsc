@@ -227,263 +227,26 @@ export class List<T extends AST = AST> extends AST {
   }
 }
 
-export class Ident extends AST {
-  constructor(public value: string) {
-    super();
-  }
-}
+export class SourceFile extends List<Stmt> {}
 
-export type TopLevelStmt = ContractDefn | InterfaceDefn | TypeDefn | ConstStmt;
+//#region Statements
 
-export class SourceFile extends List<TopLevelStmt> {}
-
-export class ContractDefn extends AST {
+export class Stmt extends AST {}
+export class ImportStmt extends Stmt {
   constructor(
-    public name: Ident,
-    public body: ContractBlock,
-    public base: TypePath | null,
-    public interfaces: List<TypePath>
-  ) {
-    super();
-  }
-}
-
-export class InterfaceDefn extends AST {
-  constructor(
-    public name: Ident,
-    public body: ContractBlock,
-    public base: TypePath | null
-  ) {
-    super();
-  }
-}
-
-export class TypePath extends AST {
-  constructor(public segments: List<Ident>) {
-    super();
-  }
-}
-
-export class TypeVariant extends AST {
-  constructor(
-    public name: TypePath,
-    public expr: Expr | null,
-    public variant: Ident | null
-  ) {
-    super();
-  }
-}
-
-export class StructDefn extends AST {
-  constructor(
-    public name: Ident | null,
-    public params: List<Param>
-  ) {
-    super();
-  }
-}
-
-export class EnumVariantStruct extends AST {
-  constructor(
-    public name: Ident,
-    public params: List<Param>
-  ) {
-    super();
-  }
-}
-
-export class EnumVariantUnit extends AST {
-  constructor(public name: Ident) {
-    super();
-  }
-}
-
-// enumDefn: ENUM (name = ident) LBRACE variants+=variant_ ((variants+=variant_) COMMA?)* RBRACE;
-export class EnumDefn extends AST {
-  constructor(
-    public name: Ident,
-    public variants: List<EnumVariantStruct | EnumVariantUnit>
-  ) {
-    super();
-  }
-}
-
-// typeAliasDefn: TYPE (name = ident) EQ (value = typeExpr);
-export class TypeAliasDefn extends AST {
-  constructor(
-    public name: Ident,
-    public value: TypeExpr
-  ) {
-    super();
-  }
-}
-
-// typeDefn: structDefn | enumDefn | typeAliasDefn;
-export type TypeDefn = StructDefn | EnumDefn | TypeAliasDefn;
-
-export class Param extends AST {
-  constructor(
-    public name: Ident,
-    public ty: TypeExpr | null,
-    public optional: boolean,
-    public default_: Expr | null
-  ) {
-    super();
-  }
-}
-
-export type ContractItem = any;
-
-export class ContractBlock extends List<ContractItem> {}
-
-export class ImportAllStmt extends AST {
-  constructor(public src: string) {
-    super();
-  }
-}
-
-export class ImportItemsStmt extends AST {
-  constructor(
-    public items: Ident[],
+    public items: List<Ident>,
     public src: string
   ) {
     super();
   }
 }
-
-export class ErrorDefn extends StructDefn {}
-
-export class ErrorDefnBlock extends List<ErrorDefn> {}
-
-export class EventDefn extends StructDefn {}
-
-export class EventDefnBlock extends List<EventDefn> {}
-
-export class StateDefnBlock extends List<StateDefnItem | StateDefnMap> {}
-
-export class StateDefnItem extends AST {
-  constructor(
-    public name: Ident,
-    public ty: TypeExpr,
-    public default_: Expr | null
-  ) {
-    super();
-  }
-}
-
-export class StateDefnMap extends AST {
-  constructor(
-    public name: Ident,
-    public mapKeys: List<MapKeyDefn>,
-    public ty: TypeExpr,
-    public default_: Expr | null
-  ) {
-    super();
-  }
-}
-
-export class MapKeyDefn extends AST {
-  constructor(
-    public name: Ident | null,
-    public ty: TypeExpr
-  ) {
-    super();
-  }
-}
-
-export class InstantiateDefn extends AST {
-  constructor(
-    public params: List<Param>,
-    public body: Block
-  ) {
-    super();
-  }
-}
-
-export class InstantiateDecl extends AST {
-  constructor(public params: List<Param>) {
-    super();
-  }
-}
-
-export class ExecDefn extends AST {
-  constructor(
-    public name: Ident,
-    public params: List<Param>,
-    public body: Block,
-    public tup: boolean
-  ) {
-    super();
-  }
-}
-
-export class ExecDecl extends AST {
-  constructor(
-    public name: Ident,
-    public params: List<Param>,
-    public tup: boolean
-  ) {
-    super();
-  }
-}
-
-export class QueryDefn extends AST {
-  constructor(
-    public name: Ident,
-    public params: List<Param>,
-    public retTy: TypeExpr | null,
-    public body: Block
-  ) {
-    super();
-  }
-}
-
-export class QueryDecl extends AST {
-  constructor(
-    public name: Ident,
-    public params: List<Param>,
-    public retTy: TypeExpr | null
-  ) {
-    super();
-  }
-}
-
-export class ReplyDefn extends AST {
-  constructor(
-    public name: Ident,
-    public params: List<Param>,
-    public body: Block,
-    public on?: Ident
-  ) {
-    super();
-  }
-}
-
-export class FnDefn extends AST {
-  constructor(
-    public name: Ident,
-    public fallible: boolean,
-    public params: List<Param>,
-    public retTy: TypeExpr | null,
-    public body: Block
-  ) {
-    super();
-  }
-}
-
 export class LetStmt extends AST {
   constructor(
-    public binding: LetBinding,
-    public expr: Expr | null
+    public binding: Binding,
+    public value: Expr
   ) {
     super();
   }
-}
-
-export enum BindingType {
-  IDENT = 'ident',
-  STRUCT = 'struct',
-  TUPLE = 'tuple',
 }
 
 export class IdentBinding extends AST {
@@ -496,37 +259,28 @@ export class IdentBinding extends AST {
 }
 
 export class TupleBinding extends AST {
-  constructor(public bindings: List<IdentBinding>) {
+  constructor(public names: List<Ident>) {
     super();
   }
 }
 
 export class StructBinding extends AST {
-  constructor(public bindings: List<IdentBinding>) {
+  constructor(public names: List<Ident>) {
     super();
   }
 }
 
-export type LetBinding = IdentBinding | TupleBinding | StructBinding;
+export type Binding = IdentBinding | TupleBinding | StructBinding;
 
-export class ConstStmt extends AST {
+export class ConstStmt extends Stmt {
   constructor(
     public name: Ident,
-    public expr: Expr
+    public ty: TypeExpr | null,
+    public value: Expr
   ) {
     super();
   }
 }
-
-export class Annotation extends AST {
-  constructor(
-    public path: TypePath,
-    public args: List<Arg>
-  ) {
-    super();
-  }
-}
-
 export enum AssignOp {
   EQ = '=',
   PLUS_EQ = '+=',
@@ -538,42 +292,90 @@ export enum AssignOp {
 
 export class AssignStmt extends AST {
   constructor(
-    public lhs: AssignLHS,
-    public op: AssignOp,
-    public rhs: Expr
+    public name: Ident,
+    public assignOp: AssignOp,
+    public value: Expr
   ) {
     super();
   }
 }
 
-export class IdentLHS extends AST {
-  constructor(public symbol: Ident) {
-    super();
-  }
-}
-
-export class DotLHS extends AST {
+export class MemberAssignStmt extends AST {
   constructor(
     public obj: Expr,
-    public member: Ident
+    public memberName: Ident,
+    public assignOp: AssignOp,
+    public value: Expr
   ) {
     super();
   }
 }
 
-export class IndexLHS extends AST {
+export class IndexAssignStmt extends AST {
   constructor(
     public obj: Expr,
-    public args: List<Expr>
+    public index: Expr,
+    public assignOp: AssignOp,
+    public value: Expr
   ) {
     super();
   }
 }
 
-export type AssignLHS = IdentLHS | DotLHS | IndexLHS;
+export class IfStmt extends AST {
+  constructor(
+    public pred: Expr,
+    public thenBody: List<Stmt>,
+    public elseBody: List<Stmt> | null
+  ) {
+    super();
+  }
+}
 
+export class ForStmt extends AST {
+  constructor(
+    public binding: Binding,
+    public iter: Expr,
+    public body: List<Stmt>
+  ) {
+    super();
+  }
+}
+
+export class ExecStmt extends Stmt {
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+export class InstantiateStmt extends Stmt {
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+export class EmitStmt extends Stmt {
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+export class ReturnStmt extends Stmt {
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+export class FailStmt extends Stmt {
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+//#endregion Statements
+
+//#region Expressions
 export class Expr extends AST {}
-
 export class TupleExpr extends Expr {
   constructor(public exprs: List<Expr>) {
     super();
@@ -593,26 +395,6 @@ export class MemberVal extends Expr {
   constructor(
     public name: Ident,
     public value: Expr | null
-  ) {
-    super();
-  }
-}
-
-export class IfStmt extends AST {
-  constructor(
-    public pred: Expr,
-    public then: Block,
-    public else_: Block | null
-  ) {
-    super();
-  }
-}
-
-export class ForStmt extends AST {
-  constructor(
-    public binding: LetBinding,
-    public iter: Expr,
-    public body: Block
   ) {
     super();
   }
@@ -751,19 +533,18 @@ export class ShortTryExpr extends Expr {
 
 export class TryCatchElseExpr extends Expr {
   constructor(
-    public body: Block,
-    public catch_: List<CatchClause>,
-    public else_: Block | null
+    public body: List<Stmt>,
+    public catchClauses: List<CatchClause>,
+    public elseBody: List<Stmt> | null
   ) {
     super();
   }
 }
 
-export class CatchClause extends Expr {
+export class CatchClause extends AST {
   constructor(
-    public name: Ident | null,
     public ty: TypeExpr,
-    public body: Block
+    public body: List<Stmt>
   ) {
     super();
   }
@@ -810,39 +591,193 @@ export class Grouped2Expr extends Expr {
     super();
   }
 }
-
-export type TypeExpr =
-  | TypePath
-  | TypeVariant
-  | TypeLens
-  | OptionT
-  | ListT
-  | TupleT
-  | TypeDefn;
-
-export enum Scope {
-  INSTANTIATE = 'instantiate',
-  EXEC = 'exec',
-  QUERY = 'query',
-  MUT = 'mut',
-}
-
-export class TypeLens extends AST {
+//#endregion Expressions
+//#region Definitions
+export class Defn extends AST {}
+export class ContractDefn extends Defn {
   constructor(
-    public scope: Scope,
-    public ty: TypePath
+    public name: Ident,
+    public base: TypeExpr | null,
+    public interfaces: List<TypeExpr> | null,
+    public body: List<Stmt>
   ) {
     super();
   }
 }
 
-export class OptionT extends AST {
+export class InterfaceDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public baseInterfaces: List<TypeExpr> | null,
+    public body: List<Stmt>
+  ) {
+    super();
+  }
+}
+
+export class StructDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public fields: List<Param>
+  ) {
+    super();
+  }
+}
+
+export class TupleDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public fields: List<Param>
+  ) {
+    super();
+  }
+}
+
+export class UnitDefn extends Defn {
+  constructor(public name: Ident) {
+    super();
+  }
+}
+
+export class EnumDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public variants: List<EnumVariant>
+  ) {
+    super();
+  }
+}
+
+export class TypeAliasDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public typeParams: List<TypeVar> | null,
+    public value: TypeExpr
+  ) {
+    super();
+  }
+}
+
+export class FnDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public fallible: boolean,
+    public params: List<Param>,
+    public returnTy: TypeExpr | null,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+export class InstantiateDefn extends Defn {
+  constructor(
+    public params: List<Param>,
+    public returnTy: TypeExpr | null,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+export class ExecDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public params: List<Param>,
+    public returnTy: TypeExpr | null,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+export class QueryDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public params: List<Param>,
+    public returnTy: TypeExpr | null,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+export class ErrorDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public fields: List<Param>
+  ) {
+    super();
+  }
+}
+
+export class EventDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public fields: List<Param>
+  ) {
+    super();
+  }
+}
+
+export class StateBlockDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public fields: List<StateField>
+  ) {
+    super();
+  }
+}
+
+export class StateItemDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public ty: TypeExpr
+  ) {
+    super();
+  }
+}
+
+export class StateMapDefn extends Defn {
+  constructor(
+    public name: Ident,
+    public indexTy: TypeExpr,
+    public ty: TypeExpr
+  ) {
+    super();
+  }
+}
+
+//#endregion Definitions
+
+//#region Type Expressions
+export class TypeExpr extends AST {}
+
+export class GroupedTypeExpr extends TypeExpr {
   constructor(public ty: TypeExpr) {
     super();
   }
 }
 
-export class ListT extends AST {
+export class ParamzdTypeExpr extends TypeExpr {
+  constructor(
+    public ty: TypeExpr,
+    public typeArgs: List<TypeExpr>
+  ) {
+    super();
+  }
+}
+
+export class MemberTypeExpr extends TypeExpr {
+  constructor(
+    public ty: TypeExpr,
+    public memberName: Ident
+  ) {
+    super();
+  }
+}
+
+export class ArrayTypeExpr extends TypeExpr {
   constructor(
     public ty: TypeExpr,
     public len: number | null
@@ -851,32 +786,45 @@ export class ListT extends AST {
   }
 }
 
-export class TupleT extends AST {
-  constructor(public tys: List<TypeExpr>) {
+export class StructDefnTypeExpr extends TypeExpr {
+  constructor(public structDefn: StructDefn) {
     super();
   }
 }
 
-export class Arg extends AST {
-  constructor(
-    public name: Ident | null,
-    public expr: Expr
-  ) {
+export class TupleDefnTypeExpr extends TypeExpr {
+  constructor(public tupleDefn: TupleDefn) {
     super();
   }
 }
 
-export class Closure extends Expr {
-  constructor(
-    public fallible: boolean,
-    public params: List<Param>,
-    public retTy: TypeExpr | null,
-    public body: Block
-  ) {
+export class UnitDefnTypeExpr extends TypeExpr {
+  constructor(public unitDefn: UnitDefn) {
     super();
   }
 }
 
+export class OptionTypeExpr extends TypeExpr {
+  constructor(public ty: TypeExpr) {
+    super();
+  }
+}
+
+export class TypeVarExpr extends TypeExpr {
+  constructor(public typeVar: TypeVar) {
+    super();
+  }
+}
+
+export class IdentTypeExpr extends TypeExpr {
+  constructor(public ident: Ident) {
+    super();
+  }
+}
+
+//#endregion Type Expressions
+
+//#region Literals
 export class Literal extends Expr {
   constructor(public value: string) {
     super();
@@ -884,84 +832,51 @@ export class Literal extends Expr {
 }
 
 export class StringLit extends Literal {}
-
 export class IntLit extends Literal {}
-
 export class DecLit extends Literal {}
-
 export class BoolLit extends Literal {}
-
 export class NoneLit extends Literal {
   constructor() {
-    super('none');
+    super('None');
   }
 }
-
-export type Stmt =
-  | DebugStmt
-  | LetStmt
-  | ConstStmt
-  | AssignStmt
-  | IfStmt
-  | ForStmt
-  | ExecStmt
-  | DelegateExecStmt
-  | InstantiateStmt
-  | EmitStmt
-  | ReturnStmt
-  | FailStmt
-  | Expr;
-
-export class DebugStmt extends AST {
-  constructor(public stmts: Stmt[]) {
+//#endregion Literals
+//#region Common
+export class Ident extends AST {
+  constructor(public value: string) {
     super();
   }
 }
 
-export class ExecStmt extends AST {
+export class Param extends AST {
   constructor(
-    public expr: Expr,
-    public options: List<MemberVal> | null
+    public name: Ident,
+    public ty: TypeExpr | null,
+    public optional: boolean
   ) {
     super();
   }
 }
 
-export class DelegateExecStmt extends AST {
-  constructor(public expr: Expr) {
-    super();
-  }
-}
-
-export class InstantiateStmt extends AST {
+export class Field extends AST {
   constructor(
-    public expr: Expr,
-    public new_: boolean,
-    public options: List<MemberVal> | null
+    public name: Ident,
+    public value: Expr | null
   ) {
     super();
   }
 }
 
-export class EmitStmt extends AST {
-  constructor(public expr: Expr) {
+export class Arg extends AST {
+  constructor(
+    public name: Ident | null,
+    public value: Expr
+  ) {
     super();
   }
 }
 
-export class ReturnStmt extends AST {
-  constructor(public expr: Expr) {
-    super();
-  }
-}
-
-export class FailStmt extends AST {
-  constructor(public expr: Expr) {
-    super();
-  }
-}
-
-export class Block extends List<Stmt> {}
+//#endregion Common
 
 export class ASTVisitor<T> {
   private getVisitor(node: AST): ((node: AST) => T) | undefined {

@@ -1,5 +1,5 @@
-// import { } from "./TestImport.cws"
-// import { A } from "./TestImport.cws"
+import { A } from "./TestImport.cws"
+import { A } from "./TestImport.cws"
 
 // let a = 3;
 // let a: Ty = 3;

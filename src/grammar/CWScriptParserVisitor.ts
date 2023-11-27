@@ -3,138 +3,107 @@
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
-import { IdentLHSContext } from "./CWScriptParser";
-import { DotLHSContext } from "./CWScriptParser";
-import { IndexLHSContext } from "./CWScriptParser";
-import { StateDefn_ItemContext } from "./CWScriptParser";
-import { StateDefn_MapContext } from "./CWScriptParser";
-import { ImportAllStmtContext } from "./CWScriptParser";
-import { ImportItemsStmtContext } from "./CWScriptParser";
 import { StringLitContext } from "./CWScriptParser";
 import { IntLitContext } from "./CWScriptParser";
 import { DecLitContext } from "./CWScriptParser";
 import { BoolLitContext } from "./CWScriptParser";
 import { NoneLitContext } from "./CWScriptParser";
-import { CatchContext } from "./CWScriptParser";
-import { CatchBindContext } from "./CWScriptParser";
-import { GroupedExprContext } from "./CWScriptParser";
 import { DotExprContext } from "./CWScriptParser";
-import { AsExprContext } from "./CWScriptParser";
 import { IndexExprContext } from "./CWScriptParser";
-import { DColonExprContext } from "./CWScriptParser";
-import { TypeDColonExprContext } from "./CWScriptParser";
-import { FnCallExprContext } from "./CWScriptParser";
+import { CallExprContext } from "./CWScriptParser";
+import { AsExprContext } from "./CWScriptParser";
+import { ExistsExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
 import { AddExprContext } from "./CWScriptParser";
 import { CompExprContext } from "./CWScriptParser";
-import { EqExprContext } from "./CWScriptParser";
-import { NoneCheckExprContext } from "./CWScriptParser";
-import { IsExprContext } from "./CWScriptParser";
-import { InExprContext } from "./CWScriptParser";
+import { QueryExprContext } from "./CWScriptParser";
 import { ShortTryExprContext } from "./CWScriptParser";
-import { TryCatchElseExprContext } from "./CWScriptParser";
-import { NotExprContext } from "./CWScriptParser";
+import { InExprContext } from "./CWScriptParser";
+import { IsExprContext } from "./CWScriptParser";
+import { EqExprContext } from "./CWScriptParser";
 import { AndExprContext } from "./CWScriptParser";
 import { OrExprContext } from "./CWScriptParser";
 import { IfExprContext } from "./CWScriptParser";
-import { QueryNowExprContext } from "./CWScriptParser";
-import { FailExprContext } from "./CWScriptParser";
+import { TryCatchElseExprContext } from "./CWScriptParser";
 import { ClosureExprContext } from "./CWScriptParser";
-import { TupleExprContext } from "./CWScriptParser";
 import { StructExprContext } from "./CWScriptParser";
-import { UnitVariantExprContext } from "./CWScriptParser";
+import { TupleExprContext } from "./CWScriptParser";
 import { LiteralExprContext } from "./CWScriptParser";
 import { IdentExprContext } from "./CWScriptParser";
-import { Grouped2ExprContext } from "./CWScriptParser";
-import { TypeAppTContext } from "./CWScriptParser";
-import { PathTContext } from "./CWScriptParser";
-import { VariantTContext } from "./CWScriptParser";
-import { LensTContext } from "./CWScriptParser";
-import { FnTContext } from "./CWScriptParser";
-import { OptionTContext } from "./CWScriptParser";
-import { ListTContext } from "./CWScriptParser";
-import { TupleTContext } from "./CWScriptParser";
-import { ParamzdTContext } from "./CWScriptParser";
-import { DefnTContext } from "./CWScriptParser";
+import { GroupedExprContext } from "./CWScriptParser";
+import { GroupedTypeExprContext } from "./CWScriptParser";
+import { ParamzdTypeExprContext } from "./CWScriptParser";
+import { MemberTypeExprContext } from "./CWScriptParser";
+import { ArrayTypeExprContext } from "./CWScriptParser";
+import { StructDefnTypeExprContext } from "./CWScriptParser";
+import { TupleDefnTypeExprContext } from "./CWScriptParser";
+import { UnitDefnTypeExprContext } from "./CWScriptParser";
+import { EnumDefnTypeExprContext } from "./CWScriptParser";
+import { OptionTypeExprContext } from "./CWScriptParser";
+import { TypeVarExprContext } from "./CWScriptParser";
+import { IdentTypeExprContext } from "./CWScriptParser";
 import { IdentBindingContext } from "./CWScriptParser";
-import { StructBindingContext } from "./CWScriptParser";
 import { TupleBindingContext } from "./CWScriptParser";
-import { AnnotBlockStmtContext } from "./CWScriptParser";
-import { DebugStmtContext } from "./CWScriptParser";
+import { StructBindingContext } from "./CWScriptParser";
+import { SourceFileContext } from "./CWScriptParser";
+import { StmtContext } from "./CWScriptParser";
+import { ImportStmtContext } from "./CWScriptParser";
 import { LetStmtContext } from "./CWScriptParser";
+import { Binding_Context } from "./CWScriptParser";
 import { ConstStmtContext } from "./CWScriptParser";
 import { AssignStmtContext } from "./CWScriptParser";
-import { IfStmtContext } from "./CWScriptParser";
-import { ForStmtContext } from "./CWScriptParser";
-import { ExecStmtContext } from "./CWScriptParser";
-import { DelegateExecStmtContext } from "./CWScriptParser";
-import { InstantiateStmtContext } from "./CWScriptParser";
-import { EmitStmtContext } from "./CWScriptParser";
+import { MemberAssignStmtContext } from "./CWScriptParser";
+import { IndexAssignStmtContext } from "./CWScriptParser";
 import { ReturnStmtContext } from "./CWScriptParser";
 import { FailStmtContext } from "./CWScriptParser";
-import { ExprStmtContext } from "./CWScriptParser";
-import { SourceFileContext } from "./CWScriptParser";
-import { TopLevelStmtContext } from "./CWScriptParser";
+import { ForStmtContext } from "./CWScriptParser";
+import { ExecStmtContext } from "./CWScriptParser";
+import { InstantiateStmtContext } from "./CWScriptParser";
+import { EmitStmtContext } from "./CWScriptParser";
+import { DefnContext } from "./CWScriptParser";
 import { ContractDefnContext } from "./CWScriptParser";
 import { InterfaceDefnContext } from "./CWScriptParser";
-import { ContractBlockContext } from "./CWScriptParser";
-import { ImportStmtContext } from "./CWScriptParser";
-import { ContractItemContext } from "./CWScriptParser";
-import { ParamContext } from "./CWScriptParser";
-import { ParamListContext } from "./CWScriptParser";
-import { FnParamsContext } from "./CWScriptParser";
-import { StructDefn_fnContext } from "./CWScriptParser";
-import { ErrorDefnContext } from "./CWScriptParser";
-import { ErrorDefnBlockContext } from "./CWScriptParser";
-import { EventDefnContext } from "./CWScriptParser";
-import { EventDefnBlockContext } from "./CWScriptParser";
-import { StateDefnBlockContext } from "./CWScriptParser";
-import { StateDefnContext } from "./CWScriptParser";
-import { MapKeyDefnContext } from "./CWScriptParser";
-import { InstantiateDefnContext } from "./CWScriptParser";
-import { InstantiateDeclContext } from "./CWScriptParser";
-import { ExecDefnContext } from "./CWScriptParser";
-import { ExecDeclContext } from "./CWScriptParser";
-import { QueryDefnContext } from "./CWScriptParser";
-import { QueryDeclContext } from "./CWScriptParser";
-import { ReplyDefnContext } from "./CWScriptParser";
-import { EnumDefnContext } from "./CWScriptParser";
-import { Variant_Context } from "./CWScriptParser";
-import { Variant_structContext } from "./CWScriptParser";
-import { Variant_unitContext } from "./CWScriptParser";
-import { TypeExprContext } from "./CWScriptParser";
-import { TypeArgContext } from "./CWScriptParser";
-import { FnTypeContext } from "./CWScriptParser";
-import { TypeLensContext } from "./CWScriptParser";
-import { TypePathContext } from "./CWScriptParser";
-import { TypeVariantContext } from "./CWScriptParser";
-import { TypeDefnContext } from "./CWScriptParser";
 import { StructDefnContext } from "./CWScriptParser";
+import { TupleDefnContext } from "./CWScriptParser";
+import { UnitDefnContext } from "./CWScriptParser";
+import { EnumDefnContext } from "./CWScriptParser";
+import { EnumVariantListContext } from "./CWScriptParser";
+import { EnumVariantContext } from "./CWScriptParser";
+import { EnumVariantStructDefnContext } from "./CWScriptParser";
+import { EnumVariantTupleDefnContext } from "./CWScriptParser";
+import { EnumVariantUnitDefnContext } from "./CWScriptParser";
 import { TypeAliasDefnContext } from "./CWScriptParser";
 import { FnDefnContext } from "./CWScriptParser";
-import { AnnotContext } from "./CWScriptParser";
-import { CallOptionsContext } from "./CWScriptParser";
-import { StmtContext } from "./CWScriptParser";
-import { DebugStmt_Context } from "./CWScriptParser";
-import { LetStmt_Context } from "./CWScriptParser";
-import { ConstStmt_Context } from "./CWScriptParser";
-import { IdentBinding_Context } from "./CWScriptParser";
-import { Let_bindingContext } from "./CWScriptParser";
-import { AssignStmt_Context } from "./CWScriptParser";
-import { AssignLHSContext } from "./CWScriptParser";
+import { InstantiateDefnContext } from "./CWScriptParser";
+import { ExecDefnContext } from "./CWScriptParser";
+import { QueryDefnContext } from "./CWScriptParser";
+import { ErrorDefnContext } from "./CWScriptParser";
+import { EventDefnContext } from "./CWScriptParser";
+import { StateBlockDefnContext } from "./CWScriptParser";
+import { StateDefnContext } from "./CWScriptParser";
+import { StateItemDefnContext } from "./CWScriptParser";
+import { StateMapDefnContext } from "./CWScriptParser";
 import { ExprContext } from "./CWScriptParser";
-import { ClosureParamsContext } from "./CWScriptParser";
-import { ClosureContext } from "./CWScriptParser";
-import { BlockContext } from "./CWScriptParser";
+import { IfExpr_Context } from "./CWScriptParser";
 import { TryCatchElseExpr_Context } from "./CWScriptParser";
 import { CatchClauseContext } from "./CWScriptParser";
-import { ArgContext } from "./CWScriptParser";
-import { MemberValContext } from "./CWScriptParser";
+import { ClosureExpr_Context } from "./CWScriptParser";
+import { StructExpr_Context } from "./CWScriptParser";
+import { TupleExpr_Context } from "./CWScriptParser";
 import { LiteralContext } from "./CWScriptParser";
-import { IfStmt_Context } from "./CWScriptParser";
-import { ElseClauseContext } from "./CWScriptParser";
-import { ForStmt_Context } from "./CWScriptParser";
+import { TypeExprContext } from "./CWScriptParser";
+import { TypeVarContext } from "./CWScriptParser";
+import { TypeVarListContext } from "./CWScriptParser";
 import { IdentContext } from "./CWScriptParser";
+import { ParamContext } from "./CWScriptParser";
+import { FieldContext } from "./CWScriptParser";
+import { NamedArgContext } from "./CWScriptParser";
+import { ArgContext } from "./CWScriptParser";
+import { IdentListContext } from "./CWScriptParser";
+import { ParamListContext } from "./CWScriptParser";
+import { TypeExprListContext } from "./CWScriptParser";
+import { FieldListContext } from "./CWScriptParser";
+import { ArgListContext } from "./CWScriptParser";
 import { ReservedKeywordContext } from "./CWScriptParser";
 
 
@@ -146,62 +115,6 @@ import { ReservedKeywordContext } from "./CWScriptParser";
  * operations with no return type.
  */
 export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> {
-	/**
-	 * Visit a parse tree produced by the `IdentLHS`
-	 * labeled alternative in `CWScriptParser.assignLHS`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIdentLHS?: (ctx: IdentLHSContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `DotLHS`
-	 * labeled alternative in `CWScriptParser.assignLHS`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDotLHS?: (ctx: DotLHSContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `IndexLHS`
-	 * labeled alternative in `CWScriptParser.assignLHS`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIndexLHS?: (ctx: IndexLHSContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `StateDefn_Item`
-	 * labeled alternative in `CWScriptParser.stateDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStateDefn_Item?: (ctx: StateDefn_ItemContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `StateDefn_Map`
-	 * labeled alternative in `CWScriptParser.stateDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStateDefn_Map?: (ctx: StateDefn_MapContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ImportAllStmt`
-	 * labeled alternative in `CWScriptParser.importStmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitImportAllStmt?: (ctx: ImportAllStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ImportItemsStmt`
-	 * labeled alternative in `CWScriptParser.importStmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitImportItemsStmt?: (ctx: ImportItemsStmtContext) => Result;
-
 	/**
 	 * Visit a parse tree produced by the `StringLit`
 	 * labeled alternative in `CWScriptParser.literal`.
@@ -243,44 +156,12 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitNoneLit?: (ctx: NoneLitContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `Catch`
-	 * labeled alternative in `CWScriptParser.catchClause`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitCatch?: (ctx: CatchContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `CatchBind`
-	 * labeled alternative in `CWScriptParser.catchClause`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitCatchBind?: (ctx: CatchBindContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `GroupedExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitGroupedExpr?: (ctx: GroupedExprContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `DotExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitDotExpr?: (ctx: DotExprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `AsExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitAsExpr?: (ctx: AsExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `IndexExpr`
@@ -291,28 +172,28 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitIndexExpr?: (ctx: IndexExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `DColonExpr`
+	 * Visit a parse tree produced by the `CallExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitDColonExpr?: (ctx: DColonExprContext) => Result;
+	visitCallExpr?: (ctx: CallExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `TypeDColonExpr`
+	 * Visit a parse tree produced by the `AsExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTypeDColonExpr?: (ctx: TypeDColonExprContext) => Result;
+	visitAsExpr?: (ctx: AsExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `FnCallExpr`
+	 * Visit a parse tree produced by the `ExistsExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitFnCallExpr?: (ctx: FnCallExprContext) => Result;
+	visitExistsExpr?: (ctx: ExistsExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `MulExpr`
@@ -339,36 +220,12 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitCompExpr?: (ctx: CompExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `EqExpr`
+	 * Visit a parse tree produced by the `QueryExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitEqExpr?: (ctx: EqExprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `NoneCheckExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitNoneCheckExpr?: (ctx: NoneCheckExprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `IsExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIsExpr?: (ctx: IsExprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `InExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInExpr?: (ctx: InExprContext) => Result;
+	visitQueryExpr?: (ctx: QueryExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `ShortTryExpr`
@@ -379,20 +236,28 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitShortTryExpr?: (ctx: ShortTryExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `TryCatchElseExpr`
+	 * Visit a parse tree produced by the `InExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTryCatchElseExpr?: (ctx: TryCatchElseExprContext) => Result;
+	visitInExpr?: (ctx: InExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `NotExpr`
+	 * Visit a parse tree produced by the `IsExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitNotExpr?: (ctx: NotExprContext) => Result;
+	visitIsExpr?: (ctx: IsExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `EqExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitEqExpr?: (ctx: EqExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `AndExpr`
@@ -419,20 +284,12 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitIfExpr?: (ctx: IfExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `QueryNowExpr`
+	 * Visit a parse tree produced by the `TryCatchElseExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitQueryNowExpr?: (ctx: QueryNowExprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `FailExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFailExpr?: (ctx: FailExprContext) => Result;
+	visitTryCatchElseExpr?: (ctx: TryCatchElseExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `ClosureExpr`
@@ -443,14 +300,6 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitClosureExpr?: (ctx: ClosureExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `TupleExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTupleExpr?: (ctx: TupleExprContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `StructExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
@@ -459,12 +308,12 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitStructExpr?: (ctx: StructExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `UnitVariantExpr`
+	 * Visit a parse tree produced by the `TupleExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitUnitVariantExpr?: (ctx: UnitVariantExprContext) => Result;
+	visitTupleExpr?: (ctx: TupleExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `LiteralExpr`
@@ -483,228 +332,124 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitIdentExpr?: (ctx: IdentExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `Grouped2Expr`
+	 * Visit a parse tree produced by the `GroupedExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitGrouped2Expr?: (ctx: Grouped2ExprContext) => Result;
+	visitGroupedExpr?: (ctx: GroupedExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `TypeAppT`
+	 * Visit a parse tree produced by the `GroupedTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTypeAppT?: (ctx: TypeAppTContext) => Result;
+	visitGroupedTypeExpr?: (ctx: GroupedTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `PathT`
+	 * Visit a parse tree produced by the `ParamzdTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitPathT?: (ctx: PathTContext) => Result;
+	visitParamzdTypeExpr?: (ctx: ParamzdTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `VariantT`
+	 * Visit a parse tree produced by the `MemberTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitVariantT?: (ctx: VariantTContext) => Result;
+	visitMemberTypeExpr?: (ctx: MemberTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `LensT`
+	 * Visit a parse tree produced by the `ArrayTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitLensT?: (ctx: LensTContext) => Result;
+	visitArrayTypeExpr?: (ctx: ArrayTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `FnT`
+	 * Visit a parse tree produced by the `StructDefnTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitFnT?: (ctx: FnTContext) => Result;
+	visitStructDefnTypeExpr?: (ctx: StructDefnTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `OptionT`
+	 * Visit a parse tree produced by the `TupleDefnTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitOptionT?: (ctx: OptionTContext) => Result;
+	visitTupleDefnTypeExpr?: (ctx: TupleDefnTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `ListT`
+	 * Visit a parse tree produced by the `UnitDefnTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitListT?: (ctx: ListTContext) => Result;
+	visitUnitDefnTypeExpr?: (ctx: UnitDefnTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `TupleT`
+	 * Visit a parse tree produced by the `EnumDefnTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTupleT?: (ctx: TupleTContext) => Result;
+	visitEnumDefnTypeExpr?: (ctx: EnumDefnTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `ParamzdT`
+	 * Visit a parse tree produced by the `OptionTypeExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitParamzdT?: (ctx: ParamzdTContext) => Result;
+	visitOptionTypeExpr?: (ctx: OptionTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `DefnT`
+	 * Visit a parse tree produced by the `TypeVarExpr`
 	 * labeled alternative in `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitDefnT?: (ctx: DefnTContext) => Result;
+	visitTypeVarExpr?: (ctx: TypeVarExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `IdentTypeExpr`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIdentTypeExpr?: (ctx: IdentTypeExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `IdentBinding`
-	 * labeled alternative in `CWScriptParser.let_binding`.
+	 * labeled alternative in `CWScriptParser.binding_`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitIdentBinding?: (ctx: IdentBindingContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `StructBinding`
-	 * labeled alternative in `CWScriptParser.let_binding`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStructBinding?: (ctx: StructBindingContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `TupleBinding`
-	 * labeled alternative in `CWScriptParser.let_binding`.
+	 * labeled alternative in `CWScriptParser.binding_`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitTupleBinding?: (ctx: TupleBindingContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `AnnotBlockStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
+	 * Visit a parse tree produced by the `StructBinding`
+	 * labeled alternative in `CWScriptParser.binding_`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitAnnotBlockStmt?: (ctx: AnnotBlockStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `DebugStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDebugStmt?: (ctx: DebugStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `LetStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitLetStmt?: (ctx: LetStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ConstStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitConstStmt?: (ctx: ConstStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `AssignStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitAssignStmt?: (ctx: AssignStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `IfStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIfStmt?: (ctx: IfStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ForStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitForStmt?: (ctx: ForStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ExecStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExecStmt?: (ctx: ExecStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `DelegateExecStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDelegateExecStmt?: (ctx: DelegateExecStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `InstantiateStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInstantiateStmt?: (ctx: InstantiateStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `EmitStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitEmitStmt?: (ctx: EmitStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ReturnStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitReturnStmt?: (ctx: ReturnStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `FailStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFailStmt?: (ctx: FailStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `ExprStmt`
-	 * labeled alternative in `CWScriptParser.stmt`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExprStmt?: (ctx: ExprStmtContext) => Result;
+	visitStructBinding?: (ctx: StructBindingContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.sourceFile`.
@@ -714,11 +459,109 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitSourceFile?: (ctx: SourceFileContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.topLevelStmt`.
+	 * Visit a parse tree produced by `CWScriptParser.stmt`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTopLevelStmt?: (ctx: TopLevelStmtContext) => Result;
+	visitStmt?: (ctx: StmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.importStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitImportStmt?: (ctx: ImportStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.letStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLetStmt?: (ctx: LetStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.binding_`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBinding_?: (ctx: Binding_Context) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConstStmt?: (ctx: ConstStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.assignStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAssignStmt?: (ctx: AssignStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.memberAssignStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMemberAssignStmt?: (ctx: MemberAssignStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.indexAssignStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIndexAssignStmt?: (ctx: IndexAssignStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.returnStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitReturnStmt?: (ctx: ReturnStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.failStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFailStmt?: (ctx: FailStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.forStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForStmt?: (ctx: ForStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.execStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExecStmt?: (ctx: ExecStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.instantiateStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInstantiateStmt?: (ctx: InstantiateStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.emitStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitEmitStmt?: (ctx: EmitStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.defn`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDefn?: (ctx: DefnContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.contractDefn`.
@@ -735,151 +578,25 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitInterfaceDefn?: (ctx: InterfaceDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.contractBlock`.
+	 * Visit a parse tree produced by `CWScriptParser.structDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitContractBlock?: (ctx: ContractBlockContext) => Result;
+	visitStructDefn?: (ctx: StructDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.importStmt`.
+	 * Visit a parse tree produced by `CWScriptParser.tupleDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitImportStmt?: (ctx: ImportStmtContext) => Result;
+	visitTupleDefn?: (ctx: TupleDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.contractItem`.
+	 * Visit a parse tree produced by `CWScriptParser.unitDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitContractItem?: (ctx: ContractItemContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.param`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitParam?: (ctx: ParamContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.paramList`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitParamList?: (ctx: ParamListContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.fnParams`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFnParams?: (ctx: FnParamsContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.structDefn_fn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStructDefn_fn?: (ctx: StructDefn_fnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.errorDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitErrorDefn?: (ctx: ErrorDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.errorDefnBlock`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitErrorDefnBlock?: (ctx: ErrorDefnBlockContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.eventDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitEventDefn?: (ctx: EventDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.eventDefnBlock`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitEventDefnBlock?: (ctx: EventDefnBlockContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.stateDefnBlock`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStateDefnBlock?: (ctx: StateDefnBlockContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.stateDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStateDefn?: (ctx: StateDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.mapKeyDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitMapKeyDefn?: (ctx: MapKeyDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.instantiateDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInstantiateDefn?: (ctx: InstantiateDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.instantiateDecl`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInstantiateDecl?: (ctx: InstantiateDeclContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.execDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExecDefn?: (ctx: ExecDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.execDecl`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExecDecl?: (ctx: ExecDeclContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.queryDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitQueryDefn?: (ctx: QueryDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.queryDecl`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitQueryDecl?: (ctx: QueryDeclContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.replyDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitReplyDefn?: (ctx: ReplyDefnContext) => Result;
+	visitUnitDefn?: (ctx: UnitDefnContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.enumDefn`.
@@ -889,81 +606,39 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitEnumDefn?: (ctx: EnumDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.variant_`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariantList`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitVariant_?: (ctx: Variant_Context) => Result;
+	visitEnumVariantList?: (ctx: EnumVariantListContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.variant_struct`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariant`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitVariant_struct?: (ctx: Variant_structContext) => Result;
+	visitEnumVariant?: (ctx: EnumVariantContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.variant_unit`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariantStructDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitVariant_unit?: (ctx: Variant_unitContext) => Result;
+	visitEnumVariantStructDefn?: (ctx: EnumVariantStructDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.typeExpr`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariantTupleDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTypeExpr?: (ctx: TypeExprContext) => Result;
+	visitEnumVariantTupleDefn?: (ctx: EnumVariantTupleDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.typeArg`.
+	 * Visit a parse tree produced by `CWScriptParser.enumVariantUnitDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTypeArg?: (ctx: TypeArgContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.fnType`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFnType?: (ctx: FnTypeContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.typeLens`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeLens?: (ctx: TypeLensContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.typePath`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypePath?: (ctx: TypePathContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.typeVariant`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeVariant?: (ctx: TypeVariantContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.typeDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeDefn?: (ctx: TypeDefnContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.structDefn`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStructDefn?: (ctx: StructDefnContext) => Result;
+	visitEnumVariantUnitDefn?: (ctx: EnumVariantUnitDefnContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.typeAliasDefn`.
@@ -980,74 +655,67 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitFnDefn?: (ctx: FnDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.annot`.
+	 * Visit a parse tree produced by `CWScriptParser.instantiateDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitAnnot?: (ctx: AnnotContext) => Result;
+	visitInstantiateDefn?: (ctx: InstantiateDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.callOptions`.
+	 * Visit a parse tree produced by `CWScriptParser.execDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitCallOptions?: (ctx: CallOptionsContext) => Result;
+	visitExecDefn?: (ctx: ExecDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.stmt`.
+	 * Visit a parse tree produced by `CWScriptParser.queryDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitStmt?: (ctx: StmtContext) => Result;
+	visitQueryDefn?: (ctx: QueryDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.debugStmt_`.
+	 * Visit a parse tree produced by `CWScriptParser.errorDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitDebugStmt_?: (ctx: DebugStmt_Context) => Result;
+	visitErrorDefn?: (ctx: ErrorDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.letStmt_`.
+	 * Visit a parse tree produced by `CWScriptParser.eventDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitLetStmt_?: (ctx: LetStmt_Context) => Result;
+	visitEventDefn?: (ctx: EventDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.constStmt_`.
+	 * Visit a parse tree produced by `CWScriptParser.stateBlockDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitConstStmt_?: (ctx: ConstStmt_Context) => Result;
+	visitStateBlockDefn?: (ctx: StateBlockDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.identBinding_`.
+	 * Visit a parse tree produced by `CWScriptParser.stateDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitIdentBinding_?: (ctx: IdentBinding_Context) => Result;
+	visitStateDefn?: (ctx: StateDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.let_binding`.
+	 * Visit a parse tree produced by `CWScriptParser.stateItemDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitLet_binding?: (ctx: Let_bindingContext) => Result;
+	visitStateItemDefn?: (ctx: StateItemDefnContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.assignStmt_`.
+	 * Visit a parse tree produced by `CWScriptParser.stateMapDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitAssignStmt_?: (ctx: AssignStmt_Context) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.assignLHS`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitAssignLHS?: (ctx: AssignLHSContext) => Result;
+	visitStateMapDefn?: (ctx: StateMapDefnContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.expr`.
@@ -1057,25 +725,11 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitExpr?: (ctx: ExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.closureParams`.
+	 * Visit a parse tree produced by `CWScriptParser.ifExpr_`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitClosureParams?: (ctx: ClosureParamsContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.closure`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitClosure?: (ctx: ClosureContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.block`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBlock?: (ctx: BlockContext) => Result;
+	visitIfExpr_?: (ctx: IfExpr_Context) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.tryCatchElseExpr_`.
@@ -1092,18 +746,25 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitCatchClause?: (ctx: CatchClauseContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.arg`.
+	 * Visit a parse tree produced by `CWScriptParser.closureExpr_`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitArg?: (ctx: ArgContext) => Result;
+	visitClosureExpr_?: (ctx: ClosureExpr_Context) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.memberVal`.
+	 * Visit a parse tree produced by `CWScriptParser.structExpr_`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitMemberVal?: (ctx: MemberValContext) => Result;
+	visitStructExpr_?: (ctx: StructExpr_Context) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.tupleExpr_`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTupleExpr_?: (ctx: TupleExpr_Context) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.literal`.
@@ -1113,25 +774,25 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitLiteral?: (ctx: LiteralContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.ifStmt_`.
+	 * Visit a parse tree produced by `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitIfStmt_?: (ctx: IfStmt_Context) => Result;
+	visitTypeExpr?: (ctx: TypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.elseClause`.
+	 * Visit a parse tree produced by `CWScriptParser.typeVar`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitElseClause?: (ctx: ElseClauseContext) => Result;
+	visitTypeVar?: (ctx: TypeVarContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.forStmt_`.
+	 * Visit a parse tree produced by `CWScriptParser.typeVarList`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitForStmt_?: (ctx: ForStmt_Context) => Result;
+	visitTypeVarList?: (ctx: TypeVarListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.ident`.
@@ -1139,6 +800,69 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitIdent?: (ctx: IdentContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.param`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParam?: (ctx: ParamContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.field`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitField?: (ctx: FieldContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.namedArg`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitNamedArg?: (ctx: NamedArgContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.arg`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArg?: (ctx: ArgContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.identList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIdentList?: (ctx: IdentListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.paramList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParamList?: (ctx: ParamListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.typeExprList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeExprList?: (ctx: TypeExprListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.fieldList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFieldList?: (ctx: FieldListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.argList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArgList?: (ctx: ArgListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.reservedKeyword`.

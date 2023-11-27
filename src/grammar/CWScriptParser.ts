@@ -67,137 +67,137 @@ export class CWScriptParser extends Parser {
 	public static readonly FAIL = 37;
 	public static readonly RETURN = 38;
 	public static readonly STRUCT = 39;
-	public static readonly ENUM = 40;
-	public static readonly TYPE = 41;
-	public static readonly EMIT = 42;
-	public static readonly AS = 43;
-	public static readonly TILDE = 44;
-	public static readonly LPAREN = 45;
-	public static readonly RPAREN = 46;
-	public static readonly LBRACK = 47;
-	public static readonly RBRACK = 48;
-	public static readonly LBRACE = 49;
-	public static readonly RBRACE = 50;
-	public static readonly DOT = 51;
-	public static readonly COMMA = 52;
-	public static readonly D_QUEST = 53;
-	public static readonly QUEST = 54;
-	public static readonly BANG = 55;
-	public static readonly SEMI = 56;
-	public static readonly COLON = 57;
-	public static readonly D_COLON = 58;
-	public static readonly HASH = 59;
-	public static readonly AT = 60;
-	public static readonly AMP = 61;
-	public static readonly ARROW = 62;
-	public static readonly FAT_ARROW = 63;
-	public static readonly BAR = 64;
-	public static readonly S_QUOTE = 65;
-	public static readonly D_QUOTE = 66;
-	public static readonly EQ = 67;
-	public static readonly EQ_EQ = 68;
-	public static readonly NEQ = 69;
-	public static readonly PLUS = 70;
-	public static readonly PLUS_EQ = 71;
-	public static readonly MINUS = 72;
-	public static readonly MINUS_EQ = 73;
-	public static readonly MUL = 74;
-	public static readonly MUL_EQ = 75;
-	public static readonly DIV = 76;
-	public static readonly DIV_EQ = 77;
-	public static readonly MOD = 78;
-	public static readonly MOD_EQ = 79;
-	public static readonly LT = 80;
-	public static readonly LT_EQ = 81;
-	public static readonly GT = 82;
-	public static readonly GT_EQ = 83;
-	public static readonly POW = 84;
-	public static readonly Ident = 85;
-	public static readonly StringLiteral = 86;
-	public static readonly IntLiteral = 87;
-	public static readonly DecLiteral = 88;
-	public static readonly BoolLiteral = 89;
-	public static readonly CWSPEC_LINE_COMMENT = 90;
-	public static readonly CWSPEC_BLOCK_COMMENT = 91;
-	public static readonly LINE_COMMENT = 92;
-	public static readonly BLOCK_COMMENT = 93;
-	public static readonly WS = 94;
+	public static readonly TUPLE = 40;
+	public static readonly UNIT = 41;
+	public static readonly ENUM = 42;
+	public static readonly TYPE = 43;
+	public static readonly EMIT = 44;
+	public static readonly AS = 45;
+	public static readonly TILDE = 46;
+	public static readonly LPAREN = 47;
+	public static readonly RPAREN = 48;
+	public static readonly LBRACK = 49;
+	public static readonly RBRACK = 50;
+	public static readonly LBRACE = 51;
+	public static readonly RBRACE = 52;
+	public static readonly DOT = 53;
+	public static readonly COMMA = 54;
+	public static readonly D_QUEST = 55;
+	public static readonly QUEST = 56;
+	public static readonly BANG = 57;
+	public static readonly SEMI = 58;
+	public static readonly COLON = 59;
+	public static readonly D_COLON = 60;
+	public static readonly HASH = 61;
+	public static readonly AT = 62;
+	public static readonly AMP = 63;
+	public static readonly ARROW = 64;
+	public static readonly FAT_ARROW = 65;
+	public static readonly BAR = 66;
+	public static readonly S_QUOTE = 67;
+	public static readonly D_QUOTE = 68;
+	public static readonly EQ = 69;
+	public static readonly EQ_EQ = 70;
+	public static readonly NEQ = 71;
+	public static readonly PLUS = 72;
+	public static readonly PLUS_EQ = 73;
+	public static readonly MINUS = 74;
+	public static readonly MINUS_EQ = 75;
+	public static readonly MUL = 76;
+	public static readonly MUL_EQ = 77;
+	public static readonly DIV = 78;
+	public static readonly DIV_EQ = 79;
+	public static readonly MOD = 80;
+	public static readonly MOD_EQ = 81;
+	public static readonly LT = 82;
+	public static readonly LT_EQ = 83;
+	public static readonly GT = 84;
+	public static readonly GT_EQ = 85;
+	public static readonly POW = 86;
+	public static readonly Ident = 87;
+	public static readonly TypeVar = 88;
+	public static readonly StringLiteral = 89;
+	public static readonly IntLiteral = 90;
+	public static readonly DecLiteral = 91;
+	public static readonly BoolLiteral = 92;
+	public static readonly CWSPEC_LINE_COMMENT = 93;
+	public static readonly CWSPEC_BLOCK_COMMENT = 94;
+	public static readonly LINE_COMMENT = 95;
+	public static readonly BLOCK_COMMENT = 96;
+	public static readonly WS = 97;
 	public static readonly RULE_sourceFile = 0;
-	public static readonly RULE_topLevelStmt = 1;
-	public static readonly RULE_contractDefn = 2;
-	public static readonly RULE_interfaceDefn = 3;
-	public static readonly RULE_contractBlock = 4;
-	public static readonly RULE_importStmt = 5;
-	public static readonly RULE_contractItem = 6;
-	public static readonly RULE_param = 7;
-	public static readonly RULE_paramList = 8;
-	public static readonly RULE_fnParams = 9;
-	public static readonly RULE_structDefn_fn = 10;
-	public static readonly RULE_errorDefn = 11;
-	public static readonly RULE_errorDefnBlock = 12;
-	public static readonly RULE_eventDefn = 13;
-	public static readonly RULE_eventDefnBlock = 14;
-	public static readonly RULE_stateDefnBlock = 15;
-	public static readonly RULE_stateDefn = 16;
-	public static readonly RULE_mapKeyDefn = 17;
-	public static readonly RULE_instantiateDefn = 18;
-	public static readonly RULE_instantiateDecl = 19;
-	public static readonly RULE_execDefn = 20;
-	public static readonly RULE_execDecl = 21;
-	public static readonly RULE_queryDefn = 22;
-	public static readonly RULE_queryDecl = 23;
-	public static readonly RULE_replyDefn = 24;
-	public static readonly RULE_enumDefn = 25;
-	public static readonly RULE_variant_ = 26;
-	public static readonly RULE_variant_struct = 27;
-	public static readonly RULE_variant_unit = 28;
-	public static readonly RULE_typeExpr = 29;
-	public static readonly RULE_typeArg = 30;
-	public static readonly RULE_fnType = 31;
-	public static readonly RULE_typeLens = 32;
-	public static readonly RULE_typePath = 33;
-	public static readonly RULE_typeVariant = 34;
-	public static readonly RULE_typeDefn = 35;
-	public static readonly RULE_structDefn = 36;
-	public static readonly RULE_typeAliasDefn = 37;
-	public static readonly RULE_fnDefn = 38;
-	public static readonly RULE_annot = 39;
-	public static readonly RULE_callOptions = 40;
-	public static readonly RULE_stmt = 41;
-	public static readonly RULE_debugStmt_ = 42;
-	public static readonly RULE_letStmt_ = 43;
-	public static readonly RULE_constStmt_ = 44;
-	public static readonly RULE_identBinding_ = 45;
-	public static readonly RULE_let_binding = 46;
-	public static readonly RULE_assignStmt_ = 47;
-	public static readonly RULE_assignLHS = 48;
-	public static readonly RULE_expr = 49;
-	public static readonly RULE_closureParams = 50;
-	public static readonly RULE_closure = 51;
-	public static readonly RULE_block = 52;
-	public static readonly RULE_tryCatchElseExpr_ = 53;
-	public static readonly RULE_catchClause = 54;
-	public static readonly RULE_arg = 55;
-	public static readonly RULE_memberVal = 56;
-	public static readonly RULE_literal = 57;
-	public static readonly RULE_ifStmt_ = 58;
-	public static readonly RULE_elseClause = 59;
-	public static readonly RULE_forStmt_ = 60;
-	public static readonly RULE_ident = 61;
-	public static readonly RULE_reservedKeyword = 62;
+	public static readonly RULE_stmt = 1;
+	public static readonly RULE_importStmt = 2;
+	public static readonly RULE_letStmt = 3;
+	public static readonly RULE_binding_ = 4;
+	public static readonly RULE_constStmt = 5;
+	public static readonly RULE_assignStmt = 6;
+	public static readonly RULE_memberAssignStmt = 7;
+	public static readonly RULE_indexAssignStmt = 8;
+	public static readonly RULE_returnStmt = 9;
+	public static readonly RULE_failStmt = 10;
+	public static readonly RULE_forStmt = 11;
+	public static readonly RULE_execStmt = 12;
+	public static readonly RULE_instantiateStmt = 13;
+	public static readonly RULE_emitStmt = 14;
+	public static readonly RULE_defn = 15;
+	public static readonly RULE_contractDefn = 16;
+	public static readonly RULE_interfaceDefn = 17;
+	public static readonly RULE_structDefn = 18;
+	public static readonly RULE_tupleDefn = 19;
+	public static readonly RULE_unitDefn = 20;
+	public static readonly RULE_enumDefn = 21;
+	public static readonly RULE_enumVariantList = 22;
+	public static readonly RULE_enumVariant = 23;
+	public static readonly RULE_enumVariantStructDefn = 24;
+	public static readonly RULE_enumVariantTupleDefn = 25;
+	public static readonly RULE_enumVariantUnitDefn = 26;
+	public static readonly RULE_typeAliasDefn = 27;
+	public static readonly RULE_fnDefn = 28;
+	public static readonly RULE_instantiateDefn = 29;
+	public static readonly RULE_execDefn = 30;
+	public static readonly RULE_queryDefn = 31;
+	public static readonly RULE_errorDefn = 32;
+	public static readonly RULE_eventDefn = 33;
+	public static readonly RULE_stateBlockDefn = 34;
+	public static readonly RULE_stateDefn = 35;
+	public static readonly RULE_stateItemDefn = 36;
+	public static readonly RULE_stateMapDefn = 37;
+	public static readonly RULE_expr = 38;
+	public static readonly RULE_ifExpr_ = 39;
+	public static readonly RULE_tryCatchElseExpr_ = 40;
+	public static readonly RULE_catchClause = 41;
+	public static readonly RULE_closureExpr_ = 42;
+	public static readonly RULE_structExpr_ = 43;
+	public static readonly RULE_tupleExpr_ = 44;
+	public static readonly RULE_literal = 45;
+	public static readonly RULE_typeExpr = 46;
+	public static readonly RULE_typeVar = 47;
+	public static readonly RULE_typeVarList = 48;
+	public static readonly RULE_ident = 49;
+	public static readonly RULE_param = 50;
+	public static readonly RULE_field = 51;
+	public static readonly RULE_namedArg = 52;
+	public static readonly RULE_arg = 53;
+	public static readonly RULE_identList = 54;
+	public static readonly RULE_paramList = 55;
+	public static readonly RULE_typeExprList = 56;
+	public static readonly RULE_fieldList = 57;
+	public static readonly RULE_argList = 58;
+	public static readonly RULE_reservedKeyword = 59;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"sourceFile", "topLevelStmt", "contractDefn", "interfaceDefn", "contractBlock", 
-		"importStmt", "contractItem", "param", "paramList", "fnParams", "structDefn_fn", 
-		"errorDefn", "errorDefnBlock", "eventDefn", "eventDefnBlock", "stateDefnBlock", 
-		"stateDefn", "mapKeyDefn", "instantiateDefn", "instantiateDecl", "execDefn", 
-		"execDecl", "queryDefn", "queryDecl", "replyDefn", "enumDefn", "variant_", 
-		"variant_struct", "variant_unit", "typeExpr", "typeArg", "fnType", "typeLens", 
-		"typePath", "typeVariant", "typeDefn", "structDefn", "typeAliasDefn", 
-		"fnDefn", "annot", "callOptions", "stmt", "debugStmt_", "letStmt_", "constStmt_", 
-		"identBinding_", "let_binding", "assignStmt_", "assignLHS", "expr", "closureParams", 
-		"closure", "block", "tryCatchElseExpr_", "catchClause", "arg", "memberVal", 
-		"literal", "ifStmt_", "elseClause", "forStmt_", "ident", "reservedKeyword",
+		"sourceFile", "stmt", "importStmt", "letStmt", "binding_", "constStmt", 
+		"assignStmt", "memberAssignStmt", "indexAssignStmt", "returnStmt", "failStmt", 
+		"forStmt", "execStmt", "instantiateStmt", "emitStmt", "defn", "contractDefn", 
+		"interfaceDefn", "structDefn", "tupleDefn", "unitDefn", "enumDefn", "enumVariantList", 
+		"enumVariant", "enumVariantStructDefn", "enumVariantTupleDefn", "enumVariantUnitDefn", 
+		"typeAliasDefn", "fnDefn", "instantiateDefn", "execDefn", "queryDefn", 
+		"errorDefn", "eventDefn", "stateBlockDefn", "stateDefn", "stateItemDefn", 
+		"stateMapDefn", "expr", "ifExpr_", "tryCatchElseExpr_", "catchClause", 
+		"closureExpr_", "structExpr_", "tupleExpr_", "literal", "typeExpr", "typeVar", 
+		"typeVarList", "ident", "param", "field", "namedArg", "arg", "identList", 
+		"paramList", "typeExprList", "fieldList", "argList", "reservedKeyword",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
@@ -207,11 +207,11 @@ export class CWScriptParser extends Parser {
 		"'reply'", "'for'", "'in'", "'from'", "'state'", "'if'", "'is'", "'try'", 
 		"'catch'", "'else'", "'not'", "'None'", "'mut'", "'and'", "'or'", "'true'", 
 		"'false'", "'fn'", "'let'", "'const'", "'fail!'", "'return'", "'struct'", 
-		"'enum'", "'type'", "'emit'", "'as'", "'~'", "'('", "')'", "'['", "']'", 
-		"'{'", "'}'", "'.'", "','", "'??'", "'?'", "'!'", "';'", "':'", "'::'", 
-		"'#'", "'@'", "'&'", "'->'", "'=>'", "'|'", "'''", "'\"'", "'='", "'=='", 
-		"'!='", "'+'", "'+='", "'-'", "'-='", "'*'", "'*='", "'/'", "'/='", "'%'", 
-		"'%='", "'<'", "'<='", "'>'", "'>='", "'**'",
+		"'tuple'", "'unit'", "'enum'", "'type'", "'emit'", "'as'", "'~'", "'('", 
+		"')'", "'['", "']'", "'{'", "'}'", "'.'", "','", "'??'", "'?'", "'!'", 
+		"';'", "':'", "'::'", "'#'", "'@'", "'&'", "'->'", "'=>'", "'|'", "'''", 
+		"'\"'", "'='", "'=='", "'!='", "'+'", "'+='", "'-'", "'-='", "'*'", "'*='", 
+		"'/'", "'/='", "'%'", "'%='", "'<'", "'<='", "'>'", "'>='", "'**'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, "DEBUG", "CONTRACT", "INTERFACE", "IMPORT", "IMPLEMENTS", "EXTENDS", 
@@ -219,13 +219,13 @@ export class CWScriptParser extends Parser {
 		"DELEGATE_EXEC", "INSTANTIATE", "EXEC", "QUERY", "REPLY", "FOR", "IN", 
 		"FROM", "STATE", "IF", "IS", "TRY", "CATCH", "ELSE", "NOT", "NONE", "MUT", 
 		"AND", "OR", "TRUE", "FALSE", "FN", "LET", "CONST", "FAIL", "RETURN", 
-		"STRUCT", "ENUM", "TYPE", "EMIT", "AS", "TILDE", "LPAREN", "RPAREN", "LBRACK", 
-		"RBRACK", "LBRACE", "RBRACE", "DOT", "COMMA", "D_QUEST", "QUEST", "BANG", 
-		"SEMI", "COLON", "D_COLON", "HASH", "AT", "AMP", "ARROW", "FAT_ARROW", 
-		"BAR", "S_QUOTE", "D_QUOTE", "EQ", "EQ_EQ", "NEQ", "PLUS", "PLUS_EQ", 
-		"MINUS", "MINUS_EQ", "MUL", "MUL_EQ", "DIV", "DIV_EQ", "MOD", "MOD_EQ", 
-		"LT", "LT_EQ", "GT", "GT_EQ", "POW", "Ident", "StringLiteral", "IntLiteral", 
-		"DecLiteral", "BoolLiteral", "CWSPEC_LINE_COMMENT", "CWSPEC_BLOCK_COMMENT", 
+		"STRUCT", "TUPLE", "UNIT", "ENUM", "TYPE", "EMIT", "AS", "TILDE", "LPAREN", 
+		"RPAREN", "LBRACK", "RBRACK", "LBRACE", "RBRACE", "DOT", "COMMA", "D_QUEST", 
+		"QUEST", "BANG", "SEMI", "COLON", "D_COLON", "HASH", "AT", "AMP", "ARROW", 
+		"FAT_ARROW", "BAR", "S_QUOTE", "D_QUOTE", "EQ", "EQ_EQ", "NEQ", "PLUS", 
+		"PLUS_EQ", "MINUS", "MINUS_EQ", "MUL", "MUL_EQ", "DIV", "DIV_EQ", "MOD", 
+		"MOD_EQ", "LT", "LT_EQ", "GT", "GT_EQ", "POW", "Ident", "TypeVar", "StringLiteral", 
+		"IntLiteral", "DecLiteral", "BoolLiteral", "CWSPEC_LINE_COMMENT", "CWSPEC_BLOCK_COMMENT", 
 		"LINE_COMMENT", "BLOCK_COMMENT", "WS",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(CWScriptParser._LITERAL_NAMES, CWScriptParser._SYMBOLIC_NAMES, []);
@@ -262,2538 +262,23 @@ export class CWScriptParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 130;
+			this.state = 123;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.DEBUG) | (1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.DEFER) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.DELEGATE_EXEC) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NOT) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.LBRACE - 32)) | (1 << (CWScriptParser.BANG - 32)) | (1 << (CWScriptParser.SEMI - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || ((((_la - 64)) & ~0x1F) === 0 && ((1 << (_la - 64)) & ((1 << (CWScriptParser.BAR - 64)) | (1 << (CWScriptParser.LT - 64)) | (1 << (CWScriptParser.Ident - 64)) | (1 << (CWScriptParser.StringLiteral - 64)) | (1 << (CWScriptParser.IntLiteral - 64)) | (1 << (CWScriptParser.DecLiteral - 64)) | (1 << (CWScriptParser.BoolLiteral - 64)))) !== 0)) {
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
 				{
-				this.state = 128;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case CWScriptParser.DEBUG:
-				case CWScriptParser.CONTRACT:
-				case CWScriptParser.INTERFACE:
-				case CWScriptParser.IMPORT:
-				case CWScriptParser.IMPLEMENTS:
-				case CWScriptParser.EXTENDS:
-				case CWScriptParser.ERROR:
-				case CWScriptParser.EVENT:
-				case CWScriptParser.DEFER:
-				case CWScriptParser.INSTANTIATE_NOW:
-				case CWScriptParser.EXEC_NOW:
-				case CWScriptParser.QUERY_NOW:
-				case CWScriptParser.DELEGATE_EXEC:
-				case CWScriptParser.INSTANTIATE:
-				case CWScriptParser.EXEC:
-				case CWScriptParser.QUERY:
-				case CWScriptParser.REPLY:
-				case CWScriptParser.FOR:
-				case CWScriptParser.IN:
-				case CWScriptParser.FROM:
-				case CWScriptParser.STATE:
-				case CWScriptParser.IF:
-				case CWScriptParser.TRY:
-				case CWScriptParser.ELSE:
-				case CWScriptParser.NOT:
-				case CWScriptParser.NONE:
-				case CWScriptParser.MUT:
-				case CWScriptParser.AND:
-				case CWScriptParser.OR:
-				case CWScriptParser.TRUE:
-				case CWScriptParser.FALSE:
-				case CWScriptParser.FN:
-				case CWScriptParser.LET:
-				case CWScriptParser.CONST:
-				case CWScriptParser.FAIL:
-				case CWScriptParser.RETURN:
-				case CWScriptParser.STRUCT:
-				case CWScriptParser.ENUM:
-				case CWScriptParser.TYPE:
-				case CWScriptParser.EMIT:
-				case CWScriptParser.LPAREN:
-				case CWScriptParser.LBRACK:
-				case CWScriptParser.LBRACE:
-				case CWScriptParser.BANG:
-				case CWScriptParser.AT:
-				case CWScriptParser.BAR:
-				case CWScriptParser.LT:
-				case CWScriptParser.Ident:
-				case CWScriptParser.StringLiteral:
-				case CWScriptParser.IntLiteral:
-				case CWScriptParser.DecLiteral:
-				case CWScriptParser.BoolLiteral:
-					{
-					this.state = 126;
-					this.topLevelStmt();
-					}
-					break;
-				case CWScriptParser.SEMI:
-					{
-					this.state = 127;
-					this.match(CWScriptParser.SEMI);
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
+				{
+				this.state = 120;
+				_localctx._stmt = this.stmt();
+				_localctx._stmts.push(_localctx._stmt);
 				}
 				}
-				this.state = 132;
+				this.state = 125;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 133;
+			this.state = 126;
 			this.match(CWScriptParser.EOF);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public topLevelStmt(): TopLevelStmtContext {
-		let _localctx: TopLevelStmtContext = new TopLevelStmtContext(this._ctx, this.state);
-		this.enterRule(_localctx, 2, CWScriptParser.RULE_topLevelStmt);
-		try {
-			this.state = 139;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 2, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 135;
-				this.importStmt();
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 136;
-				this.contractDefn();
-				}
-				break;
-
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 137;
-				this.interfaceDefn();
-				}
-				break;
-
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 138;
-				this.stmt();
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public contractDefn(): ContractDefnContext {
-		let _localctx: ContractDefnContext = new ContractDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 4, CWScriptParser.RULE_contractDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 144;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === CWScriptParser.AT) {
-				{
-				{
-				this.state = 141;
-				_localctx._annot = this.annot();
-				_localctx._ann.push(_localctx._annot);
-				}
-				}
-				this.state = 146;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			this.state = 147;
-			this.match(CWScriptParser.CONTRACT);
-			{
-			this.state = 148;
-			_localctx._name = this.ident();
-			}
-			this.state = 151;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.EXTENDS) {
-				{
-				this.state = 149;
-				this.match(CWScriptParser.EXTENDS);
-				{
-				this.state = 150;
-				_localctx._base = this.typePath();
-				}
-				}
-			}
-
-			this.state = 155;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.IMPLEMENTS) {
-				{
-				this.state = 153;
-				this.match(CWScriptParser.IMPLEMENTS);
-				{
-				this.state = 154;
-				_localctx._typePath = this.typePath();
-				_localctx._interfaces.push(_localctx._typePath);
-				}
-				}
-			}
-
-			{
-			this.state = 157;
-			_localctx._body = this.contractBlock();
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public interfaceDefn(): InterfaceDefnContext {
-		let _localctx: InterfaceDefnContext = new InterfaceDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 6, CWScriptParser.RULE_interfaceDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 162;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === CWScriptParser.AT) {
-				{
-				{
-				this.state = 159;
-				_localctx._annot = this.annot();
-				_localctx._ann.push(_localctx._annot);
-				}
-				}
-				this.state = 164;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			this.state = 165;
-			this.match(CWScriptParser.INTERFACE);
-			{
-			this.state = 166;
-			_localctx._name = this.ident();
-			}
-			this.state = 169;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.EXTENDS) {
-				{
-				this.state = 167;
-				this.match(CWScriptParser.EXTENDS);
-				{
-				this.state = 168;
-				_localctx._base = this.typePath();
-				}
-				}
-			}
-
-			{
-			this.state = 171;
-			_localctx._body = this.contractBlock();
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public contractBlock(): ContractBlockContext {
-		let _localctx: ContractBlockContext = new ContractBlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 8, CWScriptParser.RULE_contractBlock);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 173;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 177;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.STATE))) !== 0) || ((((_la - 34)) & ~0x1F) === 0 && ((1 << (_la - 34)) & ((1 << (CWScriptParser.FN - 34)) | (1 << (CWScriptParser.CONST - 34)) | (1 << (CWScriptParser.STRUCT - 34)) | (1 << (CWScriptParser.ENUM - 34)) | (1 << (CWScriptParser.TYPE - 34)) | (1 << (CWScriptParser.HASH - 34)))) !== 0)) {
-				{
-				{
-				this.state = 174;
-				_localctx._contractItem = this.contractItem();
-				_localctx._body.push(_localctx._contractItem);
-				}
-				}
-				this.state = 179;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			this.state = 180;
-			this.match(CWScriptParser.RBRACE);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public importStmt(): ImportStmtContext {
-		let _localctx: ImportStmtContext = new ImportStmtContext(this._ctx, this.state);
-		this.enterRule(_localctx, 10, CWScriptParser.RULE_importStmt);
-		let _la: number;
-		try {
-			this.state = 201;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 10, this._ctx) ) {
-			case 1:
-				_localctx = new ImportAllStmtContext(_localctx);
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 182;
-				this.match(CWScriptParser.IMPORT);
-				this.state = 183;
-				this.match(CWScriptParser.MUL);
-				this.state = 184;
-				this.match(CWScriptParser.FROM);
-				{
-				this.state = 185;
-				(_localctx as ImportAllStmtContext)._src = this.match(CWScriptParser.StringLiteral);
-				}
-				}
-				break;
-
-			case 2:
-				_localctx = new ImportItemsStmtContext(_localctx);
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 186;
-				this.match(CWScriptParser.IMPORT);
-				{
-				{
-				this.state = 187;
-				this.match(CWScriptParser.LBRACE);
-				{
-				this.state = 188;
-				(_localctx as ImportItemsStmtContext)._ident = this.ident();
-				(_localctx as ImportItemsStmtContext)._items.push((_localctx as ImportItemsStmtContext)._ident);
-				}
-				this.state = 193;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
-					{
-					{
-					this.state = 189;
-					this.match(CWScriptParser.COMMA);
-					this.state = 190;
-					(_localctx as ImportItemsStmtContext)._ident = this.ident();
-					(_localctx as ImportItemsStmtContext)._items.push((_localctx as ImportItemsStmtContext)._ident);
-					}
-					}
-					this.state = 195;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 196;
-				this.match(CWScriptParser.RBRACE);
-				}
-				}
-				this.state = 198;
-				this.match(CWScriptParser.FROM);
-				{
-				this.state = 199;
-				(_localctx as ImportItemsStmtContext)._src = this.match(CWScriptParser.StringLiteral);
-				}
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public contractItem(): ContractItemContext {
-		let _localctx: ContractItemContext = new ContractItemContext(this._ctx, this.state);
-		this.enterRule(_localctx, 12, CWScriptParser.RULE_contractItem);
-		try {
-			this.state = 219;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 11, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 203;
-				this.typeDefn();
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 204;
-				this.constStmt_();
-				}
-				break;
-
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 205;
-				this.fnDefn();
-				}
-				break;
-
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 206;
-				this.errorDefn();
-				}
-				break;
-
-			case 5:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 207;
-				this.errorDefnBlock();
-				}
-				break;
-
-			case 6:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 208;
-				this.eventDefn();
-				}
-				break;
-
-			case 7:
-				this.enterOuterAlt(_localctx, 7);
-				{
-				this.state = 209;
-				this.eventDefnBlock();
-				}
-				break;
-
-			case 8:
-				this.enterOuterAlt(_localctx, 8);
-				{
-				this.state = 210;
-				this.stateDefnBlock();
-				}
-				break;
-
-			case 9:
-				this.enterOuterAlt(_localctx, 9);
-				{
-				this.state = 211;
-				this.instantiateDefn();
-				}
-				break;
-
-			case 10:
-				this.enterOuterAlt(_localctx, 10);
-				{
-				this.state = 212;
-				this.instantiateDecl();
-				}
-				break;
-
-			case 11:
-				this.enterOuterAlt(_localctx, 11);
-				{
-				this.state = 213;
-				this.execDefn();
-				}
-				break;
-
-			case 12:
-				this.enterOuterAlt(_localctx, 12);
-				{
-				this.state = 214;
-				this.execDecl();
-				}
-				break;
-
-			case 13:
-				this.enterOuterAlt(_localctx, 13);
-				{
-				this.state = 215;
-				this.queryDefn();
-				}
-				break;
-
-			case 14:
-				this.enterOuterAlt(_localctx, 14);
-				{
-				this.state = 216;
-				this.queryDefn();
-				}
-				break;
-
-			case 15:
-				this.enterOuterAlt(_localctx, 15);
-				{
-				this.state = 217;
-				this.queryDecl();
-				}
-				break;
-
-			case 16:
-				this.enterOuterAlt(_localctx, 16);
-				{
-				this.state = 218;
-				this.replyDefn();
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public param(): ParamContext {
-		let _localctx: ParamContext = new ParamContext(this._ctx, this.state);
-		this.enterRule(_localctx, 14, CWScriptParser.RULE_param);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 224;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === CWScriptParser.AT) {
-				{
-				{
-				this.state = 221;
-				_localctx._annot = this.annot();
-				_localctx._ann.push(_localctx._annot);
-				}
-				}
-				this.state = 226;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			{
-			this.state = 227;
-			_localctx._name = this.ident();
-			}
-			this.state = 229;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.QUEST) {
-				{
-				this.state = 228;
-				_localctx._optional = this.match(CWScriptParser.QUEST);
-				}
-			}
-
-			this.state = 237;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.COLON) {
-				{
-				this.state = 231;
-				this.match(CWScriptParser.COLON);
-				{
-				this.state = 232;
-				_localctx._ty = this.typeExpr(0);
-				}
-				this.state = 235;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.EQ) {
-					{
-					this.state = 233;
-					this.match(CWScriptParser.EQ);
-					this.state = 234;
-					_localctx._default = this.expr(0);
-					}
-				}
-
-				}
-			}
-
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public paramList(): ParamListContext {
-		let _localctx: ParamListContext = new ParamListContext(this._ctx, this.state);
-		this.enterRule(_localctx, 16, CWScriptParser.RULE_paramList);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 239;
-			this.param();
-			this.state = 244;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === CWScriptParser.COMMA) {
-				{
-				{
-				this.state = 240;
-				this.match(CWScriptParser.COMMA);
-				this.state = 241;
-				this.param();
-				}
-				}
-				this.state = 246;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public fnParams(): FnParamsContext {
-		let _localctx: FnParamsContext = new FnParamsContext(this._ctx, this.state);
-		this.enterRule(_localctx, 18, CWScriptParser.RULE_fnParams);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 247;
-			this.match(CWScriptParser.LPAREN);
-			this.state = 256;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-				{
-				{
-				this.state = 248;
-				_localctx._param = this.param();
-				_localctx._params.push(_localctx._param);
-				}
-				this.state = 253;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
-					{
-					{
-					this.state = 249;
-					this.match(CWScriptParser.COMMA);
-					this.state = 250;
-					_localctx._param = this.param();
-					_localctx._params.push(_localctx._param);
-					}
-					}
-					this.state = 255;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				}
-			}
-
-			this.state = 258;
-			this.match(CWScriptParser.RPAREN);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public structDefn_fn(): StructDefn_fnContext {
-		let _localctx: StructDefn_fnContext = new StructDefn_fnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 20, CWScriptParser.RULE_structDefn_fn);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			{
-			this.state = 260;
-			_localctx._name = this.ident();
-			}
-			{
-			this.state = 261;
-			_localctx._params = this.fnParams();
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public errorDefn(): ErrorDefnContext {
-		let _localctx: ErrorDefnContext = new ErrorDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 22, CWScriptParser.RULE_errorDefn);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 263;
-			this.match(CWScriptParser.ERROR);
-			this.state = 264;
-			_localctx._defn = this.structDefn_fn();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public errorDefnBlock(): ErrorDefnBlockContext {
-		let _localctx: ErrorDefnBlockContext = new ErrorDefnBlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 24, CWScriptParser.RULE_errorDefnBlock);
-		let _la: number;
-		try {
-			let _alt: number;
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 266;
-			this.match(CWScriptParser.ERROR);
-			this.state = 267;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 279;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-				{
-				{
-				this.state = 268;
-				_localctx._structDefn_fn = this.structDefn_fn();
-				_localctx._defns.push(_localctx._structDefn_fn);
-				}
-				this.state = 273;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 269;
-						this.match(CWScriptParser.COMMA);
-						this.state = 270;
-						_localctx._structDefn_fn = this.structDefn_fn();
-						_localctx._defns.push(_localctx._structDefn_fn);
-						}
-						}
-					}
-					this.state = 275;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
-				}
-				this.state = 277;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.COMMA) {
-					{
-					this.state = 276;
-					this.match(CWScriptParser.COMMA);
-					}
-				}
-
-				}
-			}
-
-			this.state = 281;
-			this.match(CWScriptParser.RBRACE);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public eventDefn(): EventDefnContext {
-		let _localctx: EventDefnContext = new EventDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 26, CWScriptParser.RULE_eventDefn);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 283;
-			this.match(CWScriptParser.EVENT);
-			this.state = 284;
-			this.structDefn_fn();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public eventDefnBlock(): EventDefnBlockContext {
-		let _localctx: EventDefnBlockContext = new EventDefnBlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 28, CWScriptParser.RULE_eventDefnBlock);
-		let _la: number;
-		try {
-			let _alt: number;
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 286;
-			this.match(CWScriptParser.EVENT);
-			this.state = 287;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 299;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-				{
-				{
-				this.state = 288;
-				_localctx._structDefn_fn = this.structDefn_fn();
-				_localctx._defns.push(_localctx._structDefn_fn);
-				}
-				this.state = 293;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 22, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 289;
-						this.match(CWScriptParser.COMMA);
-						this.state = 290;
-						_localctx._structDefn_fn = this.structDefn_fn();
-						_localctx._defns.push(_localctx._structDefn_fn);
-						}
-						}
-					}
-					this.state = 295;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 22, this._ctx);
-				}
-				this.state = 297;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.COMMA) {
-					{
-					this.state = 296;
-					this.match(CWScriptParser.COMMA);
-					}
-				}
-
-				}
-			}
-
-			this.state = 301;
-			this.match(CWScriptParser.RBRACE);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public stateDefnBlock(): StateDefnBlockContext {
-		let _localctx: StateDefnBlockContext = new StateDefnBlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 30, CWScriptParser.RULE_stateDefnBlock);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 303;
-			this.match(CWScriptParser.STATE);
-			this.state = 304;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 308;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-				{
-				{
-				this.state = 305;
-				_localctx._stateDefn = this.stateDefn();
-				_localctx._defns.push(_localctx._stateDefn);
-				}
-				}
-				this.state = 310;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			this.state = 311;
-			this.match(CWScriptParser.RBRACE);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public stateDefn(): StateDefnContext {
-		let _localctx: StateDefnContext = new StateDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 32, CWScriptParser.RULE_stateDefn);
-		let _la: number;
-		try {
-			this.state = 337;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 29, this._ctx) ) {
-			case 1:
-				_localctx = new StateDefn_ItemContext(_localctx);
-				this.enterOuterAlt(_localctx, 1);
-				{
-				{
-				this.state = 313;
-				(_localctx as StateDefn_ItemContext)._name = this.ident();
-				}
-				this.state = 314;
-				this.match(CWScriptParser.COLON);
-				{
-				this.state = 315;
-				(_localctx as StateDefn_ItemContext)._ty = this.typeExpr(0);
-				}
-				this.state = 318;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.EQ) {
-					{
-					this.state = 316;
-					this.match(CWScriptParser.EQ);
-					{
-					this.state = 317;
-					(_localctx as StateDefn_ItemContext)._default = this.expr(0);
-					}
-					}
-				}
-
-				}
-				break;
-
-			case 2:
-				_localctx = new StateDefn_MapContext(_localctx);
-				this.enterOuterAlt(_localctx, 2);
-				{
-				{
-				this.state = 320;
-				(_localctx as StateDefn_MapContext)._name = this.ident();
-				}
-				this.state = 321;
-				this.match(CWScriptParser.LBRACK);
-				{
-				this.state = 322;
-				(_localctx as StateDefn_MapContext)._mapKeyDefn = this.mapKeyDefn();
-				(_localctx as StateDefn_MapContext)._mapKeys.push((_localctx as StateDefn_MapContext)._mapKeyDefn);
-				}
-				this.state = 327;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
-					{
-					{
-					this.state = 323;
-					this.match(CWScriptParser.COMMA);
-					{
-					this.state = 324;
-					(_localctx as StateDefn_MapContext)._mapKeyDefn = this.mapKeyDefn();
-					(_localctx as StateDefn_MapContext)._mapKeys.push((_localctx as StateDefn_MapContext)._mapKeyDefn);
-					}
-					}
-					}
-					this.state = 329;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 330;
-				this.match(CWScriptParser.RBRACK);
-				this.state = 331;
-				this.match(CWScriptParser.COLON);
-				{
-				this.state = 332;
-				(_localctx as StateDefn_MapContext)._ty = this.typeExpr(0);
-				}
-				this.state = 335;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.EQ) {
-					{
-					this.state = 333;
-					this.match(CWScriptParser.EQ);
-					{
-					this.state = 334;
-					(_localctx as StateDefn_MapContext)._default = this.expr(0);
-					}
-					}
-				}
-
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public mapKeyDefn(): MapKeyDefnContext {
-		let _localctx: MapKeyDefnContext = new MapKeyDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 34, CWScriptParser.RULE_mapKeyDefn);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 342;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 30, this._ctx) ) {
-			case 1:
-				{
-				{
-				this.state = 339;
-				_localctx._name = this.ident();
-				}
-				this.state = 340;
-				this.match(CWScriptParser.COLON);
-				}
-				break;
-			}
-			{
-			this.state = 344;
-			_localctx._ty = this.typeExpr(0);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public instantiateDefn(): InstantiateDefnContext {
-		let _localctx: InstantiateDefnContext = new InstantiateDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 36, CWScriptParser.RULE_instantiateDefn);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 346;
-			this.match(CWScriptParser.HASH);
-			this.state = 347;
-			this.match(CWScriptParser.INSTANTIATE);
-			this.state = 348;
-			_localctx._params = this.fnParams();
-			this.state = 349;
-			_localctx._body = this.block();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public instantiateDecl(): InstantiateDeclContext {
-		let _localctx: InstantiateDeclContext = new InstantiateDeclContext(this._ctx, this.state);
-		this.enterRule(_localctx, 38, CWScriptParser.RULE_instantiateDecl);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 351;
-			this.match(CWScriptParser.HASH);
-			this.state = 352;
-			this.match(CWScriptParser.INSTANTIATE);
-			this.state = 353;
-			_localctx._params = this.fnParams();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public execDefn(): ExecDefnContext {
-		let _localctx: ExecDefnContext = new ExecDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 40, CWScriptParser.RULE_execDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 355;
-			this.match(CWScriptParser.EXEC);
-			this.state = 357;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.MUL) {
-				{
-				this.state = 356;
-				_localctx._tup = this.match(CWScriptParser.MUL);
-				}
-			}
-
-			this.state = 359;
-			this.match(CWScriptParser.HASH);
-			this.state = 360;
-			_localctx._name = this.ident();
-			this.state = 361;
-			_localctx._params = this.fnParams();
-			this.state = 362;
-			_localctx._body = this.block();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public execDecl(): ExecDeclContext {
-		let _localctx: ExecDeclContext = new ExecDeclContext(this._ctx, this.state);
-		this.enterRule(_localctx, 42, CWScriptParser.RULE_execDecl);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 364;
-			this.match(CWScriptParser.EXEC);
-			this.state = 366;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.MUL) {
-				{
-				this.state = 365;
-				_localctx._tup = this.match(CWScriptParser.MUL);
-				}
-			}
-
-			this.state = 368;
-			this.match(CWScriptParser.HASH);
-			this.state = 369;
-			_localctx._name = this.ident();
-			this.state = 370;
-			_localctx._params = this.fnParams();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public queryDefn(): QueryDefnContext {
-		let _localctx: QueryDefnContext = new QueryDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 44, CWScriptParser.RULE_queryDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 372;
-			this.match(CWScriptParser.QUERY);
-			this.state = 373;
-			this.match(CWScriptParser.HASH);
-			this.state = 374;
-			_localctx._name = this.ident();
-			this.state = 375;
-			_localctx._params = this.fnParams();
-			this.state = 378;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.ARROW) {
-				{
-				this.state = 376;
-				this.match(CWScriptParser.ARROW);
-				this.state = 377;
-				_localctx._retTy = this.typeExpr(0);
-				}
-			}
-
-			this.state = 380;
-			_localctx._body = this.block();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public queryDecl(): QueryDeclContext {
-		let _localctx: QueryDeclContext = new QueryDeclContext(this._ctx, this.state);
-		this.enterRule(_localctx, 46, CWScriptParser.RULE_queryDecl);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 382;
-			this.match(CWScriptParser.QUERY);
-			this.state = 383;
-			this.match(CWScriptParser.HASH);
-			this.state = 384;
-			_localctx._name = this.ident();
-			this.state = 385;
-			_localctx._params = this.fnParams();
-			this.state = 388;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.ARROW) {
-				{
-				this.state = 386;
-				this.match(CWScriptParser.ARROW);
-				this.state = 387;
-				_localctx._retTy = this.typeExpr(0);
-				}
-			}
-
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public replyDefn(): ReplyDefnContext {
-		let _localctx: ReplyDefnContext = new ReplyDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 48, CWScriptParser.RULE_replyDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 390;
-			this.match(CWScriptParser.REPLY);
-			this.state = 393;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.DOT) {
-				{
-				this.state = 391;
-				this.match(CWScriptParser.DOT);
-				this.state = 392;
-				_localctx._on = this.ident();
-				}
-			}
-
-			this.state = 395;
-			_localctx._name = this.ident();
-			this.state = 396;
-			_localctx._params = this.fnParams();
-			this.state = 397;
-			_localctx._body = this.block();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public enumDefn(): EnumDefnContext {
-		let _localctx: EnumDefnContext = new EnumDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 50, CWScriptParser.RULE_enumDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 399;
-			this.match(CWScriptParser.ENUM);
-			{
-			this.state = 400;
-			_localctx._name = this.ident();
-			}
-			this.state = 401;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 402;
-			_localctx._variant_ = this.variant_();
-			_localctx._variants.push(_localctx._variant_);
-			this.state = 409;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === CWScriptParser.HASH) {
-				{
-				{
-				{
-				this.state = 403;
-				_localctx._variant_ = this.variant_();
-				_localctx._variants.push(_localctx._variant_);
-				}
-				this.state = 405;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.COMMA) {
-					{
-					this.state = 404;
-					this.match(CWScriptParser.COMMA);
-					}
-				}
-
-				}
-				}
-				this.state = 411;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			this.state = 412;
-			this.match(CWScriptParser.RBRACE);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public variant_(): Variant_Context {
-		let _localctx: Variant_Context = new Variant_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 52, CWScriptParser.RULE_variant_);
-		try {
-			this.state = 416;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 38, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 414;
-				this.variant_struct();
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 415;
-				this.variant_unit();
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public variant_struct(): Variant_structContext {
-		let _localctx: Variant_structContext = new Variant_structContext(this._ctx, this.state);
-		this.enterRule(_localctx, 54, CWScriptParser.RULE_variant_struct);
-		let _la: number;
-		try {
-			this.state = 434;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 41, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 418;
-				this.match(CWScriptParser.HASH);
-				{
-				this.state = 419;
-				_localctx._name = this.ident();
-				}
-				this.state = 420;
-				this.match(CWScriptParser.LPAREN);
-				this.state = 422;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-					{
-					this.state = 421;
-					_localctx._members = this.paramList();
-					}
-				}
-
-				this.state = 424;
-				this.match(CWScriptParser.RPAREN);
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 426;
-				this.match(CWScriptParser.HASH);
-				{
-				this.state = 427;
-				_localctx._name = this.ident();
-				}
-				this.state = 428;
-				this.match(CWScriptParser.LBRACE);
-				this.state = 430;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-					{
-					this.state = 429;
-					_localctx._members = this.paramList();
-					}
-				}
-
-				this.state = 432;
-				this.match(CWScriptParser.RBRACE);
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public variant_unit(): Variant_unitContext {
-		let _localctx: Variant_unitContext = new Variant_unitContext(this._ctx, this.state);
-		this.enterRule(_localctx, 56, CWScriptParser.RULE_variant_unit);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 436;
-			this.match(CWScriptParser.HASH);
-			{
-			this.state = 437;
-			_localctx._name = this.ident();
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-
-	public typeExpr(): TypeExprContext;
-	public typeExpr(_p: number): TypeExprContext;
-	// @RuleVersion(0)
-	public typeExpr(_p?: number): TypeExprContext {
-		if (_p === undefined) {
-			_p = 0;
-		}
-
-		let _parentctx: ParserRuleContext = this._ctx;
-		let _parentState: number = this.state;
-		let _localctx: TypeExprContext = new TypeExprContext(this._ctx, _parentState);
-		let _prevctx: TypeExprContext = _localctx;
-		let _startState: number = 58;
-		this.enterRecursionRule(_localctx, 58, CWScriptParser.RULE_typeExpr, _p);
-		let _la: number;
-		try {
-			let _alt: number;
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 473;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 45, this._ctx) ) {
-			case 1:
-				{
-				_localctx = new TypeAppTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-
-				this.state = 440;
-				this.match(CWScriptParser.LT);
-				this.state = 441;
-				this.typeExpr(0);
-				this.state = 442;
-				this.match(CWScriptParser.GT);
-				}
-				break;
-
-			case 2:
-				{
-				_localctx = new PathTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 444;
-				this.typePath();
-				}
-				break;
-
-			case 3:
-				{
-				_localctx = new VariantTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 445;
-				this.typeVariant();
-				}
-				break;
-
-			case 4:
-				{
-				_localctx = new LensTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 446;
-				this.typeLens();
-				}
-				break;
-
-			case 5:
-				{
-				_localctx = new FnTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 447;
-				this.fnType();
-				}
-				break;
-
-			case 6:
-				{
-				_localctx = new TupleTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 448;
-				this.match(CWScriptParser.LBRACK);
-				this.state = 457;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || _la === CWScriptParser.LT || _la === CWScriptParser.Ident) {
-					{
-					this.state = 449;
-					(_localctx as TupleTContext)._typeExpr = this.typeExpr(0);
-					(_localctx as TupleTContext)._items.push((_localctx as TupleTContext)._typeExpr);
-					this.state = 454;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					while (_la === CWScriptParser.COMMA) {
-						{
-						{
-						this.state = 450;
-						this.match(CWScriptParser.COMMA);
-						this.state = 451;
-						(_localctx as TupleTContext)._typeExpr = this.typeExpr(0);
-						(_localctx as TupleTContext)._items.push((_localctx as TupleTContext)._typeExpr);
-						}
-						}
-						this.state = 456;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-					}
-					}
-				}
-
-				this.state = 459;
-				this.match(CWScriptParser.RBRACK);
-				}
-				break;
-
-			case 7:
-				{
-				_localctx = new ParamzdTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 460;
-				this.typePath();
-				this.state = 461;
-				this.match(CWScriptParser.LT);
-				{
-				this.state = 462;
-				(_localctx as ParamzdTContext)._typeArg = this.typeArg();
-				(_localctx as ParamzdTContext)._args.push((_localctx as ParamzdTContext)._typeArg);
-				}
-				this.state = 467;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
-					{
-					{
-					this.state = 463;
-					this.match(CWScriptParser.COMMA);
-					this.state = 464;
-					(_localctx as ParamzdTContext)._typeArg = this.typeArg();
-					(_localctx as ParamzdTContext)._args.push((_localctx as ParamzdTContext)._typeArg);
-					}
-					}
-					this.state = 469;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 470;
-				this.match(CWScriptParser.GT);
-				}
-				break;
-
-			case 8:
-				{
-				_localctx = new DefnTContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 472;
-				this.typeDefn();
-				}
-				break;
-			}
-			this._ctx._stop = this._input.tryLT(-1);
-			this.state = 485;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					if (this._parseListeners != null) {
-						this.triggerExitRuleEvent();
-					}
-					_prevctx = _localctx;
-					{
-					this.state = 483;
-					this._errHandler.sync(this);
-					switch ( this.interpreter.adaptivePredict(this._input, 47, this._ctx) ) {
-					case 1:
-						{
-						_localctx = new OptionTContext(new TypeExprContext(_parentctx, _parentState));
-						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_typeExpr);
-						this.state = 475;
-						if (!(this.precpred(this._ctx, 5))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
-						}
-						this.state = 476;
-						this.match(CWScriptParser.QUEST);
-						}
-						break;
-
-					case 2:
-						{
-						_localctx = new ListTContext(new TypeExprContext(_parentctx, _parentState));
-						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_typeExpr);
-						this.state = 477;
-						if (!(this.precpred(this._ctx, 4))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 4)");
-						}
-						this.state = 478;
-						this.match(CWScriptParser.LBRACK);
-						this.state = 480;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						if (_la === CWScriptParser.IntLiteral) {
-							{
-							this.state = 479;
-							(_localctx as ListTContext)._len = this.match(CWScriptParser.IntLiteral);
-							}
-						}
-
-						this.state = 482;
-						this.match(CWScriptParser.RBRACK);
-						}
-						break;
-					}
-					}
-				}
-				this.state = 487;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.unrollRecursionContexts(_parentctx);
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public typeArg(): TypeArgContext {
-		let _localctx: TypeArgContext = new TypeArgContext(this._ctx, this.state);
-		this.enterRule(_localctx, 60, CWScriptParser.RULE_typeArg);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 491;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 49, this._ctx) ) {
-			case 1:
-				{
-				this.state = 488;
-				_localctx._name = this.ident();
-				this.state = 489;
-				this.match(CWScriptParser.EQ);
-				}
-				break;
-			}
-			{
-			this.state = 493;
-			_localctx._value = this.typeExpr(0);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public fnType(): FnTypeContext {
-		let _localctx: FnTypeContext = new FnTypeContext(this._ctx, this.state);
-		this.enterRule(_localctx, 62, CWScriptParser.RULE_fnType);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 495;
-			this.match(CWScriptParser.FN);
-			this.state = 497;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.BANG) {
-				{
-				this.state = 496;
-				_localctx._fallible = this.match(CWScriptParser.BANG);
-				}
-			}
-
-			this.state = 499;
-			this.match(CWScriptParser.LPAREN);
-			this.state = 501;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-				{
-				this.state = 500;
-				_localctx._params = this.paramList();
-				}
-			}
-
-			this.state = 503;
-			this.match(CWScriptParser.RPAREN);
-			this.state = 504;
-			this.match(CWScriptParser.ARROW);
-			this.state = 505;
-			_localctx._retTy = this.typeExpr(0);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public typeLens(): TypeLensContext {
-		let _localctx: TypeLensContext = new TypeLensContext(this._ctx, this.state);
-		this.enterRule(_localctx, 64, CWScriptParser.RULE_typeLens);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 507;
-			_localctx._scope = this._input.LT(1);
-			_la = this._input.LA(1);
-			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.MUT))) !== 0))) {
-				_localctx._scope = this._errHandler.recoverInline(this);
-			} else {
-				if (this._input.LA(1) === Token.EOF) {
-					this.matchedEOF = true;
-				}
-
-				this._errHandler.reportMatch(this);
-				this.consume();
-			}
-			this.state = 508;
-			this.typePath();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public typePath(): TypePathContext {
-		let _localctx: TypePathContext = new TypePathContext(this._ctx, this.state);
-		this.enterRule(_localctx, 66, CWScriptParser.RULE_typePath);
-		try {
-			let _alt: number;
-			this.enterOuterAlt(_localctx, 1);
-			{
-			{
-			this.state = 510;
-			_localctx._ident = this.ident();
-			_localctx._segments.push(_localctx._ident);
-			}
-			this.state = 515;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 52, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 511;
-					this.match(CWScriptParser.DOT);
-					this.state = 512;
-					_localctx._ident = this.ident();
-					_localctx._segments.push(_localctx._ident);
-					}
-					}
-				}
-				this.state = 517;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 52, this._ctx);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public typeVariant(): TypeVariantContext {
-		let _localctx: TypeVariantContext = new TypeVariantContext(this._ctx, this.state);
-		this.enterRule(_localctx, 68, CWScriptParser.RULE_typeVariant);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 518;
-			this.typePath();
-			this.state = 523;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.LPAREN) {
-				{
-				this.state = 519;
-				this.match(CWScriptParser.LPAREN);
-				this.state = 520;
-				this.expr(0);
-				this.state = 521;
-				this.match(CWScriptParser.RPAREN);
-				}
-			}
-
-			{
-			this.state = 525;
-			this.match(CWScriptParser.DOT);
-			this.state = 526;
-			this.match(CWScriptParser.HASH);
-			this.state = 527;
-			_localctx._variant = this.ident();
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public typeDefn(): TypeDefnContext {
-		let _localctx: TypeDefnContext = new TypeDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 70, CWScriptParser.RULE_typeDefn);
-		try {
-			this.state = 532;
-			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case CWScriptParser.STRUCT:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 529;
-				this.structDefn();
-				}
-				break;
-			case CWScriptParser.ENUM:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 530;
-				this.enumDefn();
-				}
-				break;
-			case CWScriptParser.TYPE:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 531;
-				this.typeAliasDefn();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public structDefn(): StructDefnContext {
-		let _localctx: StructDefnContext = new StructDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 72, CWScriptParser.RULE_structDefn);
-		let _la: number;
-		try {
-			let _alt: number;
-			this.state = 568;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 61, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 534;
-				this.match(CWScriptParser.STRUCT);
-				this.state = 536;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-					{
-					this.state = 535;
-					_localctx._name = this.ident();
-					}
-				}
-
-				this.state = 538;
-				this.match(CWScriptParser.LPAREN);
-				this.state = 547;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-					{
-					{
-					this.state = 539;
-					_localctx._param = this.param();
-					_localctx._members.push(_localctx._param);
-					}
-					this.state = 544;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					while (_la === CWScriptParser.COMMA) {
-						{
-						{
-						this.state = 540;
-						this.match(CWScriptParser.COMMA);
-						{
-						this.state = 541;
-						_localctx._param = this.param();
-						_localctx._members.push(_localctx._param);
-						}
-						}
-						}
-						this.state = 546;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-					}
-					}
-				}
-
-				this.state = 549;
-				this.match(CWScriptParser.RPAREN);
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 550;
-				this.match(CWScriptParser.STRUCT);
-				this.state = 552;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-					{
-					this.state = 551;
-					_localctx._name = this.ident();
-					}
-				}
-
-				this.state = 554;
-				this.match(CWScriptParser.LBRACE);
-				{
-				{
-				this.state = 555;
-				_localctx._param = this.param();
-				_localctx._members.push(_localctx._param);
-				}
-				this.state = 560;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 59, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 556;
-						this.match(CWScriptParser.COMMA);
-						{
-						this.state = 557;
-						_localctx._param = this.param();
-						_localctx._members.push(_localctx._param);
-						}
-						}
-						}
-					}
-					this.state = 562;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 59, this._ctx);
-				}
-				this.state = 564;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.COMMA) {
-					{
-					this.state = 563;
-					this.match(CWScriptParser.COMMA);
-					}
-				}
-
-				}
-				this.state = 566;
-				this.match(CWScriptParser.RBRACE);
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public typeAliasDefn(): TypeAliasDefnContext {
-		let _localctx: TypeAliasDefnContext = new TypeAliasDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 74, CWScriptParser.RULE_typeAliasDefn);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 570;
-			this.match(CWScriptParser.TYPE);
-			{
-			this.state = 571;
-			_localctx._name = this.ident();
-			}
-			this.state = 572;
-			this.match(CWScriptParser.EQ);
-			{
-			this.state = 573;
-			_localctx._value = this.typeExpr(0);
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public fnDefn(): FnDefnContext {
-		let _localctx: FnDefnContext = new FnDefnContext(this._ctx, this.state);
-		this.enterRule(_localctx, 76, CWScriptParser.RULE_fnDefn);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 575;
-			this.match(CWScriptParser.FN);
-			{
-			this.state = 576;
-			_localctx._name = this.ident();
-			}
-			this.state = 578;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.BANG) {
-				{
-				this.state = 577;
-				_localctx._fallible = this.match(CWScriptParser.BANG);
-				}
-			}
-
-			this.state = 580;
-			_localctx._params = this.fnParams();
-			this.state = 583;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.ARROW) {
-				{
-				this.state = 581;
-				this.match(CWScriptParser.ARROW);
-				this.state = 582;
-				_localctx._retTy = this.typeExpr(0);
-				}
-			}
-
-			this.state = 585;
-			_localctx._body = this.block();
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public annot(): AnnotContext {
-		let _localctx: AnnotContext = new AnnotContext(this._ctx, this.state);
-		this.enterRule(_localctx, 78, CWScriptParser.RULE_annot);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 587;
-			this.match(CWScriptParser.AT);
-			this.state = 589;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.AT) {
-				{
-				this.state = 588;
-				_localctx._isTag = this.match(CWScriptParser.AT);
-				}
-			}
-
-			{
-			this.state = 591;
-			_localctx._path = this.typePath();
-			}
-			this.state = 597;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 66, this._ctx) ) {
-			case 1:
-				{
-				this.state = 592;
-				this.match(CWScriptParser.LPAREN);
-				this.state = 594;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NOT) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.LBRACE - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 64)) & ~0x1F) === 0 && ((1 << (_la - 64)) & ((1 << (CWScriptParser.BAR - 64)) | (1 << (CWScriptParser.LT - 64)) | (1 << (CWScriptParser.Ident - 64)) | (1 << (CWScriptParser.StringLiteral - 64)) | (1 << (CWScriptParser.IntLiteral - 64)) | (1 << (CWScriptParser.DecLiteral - 64)) | (1 << (CWScriptParser.BoolLiteral - 64)))) !== 0)) {
-					{
-					this.state = 593;
-					_localctx._arg = this.arg();
-					_localctx._args.push(_localctx._arg);
-					}
-				}
-
-				this.state = 596;
-				this.match(CWScriptParser.RPAREN);
-				}
-				break;
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public callOptions(): CallOptionsContext {
-		let _localctx: CallOptionsContext = new CallOptionsContext(this._ctx, this.state);
-		this.enterRule(_localctx, 80, CWScriptParser.RULE_callOptions);
-		let _la: number;
-		try {
-			let _alt: number;
-			this.enterOuterAlt(_localctx, 1);
-			{
-			{
-			this.state = 599;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 611;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-				{
-				{
-				this.state = 600;
-				this.memberVal();
-				}
-				this.state = 605;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 67, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 601;
-						this.match(CWScriptParser.COMMA);
-						this.state = 602;
-						this.memberVal();
-						}
-						}
-					}
-					this.state = 607;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 67, this._ctx);
-				}
-				this.state = 609;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.COMMA) {
-					{
-					this.state = 608;
-					this.match(CWScriptParser.COMMA);
-					}
-				}
-
-				}
-			}
-
-			this.state = 613;
-			this.match(CWScriptParser.RBRACE);
-			}
 			}
 		}
 		catch (re) {
@@ -2813,569 +298,157 @@ export class CWScriptParser extends Parser {
 	// @RuleVersion(0)
 	public stmt(): StmtContext {
 		let _localctx: StmtContext = new StmtContext(this._ctx, this.state);
-		this.enterRule(_localctx, 82, CWScriptParser.RULE_stmt);
+		this.enterRule(_localctx, 2, CWScriptParser.RULE_stmt);
 		let _la: number;
 		try {
-			this.state = 737;
+			this.state = 148;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 90, this._ctx) ) {
+			switch ( this.interpreter.adaptivePredict(this._input, 2, this._ctx) ) {
 			case 1:
-				_localctx = new AnnotBlockStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 615;
-				this.annot();
-				this.state = 616;
-				this.block();
+				this.state = 128;
+				this.importStmt();
 				}
 				break;
 
 			case 2:
-				_localctx = new DebugStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 621;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 618;
-					(_localctx as DebugStmtContext)._annot = this.annot();
-					(_localctx as DebugStmtContext)._ann.push((_localctx as DebugStmtContext)._annot);
-					}
-					}
-					this.state = 623;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 624;
-				this.debugStmt_();
+				this.state = 129;
+				this.letStmt();
 				}
 				break;
 
 			case 3:
-				_localctx = new LetStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 628;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 625;
-					(_localctx as LetStmtContext)._annot = this.annot();
-					(_localctx as LetStmtContext)._ann.push((_localctx as LetStmtContext)._annot);
-					}
-					}
-					this.state = 630;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 631;
-				this.letStmt_();
+				this.state = 130;
+				this.constStmt();
 				}
 				break;
 
 			case 4:
-				_localctx = new ConstStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 635;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 632;
-					(_localctx as ConstStmtContext)._annot = this.annot();
-					(_localctx as ConstStmtContext)._ann.push((_localctx as ConstStmtContext)._annot);
-					}
-					}
-					this.state = 637;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 638;
-				this.constStmt_();
+				this.state = 131;
+				this.assignStmt();
 				}
 				break;
 
 			case 5:
-				_localctx = new AssignStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 642;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 639;
-					(_localctx as AssignStmtContext)._annot = this.annot();
-					(_localctx as AssignStmtContext)._ann.push((_localctx as AssignStmtContext)._annot);
-					}
-					}
-					this.state = 644;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 645;
-				this.assignStmt_();
+				this.state = 132;
+				this.memberAssignStmt();
 				}
 				break;
 
 			case 6:
-				_localctx = new IfStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 6);
 				{
-				this.state = 649;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 646;
-					(_localctx as IfStmtContext)._annot = this.annot();
-					(_localctx as IfStmtContext)._ann.push((_localctx as IfStmtContext)._annot);
-					}
-					}
-					this.state = 651;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 652;
-				this.ifStmt_();
+				this.state = 133;
+				this.indexAssignStmt();
 				}
 				break;
 
 			case 7:
-				_localctx = new ForStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 7);
 				{
-				this.state = 656;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 653;
-					(_localctx as ForStmtContext)._annot = this.annot();
-					(_localctx as ForStmtContext)._ann.push((_localctx as ForStmtContext)._annot);
-					}
-					}
-					this.state = 658;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 659;
-				this.forStmt_();
+				this.state = 134;
+				this.ifExpr_();
 				}
 				break;
 
 			case 8:
-				_localctx = new ExecStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 8);
 				{
-				this.state = 663;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 660;
-					(_localctx as ExecStmtContext)._annot = this.annot();
-					(_localctx as ExecStmtContext)._ann.push((_localctx as ExecStmtContext)._annot);
-					}
-					}
-					this.state = 665;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 667;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.DEFER) {
-					{
-					this.state = 666;
-					(_localctx as ExecStmtContext)._defer = this.match(CWScriptParser.DEFER);
-					}
-				}
-
-				this.state = 669;
-				this.match(CWScriptParser.EXEC_NOW);
-				this.state = 670;
-				this.expr(0);
-				this.state = 672;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 78, this._ctx) ) {
-				case 1:
-					{
-					this.state = 671;
-					(_localctx as ExecStmtContext)._options = this.callOptions();
-					}
-					break;
-				}
+				this.state = 135;
+				this.tryCatchElseExpr_();
 				}
 				break;
 
 			case 9:
-				_localctx = new DelegateExecStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 9);
 				{
-				this.state = 677;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 674;
-					(_localctx as DelegateExecStmtContext)._annot = this.annot();
-					(_localctx as DelegateExecStmtContext)._ann.push((_localctx as DelegateExecStmtContext)._annot);
-					}
-					}
-					this.state = 679;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 681;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.DEFER) {
-					{
-					this.state = 680;
-					(_localctx as DelegateExecStmtContext)._defer = this.match(CWScriptParser.DEFER);
-					}
-				}
-
-				this.state = 683;
-				this.match(CWScriptParser.DELEGATE_EXEC);
-				this.state = 684;
-				this.match(CWScriptParser.HASH);
-				this.state = 685;
-				this.expr(0);
+				this.state = 136;
+				this.forStmt();
 				}
 				break;
 
 			case 10:
-				_localctx = new InstantiateStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 10);
 				{
-				this.state = 689;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 686;
-					(_localctx as InstantiateStmtContext)._annot = this.annot();
-					(_localctx as InstantiateStmtContext)._ann.push((_localctx as InstantiateStmtContext)._annot);
-					}
-					}
-					this.state = 691;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 693;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.DEFER) {
-					{
-					this.state = 692;
-					(_localctx as InstantiateStmtContext)._defer = this.match(CWScriptParser.DEFER);
-					}
-				}
-
-				this.state = 695;
-				this.match(CWScriptParser.INSTANTIATE_NOW);
-				this.state = 697;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.HASH) {
-					{
-					this.state = 696;
-					(_localctx as InstantiateStmtContext)._new = this.match(CWScriptParser.HASH);
-					}
-				}
-
-				this.state = 699;
-				this.expr(0);
-				this.state = 701;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 84, this._ctx) ) {
-				case 1:
-					{
-					this.state = 700;
-					(_localctx as InstantiateStmtContext)._options = this.callOptions();
-					}
-					break;
-				}
+				this.state = 137;
+				this.execStmt();
 				}
 				break;
 
 			case 11:
-				_localctx = new EmitStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 11);
 				{
-				this.state = 706;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 703;
-					(_localctx as EmitStmtContext)._annot = this.annot();
-					(_localctx as EmitStmtContext)._ann.push((_localctx as EmitStmtContext)._annot);
-					}
-					}
-					this.state = 708;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 710;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.DEFER) {
-					{
-					this.state = 709;
-					(_localctx as EmitStmtContext)._defer = this.match(CWScriptParser.DEFER);
-					}
-				}
-
-				this.state = 712;
-				this.match(CWScriptParser.EMIT);
-				this.state = 713;
-				this.expr(0);
+				this.state = 138;
+				this.instantiateStmt();
 				}
 				break;
 
 			case 12:
-				_localctx = new ReturnStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 12);
 				{
-				this.state = 717;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 714;
-					(_localctx as ReturnStmtContext)._annot = this.annot();
-					(_localctx as ReturnStmtContext)._ann.push((_localctx as ReturnStmtContext)._annot);
-					}
-					}
-					this.state = 719;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 720;
-				this.match(CWScriptParser.RETURN);
-				this.state = 721;
-				this.expr(0);
+				this.state = 139;
+				this.emitStmt();
 				}
 				break;
 
 			case 13:
-				_localctx = new FailStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 13);
 				{
-				this.state = 725;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 722;
-					(_localctx as FailStmtContext)._annot = this.annot();
-					(_localctx as FailStmtContext)._ann.push((_localctx as FailStmtContext)._annot);
-					}
-					}
-					this.state = 727;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 728;
-				this.match(CWScriptParser.FAIL);
-				this.state = 729;
-				this.expr(0);
+				this.state = 140;
+				this.failStmt();
 				}
 				break;
 
 			case 14:
-				_localctx = new ExprStmtContext(_localctx);
 				this.enterOuterAlt(_localctx, 14);
 				{
-				this.state = 733;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.AT) {
-					{
-					{
-					this.state = 730;
-					(_localctx as ExprStmtContext)._annot = this.annot();
-					(_localctx as ExprStmtContext)._ann.push((_localctx as ExprStmtContext)._annot);
-					}
-					}
-					this.state = 735;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 736;
-				this.expr(0);
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public debugStmt_(): DebugStmt_Context {
-		let _localctx: DebugStmt_Context = new DebugStmt_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 84, CWScriptParser.RULE_debugStmt_);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 739;
-			this.match(CWScriptParser.DEBUG);
-			this.state = 742;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 91, this._ctx) ) {
-			case 1:
-				{
-				this.state = 740;
-				this.block();
+				this.state = 141;
+				this.returnStmt();
 				}
 				break;
 
-			case 2:
+			case 15:
+				this.enterOuterAlt(_localctx, 15);
 				{
-				this.state = 741;
-				this.stmt();
+				this.state = 142;
+				this.defn();
 				}
 				break;
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public letStmt_(): LetStmt_Context {
-		let _localctx: LetStmt_Context = new LetStmt_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 86, CWScriptParser.RULE_letStmt_);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 744;
-			this.match(CWScriptParser.LET);
-			this.state = 745;
-			this.let_binding();
-			this.state = 748;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 92, this._ctx) ) {
-			case 1:
+
+			case 16:
+				this.enterOuterAlt(_localctx, 16);
 				{
-				this.state = 746;
-				this.match(CWScriptParser.EQ);
-				this.state = 747;
+				this.state = 143;
 				this.expr(0);
+				this.state = 145;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === CWScriptParser.SEMI) {
+					{
+					this.state = 144;
+					this.match(CWScriptParser.SEMI);
+					}
+				}
+
 				}
 				break;
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public constStmt_(): ConstStmt_Context {
-		let _localctx: ConstStmt_Context = new ConstStmt_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 88, CWScriptParser.RULE_constStmt_);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 750;
-			this.match(CWScriptParser.CONST);
-			this.state = 751;
-			this.ident();
-			this.state = 752;
-			this.match(CWScriptParser.EQ);
-			this.state = 753;
-			this.expr(0);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public identBinding_(): IdentBinding_Context {
-		let _localctx: IdentBinding_Context = new IdentBinding_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 90, CWScriptParser.RULE_identBinding_);
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			{
-			this.state = 755;
-			_localctx._name = this.ident();
-			}
-			this.state = 758;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 93, this._ctx) ) {
-			case 1:
+
+			case 17:
+				this.enterOuterAlt(_localctx, 17);
 				{
-				this.state = 756;
-				this.match(CWScriptParser.COLON);
-				this.state = 757;
-				_localctx._ty = this.typeExpr(0);
+				this.state = 147;
+				this.typeExpr(0);
 				}
 				break;
-			}
 			}
 		}
 		catch (re) {
@@ -3393,12 +466,114 @@ export class CWScriptParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public let_binding(): Let_bindingContext {
-		let _localctx: Let_bindingContext = new Let_bindingContext(this._ctx, this.state);
-		this.enterRule(_localctx, 92, CWScriptParser.RULE_let_binding);
+	public importStmt(): ImportStmtContext {
+		let _localctx: ImportStmtContext = new ImportStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 4, CWScriptParser.RULE_importStmt);
 		let _la: number;
 		try {
-			this.state = 782;
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 150;
+			this.match(CWScriptParser.IMPORT);
+			this.state = 151;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 153;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 152;
+				_localctx._items = this.identList();
+				}
+			}
+
+			this.state = 155;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 156;
+			this.match(CWScriptParser.FROM);
+			{
+			this.state = 157;
+			_localctx._src = this.match(CWScriptParser.StringLiteral);
+			}
+			this.state = 159;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 158;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public letStmt(): LetStmtContext {
+		let _localctx: LetStmtContext = new LetStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 6, CWScriptParser.RULE_letStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 161;
+			this.match(CWScriptParser.LET);
+			{
+			this.state = 162;
+			_localctx._binding = this.binding_();
+			}
+			{
+			this.state = 163;
+			this.match(CWScriptParser.EQ);
+			this.state = 164;
+			_localctx._value = this.expr(0);
+			}
+			this.state = 167;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 166;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public binding_(): Binding_Context {
+		let _localctx: Binding_Context = new Binding_Context(this._ctx, this.state);
+		this.enterRule(_localctx, 8, CWScriptParser.RULE_binding_);
+		let _la: number;
+		try {
+			this.state = 184;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case CWScriptParser.CONTRACT:
@@ -3425,6 +600,8 @@ export class CWScriptParser extends Parser {
 			case CWScriptParser.FN:
 			case CWScriptParser.LET:
 			case CWScriptParser.STRUCT:
+			case CWScriptParser.TUPLE:
+			case CWScriptParser.UNIT:
 			case CWScriptParser.ENUM:
 			case CWScriptParser.TYPE:
 			case CWScriptParser.EMIT:
@@ -3432,69 +609,62 @@ export class CWScriptParser extends Parser {
 				_localctx = new IdentBindingContext(_localctx);
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 760;
-				this.identBinding_();
-				}
-				break;
-			case CWScriptParser.LBRACE:
-				_localctx = new StructBindingContext(_localctx);
-				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 761;
-				this.match(CWScriptParser.LBRACE);
-				{
-				this.state = 762;
-				(_localctx as StructBindingContext)._identBinding_ = this.identBinding_();
-				(_localctx as StructBindingContext)._bindings.push((_localctx as StructBindingContext)._identBinding_);
+				this.state = 169;
+				(_localctx as IdentBindingContext)._name = this.ident();
 				}
-				this.state = 766;
+				this.state = 172;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
+				if (_la === CWScriptParser.COLON) {
 					{
-					{
-					this.state = 763;
-					this.match(CWScriptParser.COMMA);
+					this.state = 170;
+					this.match(CWScriptParser.COLON);
+					this.state = 171;
+					(_localctx as IdentBindingContext)._ty = this.typeExpr(0);
 					}
-					}
-					this.state = 768;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
 				}
-				this.state = 769;
-				this.match(CWScriptParser.RBRACE);
+
 				}
 				break;
 			case CWScriptParser.LBRACK:
 				_localctx = new TupleBindingContext(_localctx);
-				this.enterOuterAlt(_localctx, 3);
+				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 771;
+				this.state = 174;
 				this.match(CWScriptParser.LBRACK);
-				{
-				this.state = 772;
-				(_localctx as TupleBindingContext)._identBinding_ = this.identBinding_();
-				(_localctx as TupleBindingContext)._bindings.push((_localctx as TupleBindingContext)._identBinding_);
-				}
-				this.state = 777;
+				this.state = 176;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
 					{
-					{
-					this.state = 773;
-					this.match(CWScriptParser.COMMA);
-					this.state = 774;
-					(_localctx as TupleBindingContext)._identBinding_ = this.identBinding_();
-					(_localctx as TupleBindingContext)._bindings.push((_localctx as TupleBindingContext)._identBinding_);
+					this.state = 175;
+					(_localctx as TupleBindingContext)._names = this.identList();
 					}
-					}
-					this.state = 779;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
 				}
-				this.state = 780;
+
+				this.state = 178;
 				this.match(CWScriptParser.RBRACK);
+				}
+				break;
+			case CWScriptParser.LBRACE:
+				_localctx = new StructBindingContext(_localctx);
+				this.enterOuterAlt(_localctx, 3);
+				{
+				this.state = 179;
+				this.match(CWScriptParser.LBRACE);
+				this.state = 181;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+					{
+					this.state = 180;
+					(_localctx as StructBindingContext)._names = this.identList();
+					}
+				}
+
+				this.state = 183;
+				this.match(CWScriptParser.RBRACE);
 				}
 				break;
 			default:
@@ -3516,22 +686,79 @@ export class CWScriptParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public assignStmt_(): AssignStmt_Context {
-		let _localctx: AssignStmt_Context = new AssignStmt_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 94, CWScriptParser.RULE_assignStmt_);
+	public constStmt(): ConstStmtContext {
+		let _localctx: ConstStmtContext = new ConstStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 10, CWScriptParser.RULE_constStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 186;
+			this.match(CWScriptParser.CONST);
+			{
+			this.state = 187;
+			_localctx._name = this.ident();
+			}
+			this.state = 190;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.COLON) {
+				{
+				this.state = 188;
+				this.match(CWScriptParser.COLON);
+				this.state = 189;
+				_localctx._ty = this.typeExpr(0);
+				}
+			}
+
+			{
+			this.state = 192;
+			this.match(CWScriptParser.EQ);
+			this.state = 193;
+			_localctx._value = this.expr(0);
+			}
+			this.state = 196;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 195;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public assignStmt(): AssignStmtContext {
+		let _localctx: AssignStmtContext = new AssignStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 12, CWScriptParser.RULE_assignStmt);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
 			{
-			this.state = 784;
-			_localctx._lhs = this.assignLHS();
+			this.state = 198;
+			_localctx._name = this.ident();
 			}
-			{
-			this.state = 785;
+			this.state = 199;
 			_localctx._assignOp = this._input.LT(1);
 			_la = this._input.LA(1);
-			if (!(((((_la - 67)) & ~0x1F) === 0 && ((1 << (_la - 67)) & ((1 << (CWScriptParser.EQ - 67)) | (1 << (CWScriptParser.PLUS_EQ - 67)) | (1 << (CWScriptParser.MINUS_EQ - 67)) | (1 << (CWScriptParser.MUL_EQ - 67)) | (1 << (CWScriptParser.DIV_EQ - 67)) | (1 << (CWScriptParser.MOD_EQ - 67)))) !== 0))) {
+			if (!(((((_la - 69)) & ~0x1F) === 0 && ((1 << (_la - 69)) & ((1 << (CWScriptParser.EQ - 69)) | (1 << (CWScriptParser.PLUS_EQ - 69)) | (1 << (CWScriptParser.MINUS_EQ - 69)) | (1 << (CWScriptParser.MUL_EQ - 69)) | (1 << (CWScriptParser.DIV_EQ - 69)) | (1 << (CWScriptParser.MOD_EQ - 69)))) !== 0))) {
 				_localctx._assignOp = this._errHandler.recoverInline(this);
 			} else {
 				if (this._input.LA(1) === Token.EOF) {
@@ -3541,10 +768,858 @@ export class CWScriptParser extends Parser {
 				this._errHandler.reportMatch(this);
 				this.consume();
 			}
+			{
+			this.state = 200;
+			_localctx._value = this.expr(0);
+			}
+			this.state = 202;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 201;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public memberAssignStmt(): MemberAssignStmtContext {
+		let _localctx: MemberAssignStmtContext = new MemberAssignStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 14, CWScriptParser.RULE_memberAssignStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 204;
+			_localctx._obj = this.expr(0);
+			}
+			this.state = 205;
+			this.match(CWScriptParser.DOT);
+			{
+			this.state = 206;
+			_localctx._memberName = this.ident();
+			}
+			this.state = 207;
+			_localctx._assignOp = this._input.LT(1);
+			_la = this._input.LA(1);
+			if (!(((((_la - 69)) & ~0x1F) === 0 && ((1 << (_la - 69)) & ((1 << (CWScriptParser.EQ - 69)) | (1 << (CWScriptParser.PLUS_EQ - 69)) | (1 << (CWScriptParser.MINUS_EQ - 69)) | (1 << (CWScriptParser.MUL_EQ - 69)) | (1 << (CWScriptParser.DIV_EQ - 69)) | (1 << (CWScriptParser.MOD_EQ - 69)))) !== 0))) {
+				_localctx._assignOp = this._errHandler.recoverInline(this);
+			} else {
+				if (this._input.LA(1) === Token.EOF) {
+					this.matchedEOF = true;
+				}
+
+				this._errHandler.reportMatch(this);
+				this.consume();
 			}
 			{
-			this.state = 786;
-			_localctx._rhs = this.expr(0);
+			this.state = 208;
+			_localctx._value = this.expr(0);
+			}
+			this.state = 210;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 209;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public indexAssignStmt(): IndexAssignStmtContext {
+		let _localctx: IndexAssignStmtContext = new IndexAssignStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 16, CWScriptParser.RULE_indexAssignStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 212;
+			_localctx._obj = this.expr(0);
+			}
+			this.state = 213;
+			this.match(CWScriptParser.LBRACK);
+			this.state = 214;
+			_localctx._index = this.expr(0);
+			this.state = 215;
+			this.match(CWScriptParser.RBRACK);
+			this.state = 216;
+			_localctx._assignOp = this._input.LT(1);
+			_la = this._input.LA(1);
+			if (!(((((_la - 69)) & ~0x1F) === 0 && ((1 << (_la - 69)) & ((1 << (CWScriptParser.EQ - 69)) | (1 << (CWScriptParser.PLUS_EQ - 69)) | (1 << (CWScriptParser.MINUS_EQ - 69)) | (1 << (CWScriptParser.MUL_EQ - 69)) | (1 << (CWScriptParser.DIV_EQ - 69)) | (1 << (CWScriptParser.MOD_EQ - 69)))) !== 0))) {
+				_localctx._assignOp = this._errHandler.recoverInline(this);
+			} else {
+				if (this._input.LA(1) === Token.EOF) {
+					this.matchedEOF = true;
+				}
+
+				this._errHandler.reportMatch(this);
+				this.consume();
+			}
+			this.state = 217;
+			_localctx._value = this.expr(0);
+			this.state = 219;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 218;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public returnStmt(): ReturnStmtContext {
+		let _localctx: ReturnStmtContext = new ReturnStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 18, CWScriptParser.RULE_returnStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 221;
+			this.match(CWScriptParser.RETURN);
+			{
+			this.state = 222;
+			_localctx._value = this.expr(0);
+			}
+			this.state = 224;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 223;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public failStmt(): FailStmtContext {
+		let _localctx: FailStmtContext = new FailStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 20, CWScriptParser.RULE_failStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 226;
+			this.match(CWScriptParser.FAIL);
+			{
+			this.state = 227;
+			_localctx._value = this.expr(0);
+			}
+			this.state = 229;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 228;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public forStmt(): ForStmtContext {
+		let _localctx: ForStmtContext = new ForStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 22, CWScriptParser.RULE_forStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 231;
+			this.match(CWScriptParser.FOR);
+			{
+			this.state = 232;
+			_localctx._binding = this.binding_();
+			}
+			this.state = 233;
+			this.match(CWScriptParser.IN);
+			{
+			this.state = 234;
+			_localctx._iter = this.expr(0);
+			}
+			this.state = 235;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 239;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 236;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 241;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 242;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 244;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 243;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public execStmt(): ExecStmtContext {
+		let _localctx: ExecStmtContext = new ExecStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 24, CWScriptParser.RULE_execStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 246;
+			this.match(CWScriptParser.EXEC_NOW);
+			this.state = 247;
+			_localctx._value = this.expr(0);
+			this.state = 249;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 248;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public instantiateStmt(): InstantiateStmtContext {
+		let _localctx: InstantiateStmtContext = new InstantiateStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 26, CWScriptParser.RULE_instantiateStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 251;
+			this.match(CWScriptParser.INSTANTIATE_NOW);
+			this.state = 252;
+			_localctx._value = this.expr(0);
+			this.state = 254;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 253;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public emitStmt(): EmitStmtContext {
+		let _localctx: EmitStmtContext = new EmitStmtContext(this._ctx, this.state);
+		this.enterRule(_localctx, 28, CWScriptParser.RULE_emitStmt);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 256;
+			this.match(CWScriptParser.EMIT);
+			this.state = 257;
+			_localctx._value = this.expr(0);
+			this.state = 259;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 258;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public defn(): DefnContext {
+		let _localctx: DefnContext = new DefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 30, CWScriptParser.RULE_defn);
+		try {
+			this.state = 275;
+			this._errHandler.sync(this);
+			switch (this._input.LA(1)) {
+			case CWScriptParser.CONTRACT:
+				this.enterOuterAlt(_localctx, 1);
+				{
+				this.state = 261;
+				this.contractDefn();
+				}
+				break;
+			case CWScriptParser.INTERFACE:
+				this.enterOuterAlt(_localctx, 2);
+				{
+				this.state = 262;
+				this.interfaceDefn();
+				}
+				break;
+			case CWScriptParser.STRUCT:
+				this.enterOuterAlt(_localctx, 3);
+				{
+				this.state = 263;
+				this.structDefn();
+				}
+				break;
+			case CWScriptParser.TUPLE:
+				this.enterOuterAlt(_localctx, 4);
+				{
+				this.state = 264;
+				this.tupleDefn();
+				}
+				break;
+			case CWScriptParser.UNIT:
+				this.enterOuterAlt(_localctx, 5);
+				{
+				this.state = 265;
+				this.unitDefn();
+				}
+				break;
+			case CWScriptParser.ENUM:
+				this.enterOuterAlt(_localctx, 6);
+				{
+				this.state = 266;
+				this.enumDefn();
+				}
+				break;
+			case CWScriptParser.TYPE:
+				this.enterOuterAlt(_localctx, 7);
+				{
+				this.state = 267;
+				this.typeAliasDefn();
+				}
+				break;
+			case CWScriptParser.FN:
+				this.enterOuterAlt(_localctx, 8);
+				{
+				this.state = 268;
+				this.fnDefn();
+				}
+				break;
+			case CWScriptParser.INSTANTIATE:
+				this.enterOuterAlt(_localctx, 9);
+				{
+				this.state = 269;
+				this.instantiateDefn();
+				}
+				break;
+			case CWScriptParser.EXEC:
+				this.enterOuterAlt(_localctx, 10);
+				{
+				this.state = 270;
+				this.execDefn();
+				}
+				break;
+			case CWScriptParser.QUERY:
+				this.enterOuterAlt(_localctx, 11);
+				{
+				this.state = 271;
+				this.queryDefn();
+				}
+				break;
+			case CWScriptParser.ERROR:
+				this.enterOuterAlt(_localctx, 12);
+				{
+				this.state = 272;
+				this.errorDefn();
+				}
+				break;
+			case CWScriptParser.EVENT:
+				this.enterOuterAlt(_localctx, 13);
+				{
+				this.state = 273;
+				this.eventDefn();
+				}
+				break;
+			case CWScriptParser.STATE:
+				this.enterOuterAlt(_localctx, 14);
+				{
+				this.state = 274;
+				this.stateBlockDefn();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public contractDefn(): ContractDefnContext {
+		let _localctx: ContractDefnContext = new ContractDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 32, CWScriptParser.RULE_contractDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 277;
+			this.match(CWScriptParser.CONTRACT);
+			{
+			this.state = 278;
+			_localctx._name = this.ident();
+			}
+			this.state = 281;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.EXTENDS) {
+				{
+				this.state = 279;
+				this.match(CWScriptParser.EXTENDS);
+				{
+				this.state = 280;
+				_localctx._base = this.ident();
+				}
+				}
+			}
+
+			this.state = 285;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.IMPLEMENTS) {
+				{
+				this.state = 283;
+				this.match(CWScriptParser.IMPLEMENTS);
+				{
+				this.state = 284;
+				_localctx._interfaces = this.typeExprList();
+				}
+				}
+			}
+
+			this.state = 287;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 291;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 288;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 293;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 294;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 296;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 295;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public interfaceDefn(): InterfaceDefnContext {
+		let _localctx: InterfaceDefnContext = new InterfaceDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 34, CWScriptParser.RULE_interfaceDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 298;
+			this.match(CWScriptParser.INTERFACE);
+			{
+			this.state = 299;
+			_localctx._name = this.ident();
+			}
+			this.state = 302;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.EXTENDS) {
+				{
+				this.state = 300;
+				this.match(CWScriptParser.EXTENDS);
+				{
+				this.state = 301;
+				_localctx._baseInterfaces = this.typeExprList();
+				}
+				}
+			}
+
+			this.state = 304;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 308;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 305;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 310;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 311;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 313;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 312;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public structDefn(): StructDefnContext {
+		let _localctx: StructDefnContext = new StructDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 36, CWScriptParser.RULE_structDefn);
+		let _la: number;
+		try {
+			this.state = 343;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 34, this._ctx) ) {
+			case 1:
+				this.enterOuterAlt(_localctx, 1);
+				{
+				this.state = 315;
+				this.match(CWScriptParser.STRUCT);
+				{
+				this.state = 316;
+				_localctx._name = this.ident();
+				}
+				this.state = 321;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === CWScriptParser.LBRACK) {
+					{
+					this.state = 317;
+					this.match(CWScriptParser.LBRACK);
+					this.state = 318;
+					_localctx._typeVars = this.typeVarList();
+					this.state = 319;
+					this.match(CWScriptParser.RBRACK);
+					}
+				}
+
+				this.state = 323;
+				this.match(CWScriptParser.LBRACE);
+				this.state = 325;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+					{
+					this.state = 324;
+					_localctx._fields = this.paramList();
+					}
+				}
+
+				this.state = 327;
+				this.match(CWScriptParser.RBRACE);
+				}
+				break;
+
+			case 2:
+				this.enterOuterAlt(_localctx, 2);
+				{
+				this.state = 329;
+				this.match(CWScriptParser.STRUCT);
+				{
+				this.state = 330;
+				_localctx._name = this.ident();
+				}
+				this.state = 335;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === CWScriptParser.LBRACK) {
+					{
+					this.state = 331;
+					this.match(CWScriptParser.LBRACK);
+					this.state = 332;
+					_localctx._typeVars = this.typeVarList();
+					this.state = 333;
+					this.match(CWScriptParser.RBRACK);
+					}
+				}
+
+				this.state = 337;
+				this.match(CWScriptParser.LPAREN);
+				{
+				this.state = 338;
+				_localctx._fields = this.paramList();
+				}
+				this.state = 339;
+				this.match(CWScriptParser.RPAREN);
+				this.state = 341;
+				this._errHandler.sync(this);
+				switch ( this.interpreter.adaptivePredict(this._input, 33, this._ctx) ) {
+				case 1:
+					{
+					this.state = 340;
+					this.match(CWScriptParser.SEMI);
+					}
+					break;
+				}
+				}
+				break;
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public tupleDefn(): TupleDefnContext {
+		let _localctx: TupleDefnContext = new TupleDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 38, CWScriptParser.RULE_tupleDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 345;
+			this.match(CWScriptParser.TUPLE);
+			{
+			this.state = 346;
+			_localctx._name = this.ident();
+			}
+			this.state = 351;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 35, this._ctx) ) {
+			case 1:
+				{
+				this.state = 347;
+				this.match(CWScriptParser.LBRACK);
+				this.state = 348;
+				_localctx._typeVars = this.typeVarList();
+				this.state = 349;
+				this.match(CWScriptParser.RBRACK);
+				}
+				break;
+			}
+			this.state = 353;
+			this.match(CWScriptParser.LBRACK);
+			this.state = 355;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || _la === CWScriptParser.Ident || _la === CWScriptParser.TypeVar) {
+				{
+				this.state = 354;
+				_localctx._elements = this.typeExprList();
+				}
+			}
+
+			this.state = 357;
+			this.match(CWScriptParser.RPAREN);
+			this.state = 359;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 37, this._ctx) ) {
+			case 1:
+				{
+				this.state = 358;
+				this.match(CWScriptParser.SEMI);
+				}
+				break;
 			}
 			}
 		}
@@ -3563,76 +1638,1074 @@ export class CWScriptParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public assignLHS(): AssignLHSContext {
-		let _localctx: AssignLHSContext = new AssignLHSContext(this._ctx, this.state);
-		this.enterRule(_localctx, 96, CWScriptParser.RULE_assignLHS);
+	public unitDefn(): UnitDefnContext {
+		let _localctx: UnitDefnContext = new UnitDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 40, CWScriptParser.RULE_unitDefn);
 		let _la: number;
 		try {
-			this.state = 805;
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 361;
+			this.match(CWScriptParser.UNIT);
+			this.state = 366;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 98, this._ctx) ) {
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.LBRACK) {
+				{
+				this.state = 362;
+				this.match(CWScriptParser.LBRACK);
+				this.state = 363;
+				_localctx._typeVars = this.typeVarList();
+				this.state = 364;
+				this.match(CWScriptParser.RBRACK);
+				}
+			}
+
+			{
+			this.state = 368;
+			_localctx._name = this.ident();
+			}
+			this.state = 370;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 39, this._ctx) ) {
 			case 1:
-				_localctx = new IdentLHSContext(_localctx);
+				{
+				this.state = 369;
+				this.match(CWScriptParser.SEMI);
+				}
+				break;
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public enumDefn(): EnumDefnContext {
+		let _localctx: EnumDefnContext = new EnumDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 42, CWScriptParser.RULE_enumDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 372;
+			this.match(CWScriptParser.ENUM);
+			{
+			this.state = 373;
+			_localctx._name = this.ident();
+			}
+			this.state = 378;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.LBRACK) {
+				{
+				this.state = 374;
+				this.match(CWScriptParser.LBRACK);
+				this.state = 375;
+				_localctx._typeVars = this.typeVarList();
+				this.state = 376;
+				this.match(CWScriptParser.RBRACK);
+				}
+			}
+
+			this.state = 380;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 382;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 381;
+				_localctx._variants = this.enumVariantList();
+				}
+			}
+
+			this.state = 384;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 386;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 42, this._ctx) ) {
+			case 1:
+				{
+				this.state = 385;
+				this.match(CWScriptParser.SEMI);
+				}
+				break;
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public enumVariantList(): EnumVariantListContext {
+		let _localctx: EnumVariantListContext = new EnumVariantListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 44, CWScriptParser.RULE_enumVariantList);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 388;
+			this.enumVariant();
+			this.state = 393;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 389;
+				this.match(CWScriptParser.COMMA);
+				this.state = 390;
+				this.enumVariant();
+				}
+				}
+				this.state = 395;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public enumVariant(): EnumVariantContext {
+		let _localctx: EnumVariantContext = new EnumVariantContext(this._ctx, this.state);
+		this.enterRule(_localctx, 46, CWScriptParser.RULE_enumVariant);
+		try {
+			this.state = 399;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 44, this._ctx) ) {
+			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 788;
-				(_localctx as IdentLHSContext)._symbol = this.ident();
+				this.state = 396;
+				this.enumVariantStructDefn();
 				}
 				break;
 
 			case 2:
-				_localctx = new DotLHSContext(_localctx);
 				this.enterOuterAlt(_localctx, 2);
 				{
-				{
-				this.state = 789;
-				(_localctx as DotLHSContext)._obj = this.expr(0);
-				}
-				this.state = 790;
-				this.match(CWScriptParser.DOT);
-				{
-				this.state = 791;
-				(_localctx as DotLHSContext)._member = this.ident();
-				}
+				this.state = 397;
+				this.enumVariantTupleDefn();
 				}
 				break;
 
 			case 3:
-				_localctx = new IndexLHSContext(_localctx);
 				this.enterOuterAlt(_localctx, 3);
 				{
-				{
-				this.state = 793;
-				(_localctx as IndexLHSContext)._obj = this.expr(0);
-				}
-				this.state = 794;
-				this.match(CWScriptParser.LBRACK);
-				{
-				this.state = 795;
-				(_localctx as IndexLHSContext)._expr = this.expr(0);
-				(_localctx as IndexLHSContext)._args.push((_localctx as IndexLHSContext)._expr);
-				}
-				this.state = 800;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
-					{
-					{
-					this.state = 796;
-					this.match(CWScriptParser.COMMA);
-					this.state = 797;
-					(_localctx as IndexLHSContext)._expr = this.expr(0);
-					(_localctx as IndexLHSContext)._args.push((_localctx as IndexLHSContext)._expr);
-					}
-					}
-					this.state = 802;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 803;
-				this.match(CWScriptParser.RBRACK);
+				this.state = 398;
+				this.enumVariantUnitDefn();
 				}
 				break;
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public enumVariantStructDefn(): EnumVariantStructDefnContext {
+		let _localctx: EnumVariantStructDefnContext = new EnumVariantStructDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 48, CWScriptParser.RULE_enumVariantStructDefn);
+		let _la: number;
+		try {
+			this.state = 415;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 47, this._ctx) ) {
+			case 1:
+				this.enterOuterAlt(_localctx, 1);
+				{
+				{
+				this.state = 401;
+				_localctx._name = this.ident();
+				}
+				this.state = 402;
+				this.match(CWScriptParser.LBRACE);
+				this.state = 404;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+					{
+					this.state = 403;
+					_localctx._fields = this.paramList();
+					}
+				}
+
+				this.state = 406;
+				this.match(CWScriptParser.RBRACE);
+				}
+				break;
+
+			case 2:
+				this.enterOuterAlt(_localctx, 2);
+				{
+				{
+				this.state = 408;
+				_localctx._name = this.ident();
+				}
+				this.state = 409;
+				this.match(CWScriptParser.LPAREN);
+				this.state = 411;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+					{
+					this.state = 410;
+					_localctx._fields = this.paramList();
+					}
+				}
+
+				this.state = 413;
+				this.match(CWScriptParser.RPAREN);
+				}
+				break;
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public enumVariantTupleDefn(): EnumVariantTupleDefnContext {
+		let _localctx: EnumVariantTupleDefnContext = new EnumVariantTupleDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 50, CWScriptParser.RULE_enumVariantTupleDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 417;
+			_localctx._name = this.ident();
+			}
+			this.state = 418;
+			this.match(CWScriptParser.LBRACK);
+			this.state = 420;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || _la === CWScriptParser.Ident || _la === CWScriptParser.TypeVar) {
+				{
+				this.state = 419;
+				_localctx._elements = this.typeExprList();
+				}
+			}
+
+			this.state = 422;
+			this.match(CWScriptParser.RPAREN);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public enumVariantUnitDefn(): EnumVariantUnitDefnContext {
+		let _localctx: EnumVariantUnitDefnContext = new EnumVariantUnitDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 52, CWScriptParser.RULE_enumVariantUnitDefn);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 424;
+			_localctx._name = this.ident();
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public typeAliasDefn(): TypeAliasDefnContext {
+		let _localctx: TypeAliasDefnContext = new TypeAliasDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 54, CWScriptParser.RULE_typeAliasDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 426;
+			this.match(CWScriptParser.TYPE);
+			{
+			this.state = 427;
+			_localctx._name = this.ident();
+			}
+			this.state = 432;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.LBRACK) {
+				{
+				this.state = 428;
+				this.match(CWScriptParser.LBRACK);
+				this.state = 429;
+				_localctx._typeVars = this.typeVarList();
+				this.state = 430;
+				this.match(CWScriptParser.RBRACK);
+				}
+			}
+
+			this.state = 434;
+			this.match(CWScriptParser.EQ);
+			{
+			this.state = 435;
+			_localctx._ty = this.typeExpr(0);
+			}
+			this.state = 437;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 436;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public fnDefn(): FnDefnContext {
+		let _localctx: FnDefnContext = new FnDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 56, CWScriptParser.RULE_fnDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 439;
+			this.match(CWScriptParser.FN);
+			{
+			this.state = 440;
+			_localctx._name = this.ident();
+			}
+			this.state = 441;
+			this.match(CWScriptParser.LPAREN);
+			this.state = 443;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 442;
+				_localctx._params = this.paramList();
+				}
+			}
+
+			this.state = 445;
+			this.match(CWScriptParser.RPAREN);
+			this.state = 448;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.ARROW) {
+				{
+				this.state = 446;
+				this.match(CWScriptParser.ARROW);
+				{
+				this.state = 447;
+				_localctx._returnTy = this.typeExpr(0);
+				}
+				}
+			}
+
+			this.state = 450;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 454;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 451;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 456;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 457;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 459;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 458;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public instantiateDefn(): InstantiateDefnContext {
+		let _localctx: InstantiateDefnContext = new InstantiateDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 58, CWScriptParser.RULE_instantiateDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 461;
+			this.match(CWScriptParser.INSTANTIATE);
+			{
+			this.state = 462;
+			_localctx._name = this.ident();
+			}
+			this.state = 465;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.ARROW) {
+				{
+				this.state = 463;
+				this.match(CWScriptParser.ARROW);
+				{
+				this.state = 464;
+				_localctx._returnTy = this.typeExpr(0);
+				}
+				}
+			}
+
+			this.state = 467;
+			this.match(CWScriptParser.LPAREN);
+			this.state = 469;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 468;
+				_localctx._params = this.paramList();
+				}
+			}
+
+			this.state = 471;
+			this.match(CWScriptParser.RPAREN);
+			this.state = 472;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 476;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 473;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 478;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 479;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 481;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 480;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public execDefn(): ExecDefnContext {
+		let _localctx: ExecDefnContext = new ExecDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 60, CWScriptParser.RULE_execDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 483;
+			this.match(CWScriptParser.EXEC);
+			{
+			this.state = 484;
+			_localctx._name = this.ident();
+			}
+			this.state = 485;
+			this.match(CWScriptParser.LPAREN);
+			this.state = 487;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 486;
+				_localctx._params = this.paramList();
+				}
+			}
+
+			this.state = 491;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.ARROW) {
+				{
+				this.state = 489;
+				this.match(CWScriptParser.ARROW);
+				{
+				this.state = 490;
+				_localctx._returnTy = this.typeExpr(0);
+				}
+				}
+			}
+
+			this.state = 493;
+			this.match(CWScriptParser.RPAREN);
+			this.state = 494;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 498;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 495;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 500;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 501;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 503;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 502;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public queryDefn(): QueryDefnContext {
+		let _localctx: QueryDefnContext = new QueryDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 62, CWScriptParser.RULE_queryDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 505;
+			this.match(CWScriptParser.QUERY);
+			{
+			this.state = 506;
+			_localctx._name = this.ident();
+			}
+			this.state = 507;
+			this.match(CWScriptParser.LPAREN);
+			this.state = 509;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 508;
+				_localctx._params = this.paramList();
+				}
+			}
+
+			this.state = 513;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.ARROW) {
+				{
+				this.state = 511;
+				this.match(CWScriptParser.ARROW);
+				{
+				this.state = 512;
+				_localctx._returnTy = this.typeExpr(0);
+				}
+				}
+			}
+
+			this.state = 515;
+			this.match(CWScriptParser.RPAREN);
+			this.state = 516;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 520;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 517;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 522;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 523;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 525;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 524;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public errorDefn(): ErrorDefnContext {
+		let _localctx: ErrorDefnContext = new ErrorDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 64, CWScriptParser.RULE_errorDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 527;
+			this.match(CWScriptParser.ERROR);
+			{
+			this.state = 528;
+			_localctx._name = this.ident();
+			}
+			this.state = 529;
+			this.match(CWScriptParser.LPAREN);
+			this.state = 531;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 530;
+				_localctx._params = this.paramList();
+				}
+			}
+
+			this.state = 535;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.ARROW) {
+				{
+				this.state = 533;
+				this.match(CWScriptParser.ARROW);
+				{
+				this.state = 534;
+				_localctx._returnTy = this.typeExpr(0);
+				}
+				}
+			}
+
+			this.state = 537;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 541;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 538;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 543;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 544;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 546;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 545;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public eventDefn(): EventDefnContext {
+		let _localctx: EventDefnContext = new EventDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 66, CWScriptParser.RULE_eventDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 548;
+			this.match(CWScriptParser.EVENT);
+			{
+			this.state = 549;
+			_localctx._name = this.ident();
+			}
+			this.state = 550;
+			this.match(CWScriptParser.LPAREN);
+			{
+			this.state = 551;
+			_localctx._params = this.paramList();
+			}
+			this.state = 552;
+			this.match(CWScriptParser.RPAREN);
+			this.state = 554;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 553;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public stateBlockDefn(): StateBlockDefnContext {
+		let _localctx: StateBlockDefnContext = new StateBlockDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 68, CWScriptParser.RULE_stateBlockDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 556;
+			this.match(CWScriptParser.STATE);
+			this.state = 557;
+			this.match(CWScriptParser.LBRACK);
+			this.state = 561;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				{
+				this.state = 558;
+				_localctx._stateDefn = this.stateDefn();
+				_localctx._stateVars.push(_localctx._stateDefn);
+				}
+				}
+				this.state = 563;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 564;
+			this.match(CWScriptParser.RBRACK);
+			this.state = 566;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 565;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public stateDefn(): StateDefnContext {
+		let _localctx: StateDefnContext = new StateDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 70, CWScriptParser.RULE_stateDefn);
+		try {
+			this.state = 570;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 74, this._ctx) ) {
+			case 1:
+				this.enterOuterAlt(_localctx, 1);
+				{
+				this.state = 568;
+				this.stateItemDefn();
+				}
+				break;
+
+			case 2:
+				this.enterOuterAlt(_localctx, 2);
+				{
+				this.state = 569;
+				this.stateMapDefn();
+				}
+				break;
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public stateItemDefn(): StateItemDefnContext {
+		let _localctx: StateItemDefnContext = new StateItemDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 72, CWScriptParser.RULE_stateItemDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 572;
+			_localctx._name = this.ident();
+			}
+			this.state = 573;
+			this.match(CWScriptParser.COLON);
+			{
+			this.state = 574;
+			_localctx._ty = this.typeExpr(0);
+			}
+			this.state = 576;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 575;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public stateMapDefn(): StateMapDefnContext {
+		let _localctx: StateMapDefnContext = new StateMapDefnContext(this._ctx, this.state);
+		this.enterRule(_localctx, 74, CWScriptParser.RULE_stateMapDefn);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 578;
+			_localctx._name = this.ident();
+			}
+			this.state = 579;
+			this.match(CWScriptParser.LBRACK);
+			{
+			this.state = 580;
+			_localctx._indexTy = this.typeExpr(0);
+			}
+			this.state = 581;
+			this.match(CWScriptParser.RBRACK);
+			this.state = 582;
+			this.match(CWScriptParser.COLON);
+			{
+			this.state = 583;
+			_localctx._ty = this.typeExpr(0);
+			}
+			this.state = 585;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.SEMI) {
+				{
+				this.state = 584;
+				this.match(CWScriptParser.SEMI);
+				}
+			}
+
 			}
 		}
 		catch (re) {
@@ -3662,44 +2735,35 @@ export class CWScriptParser extends Parser {
 		let _parentState: number = this.state;
 		let _localctx: ExprContext = new ExprContext(this._ctx, _parentState);
 		let _prevctx: ExprContext = _localctx;
-		let _startState: number = 98;
-		this.enterRecursionRule(_localctx, 98, CWScriptParser.RULE_expr, _p);
-		let _la: number;
+		let _startState: number = 76;
+		this.enterRecursionRule(_localctx, 76, CWScriptParser.RULE_expr, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 858;
+			this.state = 601;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 105, this._ctx) ) {
+			switch ( this.interpreter.adaptivePredict(this._input, 77, this._ctx) ) {
 			case 1:
 				{
-				_localctx = new GroupedExprContext(_localctx);
+				_localctx = new QueryExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
 
-				this.state = 808;
-				this.match(CWScriptParser.LPAREN);
-				this.state = 809;
-				this.expr(0);
-				this.state = 810;
-				this.match(CWScriptParser.RPAREN);
+				this.state = 588;
+				this.match(CWScriptParser.QUERY_NOW);
+				this.state = 589;
+				this.expr(15);
 				}
 				break;
 
 			case 2:
 				{
-				_localctx = new TypeDColonExprContext(_localctx);
+				_localctx = new IfExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 812;
-				this.typeExpr(0);
-				this.state = 813;
-				this.match(CWScriptParser.D_COLON);
-				{
-				this.state = 814;
-				(_localctx as TypeDColonExprContext)._member = this.ident();
-				}
+				this.state = 590;
+				this.ifExpr_();
 				}
 				break;
 
@@ -3708,209 +2772,79 @@ export class CWScriptParser extends Parser {
 				_localctx = new TryCatchElseExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 816;
+				this.state = 591;
 				this.tryCatchElseExpr_();
 				}
 				break;
 
 			case 4:
 				{
-				_localctx = new NotExprContext(_localctx);
+				_localctx = new ClosureExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 817;
-				this.match(CWScriptParser.NOT);
-				this.state = 818;
-				this.expr(13);
+				this.state = 592;
+				this.closureExpr_();
 				}
 				break;
 
 			case 5:
 				{
-				_localctx = new IfExprContext(_localctx);
+				_localctx = new StructExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 819;
-				this.ifStmt_();
+				this.state = 593;
+				this.structExpr_();
 				}
 				break;
 
 			case 6:
 				{
-				_localctx = new QueryNowExprContext(_localctx);
+				_localctx = new TupleExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 820;
-				this.match(CWScriptParser.QUERY_NOW);
-				this.state = 821;
-				this.expr(9);
+				this.state = 594;
+				this.tupleExpr_();
 				}
 				break;
 
 			case 7:
 				{
-				_localctx = new FailExprContext(_localctx);
+				_localctx = new LiteralExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 822;
-				this.match(CWScriptParser.FAIL);
-				this.state = 823;
-				this.expr(8);
+				this.state = 595;
+				this.literal();
 				}
 				break;
 
 			case 8:
 				{
-				_localctx = new ClosureExprContext(_localctx);
+				_localctx = new IdentExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 824;
-				this.closure();
+				this.state = 596;
+				this.ident();
 				}
 				break;
 
 			case 9:
 				{
-				_localctx = new TupleExprContext(_localctx);
+				_localctx = new GroupedExprContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 825;
-				this.match(CWScriptParser.LBRACK);
-				this.state = 834;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NOT) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.LBRACE - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 64)) & ~0x1F) === 0 && ((1 << (_la - 64)) & ((1 << (CWScriptParser.BAR - 64)) | (1 << (CWScriptParser.LT - 64)) | (1 << (CWScriptParser.Ident - 64)) | (1 << (CWScriptParser.StringLiteral - 64)) | (1 << (CWScriptParser.IntLiteral - 64)) | (1 << (CWScriptParser.DecLiteral - 64)) | (1 << (CWScriptParser.BoolLiteral - 64)))) !== 0)) {
-					{
-					{
-					this.state = 826;
-					(_localctx as TupleExprContext)._expr = this.expr(0);
-					(_localctx as TupleExprContext)._items.push((_localctx as TupleExprContext)._expr);
-					}
-					this.state = 831;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					while (_la === CWScriptParser.COMMA) {
-						{
-						{
-						this.state = 827;
-						this.match(CWScriptParser.COMMA);
-						{
-						this.state = 828;
-						(_localctx as TupleExprContext)._expr = this.expr(0);
-						(_localctx as TupleExprContext)._items.push((_localctx as TupleExprContext)._expr);
-						}
-						}
-						}
-						this.state = 833;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-					}
-					}
-				}
-
-				this.state = 836;
-				this.match(CWScriptParser.RBRACK);
-				}
-				break;
-
-			case 10:
-				{
-				_localctx = new StructExprContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 838;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || _la === CWScriptParser.LT || _la === CWScriptParser.Ident) {
-					{
-					this.state = 837;
-					this.typeExpr(0);
-					}
-				}
-
-				this.state = 840;
-				this.match(CWScriptParser.LBRACE);
-				this.state = 852;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
-					{
-					{
-					this.state = 841;
-					(_localctx as StructExprContext)._memberVal = this.memberVal();
-					(_localctx as StructExprContext)._members.push((_localctx as StructExprContext)._memberVal);
-					}
-					this.state = 846;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 102, this._ctx);
-					while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-						if (_alt === 1) {
-							{
-							{
-							this.state = 842;
-							this.match(CWScriptParser.COMMA);
-							this.state = 843;
-							(_localctx as StructExprContext)._memberVal = this.memberVal();
-							(_localctx as StructExprContext)._members.push((_localctx as StructExprContext)._memberVal);
-							}
-							}
-						}
-						this.state = 848;
-						this._errHandler.sync(this);
-						_alt = this.interpreter.adaptivePredict(this._input, 102, this._ctx);
-					}
-					this.state = 850;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					if (_la === CWScriptParser.COMMA) {
-						{
-						this.state = 849;
-						this.match(CWScriptParser.COMMA);
-						}
-					}
-
-					}
-				}
-
-				this.state = 854;
-				this.match(CWScriptParser.RBRACE);
-				}
-				break;
-
-			case 11:
-				{
-				_localctx = new UnitVariantExprContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 855;
-				this.typeVariant();
-				}
-				break;
-
-			case 12:
-				{
-				_localctx = new LiteralExprContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 856;
-				this.literal();
-				}
-				break;
-
-			case 13:
-				{
-				_localctx = new IdentExprContext(_localctx);
-				this._ctx = _localctx;
-				_prevctx = _localctx;
-				this.state = 857;
-				this.ident();
+				this.state = 597;
+				this.match(CWScriptParser.LPAREN);
+				this.state = 598;
+				this.expr(0);
+				this.state = 599;
+				this.match(CWScriptParser.RPAREN);
 				}
 				break;
 			}
 			this._ctx._stop = this._input.tryLT(-1);
-			this.state = 936;
+			this.state = 665;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 113, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 83, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					if (this._parseListeners != null) {
@@ -3918,417 +2852,318 @@ export class CWScriptParser extends Parser {
 					}
 					_prevctx = _localctx;
 					{
-					this.state = 934;
+					this.state = 663;
 					this._errHandler.sync(this);
-					switch ( this.interpreter.adaptivePredict(this._input, 112, this._ctx) ) {
+					switch ( this.interpreter.adaptivePredict(this._input, 82, this._ctx) ) {
 					case 1:
 						{
-						_localctx = new DotExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new MulExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 860;
-						if (!(this.precpred(this._ctx, 28))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 28)");
+						this.state = 603;
+						if (!(this.precpred(this._ctx, 18))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 18)");
 						}
-						this.state = 862;
+						this.state = 607;
 						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						if (_la === CWScriptParser.QUEST || _la === CWScriptParser.BANG) {
+						switch (this._input.LA(1)) {
+						case CWScriptParser.MUL:
 							{
-							this.state = 861;
-							(_localctx as DotExprContext)._unwrap = this._input.LT(1);
-							_la = this._input.LA(1);
-							if (!(_la === CWScriptParser.QUEST || _la === CWScriptParser.BANG)) {
-								(_localctx as DotExprContext)._unwrap = this._errHandler.recoverInline(this);
-							} else {
-								if (this._input.LA(1) === Token.EOF) {
-									this.matchedEOF = true;
-								}
-
-								this._errHandler.reportMatch(this);
-								this.consume();
+							this.state = 604;
+							(_localctx as MulExprContext)._op = this.match(CWScriptParser.MUL);
 							}
+							break;
+						case CWScriptParser.DIV:
+							{
+							this.state = 605;
+							this.match(CWScriptParser.DIV);
 							}
+							break;
+						case CWScriptParser.MOD:
+							{
+							this.state = 606;
+							this.match(CWScriptParser.MOD);
+							}
+							break;
+						default:
+							throw new NoViableAltException(this);
 						}
-
-						this.state = 864;
-						this.match(CWScriptParser.DOT);
-						{
-						this.state = 865;
-						(_localctx as DotExprContext)._member = this.ident();
-						}
+						this.state = 609;
+						this.expr(19);
 						}
 						break;
 
 					case 2:
 						{
-						_localctx = new AsExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new AddExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 866;
-						if (!(this.precpred(this._ctx, 27))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 27)");
+						this.state = 610;
+						if (!(this.precpred(this._ctx, 17))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 17)");
 						}
-						this.state = 867;
-						this.match(CWScriptParser.AS);
-						this.state = 868;
-						(_localctx as AsExprContext)._ty = this.typeExpr(0);
+						this.state = 613;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+						case CWScriptParser.PLUS:
+							{
+							this.state = 611;
+							(_localctx as AddExprContext)._addOp = this.match(CWScriptParser.PLUS);
+							}
+							break;
+						case CWScriptParser.MINUS:
+							{
+							this.state = 612;
+							this.match(CWScriptParser.MINUS);
+							}
+							break;
+						default:
+							throw new NoViableAltException(this);
+						}
+						this.state = 615;
+						this.expr(18);
 						}
 						break;
 
 					case 3:
 						{
-						_localctx = new IndexExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new CompExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 869;
-						if (!(this.precpred(this._ctx, 26))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 26)");
+						this.state = 616;
+						if (!(this.precpred(this._ctx, 16))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 16)");
 						}
-						this.state = 870;
-						this.match(CWScriptParser.LBRACK);
-						{
-						this.state = 871;
-						(_localctx as IndexExprContext)._arg = this.arg();
-						(_localctx as IndexExprContext)._args.push((_localctx as IndexExprContext)._arg);
-						}
-						this.state = 876;
+						this.state = 621;
 						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						while (_la === CWScriptParser.COMMA) {
+						switch (this._input.LA(1)) {
+						case CWScriptParser.LT:
 							{
+							this.state = 617;
+							(_localctx as CompExprContext)._compOp = this.match(CWScriptParser.LT);
+							}
+							break;
+						case CWScriptParser.GT:
 							{
-							this.state = 872;
-							this.match(CWScriptParser.COMMA);
-							this.state = 873;
-							(_localctx as IndexExprContext)._arg = this.arg();
-							(_localctx as IndexExprContext)._args.push((_localctx as IndexExprContext)._arg);
+							this.state = 618;
+							this.match(CWScriptParser.GT);
 							}
+							break;
+						case CWScriptParser.LT_EQ:
+							{
+							this.state = 619;
+							this.match(CWScriptParser.LT_EQ);
 							}
-							this.state = 878;
-							this._errHandler.sync(this);
-							_la = this._input.LA(1);
+							break;
+						case CWScriptParser.GT_EQ:
+							{
+							this.state = 620;
+							this.match(CWScriptParser.GT_EQ);
+							}
+							break;
+						default:
+							throw new NoViableAltException(this);
 						}
-						this.state = 879;
-						this.match(CWScriptParser.RBRACK);
+						this.state = 623;
+						this.expr(17);
 						}
 						break;
 
 					case 4:
 						{
-						_localctx = new DColonExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new ShortTryExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 881;
-						if (!(this.precpred(this._ctx, 25))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 25)");
+						this.state = 624;
+						if (!(this.precpred(this._ctx, 14))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 14)");
 						}
-						this.state = 882;
-						this.match(CWScriptParser.D_COLON);
-						{
-						this.state = 883;
-						(_localctx as DColonExprContext)._member = this.ident();
-						}
+						this.state = 625;
+						this.match(CWScriptParser.D_QUEST);
+						this.state = 626;
+						this.expr(15);
 						}
 						break;
 
 					case 5:
 						{
-						_localctx = new FnCallExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new InExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 884;
-						if (!(this.precpred(this._ctx, 23))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 23)");
+						this.state = 627;
+						if (!(this.precpred(this._ctx, 13))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 13)");
 						}
-						this.state = 886;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						if (_la === CWScriptParser.BANG) {
-							{
-							this.state = 885;
-							(_localctx as FnCallExprContext)._fallible = this.match(CWScriptParser.BANG);
-							}
-						}
-
-						this.state = 888;
-						this.match(CWScriptParser.LPAREN);
-						this.state = 897;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NOT) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.LBRACE - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 64)) & ~0x1F) === 0 && ((1 << (_la - 64)) & ((1 << (CWScriptParser.BAR - 64)) | (1 << (CWScriptParser.LT - 64)) | (1 << (CWScriptParser.Ident - 64)) | (1 << (CWScriptParser.StringLiteral - 64)) | (1 << (CWScriptParser.IntLiteral - 64)) | (1 << (CWScriptParser.DecLiteral - 64)) | (1 << (CWScriptParser.BoolLiteral - 64)))) !== 0)) {
-							{
-							{
-							this.state = 889;
-							(_localctx as FnCallExprContext)._arg = this.arg();
-							(_localctx as FnCallExprContext)._args.push((_localctx as FnCallExprContext)._arg);
-							}
-							this.state = 894;
-							this._errHandler.sync(this);
-							_la = this._input.LA(1);
-							while (_la === CWScriptParser.COMMA) {
-								{
-								{
-								this.state = 890;
-								this.match(CWScriptParser.COMMA);
-								this.state = 891;
-								(_localctx as FnCallExprContext)._arg = this.arg();
-								(_localctx as FnCallExprContext)._args.push((_localctx as FnCallExprContext)._arg);
-								}
-								}
-								this.state = 896;
-								this._errHandler.sync(this);
-								_la = this._input.LA(1);
-							}
-							}
-						}
-
-						this.state = 899;
-						this.match(CWScriptParser.RPAREN);
+						this.state = 628;
+						this.match(CWScriptParser.IN);
+						this.state = 629;
+						this.expr(14);
 						}
 						break;
 
 					case 6:
 						{
-						_localctx = new MulExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new EqExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 900;
-						if (!(this.precpred(this._ctx, 22))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 22)");
+						this.state = 630;
+						if (!(this.precpred(this._ctx, 11))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 11)");
 						}
-						{
-						this.state = 901;
-						(_localctx as MulExprContext)._op = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(((((_la - 74)) & ~0x1F) === 0 && ((1 << (_la - 74)) & ((1 << (CWScriptParser.MUL - 74)) | (1 << (CWScriptParser.DIV - 74)) | (1 << (CWScriptParser.MOD - 74)))) !== 0))) {
-							(_localctx as MulExprContext)._op = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
+						this.state = 633;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+						case CWScriptParser.EQ_EQ:
+							{
+							this.state = 631;
+							(_localctx as EqExprContext)._eqOp = this.match(CWScriptParser.EQ_EQ);
 							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
+							break;
+						case CWScriptParser.NEQ:
+							{
+							this.state = 632;
+							this.match(CWScriptParser.NEQ);
+							}
+							break;
+						default:
+							throw new NoViableAltException(this);
 						}
-						}
-						{
-						this.state = 902;
-						(_localctx as MulExprContext)._rhs = this.expr(0);
-						}
+						this.state = 635;
+						this.expr(12);
 						}
 						break;
 
 					case 7:
 						{
-						_localctx = new AddExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new AndExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 903;
-						if (!(this.precpred(this._ctx, 21))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 21)");
+						this.state = 636;
+						if (!(this.precpred(this._ctx, 10))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 10)");
 						}
-						{
-						this.state = 904;
-						(_localctx as AddExprContext)._op = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(_la === CWScriptParser.PLUS || _la === CWScriptParser.MINUS)) {
-							(_localctx as AddExprContext)._op = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						}
-						{
-						this.state = 905;
-						(_localctx as AddExprContext)._rhs = this.expr(0);
-						}
+						this.state = 637;
+						this.match(CWScriptParser.AND);
+						this.state = 638;
+						this.expr(11);
 						}
 						break;
 
 					case 8:
 						{
-						_localctx = new CompExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new OrExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 906;
-						if (!(this.precpred(this._ctx, 20))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 20)");
+						this.state = 639;
+						if (!(this.precpred(this._ctx, 9))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 9)");
 						}
-						{
-						this.state = 907;
-						(_localctx as CompExprContext)._op = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(((((_la - 80)) & ~0x1F) === 0 && ((1 << (_la - 80)) & ((1 << (CWScriptParser.LT - 80)) | (1 << (CWScriptParser.LT_EQ - 80)) | (1 << (CWScriptParser.GT - 80)) | (1 << (CWScriptParser.GT_EQ - 80)))) !== 0))) {
-							(_localctx as CompExprContext)._op = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						}
-						{
-						this.state = 908;
-						(_localctx as CompExprContext)._rhs = this.expr(0);
-						}
+						this.state = 640;
+						this.match(CWScriptParser.OR);
+						this.state = 641;
+						this.expr(10);
 						}
 						break;
 
 					case 9:
 						{
-						_localctx = new EqExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new DotExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 909;
-						if (!(this.precpred(this._ctx, 19))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 19)");
+						this.state = 642;
+						if (!(this.precpred(this._ctx, 23))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 23)");
 						}
+						this.state = 643;
+						this.match(CWScriptParser.DOT);
 						{
-						this.state = 910;
-						(_localctx as EqExprContext)._op = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(_la === CWScriptParser.EQ_EQ || _la === CWScriptParser.NEQ)) {
-							(_localctx as EqExprContext)._op = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						}
-						{
-						this.state = 911;
-						(_localctx as EqExprContext)._rhs = this.expr(0);
+						this.state = 644;
+						(_localctx as DotExprContext)._memberName = this.ident();
 						}
 						}
 						break;
 
 					case 10:
 						{
-						_localctx = new NoneCheckExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new IndexExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 912;
-						if (!(this.precpred(this._ctx, 18))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 18)");
+						this.state = 645;
+						if (!(this.precpred(this._ctx, 22))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 22)");
 						}
-						this.state = 913;
-						this.match(CWScriptParser.QUEST);
+						this.state = 646;
+						this.match(CWScriptParser.LBRACK);
+						{
+						this.state = 647;
+						(_localctx as IndexExprContext)._index = this.expr(0);
+						}
+						this.state = 648;
+						this.match(CWScriptParser.RBRACK);
 						}
 						break;
 
 					case 11:
 						{
-						_localctx = new IsExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new CallExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 914;
-						if (!(this.precpred(this._ctx, 17))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 17)");
+						this.state = 650;
+						if (!(this.precpred(this._ctx, 21))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 21)");
 						}
-						this.state = 915;
-						this.match(CWScriptParser.IS);
-						this.state = 917;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						if (_la === CWScriptParser.NOT) {
-							{
-							this.state = 916;
-							(_localctx as IsExprContext)._negative = this.match(CWScriptParser.NOT);
-							}
-						}
-
+						this.state = 651;
+						this.match(CWScriptParser.LPAREN);
 						{
-						this.state = 919;
-						(_localctx as IsExprContext)._rhs = this.typeExpr(0);
+						this.state = 652;
+						(_localctx as CallExprContext)._args = this.argList();
 						}
+						this.state = 653;
+						this.match(CWScriptParser.RPAREN);
 						}
 						break;
 
 					case 12:
 						{
-						_localctx = new InExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new AsExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 920;
-						if (!(this.precpred(this._ctx, 16))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 16)");
+						this.state = 655;
+						if (!(this.precpred(this._ctx, 20))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 20)");
 						}
-						this.state = 921;
-						this.match(CWScriptParser.IN);
+						this.state = 656;
+						this.match(CWScriptParser.AS);
 						{
-						this.state = 922;
-						(_localctx as InExprContext)._rhs = this.expr(0);
+						this.state = 657;
+						(_localctx as AsExprContext)._ty = this.typeExpr(0);
 						}
 						}
 						break;
 
 					case 13:
 						{
-						_localctx = new ShortTryExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new ExistsExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 923;
-						if (!(this.precpred(this._ctx, 15))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 15)");
+						this.state = 658;
+						if (!(this.precpred(this._ctx, 19))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 19)");
 						}
-						this.state = 924;
-						this.match(CWScriptParser.D_QUEST);
-						{
-						this.state = 925;
-						(_localctx as ShortTryExprContext)._rhs = this.expr(0);
-						}
+						this.state = 659;
+						this.match(CWScriptParser.QUEST);
 						}
 						break;
 
 					case 14:
 						{
-						_localctx = new AndExprContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new IsExprContext(new ExprContext(_parentctx, _parentState));
 						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 926;
+						this.state = 660;
 						if (!(this.precpred(this._ctx, 12))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 12)");
 						}
-						this.state = 927;
-						this.match(CWScriptParser.AND);
+						this.state = 661;
+						this.match(CWScriptParser.IS);
 						{
-						this.state = 928;
-						(_localctx as AndExprContext)._rhs = this.expr(0);
+						this.state = 662;
+						(_localctx as IsExprContext)._ty = this.typeExpr(0);
 						}
-						}
-						break;
-
-					case 15:
-						{
-						_localctx = new OrExprContext(new ExprContext(_parentctx, _parentState));
-						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 929;
-						if (!(this.precpred(this._ctx, 11))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 11)");
-						}
-						this.state = 930;
-						this.match(CWScriptParser.OR);
-						{
-						this.state = 931;
-						(_localctx as OrExprContext)._rhs = this.expr(0);
-						}
-						}
-						break;
-
-					case 16:
-						{
-						_localctx = new Grouped2ExprContext(new ExprContext(_parentctx, _parentState));
-						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_expr);
-						this.state = 932;
-						if (!(this.precpred(this._ctx, 1))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
-						}
-						this.state = 933;
-						this.match(CWScriptParser.TILDE);
 						}
 						break;
 					}
 					}
 				}
-				this.state = 938;
+				this.state = 667;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 113, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 83, this._ctx);
 			}
 			}
 		}
@@ -4347,228 +3182,67 @@ export class CWScriptParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public closureParams(): ClosureParamsContext {
-		let _localctx: ClosureParamsContext = new ClosureParamsContext(this._ctx, this.state);
-		this.enterRule(_localctx, 100, CWScriptParser.RULE_closureParams);
+	public ifExpr_(): IfExpr_Context {
+		let _localctx: IfExpr_Context = new IfExpr_Context(this._ctx, this.state);
+		this.enterRule(_localctx, 78, CWScriptParser.RULE_ifExpr_);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 939;
-			this.match(CWScriptParser.BAR);
-			this.state = 948;
+			this.state = 668;
+			this.match(CWScriptParser.IF);
+			{
+			this.state = 669;
+			_localctx._cond = this.expr(0);
+			}
+			this.state = 670;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 674;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
 				{
 				{
-				this.state = 940;
-				_localctx._param = this.param();
-				_localctx._params.push(_localctx._param);
+				this.state = 671;
+				_localctx._stmt = this.stmt();
+				_localctx._thenBody.push(_localctx._stmt);
 				}
-				this.state = 945;
+				}
+				this.state = 676;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				while (_la === CWScriptParser.COMMA) {
+			}
+			this.state = 677;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 687;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 86, this._ctx) ) {
+			case 1:
+				{
+				this.state = 678;
+				this.match(CWScriptParser.ELSE);
+				this.state = 679;
+				this.match(CWScriptParser.LBRACE);
+				this.state = 683;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
 					{
 					{
-					this.state = 941;
-					this.match(CWScriptParser.COMMA);
-					{
-					this.state = 942;
-					_localctx._param = this.param();
-					_localctx._params.push(_localctx._param);
+					this.state = 680;
+					_localctx._stmt = this.stmt();
+					_localctx._elseBody.push(_localctx._stmt);
 					}
 					}
-					}
-					this.state = 947;
+					this.state = 685;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
-				}
-			}
-
-			this.state = 950;
-			this.match(CWScriptParser.BAR);
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public closure(): ClosureContext {
-		let _localctx: ClosureContext = new ClosureContext(this._ctx, this.state);
-		this.enterRule(_localctx, 102, CWScriptParser.RULE_closure);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 953;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === CWScriptParser.BANG) {
-				{
-				this.state = 952;
-				_localctx._fallible = this.match(CWScriptParser.BANG);
-				}
-			}
-
-			{
-			this.state = 955;
-			_localctx._params = this.closureParams();
-			}
-			this.state = 962;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 118, this._ctx) ) {
-			case 1:
-				{
-				{
-				this.state = 958;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === CWScriptParser.ARROW) {
-					{
-					this.state = 956;
-					this.match(CWScriptParser.ARROW);
-					this.state = 957;
-					_localctx._retTy = this.typeExpr(0);
-					}
-				}
-
-				this.state = 960;
-				this.block();
-				}
-				}
-				break;
-
-			case 2:
-				{
-				this.state = 961;
-				this.stmt();
+				this.state = 686;
+				this.match(CWScriptParser.RBRACE);
 				}
 				break;
 			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public block(): BlockContext {
-		let _localctx: BlockContext = new BlockContext(this._ctx, this.state);
-		this.enterRule(_localctx, 104, CWScriptParser.RULE_block);
-		let _la: number;
-		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 964;
-			this.match(CWScriptParser.LBRACE);
-			this.state = 969;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.DEBUG) | (1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.DEFER) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.DELEGATE_EXEC) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NOT) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.MUT) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.LBRACE - 32)) | (1 << (CWScriptParser.BANG - 32)) | (1 << (CWScriptParser.SEMI - 32)) | (1 << (CWScriptParser.AT - 32)))) !== 0) || ((((_la - 64)) & ~0x1F) === 0 && ((1 << (_la - 64)) & ((1 << (CWScriptParser.BAR - 64)) | (1 << (CWScriptParser.LT - 64)) | (1 << (CWScriptParser.Ident - 64)) | (1 << (CWScriptParser.StringLiteral - 64)) | (1 << (CWScriptParser.IntLiteral - 64)) | (1 << (CWScriptParser.DecLiteral - 64)) | (1 << (CWScriptParser.BoolLiteral - 64)))) !== 0)) {
-				{
-				this.state = 967;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case CWScriptParser.DEBUG:
-				case CWScriptParser.CONTRACT:
-				case CWScriptParser.INTERFACE:
-				case CWScriptParser.IMPORT:
-				case CWScriptParser.IMPLEMENTS:
-				case CWScriptParser.EXTENDS:
-				case CWScriptParser.ERROR:
-				case CWScriptParser.EVENT:
-				case CWScriptParser.DEFER:
-				case CWScriptParser.INSTANTIATE_NOW:
-				case CWScriptParser.EXEC_NOW:
-				case CWScriptParser.QUERY_NOW:
-				case CWScriptParser.DELEGATE_EXEC:
-				case CWScriptParser.INSTANTIATE:
-				case CWScriptParser.EXEC:
-				case CWScriptParser.QUERY:
-				case CWScriptParser.REPLY:
-				case CWScriptParser.FOR:
-				case CWScriptParser.IN:
-				case CWScriptParser.FROM:
-				case CWScriptParser.STATE:
-				case CWScriptParser.IF:
-				case CWScriptParser.TRY:
-				case CWScriptParser.ELSE:
-				case CWScriptParser.NOT:
-				case CWScriptParser.NONE:
-				case CWScriptParser.MUT:
-				case CWScriptParser.AND:
-				case CWScriptParser.OR:
-				case CWScriptParser.TRUE:
-				case CWScriptParser.FALSE:
-				case CWScriptParser.FN:
-				case CWScriptParser.LET:
-				case CWScriptParser.CONST:
-				case CWScriptParser.FAIL:
-				case CWScriptParser.RETURN:
-				case CWScriptParser.STRUCT:
-				case CWScriptParser.ENUM:
-				case CWScriptParser.TYPE:
-				case CWScriptParser.EMIT:
-				case CWScriptParser.LPAREN:
-				case CWScriptParser.LBRACK:
-				case CWScriptParser.LBRACE:
-				case CWScriptParser.BANG:
-				case CWScriptParser.AT:
-				case CWScriptParser.BAR:
-				case CWScriptParser.LT:
-				case CWScriptParser.Ident:
-				case CWScriptParser.StringLiteral:
-				case CWScriptParser.IntLiteral:
-				case CWScriptParser.DecLiteral:
-				case CWScriptParser.BoolLiteral:
-					{
-					{
-					this.state = 965;
-					_localctx._stmt = this.stmt();
-					_localctx._body.push(_localctx._stmt);
-					}
-					}
-					break;
-				case CWScriptParser.SEMI:
-					{
-					this.state = 966;
-					this.match(CWScriptParser.SEMI);
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				this.state = 971;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-			}
-			this.state = 972;
-			this.match(CWScriptParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -4588,41 +3262,76 @@ export class CWScriptParser extends Parser {
 	// @RuleVersion(0)
 	public tryCatchElseExpr_(): TryCatchElseExpr_Context {
 		let _localctx: TryCatchElseExpr_Context = new TryCatchElseExpr_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 106, CWScriptParser.RULE_tryCatchElseExpr_);
+		this.enterRule(_localctx, 80, CWScriptParser.RULE_tryCatchElseExpr_);
+		let _la: number;
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 974;
+			this.state = 689;
 			this.match(CWScriptParser.TRY);
-			{
-			this.state = 975;
-			_localctx._body = this.block();
-			}
-			this.state = 979;
+			this.state = 690;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 694;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 121, this._ctx);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 691;
+				_localctx._stmt = this.stmt();
+				_localctx._tryBody.push(_localctx._stmt);
+				}
+				}
+				this.state = 696;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 697;
+			this.match(CWScriptParser.RBRACE);
+			this.state = 701;
+			this._errHandler.sync(this);
+			_alt = this.interpreter.adaptivePredict(this._input, 88, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					{
 					{
-					this.state = 976;
+					this.state = 698;
 					_localctx._catchClause = this.catchClause();
-					_localctx._catches.push(_localctx._catchClause);
+					_localctx._catchClauses.push(_localctx._catchClause);
 					}
 					}
 				}
-				this.state = 981;
+				this.state = 703;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 121, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 88, this._ctx);
 			}
-			this.state = 983;
+			this.state = 713;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 122, this._ctx) ) {
+			switch ( this.interpreter.adaptivePredict(this._input, 90, this._ctx) ) {
 			case 1:
 				{
-				this.state = 982;
-				_localctx._else_ = this.elseClause();
+				this.state = 704;
+				this.match(CWScriptParser.ELSE);
+				this.state = 705;
+				this.match(CWScriptParser.LBRACE);
+				this.state = 709;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+					{
+					{
+					this.state = 706;
+					_localctx._stmt = this.stmt();
+					_localctx._elseBody.push(_localctx._stmt);
+					}
+					}
+					this.state = 711;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 712;
+				this.match(CWScriptParser.RBRACE);
 				}
 				break;
 			}
@@ -4645,92 +3354,118 @@ export class CWScriptParser extends Parser {
 	// @RuleVersion(0)
 	public catchClause(): CatchClauseContext {
 		let _localctx: CatchClauseContext = new CatchClauseContext(this._ctx, this.state);
-		this.enterRule(_localctx, 108, CWScriptParser.RULE_catchClause);
-		try {
-			this.state = 996;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 123, this._ctx) ) {
-			case 1:
-				_localctx = new CatchContext(_localctx);
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 985;
-				this.match(CWScriptParser.CATCH);
-				{
-				this.state = 986;
-				(_localctx as CatchContext)._ty = this.typeExpr(0);
-				}
-				{
-				this.state = 987;
-				(_localctx as CatchContext)._body = this.block();
-				}
-				}
-				break;
-
-			case 2:
-				_localctx = new CatchBindContext(_localctx);
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 989;
-				this.match(CWScriptParser.CATCH);
-				{
-				this.state = 990;
-				(_localctx as CatchBindContext)._name = this.ident();
-				}
-				{
-				this.state = 991;
-				this.match(CWScriptParser.COLON);
-				{
-				this.state = 992;
-				(_localctx as CatchBindContext)._ty = this.typeExpr(0);
-				}
-				}
-				{
-				this.state = 994;
-				(_localctx as CatchBindContext)._body = this.block();
-				}
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public arg(): ArgContext {
-		let _localctx: ArgContext = new ArgContext(this._ctx, this.state);
-		this.enterRule(_localctx, 110, CWScriptParser.RULE_arg);
+		this.enterRule(_localctx, 82, CWScriptParser.RULE_catchClause);
+		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1001;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 124, this._ctx) ) {
-			case 1:
-				{
-				{
-				this.state = 998;
-				_localctx._name = this.ident();
-				}
-				this.state = 999;
-				this.match(CWScriptParser.EQ);
-				}
-				break;
-			}
+			this.state = 715;
+			this.match(CWScriptParser.CATCH);
 			{
-			this.state = 1003;
-			_localctx._value = this.expr(0);
+			this.state = 716;
+			_localctx._ty = this.typeExpr(0);
+			}
+			this.state = 717;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 721;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 718;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 723;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 724;
+			this.match(CWScriptParser.RBRACE);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public closureExpr_(): ClosureExpr_Context {
+		let _localctx: ClosureExpr_Context = new ClosureExpr_Context(this._ctx, this.state);
+		this.enterRule(_localctx, 84, CWScriptParser.RULE_closureExpr_);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 727;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.BANG) {
+				{
+				this.state = 726;
+				_localctx._fallible = this.match(CWScriptParser.BANG);
+				}
+			}
+
+			this.state = 729;
+			this.match(CWScriptParser.BAR);
+			this.state = 731;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
+				{
+				this.state = 730;
+				_localctx._params = this.paramList();
+				}
+			}
+
+			this.state = 733;
+			this.match(CWScriptParser.BAR);
+			this.state = 736;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.ARROW) {
+				{
+				this.state = 734;
+				this.match(CWScriptParser.ARROW);
+				{
+				this.state = 735;
+				_localctx._returnTy = this.typeExpr(0);
+				}
+				}
+			}
+
+			{
+			this.state = 738;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 742;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE_NOW) | (1 << CWScriptParser.EXEC_NOW) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.CONST - 32)) | (1 << (CWScriptParser.FAIL - 32)) | (1 << (CWScriptParser.RETURN - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 739;
+				_localctx._stmt = this.stmt();
+				_localctx._body.push(_localctx._stmt);
+				}
+				}
+				this.state = 744;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 745;
+			this.match(CWScriptParser.RBRACE);
 			}
 			}
 		}
@@ -4749,31 +3484,74 @@ export class CWScriptParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public memberVal(): MemberValContext {
-		let _localctx: MemberValContext = new MemberValContext(this._ctx, this.state);
-		this.enterRule(_localctx, 112, CWScriptParser.RULE_memberVal);
+	public structExpr_(): StructExpr_Context {
+		let _localctx: StructExpr_Context = new StructExpr_Context(this._ctx, this.state);
+		this.enterRule(_localctx, 86, CWScriptParser.RULE_structExpr_);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
 			{
-			this.state = 1005;
-			_localctx._name = this.ident();
+			this.state = 747;
+			_localctx._ty = this.typeExpr(0);
 			}
-			this.state = 1008;
+			this.state = 748;
+			this.match(CWScriptParser.LBRACE);
+			this.state = 750;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la === CWScriptParser.COLON) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.Ident) {
 				{
-				this.state = 1006;
-				this.match(CWScriptParser.COLON);
-				{
-				this.state = 1007;
-				_localctx._value = this.expr(0);
-				}
+				this.state = 749;
+				_localctx._fields = this.fieldList();
 				}
 			}
 
+			this.state = 752;
+			this.match(CWScriptParser.RBRACE);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public tupleExpr_(): TupleExpr_Context {
+		let _localctx: TupleExpr_Context = new TupleExpr_Context(this._ctx, this.state);
+		this.enterRule(_localctx, 88, CWScriptParser.RULE_tupleExpr_);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 754;
+			this.match(CWScriptParser.LBRACK);
+			this.state = 758;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.QUERY_NOW) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.TRY) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)) | (1 << (CWScriptParser.BANG - 32)))) !== 0) || ((((_la - 66)) & ~0x1F) === 0 && ((1 << (_la - 66)) & ((1 << (CWScriptParser.BAR - 66)) | (1 << (CWScriptParser.Ident - 66)) | (1 << (CWScriptParser.TypeVar - 66)) | (1 << (CWScriptParser.StringLiteral - 66)) | (1 << (CWScriptParser.IntLiteral - 66)) | (1 << (CWScriptParser.DecLiteral - 66)) | (1 << (CWScriptParser.BoolLiteral - 66)))) !== 0)) {
+				{
+				{
+				this.state = 755;
+				_localctx._expr = this.expr(0);
+				_localctx._elements.push(_localctx._expr);
+				}
+				}
+				this.state = 760;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 761;
+			this.match(CWScriptParser.RBRACK);
 			}
 		}
 		catch (re) {
@@ -4793,16 +3571,16 @@ export class CWScriptParser extends Parser {
 	// @RuleVersion(0)
 	public literal(): LiteralContext {
 		let _localctx: LiteralContext = new LiteralContext(this._ctx, this.state);
-		this.enterRule(_localctx, 114, CWScriptParser.RULE_literal);
+		this.enterRule(_localctx, 90, CWScriptParser.RULE_literal);
 		try {
-			this.state = 1015;
+			this.state = 768;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case CWScriptParser.StringLiteral:
 				_localctx = new StringLitContext(_localctx);
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 1010;
+				this.state = 763;
 				this.match(CWScriptParser.StringLiteral);
 				}
 				break;
@@ -4810,7 +3588,7 @@ export class CWScriptParser extends Parser {
 				_localctx = new IntLitContext(_localctx);
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 1011;
+				this.state = 764;
 				this.match(CWScriptParser.IntLiteral);
 				}
 				break;
@@ -4818,7 +3596,7 @@ export class CWScriptParser extends Parser {
 				_localctx = new DecLitContext(_localctx);
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 1012;
+				this.state = 765;
 				this.match(CWScriptParser.DecLiteral);
 				}
 				break;
@@ -4826,7 +3604,7 @@ export class CWScriptParser extends Parser {
 				_localctx = new BoolLitContext(_localctx);
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 1013;
+				this.state = 766;
 				this.match(CWScriptParser.BoolLiteral);
 				}
 				break;
@@ -4834,7 +3612,7 @@ export class CWScriptParser extends Parser {
 				_localctx = new NoneLitContext(_localctx);
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 1014;
+				this.state = 767;
 				this.match(CWScriptParser.NONE);
 				}
 				break;
@@ -4856,76 +3634,213 @@ export class CWScriptParser extends Parser {
 		}
 		return _localctx;
 	}
+
+	public typeExpr(): TypeExprContext;
+	public typeExpr(_p: number): TypeExprContext;
 	// @RuleVersion(0)
-	public ifStmt_(): IfStmt_Context {
-		let _localctx: IfStmt_Context = new IfStmt_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 116, CWScriptParser.RULE_ifStmt_);
+	public typeExpr(_p?: number): TypeExprContext {
+		if (_p === undefined) {
+			_p = 0;
+		}
+
+		let _parentctx: ParserRuleContext = this._ctx;
+		let _parentState: number = this.state;
+		let _localctx: TypeExprContext = new TypeExprContext(this._ctx, _parentState);
+		let _prevctx: TypeExprContext = _localctx;
+		let _startState: number = 92;
+		this.enterRecursionRule(_localctx, 92, CWScriptParser.RULE_typeExpr, _p);
 		try {
+			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1017;
-			this.match(CWScriptParser.IF);
-			{
-			this.state = 1018;
-			_localctx._pred = this.expr(0);
-			}
-			{
-			this.state = 1019;
-			_localctx._body = this.block();
-			}
-			this.state = 1021;
+			this.state = 787;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 127, this._ctx) ) {
+			switch ( this.interpreter.adaptivePredict(this._input, 99, this._ctx) ) {
 			case 1:
 				{
-				this.state = 1020;
-				_localctx._else_ = this.elseClause();
-				}
-				break;
-			}
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				_localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return _localctx;
-	}
-	// @RuleVersion(0)
-	public elseClause(): ElseClauseContext {
-		let _localctx: ElseClauseContext = new ElseClauseContext(this._ctx, this.state);
-		this.enterRule(_localctx, 118, CWScriptParser.RULE_elseClause);
-		try {
-			this.state = 1027;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 128, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1023;
-				this.match(CWScriptParser.ELSE);
-				this.state = 1024;
-				this.block();
+				_localctx = new GroupedTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+
+				this.state = 771;
+				this.match(CWScriptParser.LPAREN);
+				this.state = 772;
+				this.typeExpr(0);
+				this.state = 773;
+				this.match(CWScriptParser.RPAREN);
 				}
 				break;
 
 			case 2:
-				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 1025;
-				this.match(CWScriptParser.ELSE);
-				this.state = 1026;
-				this.stmt();
+				_localctx = new ArrayTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 775;
+				this.match(CWScriptParser.LBRACK);
+				this.state = 776;
+				(_localctx as ArrayTypeExprContext)._ty = this.typeExpr(0);
+				this.state = 777;
+				this.match(CWScriptParser.SEMI);
+				this.state = 778;
+				(_localctx as ArrayTypeExprContext)._size = this.match(CWScriptParser.IntLiteral);
+				this.state = 779;
+				this.match(CWScriptParser.RBRACK);
 				}
 				break;
+
+			case 3:
+				{
+				_localctx = new StructDefnTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 781;
+				this.structDefn();
+				}
+				break;
+
+			case 4:
+				{
+				_localctx = new TupleDefnTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 782;
+				this.tupleDefn();
+				}
+				break;
+
+			case 5:
+				{
+				_localctx = new UnitDefnTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 783;
+				this.unitDefn();
+				}
+				break;
+
+			case 6:
+				{
+				_localctx = new EnumDefnTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 784;
+				this.enumDefn();
+				}
+				break;
+
+			case 7:
+				{
+				_localctx = new TypeVarExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 785;
+				this.typeVar();
+				}
+				break;
+
+			case 8:
+				{
+				_localctx = new IdentTypeExprContext(_localctx);
+				this._ctx = _localctx;
+				_prevctx = _localctx;
+				this.state = 786;
+				this.ident();
+				}
+				break;
+			}
+			this._ctx._stop = this._input.tryLT(-1);
+			this.state = 801;
+			this._errHandler.sync(this);
+			_alt = this.interpreter.adaptivePredict(this._input, 101, this._ctx);
+			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+				if (_alt === 1) {
+					if (this._parseListeners != null) {
+						this.triggerExitRuleEvent();
+					}
+					_prevctx = _localctx;
+					{
+					this.state = 799;
+					this._errHandler.sync(this);
+					switch ( this.interpreter.adaptivePredict(this._input, 100, this._ctx) ) {
+					case 1:
+						{
+						_localctx = new ParamzdTypeExprContext(new TypeExprContext(_parentctx, _parentState));
+						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_typeExpr);
+						this.state = 789;
+						if (!(this.precpred(this._ctx, 10))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 10)");
+						}
+						this.state = 790;
+						this.match(CWScriptParser.LBRACK);
+						this.state = 791;
+						(_localctx as ParamzdTypeExprContext)._typeArgs = this.typeExprList();
+						this.state = 792;
+						this.match(CWScriptParser.RBRACK);
+						}
+						break;
+
+					case 2:
+						{
+						_localctx = new MemberTypeExprContext(new TypeExprContext(_parentctx, _parentState));
+						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_typeExpr);
+						this.state = 794;
+						if (!(this.precpred(this._ctx, 9))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 9)");
+						}
+						this.state = 795;
+						this.match(CWScriptParser.DOT);
+						{
+						this.state = 796;
+						(_localctx as MemberTypeExprContext)._memberName = this.ident();
+						}
+						}
+						break;
+
+					case 3:
+						{
+						_localctx = new OptionTypeExprContext(new TypeExprContext(_parentctx, _parentState));
+						this.pushNewRecursionContext(_localctx, _startState, CWScriptParser.RULE_typeExpr);
+						this.state = 797;
+						if (!(this.precpred(this._ctx, 3))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
+						}
+						this.state = 798;
+						this.match(CWScriptParser.QUEST);
+						}
+						break;
+					}
+					}
+				}
+				this.state = 803;
+				this._errHandler.sync(this);
+				_alt = this.interpreter.adaptivePredict(this._input, 101, this._ctx);
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.unrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public typeVar(): TypeVarContext {
+		let _localctx: TypeVarContext = new TypeVarContext(this._ctx, this.state);
+		this.enterRule(_localctx, 94, CWScriptParser.RULE_typeVar);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 804;
+			this.match(CWScriptParser.TypeVar);
 			}
 		}
 		catch (re) {
@@ -4943,26 +3858,33 @@ export class CWScriptParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public forStmt_(): ForStmt_Context {
-		let _localctx: ForStmt_Context = new ForStmt_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 120, CWScriptParser.RULE_forStmt_);
+	public typeVarList(): TypeVarListContext {
+		let _localctx: TypeVarListContext = new TypeVarListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 96, CWScriptParser.RULE_typeVarList);
+		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1029;
-			this.match(CWScriptParser.FOR);
 			{
-			this.state = 1030;
-			_localctx._binding = this.let_binding();
+			this.state = 806;
+			this.typeVar();
+			this.state = 811;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 807;
+				this.match(CWScriptParser.COMMA);
+				this.state = 808;
+				this.typeVar();
+				}
+				}
+				this.state = 813;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
 			}
-			this.state = 1031;
-			this.match(CWScriptParser.IN);
-			{
-			this.state = 1032;
-			_localctx._iter = this.expr(0);
 			}
-			this.state = 1033;
-			_localctx._body = this.block();
 			}
 		}
 		catch (re) {
@@ -4982,16 +3904,15 @@ export class CWScriptParser extends Parser {
 	// @RuleVersion(0)
 	public ident(): IdentContext {
 		let _localctx: IdentContext = new IdentContext(this._ctx, this.state);
-		this.enterRule(_localctx, 122, CWScriptParser.RULE_ident);
+		this.enterRule(_localctx, 98, CWScriptParser.RULE_ident);
 		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-			this.state = 1037;
+			this.state = 816;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case CWScriptParser.Ident:
+				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 1035;
+				this.state = 814;
 				this.match(CWScriptParser.Ident);
 				}
 				break;
@@ -5019,16 +3940,396 @@ export class CWScriptParser extends Parser {
 			case CWScriptParser.FN:
 			case CWScriptParser.LET:
 			case CWScriptParser.STRUCT:
+			case CWScriptParser.TUPLE:
+			case CWScriptParser.UNIT:
 			case CWScriptParser.ENUM:
 			case CWScriptParser.TYPE:
 			case CWScriptParser.EMIT:
+				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 1036;
+				this.state = 815;
 				this.reservedKeyword();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public param(): ParamContext {
+		let _localctx: ParamContext = new ParamContext(this._ctx, this.state);
+		this.enterRule(_localctx, 100, CWScriptParser.RULE_param);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 818;
+			_localctx._name = this.ident();
+			}
+			this.state = 820;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la === CWScriptParser.QUEST) {
+				{
+				this.state = 819;
+				_localctx._optional = this.match(CWScriptParser.QUEST);
+				}
+			}
+
+			this.state = 822;
+			this.match(CWScriptParser.COLON);
+			{
+			this.state = 824;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || _la === CWScriptParser.Ident || _la === CWScriptParser.TypeVar) {
+				{
+				this.state = 823;
+				_localctx._ty = this.typeExpr(0);
+				}
+			}
+
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public field(): FieldContext {
+		let _localctx: FieldContext = new FieldContext(this._ctx, this.state);
+		this.enterRule(_localctx, 102, CWScriptParser.RULE_field);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 826;
+			_localctx._name = this.ident();
+			}
+			this.state = 827;
+			this.match(CWScriptParser.COLON);
+			{
+			this.state = 828;
+			_localctx._ty = this.typeExpr(0);
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public namedArg(): NamedArgContext {
+		let _localctx: NamedArgContext = new NamedArgContext(this._ctx, this.state);
+		this.enterRule(_localctx, 104, CWScriptParser.RULE_namedArg);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 830;
+			_localctx._name = this.ident();
+			}
+			this.state = 831;
+			this.match(CWScriptParser.EQ);
+			{
+			this.state = 832;
+			_localctx._value = this.expr(0);
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public arg(): ArgContext {
+		let _localctx: ArgContext = new ArgContext(this._ctx, this.state);
+		this.enterRule(_localctx, 106, CWScriptParser.RULE_arg);
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 836;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 106, this._ctx) ) {
+			case 1:
+				{
+				this.state = 834;
+				this.expr(0);
+				}
+				break;
+
+			case 2:
+				{
+				this.state = 835;
+				this.namedArg();
+				}
+				break;
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public identList(): IdentListContext {
+		let _localctx: IdentListContext = new IdentListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 108, CWScriptParser.RULE_identList);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 838;
+			this.ident();
+			this.state = 843;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 839;
+				this.match(CWScriptParser.COMMA);
+				this.state = 840;
+				this.ident();
+				}
+				}
+				this.state = 845;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public paramList(): ParamListContext {
+		let _localctx: ParamListContext = new ParamListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 110, CWScriptParser.RULE_paramList);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 846;
+			this.param();
+			this.state = 851;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 847;
+				this.match(CWScriptParser.COMMA);
+				this.state = 848;
+				this.param();
+				}
+				}
+				this.state = 853;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public typeExprList(): TypeExprListContext {
+		let _localctx: TypeExprListContext = new TypeExprListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 112, CWScriptParser.RULE_typeExprList);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 854;
+			this.typeExpr(0);
+			this.state = 859;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 855;
+				this.match(CWScriptParser.COMMA);
+				this.state = 856;
+				this.typeExpr(0);
+				}
+				}
+				this.state = 861;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public fieldList(): FieldListContext {
+		let _localctx: FieldListContext = new FieldListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 114, CWScriptParser.RULE_fieldList);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 862;
+			this.field();
+			this.state = 867;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 863;
+				this.match(CWScriptParser.COMMA);
+				this.state = 864;
+				this.field();
+				}
+				}
+				this.state = 869;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public argList(): ArgListContext {
+		let _localctx: ArgListContext = new ArgListContext(this._ctx, this.state);
+		this.enterRule(_localctx, 116, CWScriptParser.RULE_argList);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			{
+			this.state = 870;
+			this.arg();
+			this.state = 875;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la === CWScriptParser.COMMA) {
+				{
+				{
+				this.state = 871;
+				this.match(CWScriptParser.COMMA);
+				this.state = 872;
+				this.arg();
+				}
+				}
+				this.state = 877;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
 			}
 			}
 		}
@@ -5049,14 +4350,14 @@ export class CWScriptParser extends Parser {
 	// @RuleVersion(0)
 	public reservedKeyword(): ReservedKeywordContext {
 		let _localctx: ReservedKeywordContext = new ReservedKeywordContext(this._ctx, this.state);
-		this.enterRule(_localctx, 124, CWScriptParser.RULE_reservedKeyword);
+		this.enterRule(_localctx, 118, CWScriptParser.RULE_reservedKeyword);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1039;
+			this.state = 878;
 			_la = this._input.LA(1);
-			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0))) {
+			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND) | (1 << CWScriptParser.OR))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0))) {
 			this._errHandler.recoverInline(this);
 			} else {
 				if (this._input.LA(1) === Token.EOF) {
@@ -5085,80 +4386,77 @@ export class CWScriptParser extends Parser {
 
 	public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): boolean {
 		switch (ruleIndex) {
-		case 29:
-			return this.typeExpr_sempred(_localctx as TypeExprContext, predIndex);
-
-		case 49:
+		case 38:
 			return this.expr_sempred(_localctx as ExprContext, predIndex);
-		}
-		return true;
-	}
-	private typeExpr_sempred(_localctx: TypeExprContext, predIndex: number): boolean {
-		switch (predIndex) {
-		case 0:
-			return this.precpred(this._ctx, 5);
 
-		case 1:
-			return this.precpred(this._ctx, 4);
+		case 46:
+			return this.typeExpr_sempred(_localctx as TypeExprContext, predIndex);
 		}
 		return true;
 	}
 	private expr_sempred(_localctx: ExprContext, predIndex: number): boolean {
 		switch (predIndex) {
-		case 2:
-			return this.precpred(this._ctx, 28);
-
-		case 3:
-			return this.precpred(this._ctx, 27);
-
-		case 4:
-			return this.precpred(this._ctx, 26);
-
-		case 5:
-			return this.precpred(this._ctx, 25);
-
-		case 6:
-			return this.precpred(this._ctx, 23);
-
-		case 7:
-			return this.precpred(this._ctx, 22);
-
-		case 8:
-			return this.precpred(this._ctx, 21);
-
-		case 9:
-			return this.precpred(this._ctx, 20);
-
-		case 10:
-			return this.precpred(this._ctx, 19);
-
-		case 11:
+		case 0:
 			return this.precpred(this._ctx, 18);
 
-		case 12:
+		case 1:
 			return this.precpred(this._ctx, 17);
 
-		case 13:
+		case 2:
 			return this.precpred(this._ctx, 16);
 
-		case 14:
-			return this.precpred(this._ctx, 15);
+		case 3:
+			return this.precpred(this._ctx, 14);
 
-		case 15:
-			return this.precpred(this._ctx, 12);
+		case 4:
+			return this.precpred(this._ctx, 13);
 
-		case 16:
+		case 5:
 			return this.precpred(this._ctx, 11);
 
-		case 17:
-			return this.precpred(this._ctx, 1);
+		case 6:
+			return this.precpred(this._ctx, 10);
+
+		case 7:
+			return this.precpred(this._ctx, 9);
+
+		case 8:
+			return this.precpred(this._ctx, 23);
+
+		case 9:
+			return this.precpred(this._ctx, 22);
+
+		case 10:
+			return this.precpred(this._ctx, 21);
+
+		case 11:
+			return this.precpred(this._ctx, 20);
+
+		case 12:
+			return this.precpred(this._ctx, 19);
+
+		case 13:
+			return this.precpred(this._ctx, 12);
+		}
+		return true;
+	}
+	private typeExpr_sempred(_localctx: TypeExprContext, predIndex: number): boolean {
+		switch (predIndex) {
+		case 14:
+			return this.precpred(this._ctx, 10);
+
+		case 15:
+			return this.precpred(this._ctx, 9);
+
+		case 16:
+			return this.precpred(this._ctx, 3);
 		}
 		return true;
 	}
 
 	private static readonly _serializedATNSegments: number = 2;
 	private static readonly _serializedATNSegment0: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03`\u0414\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03c\u0373\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
@@ -5168,533 +4466,450 @@ export class CWScriptParser extends Parser {
 		"\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x04)\t)\x04*\t*\x04+\t+" +
 		"\x04,\t,\x04-\t-\x04.\t.\x04/\t/\x040\t0\x041\t1\x042\t2\x043\t3\x044" +
 		"\t4\x045\t5\x046\t6\x047\t7\x048\t8\x049\t9\x04:\t:\x04;\t;\x04<\t<\x04" +
-		"=\t=\x04>\t>\x04?\t?\x04@\t@\x03\x02\x03\x02\x07\x02\x83\n\x02\f\x02\x0E" +
-		"\x02\x86\v\x02\x03\x02\x03\x02\x03\x03\x03\x03\x03\x03\x03\x03\x05\x03" +
-		"\x8E\n\x03\x03\x04\x07\x04\x91\n\x04\f\x04\x0E\x04\x94\v\x04\x03\x04\x03" +
-		"\x04\x03\x04\x03\x04\x05\x04\x9A\n\x04\x03\x04\x03\x04\x05\x04\x9E\n\x04" +
-		"\x03\x04\x03\x04\x03\x05\x07\x05\xA3\n\x05\f\x05\x0E\x05\xA6\v\x05\x03" +
-		"\x05\x03\x05\x03\x05\x03\x05\x05\x05\xAC\n\x05\x03\x05\x03\x05\x03\x06" +
-		"\x03\x06\x07\x06\xB2\n\x06\f\x06\x0E\x06\xB5\v\x06\x03\x06\x03\x06\x03" +
-		"\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x07" +
-		"\x07\xC2\n\x07\f\x07\x0E\x07\xC5\v\x07\x03\x07\x03\x07\x03\x07\x03\x07" +
-		"\x03\x07\x05\x07\xCC\n\x07\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03" +
-		"\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x05\b\xDE\n\b\x03\t" +
-		"\x07\t\xE1\n\t\f\t\x0E\t\xE4\v\t\x03\t\x03\t\x05\t\xE8\n\t\x03\t\x03\t" +
-		"\x03\t\x03\t\x05\t\xEE\n\t\x05\t\xF0\n\t\x03\n\x03\n\x03\n\x07\n\xF5\n" +
-		"\n\f\n\x0E\n\xF8\v\n\x03\v\x03\v\x03\v\x03\v\x07\v\xFE\n\v\f\v\x0E\v\u0101" +
-		"\v\v\x05\v\u0103\n\v\x03\v\x03\v\x03\f\x03\f\x03\f\x03\r\x03\r\x03\r\x03" +
-		"\x0E\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x07\x0E\u0112\n\x0E\f\x0E\x0E\x0E" +
-		"\u0115\v\x0E\x03\x0E\x05\x0E\u0118\n\x0E\x05\x0E\u011A\n\x0E\x03\x0E\x03" +
-		"\x0E\x03\x0F\x03\x0F\x03\x0F\x03\x10\x03\x10\x03\x10\x03\x10\x03\x10\x07" +
-		"\x10\u0126\n\x10\f\x10\x0E\x10\u0129\v\x10\x03\x10\x05\x10\u012C\n\x10" +
-		"\x05\x10\u012E\n\x10\x03\x10\x03\x10\x03\x11\x03\x11\x03\x11\x07\x11\u0135" +
-		"\n\x11\f\x11\x0E\x11\u0138\v\x11\x03\x11\x03\x11\x03\x12\x03\x12\x03\x12" +
-		"\x03\x12\x03\x12\x05\x12\u0141\n\x12\x03\x12\x03\x12\x03\x12\x03\x12\x03" +
-		"\x12\x07\x12\u0148\n\x12\f\x12\x0E\x12\u014B\v\x12\x03\x12\x03\x12\x03" +
-		"\x12\x03\x12\x03\x12\x05\x12\u0152\n\x12\x05\x12\u0154\n\x12\x03\x13\x03" +
-		"\x13\x03\x13\x05\x13\u0159\n\x13\x03\x13\x03\x13\x03\x14\x03\x14\x03\x14" +
-		"\x03\x14\x03\x14\x03\x15\x03\x15\x03\x15\x03\x15\x03\x16\x03\x16\x05\x16" +
-		"\u0168\n\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x03\x17\x03\x17\x05" +
-		"\x17\u0171\n\x17\x03\x17\x03\x17\x03\x17\x03\x17\x03\x18\x03\x18\x03\x18" +
-		"\x03\x18\x03\x18\x03\x18\x05\x18\u017D\n\x18\x03\x18\x03\x18\x03\x19\x03" +
-		"\x19\x03\x19\x03\x19\x03\x19\x03\x19\x05\x19\u0187\n\x19\x03\x1A\x03\x1A" +
-		"\x03\x1A\x05\x1A\u018C\n\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1B\x03" +
-		"\x1B\x03\x1B\x03\x1B\x03\x1B\x03\x1B\x05\x1B\u0198\n\x1B\x07\x1B\u019A" +
-		"\n\x1B\f\x1B\x0E\x1B\u019D\v\x1B\x03\x1B\x03\x1B\x03\x1C\x03\x1C\x05\x1C" +
-		"\u01A3\n\x1C\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x05\x1D\u01A9\n\x1D\x03\x1D" +
-		"\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x05\x1D\u01B1\n\x1D\x03\x1D\x03" +
-		"\x1D\x05\x1D\u01B5\n\x1D\x03\x1E\x03\x1E\x03\x1E\x03\x1F\x03\x1F\x03\x1F" +
-		"\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F" +
-		"\x03\x1F\x07\x1F\u01C7\n\x1F\f\x1F\x0E\x1F\u01CA\v\x1F\x05\x1F\u01CC\n" +
-		"\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x07\x1F\u01D4\n\x1F" +
-		"\f\x1F\x0E\x1F\u01D7\v\x1F\x03\x1F\x03\x1F\x03\x1F\x05\x1F\u01DC\n\x1F" +
-		"\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x05\x1F\u01E3\n\x1F\x03\x1F\x07" +
-		"\x1F\u01E6\n\x1F\f\x1F\x0E\x1F\u01E9\v\x1F\x03 \x03 \x03 \x05 \u01EE\n" +
-		" \x03 \x03 \x03!\x03!\x05!\u01F4\n!\x03!\x03!\x05!\u01F8\n!\x03!\x03!" +
-		"\x03!\x03!\x03\"\x03\"\x03\"\x03#\x03#\x03#\x07#\u0204\n#\f#\x0E#\u0207" +
-		"\v#\x03$\x03$\x03$\x03$\x03$\x05$\u020E\n$\x03$\x03$\x03$\x03$\x03%\x03" +
-		"%\x03%\x05%\u0217\n%\x03&\x03&\x05&\u021B\n&\x03&\x03&\x03&\x03&\x07&" +
-		"\u0221\n&\f&\x0E&\u0224\v&\x05&\u0226\n&\x03&\x03&\x03&\x05&\u022B\n&" +
-		"\x03&\x03&\x03&\x03&\x07&\u0231\n&\f&\x0E&\u0234\v&\x03&\x05&\u0237\n" +
-		"&\x03&\x03&\x05&\u023B\n&\x03\'\x03\'\x03\'\x03\'\x03\'\x03(\x03(\x03" +
-		"(\x05(\u0245\n(\x03(\x03(\x03(\x05(\u024A\n(\x03(\x03(\x03)\x03)\x05)" +
-		"\u0250\n)\x03)\x03)\x03)\x05)\u0255\n)\x03)\x05)\u0258\n)\x03*\x03*\x03" +
-		"*\x03*\x07*\u025E\n*\f*\x0E*\u0261\v*\x03*\x05*\u0264\n*\x05*\u0266\n" +
-		"*\x03*\x03*\x03+\x03+\x03+\x03+\x07+\u026E\n+\f+\x0E+\u0271\v+\x03+\x03" +
-		"+\x07+\u0275\n+\f+\x0E+\u0278\v+\x03+\x03+\x07+\u027C\n+\f+\x0E+\u027F" +
-		"\v+\x03+\x03+\x07+\u0283\n+\f+\x0E+\u0286\v+\x03+\x03+\x07+\u028A\n+\f" +
-		"+\x0E+\u028D\v+\x03+\x03+\x07+\u0291\n+\f+\x0E+\u0294\v+\x03+\x03+\x07" +
-		"+\u0298\n+\f+\x0E+\u029B\v+\x03+\x05+\u029E\n+\x03+\x03+\x03+\x05+\u02A3" +
-		"\n+\x03+\x07+\u02A6\n+\f+\x0E+\u02A9\v+\x03+\x05+\u02AC\n+\x03+\x03+\x03" +
-		"+\x03+\x07+\u02B2\n+\f+\x0E+\u02B5\v+\x03+\x05+\u02B8\n+\x03+\x03+\x05" +
-		"+\u02BC\n+\x03+\x03+\x05+\u02C0\n+\x03+\x07+\u02C3\n+\f+\x0E+\u02C6\v" +
-		"+\x03+\x05+\u02C9\n+\x03+\x03+\x03+\x07+\u02CE\n+\f+\x0E+\u02D1\v+\x03" +
-		"+\x03+\x03+\x07+\u02D6\n+\f+\x0E+\u02D9\v+\x03+\x03+\x03+\x07+\u02DE\n" +
-		"+\f+\x0E+\u02E1\v+\x03+\x05+\u02E4\n+\x03,\x03,\x03,\x05,\u02E9\n,\x03" +
-		"-\x03-\x03-\x03-\x05-\u02EF\n-\x03.\x03.\x03.\x03.\x03.\x03/\x03/\x03" +
-		"/\x05/\u02F9\n/\x030\x030\x030\x030\x070\u02FF\n0\f0\x0E0\u0302\v0\x03" +
-		"0\x030\x030\x030\x030\x030\x070\u030A\n0\f0\x0E0\u030D\v0\x030\x030\x05" +
-		"0\u0311\n0\x031\x031\x031\x031\x032\x032\x032\x032\x032\x032\x032\x03" +
-		"2\x032\x032\x072\u0321\n2\f2\x0E2\u0324\v2\x032\x032\x052\u0328\n2\x03" +
-		"3\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x03" +
-		"3\x033\x033\x033\x033\x033\x033\x033\x073\u0340\n3\f3\x0E3\u0343\v3\x05" +
-		"3\u0345\n3\x033\x033\x053\u0349\n3\x033\x033\x033\x033\x073\u034F\n3\f" +
-		"3\x0E3\u0352\v3\x033\x053\u0355\n3\x053\u0357\n3\x033\x033\x033\x033\x05" +
-		"3\u035D\n3\x033\x033\x053\u0361\n3\x033\x033\x033\x033\x033\x033\x033" +
-		"\x033\x033\x033\x073\u036D\n3\f3\x0E3\u0370\v3\x033\x033\x033\x033\x03" +
-		"3\x033\x033\x053\u0379\n3\x033\x033\x033\x033\x073\u037F\n3\f3\x0E3\u0382" +
-		"\v3\x053\u0384\n3\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x03" +
-		"3\x033\x033\x033\x033\x033\x033\x033\x053\u0398\n3\x033\x033\x033\x03" +
-		"3\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x033\x073\u03A9\n" +
-		"3\f3\x0E3\u03AC\v3\x034\x034\x034\x034\x074\u03B2\n4\f4\x0E4\u03B5\v4" +
-		"\x054\u03B7\n4\x034\x034\x035\x055\u03BC\n5\x035\x035\x035\x055\u03C1" +
-		"\n5\x035\x035\x055\u03C5\n5\x036\x036\x036\x076\u03CA\n6\f6\x0E6\u03CD" +
-		"\v6\x036\x036\x037\x037\x037\x077\u03D4\n7\f7\x0E7\u03D7\v7\x037\x057" +
-		"\u03DA\n7\x038\x038\x038\x038\x038\x038\x038\x038\x038\x038\x038\x058" +
-		"\u03E7\n8\x039\x039\x039\x059\u03EC\n9\x039\x039\x03:\x03:\x03:\x05:\u03F3" +
-		"\n:\x03;\x03;\x03;\x03;\x03;\x05;\u03FA\n;\x03<\x03<\x03<\x03<\x05<\u0400" +
-		"\n<\x03=\x03=\x03=\x03=\x05=\u0406\n=\x03>\x03>\x03>\x03>\x03>\x03>\x03" +
-		"?\x03?\x05?\u0410\n?\x03@\x03@\x03@\x02\x02\x04<dA\x02\x02\x04\x02\x06" +
-		"\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02" +
-		"\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02.\x020\x02" +
-		"2\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02L\x02" +
-		"N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02b\x02d\x02f\x02h\x02" +
-		"j\x02l\x02n\x02p\x02r\x02t\x02v\x02x\x02z\x02|\x02~\x02\x02\n\x04\x02" +
-		"\x10\x12\x1F\x1F\b\x02EEIIKKMMOOQQ\x03\x0289\x05\x02LLNNPP\x04\x02HHJ" +
-		"J\x03\x02RU\x03\x02FG\x07\x02\x04\n\x10\x18\x1C\x1C %),\x02\u0498\x02" +
-		"\x84\x03\x02\x02\x02\x04\x8D\x03\x02\x02\x02\x06\x92\x03\x02\x02\x02\b" +
-		"\xA4\x03\x02\x02\x02\n\xAF\x03\x02\x02\x02\f\xCB\x03\x02\x02\x02\x0E\xDD" +
-		"\x03\x02\x02\x02\x10\xE2\x03\x02\x02\x02\x12\xF1\x03\x02\x02\x02\x14\xF9" +
-		"\x03\x02\x02\x02\x16\u0106\x03\x02\x02\x02\x18\u0109\x03\x02\x02\x02\x1A" +
-		"\u010C\x03\x02\x02\x02\x1C\u011D\x03\x02\x02\x02\x1E\u0120\x03\x02\x02" +
-		"\x02 \u0131\x03\x02\x02\x02\"\u0153\x03\x02\x02\x02$\u0158\x03\x02\x02" +
-		"\x02&\u015C\x03\x02\x02\x02(\u0161\x03\x02\x02\x02*\u0165\x03\x02\x02" +
-		"\x02,\u016E\x03\x02\x02\x02.\u0176\x03\x02\x02\x020\u0180\x03\x02\x02" +
-		"\x022\u0188\x03\x02\x02\x024\u0191\x03\x02\x02\x026\u01A2\x03\x02\x02" +
-		"\x028\u01B4\x03\x02\x02\x02:\u01B6\x03\x02\x02\x02<\u01DB\x03\x02\x02" +
-		"\x02>\u01ED\x03\x02\x02\x02@\u01F1\x03\x02\x02\x02B\u01FD\x03\x02\x02" +
-		"\x02D\u0200\x03\x02\x02\x02F\u0208\x03\x02\x02\x02H\u0216\x03\x02\x02" +
-		"\x02J\u023A\x03\x02\x02\x02L\u023C\x03\x02\x02\x02N\u0241\x03\x02\x02" +
-		"\x02P\u024D\x03\x02\x02\x02R\u0259\x03\x02\x02\x02T\u02E3\x03\x02\x02" +
-		"\x02V\u02E5\x03\x02\x02\x02X\u02EA\x03\x02\x02\x02Z\u02F0\x03\x02\x02" +
-		"\x02\\\u02F5\x03\x02\x02\x02^\u0310\x03\x02\x02\x02`\u0312\x03\x02\x02" +
-		"\x02b\u0327\x03\x02\x02\x02d\u035C\x03\x02\x02\x02f\u03AD\x03\x02\x02" +
-		"\x02h\u03BB\x03\x02\x02\x02j\u03C6\x03\x02\x02\x02l\u03D0\x03\x02\x02" +
-		"\x02n\u03E6\x03\x02\x02\x02p\u03EB\x03\x02\x02\x02r\u03EF\x03\x02\x02" +
-		"\x02t\u03F9\x03\x02\x02\x02v\u03FB\x03\x02\x02\x02x\u0405\x03\x02\x02" +
-		"\x02z\u0407\x03\x02\x02\x02|\u040F\x03\x02\x02\x02~\u0411\x03\x02\x02" +
-		"\x02\x80\x83\x05\x04\x03\x02\x81\x83\x07:\x02\x02\x82\x80\x03\x02\x02" +
-		"\x02\x82\x81\x03\x02\x02\x02\x83\x86\x03\x02\x02\x02\x84\x82\x03\x02\x02" +
-		"\x02\x84\x85\x03\x02\x02\x02\x85\x87\x03\x02\x02\x02\x86\x84\x03\x02\x02" +
-		"\x02\x87\x88\x07\x02\x02\x03\x88\x03\x03\x02\x02\x02\x89\x8E\x05\f\x07" +
-		"\x02\x8A\x8E\x05\x06\x04\x02\x8B\x8E\x05\b\x05\x02\x8C\x8E\x05T+\x02\x8D" +
-		"\x89\x03\x02\x02\x02\x8D\x8A\x03\x02\x02\x02\x8D\x8B\x03\x02\x02\x02\x8D" +
-		"\x8C\x03\x02\x02\x02\x8E\x05\x03\x02\x02\x02\x8F\x91\x05P)\x02\x90\x8F" +
-		"\x03\x02\x02\x02\x91\x94\x03\x02\x02\x02\x92\x90\x03\x02\x02\x02\x92\x93" +
-		"\x03\x02\x02\x02\x93\x95\x03\x02\x02\x02\x94\x92\x03\x02\x02\x02\x95\x96" +
-		"\x07\x04\x02\x02\x96\x99\x05|?\x02\x97\x98\x07\b\x02\x02\x98\x9A\x05D" +
-		"#\x02\x99\x97\x03\x02\x02\x02\x99\x9A\x03\x02\x02\x02\x9A\x9D\x03\x02" +
-		"\x02\x02\x9B\x9C\x07\x07\x02\x02\x9C\x9E\x05D#\x02\x9D\x9B\x03\x02\x02" +
-		"\x02\x9D\x9E\x03\x02\x02\x02\x9E\x9F\x03\x02\x02\x02\x9F\xA0\x05\n\x06" +
-		"\x02\xA0\x07\x03\x02\x02\x02\xA1\xA3\x05P)\x02\xA2\xA1\x03\x02\x02\x02" +
-		"\xA3\xA6\x03\x02\x02\x02\xA4\xA2\x03\x02\x02\x02\xA4\xA5\x03\x02\x02\x02" +
-		"\xA5\xA7\x03\x02\x02\x02\xA6\xA4\x03\x02\x02\x02\xA7\xA8\x07\x05\x02\x02" +
-		"\xA8\xAB\x05|?\x02\xA9\xAA\x07\b\x02\x02\xAA\xAC\x05D#\x02\xAB\xA9\x03" +
-		"\x02\x02\x02\xAB\xAC\x03\x02\x02\x02\xAC\xAD\x03\x02\x02\x02\xAD\xAE\x05" +
-		"\n\x06\x02\xAE\t\x03\x02\x02\x02\xAF\xB3\x073\x02\x02\xB0\xB2\x05\x0E" +
-		"\b\x02\xB1\xB0\x03\x02\x02\x02\xB2\xB5\x03\x02\x02\x02\xB3\xB1\x03\x02" +
-		"\x02\x02\xB3\xB4\x03\x02\x02\x02\xB4\xB6\x03\x02\x02\x02\xB5\xB3\x03\x02" +
-		"\x02\x02\xB6\xB7\x074\x02\x02\xB7\v\x03\x02\x02\x02\xB8\xB9\x07\x06\x02" +
-		"\x02\xB9\xBA\x07L\x02\x02\xBA\xBB\x07\x16\x02\x02\xBB\xCC\x07X\x02\x02" +
-		"\xBC\xBD\x07\x06\x02\x02\xBD\xBE\x073\x02\x02\xBE\xC3\x05|?\x02\xBF\xC0" +
-		"\x076\x02\x02\xC0\xC2\x05|?\x02\xC1\xBF\x03\x02\x02\x02\xC2\xC5\x03\x02" +
-		"\x02\x02\xC3\xC1\x03\x02\x02\x02\xC3\xC4\x03\x02\x02\x02\xC4\xC6\x03\x02" +
-		"\x02\x02\xC5\xC3\x03\x02\x02\x02\xC6\xC7\x074\x02\x02\xC7\xC8\x03\x02" +
-		"\x02\x02\xC8\xC9\x07\x16\x02\x02\xC9\xCA\x07X\x02\x02\xCA\xCC\x03\x02" +
-		"\x02\x02\xCB\xB8\x03\x02\x02\x02\xCB\xBC\x03\x02\x02\x02\xCC\r\x03\x02" +
-		"\x02\x02\xCD\xDE\x05H%\x02\xCE\xDE\x05Z.\x02\xCF\xDE\x05N(\x02\xD0\xDE" +
-		"\x05\x18\r\x02\xD1\xDE\x05\x1A\x0E\x02\xD2\xDE\x05\x1C\x0F\x02\xD3\xDE" +
-		"\x05\x1E\x10\x02\xD4\xDE\x05 \x11\x02\xD5\xDE\x05&\x14\x02\xD6\xDE\x05" +
-		"(\x15\x02\xD7\xDE\x05*\x16\x02\xD8\xDE\x05,\x17\x02\xD9\xDE\x05.\x18\x02" +
-		"\xDA\xDE\x05.\x18\x02\xDB\xDE\x050\x19\x02\xDC\xDE\x052\x1A\x02\xDD\xCD" +
-		"\x03\x02\x02\x02\xDD\xCE\x03\x02\x02\x02\xDD\xCF\x03\x02\x02\x02\xDD\xD0" +
-		"\x03\x02\x02\x02\xDD\xD1\x03\x02\x02\x02\xDD\xD2\x03\x02\x02\x02\xDD\xD3" +
-		"\x03\x02\x02\x02\xDD\xD4\x03\x02\x02\x02\xDD\xD5\x03\x02\x02\x02\xDD\xD6" +
-		"\x03\x02\x02\x02\xDD\xD7\x03\x02\x02\x02\xDD\xD8\x03\x02\x02\x02\xDD\xD9" +
-		"\x03\x02\x02\x02\xDD\xDA\x03\x02\x02\x02\xDD\xDB\x03\x02\x02\x02\xDD\xDC" +
-		"\x03\x02\x02\x02\xDE\x0F\x03\x02\x02\x02\xDF\xE1\x05P)\x02\xE0\xDF\x03" +
-		"\x02\x02\x02\xE1\xE4\x03\x02\x02\x02\xE2\xE0\x03\x02\x02\x02\xE2\xE3\x03" +
-		"\x02\x02\x02\xE3\xE5\x03\x02\x02\x02\xE4\xE2\x03\x02\x02\x02\xE5\xE7\x05" +
-		"|?\x02\xE6\xE8\x078\x02\x02\xE7\xE6\x03\x02\x02\x02\xE7\xE8\x03\x02\x02" +
-		"\x02\xE8\xEF\x03\x02\x02\x02\xE9\xEA\x07;\x02\x02\xEA\xED\x05<\x1F\x02" +
-		"\xEB\xEC\x07E\x02\x02\xEC\xEE\x05d3\x02\xED\xEB\x03\x02\x02\x02\xED\xEE" +
-		"\x03\x02\x02\x02\xEE\xF0\x03\x02\x02\x02\xEF\xE9\x03\x02\x02\x02\xEF\xF0" +
-		"\x03\x02\x02\x02\xF0\x11\x03\x02\x02\x02\xF1\xF6\x05\x10\t\x02\xF2\xF3" +
-		"\x076\x02\x02\xF3\xF5\x05\x10\t\x02\xF4\xF2\x03\x02\x02\x02\xF5\xF8\x03" +
-		"\x02\x02\x02\xF6\xF4\x03\x02\x02\x02\xF6\xF7\x03\x02\x02\x02\xF7\x13\x03" +
-		"\x02\x02\x02\xF8\xF6\x03\x02\x02\x02\xF9\u0102\x07/\x02\x02\xFA\xFF\x05" +
-		"\x10\t\x02\xFB\xFC\x076\x02\x02\xFC\xFE\x05\x10\t\x02\xFD\xFB\x03\x02" +
-		"\x02\x02\xFE\u0101\x03\x02\x02\x02\xFF\xFD\x03\x02\x02\x02\xFF\u0100\x03" +
-		"\x02\x02\x02\u0100\u0103\x03\x02\x02\x02\u0101\xFF\x03\x02\x02\x02\u0102" +
-		"\xFA\x03\x02\x02\x02\u0102\u0103\x03\x02\x02\x02\u0103\u0104\x03\x02\x02" +
-		"\x02\u0104\u0105\x070\x02\x02\u0105\x15\x03\x02\x02\x02\u0106\u0107\x05" +
-		"|?\x02\u0107\u0108\x05\x14\v\x02\u0108\x17\x03\x02\x02\x02\u0109\u010A" +
-		"\x07\t\x02\x02\u010A\u010B\x05\x16\f\x02\u010B\x19\x03\x02\x02\x02\u010C" +
-		"\u010D\x07\t\x02\x02\u010D\u0119\x073\x02\x02\u010E\u0113\x05\x16\f\x02" +
-		"\u010F\u0110\x076\x02\x02\u0110\u0112\x05\x16\f\x02\u0111\u010F\x03\x02" +
-		"\x02\x02\u0112\u0115\x03\x02\x02\x02\u0113\u0111\x03\x02\x02\x02\u0113" +
-		"\u0114\x03\x02\x02\x02\u0114\u0117\x03\x02\x02\x02\u0115\u0113\x03\x02" +
-		"\x02\x02\u0116\u0118\x076\x02\x02\u0117\u0116\x03\x02\x02\x02\u0117\u0118" +
-		"\x03\x02\x02\x02\u0118\u011A\x03\x02\x02\x02\u0119\u010E\x03\x02\x02\x02" +
-		"\u0119\u011A\x03\x02\x02\x02\u011A\u011B\x03\x02\x02\x02\u011B\u011C\x07" +
-		"4\x02\x02\u011C\x1B\x03\x02\x02\x02\u011D\u011E\x07\n\x02\x02\u011E\u011F" +
-		"\x05\x16\f\x02\u011F\x1D\x03\x02\x02\x02\u0120\u0121\x07\n\x02\x02\u0121" +
-		"\u012D\x073\x02\x02\u0122\u0127\x05\x16\f\x02\u0123\u0124\x076\x02\x02" +
-		"\u0124\u0126\x05\x16\f\x02\u0125\u0123\x03\x02\x02\x02\u0126\u0129\x03" +
-		"\x02\x02\x02\u0127\u0125\x03\x02\x02\x02\u0127\u0128\x03\x02\x02\x02\u0128" +
-		"\u012B\x03\x02\x02\x02\u0129\u0127\x03\x02\x02\x02\u012A\u012C\x076\x02" +
-		"\x02\u012B\u012A\x03\x02\x02\x02\u012B\u012C\x03\x02\x02\x02\u012C\u012E" +
-		"\x03\x02\x02\x02\u012D\u0122\x03\x02\x02\x02\u012D\u012E\x03\x02\x02\x02" +
-		"\u012E\u012F\x03\x02\x02\x02\u012F\u0130\x074\x02\x02\u0130\x1F\x03\x02" +
-		"\x02\x02\u0131\u0132\x07\x17\x02\x02\u0132\u0136\x073\x02\x02\u0133\u0135" +
-		"\x05\"\x12\x02\u0134\u0133\x03\x02\x02\x02\u0135\u0138\x03\x02\x02\x02" +
+		"=\t=\x03\x02\x07\x02|\n\x02\f\x02\x0E\x02\x7F\v\x02\x03\x02\x03\x02\x03" +
+		"\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03" +
+		"\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x05\x03\x94" +
+		"\n\x03\x03\x03\x05\x03\x97\n\x03\x03\x04\x03\x04\x03\x04\x05\x04\x9C\n" +
+		"\x04\x03\x04\x03\x04\x03\x04\x03\x04\x05\x04\xA2\n\x04\x03\x05\x03\x05" +
+		"\x03\x05\x03\x05\x03\x05\x03\x05\x05\x05\xAA\n\x05\x03\x06\x03\x06\x03" +
+		"\x06\x05\x06\xAF\n\x06\x03\x06\x03\x06\x05\x06\xB3\n\x06\x03\x06\x03\x06" +
+		"\x03\x06\x05\x06\xB8\n\x06\x03\x06\x05\x06\xBB\n\x06\x03\x07\x03\x07\x03" +
+		"\x07\x03\x07\x05\x07\xC1\n\x07\x03\x07\x03\x07\x03\x07\x03\x07\x05\x07" +
+		"\xC7\n\x07\x03\b\x03\b\x03\b\x03\b\x05\b\xCD\n\b\x03\t\x03\t\x03\t\x03" +
+		"\t\x03\t\x03\t\x05\t\xD5\n\t\x03\n\x03\n\x03\n\x03\n\x03\n\x03\n\x03\n" +
+		"\x05\n\xDE\n\n\x03\v\x03\v\x03\v\x05\v\xE3\n\v\x03\f\x03\f\x03\f\x05\f" +
+		"\xE8\n\f\x03\r\x03\r\x03\r\x03\r\x03\r\x03\r\x07\r\xF0\n\r\f\r\x0E\r\xF3" +
+		"\v\r\x03\r\x03\r\x05\r\xF7\n\r\x03\x0E\x03\x0E\x03\x0E\x05\x0E\xFC\n\x0E" +
+		"\x03\x0F\x03\x0F\x03\x0F\x05\x0F\u0101\n\x0F\x03\x10\x03\x10\x03\x10\x05" +
+		"\x10\u0106\n\x10\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11" +
+		"\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x05\x11\u0116" +
+		"\n\x11\x03\x12\x03\x12\x03\x12\x03\x12\x05\x12\u011C\n\x12\x03\x12\x03" +
+		"\x12\x05\x12\u0120\n\x12\x03\x12\x03\x12\x07\x12\u0124\n\x12\f\x12\x0E" +
+		"\x12\u0127\v\x12\x03\x12\x03\x12\x05\x12\u012B\n\x12\x03\x13\x03\x13\x03" +
+		"\x13\x03\x13\x05\x13\u0131\n\x13\x03\x13\x03\x13\x07\x13\u0135\n\x13\f" +
+		"\x13\x0E\x13\u0138\v\x13\x03\x13\x03\x13\x05\x13\u013C\n\x13\x03\x14\x03" +
+		"\x14\x03\x14\x03\x14\x03\x14\x03\x14\x05\x14\u0144\n\x14\x03\x14\x03\x14" +
+		"\x05\x14\u0148\n\x14\x03\x14\x03\x14\x03\x14\x03\x14\x03\x14\x03\x14\x03" +
+		"\x14\x03\x14\x05\x14\u0152\n\x14\x03\x14\x03\x14\x03\x14\x03\x14\x05\x14" +
+		"\u0158\n\x14\x05\x14\u015A\n\x14\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15" +
+		"\x03\x15\x05\x15\u0162\n\x15\x03\x15\x03\x15\x05\x15\u0166\n\x15\x03\x15" +
+		"\x03\x15\x05\x15\u016A\n\x15\x03\x16\x03\x16\x03\x16\x03\x16\x03\x16\x05" +
+		"\x16\u0171\n\x16\x03\x16\x03\x16\x05\x16\u0175\n\x16\x03\x17\x03\x17\x03" +
+		"\x17\x03\x17\x03\x17\x03\x17\x05\x17\u017D\n\x17\x03\x17\x03\x17\x05\x17" +
+		"\u0181\n\x17\x03\x17\x03\x17\x05\x17\u0185\n\x17\x03\x18\x03\x18\x03\x18" +
+		"\x07\x18\u018A\n\x18\f\x18\x0E\x18\u018D\v\x18\x03\x19\x03\x19\x03\x19" +
+		"\x05\x19\u0192\n\x19\x03\x1A\x03\x1A\x03\x1A\x05\x1A\u0197\n\x1A\x03\x1A" +
+		"\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x05\x1A\u019E\n\x1A\x03\x1A\x03\x1A\x05" +
+		"\x1A\u01A2\n\x1A\x03\x1B\x03\x1B\x03\x1B\x05\x1B\u01A7\n\x1B\x03\x1B\x03" +
+		"\x1B\x03\x1C\x03\x1C\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x05" +
+		"\x1D\u01B3\n\x1D\x03\x1D\x03\x1D\x03\x1D\x05\x1D\u01B8\n\x1D\x03\x1E\x03" +
+		"\x1E\x03\x1E\x03\x1E\x05\x1E\u01BE\n\x1E\x03\x1E\x03\x1E\x03\x1E\x05\x1E" +
+		"\u01C3\n\x1E\x03\x1E\x03\x1E\x07\x1E\u01C7\n\x1E\f\x1E\x0E\x1E\u01CA\v" +
+		"\x1E\x03\x1E\x03\x1E\x05\x1E\u01CE\n\x1E\x03\x1F\x03\x1F\x03\x1F\x03\x1F" +
+		"\x05\x1F\u01D4\n\x1F\x03\x1F\x03\x1F\x05\x1F\u01D8\n\x1F\x03\x1F\x03\x1F" +
+		"\x03\x1F\x07\x1F\u01DD\n\x1F\f\x1F\x0E\x1F\u01E0\v\x1F\x03\x1F\x03\x1F" +
+		"\x05\x1F\u01E4\n\x1F\x03 \x03 \x03 \x03 \x05 \u01EA\n \x03 \x03 \x05 " +
+		"\u01EE\n \x03 \x03 \x03 \x07 \u01F3\n \f \x0E \u01F6\v \x03 \x03 \x05" +
+		" \u01FA\n \x03!\x03!\x03!\x03!\x05!\u0200\n!\x03!\x03!\x05!\u0204\n!\x03" +
+		"!\x03!\x03!\x07!\u0209\n!\f!\x0E!\u020C\v!\x03!\x03!\x05!\u0210\n!\x03" +
+		"\"\x03\"\x03\"\x03\"\x05\"\u0216\n\"\x03\"\x03\"\x05\"\u021A\n\"\x03\"" +
+		"\x03\"\x07\"\u021E\n\"\f\"\x0E\"\u0221\v\"\x03\"\x03\"\x05\"\u0225\n\"" +
+		"\x03#\x03#\x03#\x03#\x03#\x03#\x05#\u022D\n#\x03$\x03$\x03$\x07$\u0232" +
+		"\n$\f$\x0E$\u0235\v$\x03$\x03$\x05$\u0239\n$\x03%\x03%\x05%\u023D\n%\x03" +
+		"&\x03&\x03&\x03&\x05&\u0243\n&\x03\'\x03\'\x03\'\x03\'\x03\'\x03\'\x03" +
+		"\'\x05\'\u024C\n\'\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03" +
+		"(\x03(\x03(\x03(\x05(\u025C\n(\x03(\x03(\x03(\x03(\x05(\u0262\n(\x03(" +
+		"\x03(\x03(\x03(\x05(\u0268\n(\x03(\x03(\x03(\x03(\x03(\x03(\x05(\u0270" +
+		"\n(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x05(\u027C\n(\x03" +
+		"(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03" +
+		"(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x03(\x07" +
+		"(\u029A\n(\f(\x0E(\u029D\v(\x03)\x03)\x03)\x03)\x07)\u02A3\n)\f)\x0E)" +
+		"\u02A6\v)\x03)\x03)\x03)\x03)\x07)\u02AC\n)\f)\x0E)\u02AF\v)\x03)\x05" +
+		")\u02B2\n)\x03*\x03*\x03*\x07*\u02B7\n*\f*\x0E*\u02BA\v*\x03*\x03*\x07" +
+		"*\u02BE\n*\f*\x0E*\u02C1\v*\x03*\x03*\x03*\x07*\u02C6\n*\f*\x0E*\u02C9" +
+		"\v*\x03*\x05*\u02CC\n*\x03+\x03+\x03+\x03+\x07+\u02D2\n+\f+\x0E+\u02D5" +
+		"\v+\x03+\x03+\x03,\x05,\u02DA\n,\x03,\x03,\x05,\u02DE\n,\x03,\x03,\x03" +
+		",\x05,\u02E3\n,\x03,\x03,\x07,\u02E7\n,\f,\x0E,\u02EA\v,\x03,\x03,\x03" +
+		"-\x03-\x03-\x05-\u02F1\n-\x03-\x03-\x03.\x03.\x07.\u02F7\n.\f.\x0E.\u02FA" +
+		"\v.\x03.\x03.\x03/\x03/\x03/\x03/\x03/\x05/\u0303\n/\x030\x030\x030\x03" +
+		"0\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x05" +
+		"0\u0316\n0\x030\x030\x030\x030\x030\x030\x030\x030\x030\x030\x070\u0322" +
+		"\n0\f0\x0E0\u0325\v0\x031\x031\x032\x032\x032\x072\u032C\n2\f2\x0E2\u032F" +
+		"\v2\x033\x033\x053\u0333\n3\x034\x034\x054\u0337\n4\x034\x034\x054\u033B" +
+		"\n4\x035\x035\x035\x035\x036\x036\x036\x036\x037\x037\x057\u0347\n7\x03" +
+		"8\x038\x038\x078\u034C\n8\f8\x0E8\u034F\v8\x039\x039\x039\x079\u0354\n" +
+		"9\f9\x0E9\u0357\v9\x03:\x03:\x03:\x07:\u035C\n:\f:\x0E:\u035F\v:\x03;" +
+		"\x03;\x03;\x07;\u0364\n;\f;\x0E;\u0367\v;\x03<\x03<\x03<\x07<\u036C\n" +
+		"<\f<\x0E<\u036F\v<\x03=\x03=\x03=\x02\x02\x04N^>\x02\x02\x04\x02\x06\x02" +
+		"\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02\x1A" +
+		"\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02.\x020\x022\x02" +
+		"4\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02L\x02N\x02" +
+		"P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02b\x02d\x02f\x02h\x02j\x02" +
+		"l\x02n\x02p\x02r\x02t\x02v\x02x\x02\x02\x04\b\x02GGKKMMOOQQSS\x07\x02" +
+		"\x04\n\x10\x18\x1C\x1C %).\x02\u03E3\x02}\x03\x02\x02\x02\x04\x96\x03" +
+		"\x02\x02\x02\x06\x98\x03\x02\x02\x02\b\xA3\x03\x02\x02\x02\n\xBA\x03\x02" +
+		"\x02\x02\f\xBC\x03\x02\x02\x02\x0E\xC8\x03\x02\x02\x02\x10\xCE\x03\x02" +
+		"\x02\x02\x12\xD6\x03\x02\x02\x02\x14\xDF\x03\x02\x02\x02\x16\xE4\x03\x02" +
+		"\x02\x02\x18\xE9\x03\x02\x02\x02\x1A\xF8\x03\x02\x02\x02\x1C\xFD\x03\x02" +
+		"\x02\x02\x1E\u0102\x03\x02\x02\x02 \u0115\x03\x02\x02\x02\"\u0117\x03" +
+		"\x02\x02\x02$\u012C\x03\x02\x02\x02&\u0159\x03\x02\x02\x02(\u015B\x03" +
+		"\x02\x02\x02*\u016B\x03\x02\x02\x02,\u0176\x03\x02\x02\x02.\u0186\x03" +
+		"\x02\x02\x020\u0191\x03\x02\x02\x022\u01A1\x03\x02\x02\x024\u01A3\x03" +
+		"\x02\x02\x026\u01AA\x03\x02\x02\x028\u01AC\x03\x02\x02\x02:\u01B9\x03" +
+		"\x02\x02\x02<\u01CF\x03\x02\x02\x02>\u01E5\x03\x02\x02\x02@\u01FB\x03" +
+		"\x02\x02\x02B\u0211\x03\x02\x02\x02D\u0226\x03\x02\x02\x02F\u022E\x03" +
+		"\x02\x02\x02H\u023C\x03\x02\x02\x02J\u023E\x03\x02\x02\x02L\u0244\x03" +
+		"\x02\x02\x02N\u025B\x03\x02\x02\x02P\u029E\x03\x02\x02\x02R\u02B3\x03" +
+		"\x02\x02\x02T\u02CD\x03\x02\x02\x02V\u02D9\x03\x02\x02\x02X\u02ED\x03" +
+		"\x02\x02\x02Z\u02F4\x03\x02\x02\x02\\\u0302\x03\x02\x02\x02^\u0315\x03" +
+		"\x02\x02\x02`\u0326\x03\x02\x02\x02b\u0328\x03\x02\x02\x02d\u0332\x03" +
+		"\x02\x02\x02f\u0334\x03\x02\x02\x02h\u033C\x03\x02\x02\x02j\u0340\x03" +
+		"\x02\x02\x02l\u0346\x03\x02\x02\x02n\u0348\x03\x02\x02\x02p\u0350\x03" +
+		"\x02\x02\x02r\u0358\x03\x02\x02\x02t\u0360\x03\x02\x02\x02v\u0368\x03" +
+		"\x02\x02\x02x\u0370\x03\x02\x02\x02z|\x05\x04\x03\x02{z\x03\x02\x02\x02" +
+		"|\x7F\x03\x02\x02\x02}{\x03\x02\x02\x02}~\x03\x02\x02\x02~\x80\x03\x02" +
+		"\x02\x02\x7F}\x03\x02\x02\x02\x80\x81\x07\x02\x02\x03\x81\x03\x03\x02" +
+		"\x02\x02\x82\x97\x05\x06\x04\x02\x83\x97\x05\b\x05\x02\x84\x97\x05\f\x07" +
+		"\x02\x85\x97\x05\x0E\b\x02\x86\x97\x05\x10\t\x02\x87\x97\x05\x12\n\x02" +
+		"\x88\x97\x05P)\x02\x89\x97\x05R*\x02\x8A\x97\x05\x18\r\x02\x8B\x97\x05" +
+		"\x1A\x0E\x02\x8C\x97\x05\x1C\x0F\x02\x8D\x97\x05\x1E\x10\x02\x8E\x97\x05" +
+		"\x16\f\x02\x8F\x97\x05\x14\v\x02\x90\x97\x05 \x11\x02\x91\x93\x05N(\x02" +
+		"\x92\x94\x07<\x02\x02\x93\x92\x03\x02\x02\x02\x93\x94\x03\x02\x02\x02" +
+		"\x94\x97\x03\x02\x02\x02\x95\x97\x05^0\x02\x96\x82\x03\x02\x02\x02\x96" +
+		"\x83\x03\x02\x02\x02\x96\x84\x03\x02\x02\x02\x96\x85\x03\x02\x02\x02\x96" +
+		"\x86\x03\x02\x02\x02\x96\x87\x03\x02\x02\x02\x96\x88\x03\x02\x02\x02\x96" +
+		"\x89\x03\x02\x02\x02\x96\x8A\x03\x02\x02\x02\x96\x8B\x03\x02\x02\x02\x96" +
+		"\x8C\x03\x02\x02\x02\x96\x8D\x03\x02\x02\x02\x96\x8E\x03\x02\x02\x02\x96" +
+		"\x8F\x03\x02\x02\x02\x96\x90\x03\x02\x02\x02\x96\x91\x03\x02\x02\x02\x96" +
+		"\x95\x03\x02\x02\x02\x97\x05\x03\x02\x02\x02\x98\x99\x07\x06\x02\x02\x99" +
+		"\x9B\x075\x02\x02\x9A\x9C\x05n8\x02\x9B\x9A\x03\x02\x02\x02\x9B\x9C\x03" +
+		"\x02\x02\x02\x9C\x9D\x03\x02\x02\x02\x9D\x9E\x076\x02\x02\x9E\x9F\x07" +
+		"\x16\x02\x02\x9F\xA1\x07[\x02\x02\xA0\xA2\x07<\x02\x02\xA1\xA0\x03\x02" +
+		"\x02\x02\xA1\xA2\x03\x02\x02\x02\xA2\x07\x03\x02\x02\x02\xA3\xA4\x07%" +
+		"\x02\x02\xA4\xA5\x05\n\x06\x02\xA5\xA6\x07G\x02\x02\xA6\xA7\x05N(\x02" +
+		"\xA7\xA9\x03\x02\x02\x02\xA8\xAA\x07<\x02\x02\xA9\xA8\x03\x02\x02\x02" +
+		"\xA9\xAA\x03\x02\x02\x02\xAA\t\x03\x02\x02\x02\xAB\xAE\x05d3\x02\xAC\xAD" +
+		"\x07=\x02\x02\xAD\xAF\x05^0\x02\xAE\xAC\x03\x02\x02\x02\xAE\xAF\x03\x02" +
+		"\x02\x02\xAF\xBB\x03\x02\x02\x02\xB0\xB2\x073\x02\x02\xB1\xB3\x05n8\x02" +
+		"\xB2\xB1\x03\x02\x02\x02\xB2\xB3\x03\x02\x02\x02\xB3\xB4\x03\x02\x02\x02" +
+		"\xB4\xBB\x074\x02\x02\xB5\xB7\x075\x02\x02\xB6\xB8\x05n8\x02\xB7\xB6\x03" +
+		"\x02\x02\x02\xB7\xB8\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02\xB9\xBB\x07" +
+		"6\x02\x02\xBA\xAB\x03\x02\x02\x02\xBA\xB0\x03\x02\x02\x02\xBA\xB5\x03" +
+		"\x02\x02\x02\xBB\v\x03\x02\x02\x02\xBC\xBD\x07&\x02\x02\xBD\xC0\x05d3" +
+		"\x02\xBE\xBF\x07=\x02\x02\xBF\xC1\x05^0\x02\xC0\xBE\x03\x02\x02\x02\xC0" +
+		"\xC1\x03\x02\x02\x02\xC1\xC2\x03\x02\x02\x02\xC2\xC3\x07G\x02\x02\xC3" +
+		"\xC4\x05N(\x02\xC4\xC6\x03\x02\x02\x02\xC5\xC7\x07<\x02\x02\xC6\xC5\x03" +
+		"\x02\x02\x02\xC6\xC7\x03\x02\x02\x02\xC7\r\x03\x02\x02\x02\xC8\xC9\x05" +
+		"d3\x02\xC9\xCA\t\x02\x02\x02\xCA\xCC\x05N(\x02\xCB\xCD\x07<\x02\x02\xCC" +
+		"\xCB\x03\x02\x02\x02\xCC\xCD\x03\x02\x02\x02\xCD\x0F\x03\x02\x02\x02\xCE" +
+		"\xCF\x05N(\x02\xCF\xD0\x077\x02\x02\xD0\xD1\x05d3\x02\xD1\xD2\t\x02\x02" +
+		"\x02\xD2\xD4\x05N(\x02\xD3\xD5\x07<\x02\x02\xD4\xD3\x03\x02\x02\x02\xD4" +
+		"\xD5\x03\x02\x02\x02\xD5\x11\x03\x02\x02\x02\xD6\xD7\x05N(\x02\xD7\xD8" +
+		"\x073\x02\x02\xD8\xD9\x05N(\x02\xD9\xDA\x074\x02\x02\xDA\xDB\t\x02\x02" +
+		"\x02\xDB\xDD\x05N(\x02\xDC\xDE\x07<\x02\x02\xDD\xDC\x03\x02\x02\x02\xDD" +
+		"\xDE\x03\x02\x02\x02\xDE\x13\x03\x02\x02\x02\xDF\xE0\x07(\x02\x02\xE0" +
+		"\xE2\x05N(\x02\xE1\xE3\x07<\x02\x02\xE2\xE1\x03\x02\x02\x02\xE2\xE3\x03" +
+		"\x02\x02\x02\xE3\x15\x03\x02\x02\x02\xE4\xE5\x07\'\x02\x02\xE5\xE7\x05" +
+		"N(\x02\xE6\xE8\x07<\x02\x02\xE7\xE6\x03\x02\x02\x02\xE7\xE8\x03\x02\x02" +
+		"\x02\xE8\x17\x03\x02\x02\x02\xE9\xEA\x07\x14\x02\x02\xEA\xEB\x05\n\x06" +
+		"\x02\xEB\xEC\x07\x15\x02\x02\xEC\xED\x05N(\x02\xED\xF1\x075\x02\x02\xEE" +
+		"\xF0\x05\x04\x03\x02\xEF\xEE\x03\x02\x02\x02\xF0\xF3\x03\x02\x02\x02\xF1" +
+		"\xEF\x03\x02\x02\x02\xF1\xF2\x03\x02\x02\x02\xF2\xF4\x03\x02\x02\x02\xF3" +
+		"\xF1\x03\x02\x02\x02\xF4\xF6\x076\x02\x02\xF5\xF7\x07<\x02\x02\xF6\xF5" +
+		"\x03\x02\x02\x02\xF6\xF7\x03\x02\x02\x02\xF7\x19\x03\x02\x02\x02\xF8\xF9" +
+		"\x07\r\x02\x02\xF9\xFB\x05N(\x02\xFA\xFC\x07<\x02\x02\xFB\xFA\x03\x02" +
+		"\x02\x02\xFB\xFC\x03\x02\x02\x02\xFC\x1B\x03\x02\x02\x02\xFD\xFE\x07\f" +
+		"\x02\x02\xFE\u0100\x05N(\x02\xFF\u0101\x07<\x02\x02\u0100\xFF\x03\x02" +
+		"\x02\x02\u0100\u0101\x03\x02\x02\x02\u0101\x1D\x03\x02\x02\x02\u0102\u0103" +
+		"\x07.\x02\x02\u0103\u0105\x05N(\x02\u0104\u0106\x07<\x02\x02\u0105\u0104" +
+		"\x03\x02\x02\x02\u0105\u0106\x03\x02\x02\x02\u0106\x1F\x03\x02\x02\x02" +
+		"\u0107\u0116\x05\"\x12\x02\u0108\u0116\x05$\x13\x02\u0109\u0116\x05&\x14" +
+		"\x02\u010A\u0116\x05(\x15\x02\u010B\u0116\x05*\x16\x02\u010C\u0116\x05" +
+		",\x17\x02\u010D\u0116\x058\x1D\x02\u010E\u0116\x05:\x1E\x02\u010F\u0116" +
+		"\x05<\x1F\x02\u0110\u0116\x05> \x02\u0111\u0116\x05@!\x02\u0112\u0116" +
+		"\x05B\"\x02\u0113\u0116\x05D#\x02\u0114\u0116\x05F$\x02\u0115\u0107\x03" +
+		"\x02\x02\x02\u0115\u0108\x03\x02\x02\x02\u0115\u0109\x03\x02\x02\x02\u0115" +
+		"\u010A\x03\x02\x02\x02\u0115\u010B\x03\x02\x02\x02\u0115\u010C\x03\x02" +
+		"\x02\x02\u0115\u010D\x03\x02\x02\x02\u0115\u010E\x03\x02\x02\x02\u0115" +
+		"\u010F\x03\x02\x02\x02\u0115\u0110\x03\x02\x02\x02\u0115\u0111\x03\x02" +
+		"\x02\x02\u0115\u0112\x03\x02\x02\x02\u0115\u0113\x03\x02\x02\x02\u0115" +
+		"\u0114\x03\x02\x02\x02\u0116!\x03\x02\x02\x02\u0117\u0118\x07\x04\x02" +
+		"\x02\u0118\u011B\x05d3\x02\u0119\u011A\x07\b\x02\x02\u011A\u011C\x05d" +
+		"3\x02\u011B\u0119\x03\x02\x02\x02\u011B\u011C\x03\x02\x02\x02\u011C\u011F" +
+		"\x03\x02\x02\x02\u011D\u011E\x07\x07\x02\x02\u011E\u0120\x05r:\x02\u011F" +
+		"\u011D\x03\x02\x02\x02\u011F\u0120\x03\x02\x02\x02\u0120\u0121\x03\x02" +
+		"\x02\x02\u0121\u0125\x075\x02\x02\u0122\u0124\x05\x04\x03\x02\u0123\u0122" +
+		"\x03\x02\x02\x02\u0124\u0127\x03\x02\x02\x02\u0125\u0123\x03\x02\x02\x02" +
+		"\u0125\u0126\x03\x02\x02\x02\u0126\u0128\x03\x02\x02\x02\u0127\u0125\x03" +
+		"\x02\x02\x02\u0128\u012A\x076\x02\x02\u0129\u012B\x07<\x02\x02\u012A\u0129" +
+		"\x03\x02\x02\x02\u012A\u012B\x03\x02\x02\x02\u012B#\x03\x02\x02\x02\u012C" +
+		"\u012D\x07\x05\x02\x02\u012D\u0130\x05d3\x02\u012E\u012F\x07\b\x02\x02" +
+		"\u012F\u0131\x05r:\x02\u0130\u012E\x03\x02\x02\x02\u0130\u0131\x03\x02" +
+		"\x02\x02\u0131\u0132\x03\x02\x02\x02\u0132\u0136\x075\x02\x02\u0133\u0135" +
+		"\x05\x04\x03\x02\u0134\u0133\x03\x02\x02\x02\u0135\u0138\x03\x02\x02\x02" +
 		"\u0136\u0134\x03\x02\x02\x02\u0136\u0137\x03\x02\x02\x02\u0137\u0139\x03" +
-		"\x02\x02\x02\u0138\u0136\x03\x02\x02\x02\u0139\u013A\x074\x02\x02\u013A" +
-		"!\x03\x02\x02\x02\u013B\u013C\x05|?\x02\u013C\u013D\x07;\x02\x02\u013D" +
-		"\u0140\x05<\x1F\x02\u013E\u013F\x07E\x02\x02\u013F\u0141\x05d3\x02\u0140" +
-		"\u013E\x03\x02\x02\x02\u0140\u0141\x03\x02\x02\x02\u0141\u0154\x03\x02" +
-		"\x02\x02\u0142\u0143\x05|?\x02\u0143\u0144\x071\x02\x02\u0144\u0149\x05" +
-		"$\x13\x02\u0145\u0146\x076\x02\x02\u0146\u0148\x05$\x13\x02\u0147\u0145" +
-		"\x03\x02\x02\x02\u0148\u014B\x03\x02\x02\x02\u0149\u0147\x03\x02\x02\x02" +
-		"\u0149\u014A\x03\x02\x02\x02\u014A\u014C\x03\x02\x02\x02\u014B\u0149\x03" +
-		"\x02\x02\x02\u014C\u014D\x072\x02\x02\u014D\u014E\x07;\x02\x02\u014E\u0151" +
-		"\x05<\x1F\x02\u014F\u0150\x07E\x02\x02\u0150\u0152\x05d3\x02\u0151\u014F" +
-		"\x03\x02\x02\x02\u0151\u0152\x03\x02\x02\x02\u0152\u0154\x03\x02\x02\x02" +
-		"\u0153\u013B\x03\x02\x02\x02\u0153\u0142\x03\x02\x02\x02\u0154#\x03\x02" +
-		"\x02\x02\u0155\u0156\x05|?\x02\u0156\u0157\x07;\x02\x02\u0157\u0159\x03" +
-		"\x02\x02\x02\u0158\u0155\x03\x02\x02\x02\u0158\u0159\x03\x02\x02\x02\u0159" +
-		"\u015A\x03\x02\x02\x02\u015A\u015B\x05<\x1F\x02\u015B%\x03\x02\x02\x02" +
-		"\u015C\u015D\x07=\x02\x02\u015D\u015E\x07\x10\x02\x02\u015E\u015F\x05" +
-		"\x14\v\x02\u015F\u0160\x05j6\x02\u0160\'\x03\x02\x02\x02\u0161\u0162\x07" +
-		"=\x02\x02\u0162\u0163\x07\x10\x02\x02\u0163\u0164\x05\x14\v\x02\u0164" +
-		")\x03\x02\x02\x02\u0165\u0167\x07\x11\x02\x02\u0166\u0168\x07L\x02\x02" +
-		"\u0167\u0166\x03\x02\x02\x02\u0167\u0168\x03\x02\x02\x02\u0168\u0169\x03" +
-		"\x02\x02\x02\u0169\u016A\x07=\x02\x02\u016A\u016B\x05|?\x02\u016B\u016C" +
-		"\x05\x14\v\x02\u016C\u016D\x05j6\x02\u016D+\x03\x02\x02\x02\u016E\u0170" +
-		"\x07\x11\x02\x02\u016F\u0171\x07L\x02\x02\u0170\u016F\x03\x02\x02\x02" +
-		"\u0170\u0171\x03\x02\x02\x02\u0171\u0172\x03\x02\x02\x02\u0172\u0173\x07" +
-		"=\x02\x02\u0173\u0174\x05|?\x02\u0174\u0175\x05\x14\v\x02\u0175-\x03\x02" +
-		"\x02\x02\u0176\u0177\x07\x12\x02\x02\u0177\u0178\x07=\x02\x02\u0178\u0179" +
-		"\x05|?\x02\u0179\u017C\x05\x14\v\x02\u017A\u017B\x07@\x02\x02\u017B\u017D" +
-		"\x05<\x1F\x02\u017C\u017A\x03\x02\x02\x02\u017C\u017D\x03\x02\x02\x02" +
-		"\u017D\u017E\x03\x02\x02\x02\u017E\u017F\x05j6\x02\u017F/\x03\x02\x02" +
-		"\x02\u0180\u0181\x07\x12\x02\x02\u0181\u0182\x07=\x02\x02\u0182\u0183" +
-		"\x05|?\x02\u0183\u0186\x05\x14\v\x02\u0184\u0185\x07@\x02\x02\u0185\u0187" +
-		"\x05<\x1F\x02\u0186\u0184\x03\x02\x02\x02\u0186\u0187\x03\x02\x02\x02" +
-		"\u01871\x03\x02\x02\x02\u0188\u018B\x07\x13\x02\x02\u0189\u018A\x075\x02" +
-		"\x02\u018A\u018C\x05|?\x02\u018B\u0189\x03\x02\x02\x02\u018B\u018C\x03" +
-		"\x02\x02\x02\u018C\u018D\x03\x02\x02\x02\u018D\u018E\x05|?\x02\u018E\u018F" +
-		"\x05\x14\v\x02\u018F\u0190\x05j6\x02\u01903\x03\x02\x02\x02\u0191\u0192" +
-		"\x07*\x02\x02\u0192\u0193\x05|?\x02\u0193\u0194\x073\x02\x02\u0194\u019B" +
-		"\x056\x1C\x02\u0195\u0197\x056\x1C\x02\u0196\u0198\x076\x02\x02\u0197" +
-		"\u0196\x03\x02\x02\x02\u0197\u0198\x03\x02\x02\x02\u0198\u019A\x03\x02" +
-		"\x02\x02\u0199\u0195\x03\x02\x02\x02\u019A\u019D\x03\x02\x02\x02\u019B" +
-		"\u0199\x03\x02\x02\x02\u019B\u019C\x03\x02\x02\x02\u019C\u019E\x03\x02" +
-		"\x02\x02\u019D\u019B\x03\x02\x02\x02\u019E\u019F\x074\x02\x02\u019F5\x03" +
-		"\x02\x02\x02\u01A0\u01A3\x058\x1D\x02\u01A1\u01A3\x05:\x1E\x02\u01A2\u01A0" +
-		"\x03\x02\x02\x02\u01A2\u01A1\x03\x02\x02\x02\u01A37\x03\x02\x02\x02\u01A4" +
-		"\u01A5\x07=\x02\x02\u01A5\u01A6\x05|?\x02\u01A6\u01A8\x07/\x02\x02\u01A7" +
-		"\u01A9\x05\x12\n\x02\u01A8\u01A7\x03\x02\x02\x02\u01A8\u01A9\x03\x02\x02" +
-		"\x02\u01A9\u01AA\x03\x02\x02\x02\u01AA\u01AB\x070\x02\x02\u01AB\u01B5" +
-		"\x03\x02\x02\x02\u01AC\u01AD\x07=\x02\x02\u01AD\u01AE\x05|?\x02\u01AE" +
-		"\u01B0\x073\x02\x02\u01AF\u01B1\x05\x12\n\x02\u01B0\u01AF";
+		"\x02\x02\x02\u0138\u0136\x03\x02\x02\x02\u0139\u013B\x076\x02\x02\u013A" +
+		"\u013C\x07<\x02\x02\u013B\u013A\x03\x02\x02\x02\u013B\u013C\x03\x02\x02" +
+		"\x02\u013C%\x03\x02\x02\x02\u013D\u013E\x07)\x02\x02\u013E\u0143\x05d" +
+		"3\x02\u013F\u0140\x073\x02\x02\u0140\u0141\x05b2\x02\u0141\u0142\x074" +
+		"\x02\x02\u0142\u0144\x03\x02\x02\x02\u0143\u013F\x03\x02\x02\x02\u0143" +
+		"\u0144\x03\x02\x02\x02\u0144\u0145\x03\x02\x02\x02\u0145\u0147\x075\x02" +
+		"\x02\u0146\u0148\x05p9\x02\u0147\u0146\x03\x02\x02\x02\u0147\u0148\x03" +
+		"\x02\x02\x02\u0148\u0149\x03\x02\x02\x02\u0149\u014A\x076\x02\x02\u014A" +
+		"\u015A\x03\x02\x02\x02\u014B\u014C\x07)\x02\x02\u014C\u0151\x05d3\x02" +
+		"\u014D\u014E\x073\x02\x02\u014E\u014F\x05b2\x02\u014F\u0150\x074\x02\x02" +
+		"\u0150\u0152\x03\x02\x02\x02\u0151\u014D\x03\x02\x02\x02\u0151\u0152\x03" +
+		"\x02\x02\x02\u0152\u0153\x03\x02\x02\x02\u0153\u0154\x071\x02\x02\u0154" +
+		"\u0155\x05p9\x02\u0155\u0157\x072\x02\x02\u0156\u0158\x07<\x02\x02\u0157" +
+		"\u0156\x03\x02\x02\x02\u0157\u0158\x03\x02\x02\x02\u0158\u015A\x03\x02" +
+		"\x02\x02\u0159\u013D\x03\x02\x02\x02\u0159\u014B\x03\x02\x02\x02\u015A" +
+		"\'\x03\x02\x02\x02\u015B\u015C\x07*\x02\x02\u015C\u0161\x05d3\x02\u015D" +
+		"\u015E\x073\x02\x02\u015E\u015F\x05b2\x02\u015F\u0160\x074\x02\x02\u0160" +
+		"\u0162\x03\x02\x02\x02\u0161\u015D\x03\x02\x02\x02\u0161\u0162\x03\x02" +
+		"\x02\x02\u0162\u0163\x03\x02\x02\x02\u0163\u0165\x073\x02\x02\u0164\u0166" +
+		"\x05r:\x02\u0165\u0164\x03\x02\x02\x02\u0165\u0166\x03\x02\x02\x02\u0166" +
+		"\u0167\x03\x02\x02\x02\u0167\u0169\x072\x02\x02\u0168\u016A\x07<\x02\x02" +
+		"\u0169\u0168\x03\x02\x02\x02\u0169\u016A\x03\x02\x02\x02\u016A)\x03\x02" +
+		"\x02\x02\u016B\u0170\x07+\x02\x02\u016C\u016D\x073\x02\x02\u016D\u016E" +
+		"\x05b2\x02\u016E\u016F\x074\x02\x02\u016F\u0171\x03\x02\x02\x02\u0170" +
+		"\u016C\x03\x02\x02\x02\u0170\u0171\x03\x02\x02\x02\u0171\u0172\x03\x02" +
+		"\x02\x02\u0172\u0174\x05d3\x02\u0173\u0175\x07<\x02\x02\u0174\u0173\x03" +
+		"\x02\x02\x02\u0174\u0175\x03\x02\x02\x02\u0175+\x03\x02\x02\x02\u0176" +
+		"\u0177\x07,\x02\x02\u0177\u017C\x05d3\x02\u0178\u0179\x073\x02\x02\u0179" +
+		"\u017A\x05b2\x02\u017A\u017B\x074\x02\x02\u017B\u017D\x03\x02\x02\x02" +
+		"\u017C\u0178\x03\x02\x02\x02\u017C\u017D\x03\x02\x02\x02\u017D\u017E\x03" +
+		"\x02\x02\x02\u017E\u0180\x075\x02\x02\u017F\u0181\x05.\x18\x02\u0180\u017F" +
+		"\x03\x02\x02\x02\u0180\u0181\x03\x02\x02\x02\u0181\u0182\x03\x02\x02\x02" +
+		"\u0182\u0184\x076\x02\x02\u0183\u0185\x07<\x02\x02\u0184\u0183\x03\x02" +
+		"\x02\x02\u0184\u0185\x03\x02\x02\x02\u0185-\x03\x02\x02\x02\u0186\u018B" +
+		"\x050\x19\x02\u0187\u0188\x078\x02\x02\u0188\u018A\x050\x19\x02\u0189" +
+		"\u0187\x03\x02\x02\x02\u018A\u018D\x03\x02\x02\x02\u018B\u0189\x03\x02" +
+		"\x02\x02\u018B\u018C\x03\x02\x02\x02\u018C/\x03\x02\x02\x02\u018D\u018B" +
+		"\x03\x02\x02\x02\u018E\u0192\x052\x1A\x02\u018F\u0192\x054\x1B\x02\u0190" +
+		"\u0192\x056\x1C\x02\u0191\u018E\x03\x02\x02\x02\u0191\u018F\x03\x02\x02" +
+		"\x02\u0191\u0190\x03\x02\x02\x02\u01921\x03\x02\x02\x02\u0193\u0194\x05" +
+		"d3\x02\u0194\u0196\x075\x02\x02\u0195\u0197\x05p9\x02\u0196\u0195\x03" +
+		"\x02\x02\x02\u0196\u0197\x03\x02\x02\x02\u0197\u0198\x03\x02\x02\x02\u0198" +
+		"\u0199\x076\x02\x02\u0199\u01A2\x03\x02\x02\x02\u019A\u019B\x05d3\x02" +
+		"\u019B\u019D\x071\x02\x02\u019C\u019E\x05p9\x02\u019D\u019C\x03\x02\x02" +
+		"\x02\u019D\u019E\x03\x02\x02\x02\u019E\u019F\x03\x02\x02\x02\u019F\u01A0" +
+		"\x072\x02\x02\u01A0\u01A2\x03\x02\x02\x02\u01A1\u0193\x03\x02\x02\x02" +
+		"\u01A1\u019A\x03\x02\x02\x02\u01A23\x03\x02\x02\x02\u01A3\u01A4\x05d3" +
+		"\x02\u01A4\u01A6\x073\x02\x02\u01A5\u01A7\x05r:\x02\u01A6\u01A5\x03\x02" +
+		"\x02\x02\u01A6\u01A7\x03\x02\x02\x02\u01A7\u01A8\x03\x02\x02\x02\u01A8" +
+		"\u01A9\x072\x02\x02\u01A95\x03\x02\x02\x02\u01AA\u01AB\x05d3\x02\u01AB" +
+		"7\x03\x02\x02\x02\u01AC\u01AD\x07-\x02\x02\u01AD\u01B2\x05d3\x02\u01AE" +
+		"\u01AF\x073\x02\x02\u01AF\u01B0\x05b2\x02\u01B0\u01B1\x074\x02\x02\u01B1" +
+		"\u01B3\x03\x02\x02\x02\u01B2\u01AE\x03\x02\x02\x02\u01B2\u01B3\x03\x02" +
+		"\x02\x02\u01B3\u01B4\x03\x02\x02\x02\u01B4\u01B5\x07G\x02\x02\u01B5\u01B7" +
+		"\x05^0\x02\u01B6\u01B8\x07<\x02\x02\u01B7\u01B6\x03\x02\x02\x02\u01B7" +
+		"\u01B8\x03\x02\x02\x02\u01B89\x03\x02\x02\x02\u01B9\u01BA\x07$\x02\x02" +
+		"\u01BA\u01BB\x05d3\x02\u01BB\u01BD\x071\x02\x02\u01BC\u01BE\x05p9\x02" +
+		"\u01BD\u01BC\x03\x02\x02\x02\u01BD\u01BE\x03\x02\x02\x02\u01BE\u01BF\x03" +
+		"\x02\x02\x02\u01BF\u01C2\x072\x02\x02\u01C0\u01C1\x07B\x02\x02\u01C1\u01C3" +
+		"\x05^0\x02\u01C2\u01C0\x03\x02\x02\x02\u01C2\u01C3\x03\x02\x02\x02\u01C3" +
+		"\u01C4\x03\x02\x02\x02\u01C4\u01C8\x075\x02\x02\u01C5\u01C7\x05\x04\x03" +
+		"\x02\u01C6\u01C5\x03\x02\x02\x02\u01C7\u01CA\x03\x02\x02\x02\u01C8\u01C6" +
+		"\x03\x02\x02\x02\u01C8\u01C9\x03\x02\x02\x02\u01C9\u01CB\x03\x02\x02\x02" +
+		"\u01CA\u01C8\x03\x02\x02\x02\u01CB\u01CD\x076\x02\x02\u01CC\u01CE\x07" +
+		"<\x02\x02\u01CD\u01CC\x03\x02\x02\x02\u01CD\u01CE\x03\x02\x02\x02\u01CE" +
+		";\x03\x02\x02\x02\u01CF\u01D0\x07\x10\x02\x02\u01D0\u01D3\x05d3\x02\u01D1" +
+		"\u01D2\x07B\x02\x02\u01D2\u01D4\x05^0";
 	private static readonly _serializedATNSegment1: string =
-		"\x03\x02\x02\x02\u01B0\u01B1\x03\x02\x02\x02\u01B1\u01B2\x03\x02\x02\x02" +
-		"\u01B2\u01B3\x074\x02\x02\u01B3\u01B5\x03\x02\x02\x02\u01B4\u01A4\x03" +
-		"\x02\x02\x02\u01B4\u01AC\x03\x02\x02\x02\u01B59\x03\x02\x02\x02\u01B6" +
-		"\u01B7\x07=\x02\x02\u01B7\u01B8\x05|?\x02\u01B8;\x03\x02\x02\x02\u01B9" +
-		"\u01BA\b\x1F\x01\x02\u01BA\u01BB\x07R\x02\x02\u01BB\u01BC\x05<\x1F\x02" +
-		"\u01BC\u01BD\x07T\x02\x02\u01BD\u01DC\x03\x02\x02\x02\u01BE\u01DC\x05" +
-		"D#\x02\u01BF\u01DC\x05F$\x02\u01C0\u01DC\x05B\"\x02\u01C1\u01DC\x05@!" +
-		"\x02\u01C2\u01CB\x071\x02\x02\u01C3\u01C8\x05<\x1F\x02\u01C4\u01C5\x07" +
-		"6\x02\x02\u01C5\u01C7\x05<\x1F\x02\u01C6\u01C4\x03\x02\x02\x02\u01C7\u01CA" +
-		"\x03\x02\x02\x02\u01C8\u01C6\x03\x02\x02\x02\u01C8\u01C9\x03\x02\x02\x02" +
-		"\u01C9\u01CC\x03\x02\x02\x02\u01CA\u01C8\x03\x02\x02\x02\u01CB\u01C3\x03" +
-		"\x02\x02\x02\u01CB\u01CC\x03\x02\x02\x02\u01CC\u01CD\x03\x02\x02\x02\u01CD" +
-		"\u01DC\x072\x02\x02\u01CE\u01CF\x05D#\x02\u01CF\u01D0\x07R\x02\x02\u01D0" +
-		"\u01D5\x05> \x02\u01D1\u01D2\x076\x02\x02\u01D2\u01D4\x05> \x02\u01D3" +
-		"\u01D1\x03\x02\x02\x02\u01D4\u01D7\x03\x02\x02\x02\u01D5\u01D3\x03\x02" +
-		"\x02\x02\u01D5\u01D6\x03\x02\x02\x02\u01D6\u01D8\x03\x02\x02\x02\u01D7" +
-		"\u01D5\x03\x02\x02\x02\u01D8\u01D9\x07T\x02\x02\u01D9\u01DC\x03\x02\x02" +
-		"\x02\u01DA\u01DC\x05H%\x02\u01DB\u01B9\x03\x02\x02\x02\u01DB\u01BE\x03" +
-		"\x02\x02\x02\u01DB\u01BF\x03\x02\x02\x02\u01DB\u01C0\x03\x02\x02\x02\u01DB" +
-		"\u01C1\x03\x02\x02\x02\u01DB\u01C2\x03\x02\x02\x02\u01DB\u01CE\x03\x02" +
-		"\x02\x02\u01DB\u01DA\x03\x02\x02\x02\u01DC\u01E7\x03\x02\x02\x02\u01DD" +
-		"\u01DE\f\x07\x02\x02\u01DE\u01E6\x078\x02\x02\u01DF\u01E0\f\x06\x02\x02" +
-		"\u01E0\u01E2\x071\x02\x02\u01E1\u01E3\x07Y\x02\x02\u01E2\u01E1\x03\x02" +
-		"\x02\x02\u01E2\u01E3\x03\x02\x02\x02\u01E3\u01E4\x03\x02\x02\x02\u01E4" +
-		"\u01E6\x072\x02\x02\u01E5\u01DD\x03\x02\x02\x02\u01E5\u01DF\x03\x02\x02" +
-		"\x02\u01E6\u01E9\x03\x02\x02\x02\u01E7\u01E5\x03\x02\x02\x02\u01E7\u01E8" +
-		"\x03\x02\x02\x02\u01E8=\x03\x02\x02\x02\u01E9\u01E7\x03\x02\x02\x02\u01EA" +
-		"\u01EB\x05|?\x02\u01EB\u01EC\x07E\x02\x02\u01EC\u01EE\x03\x02\x02\x02" +
-		"\u01ED\u01EA\x03\x02\x02\x02\u01ED\u01EE\x03\x02\x02\x02\u01EE\u01EF\x03" +
-		"\x02\x02\x02\u01EF\u01F0\x05<\x1F\x02\u01F0?\x03\x02\x02\x02\u01F1\u01F3" +
-		"\x07$\x02\x02\u01F2\u01F4\x079\x02\x02\u01F3\u01F2\x03\x02\x02\x02\u01F3" +
-		"\u01F4\x03\x02\x02\x02\u01F4\u01F5\x03\x02\x02\x02\u01F5\u01F7\x07/\x02" +
-		"\x02\u01F6\u01F8\x05\x12\n\x02\u01F7\u01F6\x03\x02\x02\x02\u01F7\u01F8" +
-		"\x03\x02\x02\x02\u01F8\u01F9\x03\x02\x02\x02\u01F9\u01FA\x070\x02\x02" +
-		"\u01FA\u01FB\x07@\x02\x02\u01FB\u01FC\x05<\x1F\x02\u01FCA\x03\x02\x02" +
-		"\x02\u01FD\u01FE\t\x02\x02\x02\u01FE\u01FF\x05D#\x02\u01FFC\x03\x02\x02" +
-		"\x02\u0200\u0205\x05|?\x02\u0201\u0202\x075\x02\x02\u0202\u0204\x05|?" +
-		"\x02\u0203\u0201\x03\x02\x02\x02\u0204\u0207\x03\x02\x02\x02\u0205\u0203" +
-		"\x03\x02\x02\x02\u0205\u0206\x03\x02\x02\x02\u0206E\x03\x02\x02\x02\u0207" +
-		"\u0205\x03\x02\x02\x02\u0208\u020D\x05D#\x02\u0209\u020A\x07/\x02\x02" +
-		"\u020A\u020B\x05d3\x02\u020B\u020C\x070\x02\x02\u020C\u020E\x03\x02\x02" +
-		"\x02\u020D\u0209\x03\x02\x02\x02\u020D\u020E\x03\x02\x02\x02\u020E\u020F" +
-		"\x03\x02\x02\x02\u020F\u0210\x075\x02\x02\u0210\u0211\x07=\x02\x02\u0211" +
-		"\u0212\x05|?\x02\u0212G\x03\x02\x02\x02\u0213\u0217\x05J&\x02\u0214\u0217" +
-		"\x054\x1B\x02\u0215\u0217\x05L\'\x02\u0216\u0213\x03\x02\x02\x02\u0216" +
-		"\u0214\x03\x02\x02\x02\u0216\u0215\x03\x02\x02\x02\u0217I\x03\x02\x02" +
-		"\x02\u0218\u021A\x07)\x02\x02\u0219\u021B\x05|?\x02\u021A\u0219\x03\x02" +
-		"\x02\x02\u021A\u021B\x03\x02\x02\x02\u021B\u021C\x03\x02\x02\x02\u021C" +
-		"\u0225\x07/\x02\x02\u021D\u0222\x05\x10\t\x02\u021E\u021F\x076\x02\x02" +
-		"\u021F\u0221\x05\x10\t\x02\u0220\u021E\x03\x02\x02\x02\u0221\u0224\x03" +
-		"\x02\x02\x02\u0222\u0220\x03\x02\x02\x02\u0222\u0223\x03\x02\x02\x02\u0223" +
-		"\u0226\x03\x02\x02\x02\u0224\u0222\x03\x02\x02\x02\u0225\u021D\x03\x02" +
-		"\x02\x02\u0225\u0226\x03\x02\x02\x02\u0226\u0227\x03\x02\x02\x02\u0227" +
-		"\u023B\x070\x02\x02\u0228\u022A\x07)\x02\x02\u0229\u022B\x05|?\x02\u022A" +
-		"\u0229\x03\x02\x02\x02\u022A\u022B\x03\x02\x02\x02\u022B\u022C\x03\x02" +
-		"\x02\x02\u022C\u022D\x073\x02\x02\u022D\u0232\x05\x10\t\x02\u022E\u022F" +
-		"\x076\x02\x02\u022F\u0231\x05\x10\t\x02\u0230\u022E\x03\x02\x02\x02\u0231" +
-		"\u0234\x03\x02\x02\x02\u0232\u0230\x03\x02\x02\x02\u0232\u0233\x03\x02" +
-		"\x02\x02\u0233\u0236\x03\x02\x02\x02\u0234\u0232\x03\x02\x02\x02\u0235" +
-		"\u0237\x076\x02\x02\u0236\u0235\x03\x02\x02\x02\u0236\u0237\x03\x02\x02" +
-		"\x02\u0237\u0238\x03\x02\x02\x02\u0238\u0239\x074\x02\x02\u0239\u023B" +
-		"\x03\x02\x02\x02\u023A\u0218\x03\x02\x02\x02\u023A\u0228\x03\x02\x02\x02" +
-		"\u023BK\x03\x02\x02\x02\u023C\u023D\x07+\x02\x02\u023D\u023E\x05|?\x02" +
-		"\u023E\u023F\x07E\x02\x02\u023F\u0240\x05<\x1F\x02\u0240M\x03\x02\x02" +
-		"\x02\u0241\u0242\x07$\x02\x02\u0242\u0244\x05|?\x02\u0243\u0245\x079\x02" +
-		"\x02\u0244\u0243\x03\x02\x02\x02\u0244\u0245\x03\x02\x02\x02\u0245\u0246" +
-		"\x03\x02\x02\x02\u0246\u0249\x05\x14\v\x02\u0247\u0248\x07@\x02\x02\u0248" +
-		"\u024A\x05<\x1F\x02\u0249\u0247\x03\x02\x02\x02\u0249\u024A\x03\x02\x02" +
-		"\x02\u024A\u024B\x03\x02\x02\x02\u024B\u024C\x05j6\x02\u024CO\x03\x02" +
-		"\x02\x02\u024D\u024F\x07>\x02\x02\u024E\u0250\x07>\x02\x02\u024F\u024E" +
-		"\x03\x02\x02\x02\u024F\u0250\x03\x02\x02\x02\u0250\u0251\x03\x02\x02\x02" +
-		"\u0251\u0257\x05D#\x02\u0252\u0254\x07/\x02\x02\u0253\u0255\x05p9\x02" +
-		"\u0254\u0253\x03\x02\x02\x02\u0254\u0255\x03\x02\x02\x02\u0255\u0256\x03" +
-		"\x02\x02\x02\u0256\u0258\x070\x02\x02\u0257\u0252\x03\x02\x02\x02\u0257" +
-		"\u0258\x03\x02\x02\x02\u0258Q\x03\x02\x02\x02\u0259\u0265\x073\x02\x02" +
-		"\u025A\u025F\x05r:\x02\u025B\u025C\x076\x02\x02\u025C\u025E\x05r:\x02" +
-		"\u025D\u025B\x03\x02\x02\x02\u025E\u0261\x03\x02\x02\x02\u025F\u025D\x03" +
-		"\x02\x02\x02\u025F\u0260\x03\x02\x02\x02\u0260\u0263\x03\x02\x02\x02\u0261" +
-		"\u025F\x03\x02\x02\x02\u0262\u0264\x076\x02\x02\u0263\u0262\x03\x02\x02" +
-		"\x02\u0263\u0264\x03\x02\x02\x02\u0264\u0266\x03\x02\x02\x02\u0265\u025A" +
-		"\x03\x02\x02\x02\u0265\u0266\x03\x02\x02\x02\u0266\u0267\x03\x02\x02\x02" +
-		"\u0267\u0268\x074\x02\x02\u0268S\x03\x02\x02\x02\u0269\u026A\x05P)\x02" +
-		"\u026A\u026B\x05j6\x02\u026B\u02E4\x03\x02\x02\x02\u026C\u026E\x05P)\x02" +
-		"\u026D\u026C\x03\x02\x02\x02\u026E\u0271\x03\x02\x02\x02\u026F\u026D\x03" +
-		"\x02\x02\x02\u026F\u0270\x03\x02\x02\x02\u0270\u0272\x03\x02\x02\x02\u0271" +
-		"\u026F\x03\x02\x02\x02\u0272\u02E4\x05V,\x02\u0273\u0275\x05P)\x02\u0274" +
-		"\u0273\x03\x02\x02\x02\u0275\u0278\x03\x02\x02\x02\u0276\u0274\x03\x02" +
-		"\x02\x02\u0276\u0277\x03\x02\x02\x02\u0277\u0279\x03\x02\x02\x02\u0278" +
-		"\u0276\x03\x02\x02\x02\u0279\u02E4\x05X-\x02\u027A\u027C\x05P)\x02\u027B" +
-		"\u027A\x03\x02\x02\x02\u027C\u027F\x03\x02\x02\x02\u027D\u027B\x03\x02" +
-		"\x02\x02\u027D\u027E\x03\x02\x02\x02\u027E\u0280\x03\x02\x02\x02\u027F" +
-		"\u027D\x03\x02\x02\x02\u0280\u02E4\x05Z.\x02\u0281\u0283\x05P)\x02\u0282" +
-		"\u0281\x03\x02\x02\x02\u0283\u0286\x03\x02\x02\x02\u0284\u0282\x03\x02" +
-		"\x02\x02\u0284\u0285\x03\x02\x02\x02\u0285\u0287\x03\x02\x02\x02\u0286" +
-		"\u0284\x03\x02\x02\x02\u0287\u02E4\x05`1\x02\u0288\u028A\x05P)\x02\u0289" +
-		"\u0288\x03\x02\x02\x02\u028A\u028D\x03\x02\x02\x02\u028B\u0289\x03\x02" +
-		"\x02\x02\u028B\u028C\x03\x02\x02\x02\u028C\u028E\x03\x02\x02\x02\u028D" +
-		"\u028B\x03\x02\x02\x02\u028E\u02E4\x05v<\x02\u028F\u0291\x05P)\x02\u0290" +
-		"\u028F\x03\x02\x02\x02\u0291\u0294\x03\x02\x02\x02\u0292\u0290\x03\x02" +
-		"\x02\x02\u0292\u0293\x03\x02\x02\x02\u0293\u0295\x03\x02\x02\x02\u0294" +
-		"\u0292\x03\x02\x02\x02\u0295\u02E4\x05z>\x02\u0296\u0298\x05P)\x02\u0297" +
-		"\u0296\x03\x02\x02\x02\u0298\u029B\x03\x02\x02\x02\u0299\u0297\x03\x02" +
-		"\x02\x02\u0299\u029A\x03\x02\x02\x02\u029A\u029D\x03\x02\x02\x02\u029B" +
-		"\u0299\x03\x02\x02\x02\u029C\u029E\x07\v\x02\x02\u029D\u029C\x03\x02\x02" +
-		"\x02\u029D\u029E\x03\x02\x02\x02\u029E\u029F\x03\x02\x02\x02\u029F\u02A0" +
-		"\x07\r\x02\x02\u02A0\u02A2\x05d3\x02\u02A1\u02A3\x05R*\x02\u02A2\u02A1" +
-		"\x03\x02\x02\x02\u02A2\u02A3\x03\x02\x02\x02\u02A3\u02E4\x03\x02\x02\x02" +
-		"\u02A4\u02A6\x05P)\x02\u02A5\u02A4\x03\x02\x02\x02\u02A6\u02A9\x03\x02" +
-		"\x02\x02\u02A7\u02A5\x03\x02\x02\x02\u02A7\u02A8\x03\x02\x02\x02\u02A8" +
-		"\u02AB\x03\x02\x02\x02\u02A9\u02A7\x03\x02\x02\x02\u02AA\u02AC\x07\v\x02" +
-		"\x02\u02AB\u02AA\x03\x02\x02\x02\u02AB\u02AC\x03\x02\x02\x02\u02AC\u02AD" +
-		"\x03\x02\x02\x02\u02AD\u02AE\x07\x0F\x02\x02\u02AE\u02AF\x07=\x02\x02" +
-		"\u02AF\u02E4\x05d3\x02\u02B0\u02B2\x05P)\x02\u02B1\u02B0\x03\x02\x02\x02" +
-		"\u02B2\u02B5\x03\x02\x02\x02\u02B3\u02B1\x03\x02\x02\x02\u02B3\u02B4\x03" +
-		"\x02\x02\x02\u02B4\u02B7\x03\x02\x02\x02\u02B5\u02B3\x03\x02\x02\x02\u02B6" +
-		"\u02B8\x07\v\x02\x02\u02B7\u02B6\x03\x02\x02\x02\u02B7\u02B8\x03\x02\x02" +
-		"\x02\u02B8\u02B9\x03\x02\x02\x02\u02B9\u02BB\x07\f\x02\x02\u02BA\u02BC" +
-		"\x07=\x02\x02\u02BB\u02BA\x03\x02\x02\x02\u02BB\u02BC\x03\x02\x02\x02" +
-		"\u02BC\u02BD\x03\x02\x02\x02\u02BD\u02BF\x05d3\x02\u02BE\u02C0\x05R*\x02" +
-		"\u02BF\u02BE\x03\x02\x02\x02\u02BF\u02C0\x03\x02\x02\x02\u02C0\u02E4\x03" +
-		"\x02\x02\x02\u02C1\u02C3\x05P)\x02\u02C2\u02C1\x03\x02\x02\x02\u02C3\u02C6" +
-		"\x03\x02\x02\x02\u02C4\u02C2\x03\x02\x02\x02\u02C4\u02C5\x03\x02\x02\x02" +
-		"\u02C5\u02C8\x03\x02\x02\x02\u02C6\u02C4\x03\x02\x02\x02\u02C7\u02C9\x07" +
-		"\v\x02\x02\u02C8\u02C7\x03\x02\x02\x02\u02C8\u02C9\x03\x02\x02\x02\u02C9" +
-		"\u02CA\x03\x02\x02\x02\u02CA\u02CB\x07,\x02\x02\u02CB\u02E4\x05d3\x02" +
-		"\u02CC\u02CE\x05P)\x02\u02CD\u02CC\x03\x02\x02\x02\u02CE\u02D1\x03\x02" +
-		"\x02\x02\u02CF\u02CD\x03\x02\x02\x02\u02CF\u02D0\x03\x02\x02\x02\u02D0" +
-		"\u02D2\x03\x02\x02\x02\u02D1\u02CF\x03\x02\x02\x02\u02D2\u02D3\x07(\x02" +
-		"\x02\u02D3\u02E4\x05d3\x02\u02D4\u02D6\x05P)\x02\u02D5\u02D4\x03\x02\x02" +
-		"\x02\u02D6\u02D9\x03\x02\x02\x02\u02D7\u02D5\x03\x02\x02\x02\u02D7\u02D8" +
-		"\x03\x02\x02\x02\u02D8\u02DA\x03\x02\x02\x02\u02D9\u02D7\x03\x02\x02\x02" +
-		"\u02DA\u02DB\x07\'\x02\x02\u02DB\u02E4\x05d3\x02\u02DC\u02DE\x05P)\x02" +
-		"\u02DD\u02DC\x03\x02\x02\x02\u02DE\u02E1\x03\x02\x02\x02\u02DF\u02DD\x03" +
-		"\x02\x02\x02\u02DF\u02E0\x03\x02\x02\x02\u02E0\u02E2\x03\x02\x02\x02\u02E1" +
-		"\u02DF\x03\x02\x02\x02\u02E2\u02E4\x05d3\x02\u02E3\u0269\x03\x02\x02\x02" +
-		"\u02E3\u026F\x03\x02\x02\x02\u02E3\u0276\x03\x02\x02\x02\u02E3\u027D\x03" +
-		"\x02\x02\x02\u02E3\u0284\x03\x02\x02\x02\u02E3\u028B\x03\x02\x02\x02\u02E3" +
-		"\u0292\x03\x02\x02\x02\u02E3\u0299\x03\x02\x02\x02\u02E3\u02A7\x03\x02" +
-		"\x02\x02\u02E3\u02B3\x03\x02\x02\x02\u02E3\u02C4\x03\x02\x02\x02\u02E3" +
-		"\u02CF\x03\x02\x02\x02\u02E3\u02D7\x03\x02\x02\x02\u02E3\u02DF\x03\x02" +
-		"\x02\x02\u02E4U\x03\x02\x02\x02\u02E5\u02E8\x07\x03\x02\x02\u02E6\u02E9" +
-		"\x05j6\x02\u02E7\u02E9\x05T+\x02\u02E8\u02E6\x03\x02\x02\x02\u02E8\u02E7" +
-		"\x03\x02\x02\x02\u02E8\u02E9\x03\x02\x02\x02\u02E9W\x03\x02\x02\x02\u02EA" +
-		"\u02EB\x07%\x02\x02\u02EB\u02EE\x05^0\x02\u02EC\u02ED\x07E\x02\x02\u02ED" +
-		"\u02EF\x05d3\x02\u02EE\u02EC\x03\x02\x02\x02\u02EE\u02EF\x03\x02\x02\x02" +
-		"\u02EFY\x03\x02\x02\x02\u02F0\u02F1\x07&\x02\x02\u02F1\u02F2\x05|?\x02" +
-		"\u02F2\u02F3\x07E\x02\x02\u02F3\u02F4\x05d3\x02\u02F4[\x03\x02\x02\x02" +
-		"\u02F5\u02F8\x05|?\x02\u02F6\u02F7\x07;\x02\x02\u02F7\u02F9\x05<\x1F\x02" +
-		"\u02F8\u02F6\x03\x02\x02\x02\u02F8\u02F9\x03\x02\x02\x02\u02F9]\x03\x02" +
-		"\x02\x02\u02FA\u0311\x05\\/\x02\u02FB\u02FC\x073\x02\x02\u02FC\u0300\x05" +
-		"\\/\x02\u02FD\u02FF\x076\x02\x02\u02FE\u02FD\x03\x02\x02\x02\u02FF\u0302" +
-		"\x03\x02\x02\x02\u0300\u02FE\x03\x02\x02\x02\u0300\u0301\x03\x02\x02\x02" +
-		"\u0301\u0303\x03\x02\x02\x02\u0302\u0300\x03\x02\x02\x02\u0303\u0304\x07" +
-		"4\x02\x02\u0304\u0311\x03\x02\x02\x02\u0305\u0306\x071\x02\x02\u0306\u030B" +
-		"\x05\\/\x02\u0307\u0308\x076\x02\x02\u0308\u030A\x05\\/\x02\u0309\u0307" +
-		"\x03\x02\x02\x02\u030A\u030D\x03\x02\x02\x02\u030B\u0309\x03\x02\x02\x02" +
-		"\u030B\u030C\x03\x02\x02\x02\u030C\u030E\x03\x02\x02\x02\u030D\u030B\x03" +
-		"\x02\x02\x02\u030E\u030F\x072\x02\x02\u030F\u0311\x03\x02\x02\x02\u0310" +
-		"\u02FA\x03\x02\x02\x02\u0310\u02FB\x03\x02\x02\x02\u0310\u0305\x03\x02" +
-		"\x02\x02\u0311_\x03\x02\x02\x02\u0312\u0313\x05b2\x02\u0313\u0314\t\x03" +
-		"\x02\x02\u0314\u0315\x05d3\x02\u0315a\x03\x02\x02\x02\u0316\u0328\x05" +
-		"|?\x02\u0317\u0318\x05d3\x02\u0318\u0319\x075\x02\x02\u0319\u031A\x05" +
-		"|?\x02\u031A\u0328\x03\x02\x02\x02\u031B\u031C\x05d3\x02\u031C\u031D\x07" +
-		"1\x02\x02\u031D\u0322\x05d3\x02\u031E\u031F\x076\x02\x02\u031F\u0321\x05" +
-		"d3\x02\u0320\u031E\x03\x02\x02\x02\u0321\u0324\x03\x02\x02\x02\u0322\u0320" +
-		"\x03\x02\x02\x02\u0322\u0323\x03\x02\x02\x02\u0323\u0325\x03\x02\x02\x02" +
-		"\u0324\u0322\x03\x02\x02\x02\u0325\u0326\x072\x02\x02\u0326\u0328\x03" +
-		"\x02\x02\x02\u0327\u0316\x03\x02\x02\x02\u0327\u0317\x03\x02\x02\x02\u0327" +
-		"\u031B\x03\x02\x02\x02\u0328c\x03\x02\x02\x02\u0329\u032A\b3\x01\x02\u032A" +
-		"\u032B\x07/\x02\x02\u032B\u032C\x05d3\x02\u032C\u032D\x070\x02\x02\u032D" +
-		"\u035D\x03\x02\x02\x02\u032E\u032F\x05<\x1F\x02\u032F\u0330\x07<\x02\x02" +
-		"\u0330\u0331\x05|?\x02\u0331\u035D\x03\x02\x02\x02\u0332\u035D\x05l7\x02" +
-		"\u0333\u0334\x07\x1D\x02\x02\u0334\u035D\x05d3\x0F\u0335\u035D\x05v<\x02" +
-		"\u0336\u0337\x07\x0E\x02\x02\u0337\u035D\x05d3\v\u0338\u0339\x07\'\x02" +
-		"\x02\u0339\u035D\x05d3\n\u033A\u035D\x05h5\x02\u033B\u0344\x071\x02\x02" +
-		"\u033C\u0341\x05d3\x02\u033D\u033E\x076\x02\x02\u033E\u0340\x05d3\x02" +
-		"\u033F\u033D\x03\x02\x02\x02\u0340\u0343\x03\x02\x02\x02\u0341\u033F\x03" +
-		"\x02\x02\x02\u0341\u0342\x03\x02\x02\x02\u0342\u0345\x03\x02\x02\x02\u0343" +
-		"\u0341\x03\x02\x02\x02\u0344\u033C\x03\x02\x02\x02\u0344\u0345\x03\x02" +
-		"\x02\x02\u0345\u0346\x03\x02\x02\x02\u0346\u035D\x072\x02\x02\u0347\u0349" +
-		"\x05<\x1F\x02\u0348\u0347\x03\x02\x02\x02\u0348\u0349\x03\x02\x02\x02" +
-		"\u0349\u034A\x03\x02\x02\x02\u034A\u0356\x073\x02\x02\u034B\u0350\x05" +
-		"r:\x02\u034C\u034D\x076\x02\x02\u034D\u034F\x05r:\x02\u034E\u034C\x03" +
-		"\x02\x02\x02\u034F\u0352\x03\x02\x02\x02\u0350\u034E\x03\x02\x02\x02\u0350" +
-		"\u0351\x03\x02\x02\x02\u0351\u0354\x03\x02\x02\x02\u0352\u0350\x03\x02" +
-		"\x02\x02\u0353\u0355\x076\x02\x02\u0354\u0353\x03\x02\x02\x02\u0354\u0355" +
-		"\x03\x02\x02\x02\u0355\u0357\x03\x02\x02\x02\u0356\u034B\x03\x02\x02\x02" +
-		"\u0356\u0357\x03\x02\x02\x02\u0357\u0358\x03\x02\x02\x02\u0358\u035D\x07" +
-		"4\x02\x02\u0359\u035D\x05F$\x02\u035A\u035D\x05t;\x02\u035B\u035D\x05" +
-		"|?\x02\u035C\u0329\x03\x02\x02\x02\u035C\u032E\x03\x02\x02\x02\u035C\u0332" +
-		"\x03\x02\x02\x02\u035C\u0333\x03\x02\x02\x02\u035C\u0335\x03\x02\x02\x02" +
-		"\u035C\u0336\x03\x02\x02\x02\u035C\u0338\x03\x02\x02\x02\u035C\u033A\x03" +
-		"\x02\x02\x02\u035C\u033B\x03\x02\x02\x02\u035C\u0348\x03\x02\x02\x02\u035C" +
-		"\u0359\x03\x02\x02\x02\u035C\u035A\x03\x02\x02\x02\u035C\u035B\x03\x02" +
-		"\x02\x02\u035D\u03AA\x03\x02\x02\x02\u035E\u0360\f\x1E\x02\x02\u035F\u0361" +
-		"\t\x04\x02\x02\u0360\u035F\x03\x02\x02\x02\u0360\u0361\x03\x02\x02\x02" +
-		"\u0361\u0362\x03\x02\x02\x02\u0362\u0363\x075\x02\x02\u0363\u03A9\x05" +
-		"|?\x02\u0364\u0365\f\x1D\x02\x02\u0365\u0366\x07-\x02\x02\u0366\u03A9" +
-		"\x05<\x1F\x02\u0367\u0368\f\x1C\x02\x02\u0368\u0369\x071\x02\x02\u0369" +
-		"\u036E\x05p9\x02\u036A\u036B\x076\x02\x02\u036B\u036D\x05p9\x02\u036C" +
-		"\u036A\x03\x02\x02\x02\u036D\u0370\x03\x02\x02\x02\u036E\u036C\x03\x02" +
-		"\x02\x02\u036E\u036F\x03\x02\x02\x02\u036F\u0371\x03\x02\x02\x02\u0370" +
-		"\u036E\x03\x02\x02\x02\u0371\u0372\x072\x02\x02\u0372\u03A9\x03\x02\x02" +
-		"\x02\u0373\u0374\f\x1B\x02\x02\u0374\u0375\x07<\x02\x02\u0375\u03A9\x05" +
-		"|?\x02\u0376\u0378\f\x19\x02\x02\u0377\u0379\x079\x02\x02\u0378\u0377" +
-		"\x03\x02\x02\x02\u0378\u0379\x03\x02\x02\x02\u0379\u037A\x03\x02\x02\x02" +
-		"\u037A\u0383\x07/\x02\x02\u037B\u0380\x05p9\x02\u037C\u037D\x076\x02\x02" +
-		"\u037D\u037F\x05p9\x02\u037E\u037C\x03\x02\x02\x02\u037F\u0382\x03\x02" +
-		"\x02\x02\u0380\u037E\x03\x02\x02\x02\u0380\u0381\x03\x02\x02\x02\u0381" +
-		"\u0384\x03\x02\x02\x02\u0382\u0380\x03\x02\x02\x02\u0383\u037B\x03\x02" +
-		"\x02\x02\u0383\u0384\x03\x02\x02\x02\u0384\u0385\x03\x02\x02\x02\u0385" +
-		"\u03A9\x070\x02\x02\u0386\u0387\f\x18\x02\x02\u0387\u0388\t\x05\x02\x02" +
-		"\u0388\u03A9\x05d3\x02\u0389\u038A\f\x17\x02\x02\u038A\u038B\t\x06\x02" +
-		"\x02\u038B\u03A9\x05d3\x02\u038C\u038D\f\x16\x02\x02\u038D\u038E\t\x07" +
-		"\x02\x02\u038E\u03A9\x05d3\x02\u038F\u0390\f\x15\x02\x02\u0390\u0391\t" +
-		"\b\x02\x02\u0391\u03A9\x05d3\x02\u0392\u0393\f\x14\x02\x02\u0393\u03A9" +
-		"\x078\x02\x02\u0394\u0395\f\x13\x02\x02\u0395\u0397\x07\x19\x02\x02\u0396" +
-		"\u0398\x07\x1D\x02\x02\u0397\u0396\x03\x02\x02\x02\u0397\u0398\x03\x02" +
-		"\x02\x02\u0398\u0399\x03\x02\x02\x02\u0399\u03A9\x05<\x1F\x02\u039A\u039B" +
-		"\f\x12\x02\x02\u039B\u039C\x07\x15\x02\x02\u039C\u03A9\x05d3\x02\u039D" +
-		"\u039E\f\x11\x02\x02\u039E\u039F\x077\x02\x02\u039F\u03A9\x05d3\x02\u03A0" +
-		"\u03A1\f\x0E\x02\x02\u03A1\u03A2\x07 \x02\x02\u03A2\u03A9\x05d3\x02\u03A3" +
-		"\u03A4\f\r\x02\x02\u03A4\u03A5\x07!\x02\x02\u03A5\u03A9\x05d3\x02\u03A6" +
-		"\u03A7\f\x03\x02\x02\u03A7\u03A9\x07.\x02\x02\u03A8\u035E\x03\x02\x02" +
-		"\x02\u03A8\u0364\x03\x02\x02\x02\u03A8\u0367\x03\x02\x02\x02\u03A8\u0373" +
-		"\x03\x02\x02\x02\u03A8\u0376\x03\x02\x02\x02\u03A8\u0386\x03\x02\x02\x02" +
-		"\u03A8\u0389\x03\x02\x02\x02\u03A8\u038C\x03\x02\x02\x02\u03A8\u038F\x03" +
-		"\x02\x02\x02\u03A8\u0392\x03\x02\x02\x02\u03A8\u0394\x03\x02\x02\x02\u03A8" +
-		"\u039A\x03\x02\x02\x02\u03A8\u039D\x03\x02\x02\x02\u03A8\u03A0\x03\x02" +
-		"\x02\x02\u03A8\u03A3\x03\x02\x02\x02\u03A8\u03A6\x03\x02\x02\x02\u03A9" +
-		"\u03AC\x03\x02\x02\x02\u03AA\u03A8\x03\x02\x02\x02\u03AA\u03AB\x03\x02" +
-		"\x02\x02\u03ABe\x03\x02\x02\x02\u03AC\u03AA\x03\x02\x02\x02\u03AD\u03B6" +
-		"\x07B\x02\x02\u03AE\u03B3\x05\x10\t\x02\u03AF\u03B0\x076\x02\x02\u03B0" +
-		"\u03B2\x05\x10\t\x02\u03B1\u03AF\x03\x02\x02\x02\u03B2\u03B5\x03\x02\x02" +
-		"\x02\u03B3\u03B1\x03\x02\x02\x02\u03B3\u03B4\x03\x02\x02\x02\u03B4\u03B7" +
-		"\x03\x02\x02\x02\u03B5\u03B3\x03\x02\x02\x02\u03B6\u03AE\x03\x02\x02\x02" +
-		"\u03B6\u03B7\x03\x02\x02\x02\u03B7\u03B8\x03\x02\x02\x02\u03B8\u03B9\x07" +
-		"B\x02\x02\u03B9g\x03\x02\x02\x02\u03BA\u03BC\x079\x02\x02\u03BB\u03BA" +
-		"\x03\x02\x02\x02\u03BB\u03BC\x03\x02\x02\x02\u03BC\u03BD\x03\x02\x02\x02" +
-		"\u03BD\u03C4\x05f4\x02\u03BE\u03BF\x07@\x02\x02\u03BF\u03C1\x05<\x1F\x02" +
-		"\u03C0\u03BE\x03\x02\x02\x02\u03C0\u03C1\x03\x02\x02\x02\u03C1\u03C2\x03" +
-		"\x02\x02\x02\u03C2\u03C5\x05j6\x02\u03C3\u03C5\x05T+\x02\u03C4\u03C0\x03" +
-		"\x02\x02\x02\u03C4\u03C3\x03\x02\x02\x02\u03C5i\x03\x02\x02\x02\u03C6" +
-		"\u03CB\x073\x02\x02\u03C7\u03CA\x05T+\x02\u03C8\u03CA\x07:\x02\x02\u03C9" +
-		"\u03C7\x03\x02\x02\x02\u03C9\u03C8\x03\x02\x02\x02\u03CA\u03CD\x03\x02" +
-		"\x02\x02\u03CB\u03C9\x03\x02\x02\x02\u03CB\u03CC\x03\x02\x02\x02\u03CC" +
-		"\u03CE\x03\x02\x02\x02\u03CD\u03CB\x03\x02\x02\x02\u03CE\u03CF\x074\x02" +
-		"\x02\u03CFk\x03\x02\x02\x02\u03D0\u03D1\x07\x1A\x02\x02\u03D1\u03D5\x05" +
-		"j6\x02\u03D2\u03D4\x05n8\x02\u03D3\u03D2\x03\x02\x02\x02\u03D4\u03D7\x03" +
-		"\x02\x02\x02\u03D5\u03D3\x03\x02\x02\x02\u03D5\u03D6\x03\x02\x02\x02\u03D6" +
-		"\u03D9\x03\x02\x02\x02\u03D7\u03D5\x03\x02\x02\x02\u03D8\u03DA\x05x=\x02" +
-		"\u03D9\u03D8\x03\x02\x02\x02\u03D9\u03DA\x03\x02\x02\x02\u03DAm\x03\x02" +
-		"\x02\x02\u03DB\u03DC\x07\x1B\x02\x02\u03DC\u03DD\x05<\x1F\x02\u03DD\u03DE" +
-		"\x05j6\x02\u03DE\u03E7\x03\x02\x02\x02\u03DF\u03E0\x07\x1B\x02\x02\u03E0" +
-		"\u03E1\x05|?\x02\u03E1\u03E2\x07;\x02\x02\u03E2\u03E3\x05<\x1F\x02\u03E3" +
-		"\u03E4\x03\x02\x02\x02\u03E4\u03E5\x05j6\x02\u03E5\u03E7\x03\x02\x02\x02" +
-		"\u03E6\u03DB\x03\x02\x02\x02\u03E6\u03DF\x03\x02\x02\x02\u03E7o\x03\x02" +
-		"\x02\x02\u03E8\u03E9\x05|?\x02\u03E9\u03EA\x07E\x02\x02\u03EA\u03EC\x03" +
-		"\x02\x02\x02\u03EB\u03E8\x03\x02\x02\x02\u03EB\u03EC\x03\x02\x02\x02\u03EC" +
-		"\u03ED\x03\x02\x02\x02\u03ED\u03EE\x05d3\x02\u03EEq\x03\x02\x02\x02\u03EF" +
-		"\u03F2\x05|?\x02\u03F0\u03F1\x07;\x02\x02\u03F1\u03F3\x05d3\x02\u03F2" +
-		"\u03F0\x03\x02\x02\x02\u03F2\u03F3\x03\x02\x02\x02\u03F3s\x03\x02\x02" +
-		"\x02\u03F4\u03FA\x07X\x02\x02\u03F5\u03FA\x07Y\x02\x02\u03F6\u03FA\x07" +
-		"Z\x02\x02\u03F7\u03FA\x07[\x02\x02\u03F8\u03FA\x07\x1E\x02\x02\u03F9\u03F4" +
-		"\x03\x02\x02\x02\u03F9\u03F5\x03\x02\x02\x02\u03F9\u03F6\x03\x02\x02\x02" +
-		"\u03F9\u03F7\x03\x02\x02\x02\u03F9\u03F8\x03\x02\x02\x02\u03FAu\x03\x02" +
-		"\x02\x02\u03FB\u03FC\x07\x18\x02\x02\u03FC\u03FD\x05d3\x02\u03FD\u03FF" +
-		"\x05j6\x02\u03FE\u0400\x05x=\x02\u03FF\u03FE\x03\x02\x02\x02\u03FF\u0400" +
-		"\x03\x02\x02\x02\u0400w\x03\x02\x02\x02\u0401\u0402\x07\x1C\x02\x02\u0402" +
-		"\u0406\x05j6\x02\u0403\u0404\x07\x1C\x02\x02\u0404\u0406\x05T+\x02\u0405" +
-		"\u0401\x03\x02\x02\x02\u0405\u0403\x03\x02\x02\x02\u0406y\x03\x02\x02" +
-		"\x02\u0407\u0408\x07\x14\x02\x02\u0408\u0409\x05^0\x02\u0409\u040A\x07" +
-		"\x15\x02\x02\u040A\u040B\x05d3\x02\u040B\u040C\x05j6\x02\u040C{\x03\x02" +
-		"\x02\x02\u040D\u0410\x07W\x02\x02\u040E\u0410\x05~@\x02\u040F\u040D\x03" +
-		"\x02\x02\x02\u040F\u040E\x03\x02\x02\x02\u0410}\x03\x02\x02\x02\u0411" +
-		"\u0412\t\t\x02\x02\u0412\x7F\x03\x02\x02\x02\x84\x82\x84\x8D\x92\x99\x9D" +
-		"\xA4\xAB\xB3\xC3\xCB\xDD\xE2\xE7\xED\xEF\xF6\xFF\u0102\u0113\u0117\u0119" +
-		"\u0127\u012B\u012D\u0136\u0140\u0149\u0151\u0153\u0158\u0167\u0170\u017C" +
-		"\u0186\u018B\u0197\u019B\u01A2\u01A8\u01B0\u01B4\u01C8\u01CB\u01D5\u01DB" +
-		"\u01E2\u01E5\u01E7\u01ED\u01F3\u01F7\u0205\u020D\u0216\u021A\u0222\u0225" +
-		"\u022A\u0232\u0236\u023A\u0244\u0249\u024F\u0254\u0257\u025F\u0263\u0265" +
-		"\u026F\u0276\u027D\u0284\u028B\u0292\u0299\u029D\u02A2\u02A7\u02AB\u02B3" +
-		"\u02B7\u02BB\u02BF\u02C4\u02C8\u02CF\u02D7\u02DF\u02E3\u02E8\u02EE\u02F8" +
-		"\u0300\u030B\u0310\u0322\u0327\u0341\u0344\u0348\u0350\u0354\u0356\u035C" +
-		"\u0360\u036E\u0378\u0380\u0383\u0397\u03A8\u03AA\u03B3\u03B6\u03BB\u03C0" +
-		"\u03C4\u03C9\u03CB\u03D5\u03D9\u03E6\u03EB\u03F2\u03F9\u03FF\u0405\u040F";
+		"\x02\u01D3\u01D1\x03\x02\x02\x02\u01D3\u01D4\x03\x02\x02\x02\u01D4\u01D5" +
+		"\x03\x02\x02\x02\u01D5\u01D7\x071\x02\x02\u01D6\u01D8\x05p9\x02\u01D7" +
+		"\u01D6\x03\x02\x02\x02\u01D7\u01D8\x03\x02\x02\x02\u01D8\u01D9\x03\x02" +
+		"\x02\x02\u01D9\u01DA\x072\x02\x02\u01DA\u01DE\x075\x02\x02\u01DB\u01DD" +
+		"\x05\x04\x03\x02\u01DC\u01DB\x03\x02\x02\x02\u01DD\u01E0\x03\x02\x02\x02" +
+		"\u01DE\u01DC\x03\x02\x02\x02\u01DE\u01DF\x03\x02\x02\x02\u01DF\u01E1\x03" +
+		"\x02\x02\x02\u01E0\u01DE\x03\x02\x02\x02\u01E1\u01E3\x076\x02\x02\u01E2" +
+		"\u01E4\x07<\x02\x02\u01E3\u01E2\x03\x02\x02\x02\u01E3\u01E4\x03\x02\x02" +
+		"\x02\u01E4=\x03\x02\x02\x02\u01E5\u01E6\x07\x11\x02\x02\u01E6\u01E7\x05" +
+		"d3\x02\u01E7\u01E9\x071\x02\x02\u01E8\u01EA\x05p9\x02\u01E9\u01E8\x03" +
+		"\x02\x02\x02\u01E9\u01EA\x03\x02\x02\x02\u01EA\u01ED\x03\x02\x02\x02\u01EB" +
+		"\u01EC\x07B\x02\x02\u01EC\u01EE\x05^0\x02\u01ED\u01EB\x03\x02\x02\x02" +
+		"\u01ED\u01EE\x03\x02\x02\x02\u01EE\u01EF\x03\x02\x02\x02\u01EF\u01F0\x07" +
+		"2\x02\x02\u01F0\u01F4\x075\x02\x02\u01F1\u01F3\x05\x04\x03\x02\u01F2\u01F1" +
+		"\x03\x02\x02\x02\u01F3\u01F6\x03\x02\x02\x02\u01F4\u01F2\x03\x02\x02\x02" +
+		"\u01F4\u01F5\x03\x02\x02\x02\u01F5\u01F7\x03\x02\x02\x02\u01F6\u01F4\x03" +
+		"\x02\x02\x02\u01F7\u01F9\x076\x02\x02\u01F8\u01FA\x07<\x02\x02\u01F9\u01F8" +
+		"\x03\x02\x02\x02\u01F9\u01FA\x03\x02\x02\x02\u01FA?\x03\x02\x02\x02\u01FB" +
+		"\u01FC\x07\x12\x02\x02\u01FC\u01FD\x05d3\x02\u01FD\u01FF\x071\x02\x02" +
+		"\u01FE\u0200\x05p9\x02\u01FF\u01FE\x03\x02\x02\x02\u01FF\u0200\x03\x02" +
+		"\x02\x02\u0200\u0203\x03\x02\x02\x02\u0201\u0202\x07B\x02\x02\u0202\u0204" +
+		"\x05^0\x02\u0203\u0201\x03\x02\x02\x02\u0203\u0204\x03\x02\x02\x02\u0204" +
+		"\u0205\x03\x02\x02\x02\u0205\u0206\x072\x02\x02\u0206\u020A\x075\x02\x02" +
+		"\u0207\u0209\x05\x04\x03\x02\u0208\u0207\x03\x02\x02\x02\u0209\u020C\x03" +
+		"\x02\x02\x02\u020A\u0208\x03\x02\x02\x02\u020A\u020B\x03\x02\x02\x02\u020B" +
+		"\u020D\x03\x02\x02\x02\u020C\u020A\x03\x02\x02\x02\u020D\u020F\x076\x02" +
+		"\x02\u020E\u0210\x07<\x02\x02\u020F\u020E\x03\x02\x02\x02\u020F\u0210" +
+		"\x03\x02\x02\x02\u0210A\x03\x02\x02\x02\u0211\u0212\x07\t\x02\x02\u0212" +
+		"\u0213\x05d3\x02\u0213\u0215\x071\x02\x02\u0214\u0216\x05p9\x02\u0215" +
+		"\u0214\x03\x02\x02\x02\u0215\u0216\x03\x02\x02\x02\u0216\u0219\x03\x02" +
+		"\x02\x02\u0217\u0218\x07B\x02\x02\u0218\u021A\x05^0\x02\u0219\u0217\x03" +
+		"\x02\x02\x02\u0219\u021A\x03\x02\x02\x02\u021A\u021B\x03\x02\x02\x02\u021B" +
+		"\u021F\x075\x02\x02\u021C\u021E\x05\x04\x03\x02\u021D\u021C\x03\x02\x02" +
+		"\x02\u021E\u0221\x03\x02\x02\x02\u021F\u021D\x03\x02\x02\x02\u021F\u0220" +
+		"\x03\x02\x02\x02\u0220\u0222\x03\x02\x02\x02\u0221\u021F\x03\x02\x02\x02" +
+		"\u0222\u0224\x076\x02\x02\u0223\u0225\x07<\x02\x02\u0224\u0223\x03\x02" +
+		"\x02\x02\u0224\u0225\x03\x02\x02\x02\u0225C\x03\x02\x02\x02\u0226\u0227" +
+		"\x07\n\x02\x02\u0227\u0228\x05d3\x02\u0228\u0229\x071\x02\x02\u0229\u022A" +
+		"\x05p9\x02\u022A\u022C\x072\x02\x02\u022B\u022D\x07<\x02\x02\u022C\u022B" +
+		"\x03\x02\x02\x02\u022C\u022D\x03\x02\x02\x02\u022DE\x03\x02\x02\x02\u022E" +
+		"\u022F\x07\x17\x02\x02\u022F\u0233\x073\x02\x02\u0230\u0232\x05H%\x02" +
+		"\u0231\u0230\x03\x02\x02\x02\u0232\u0235\x03\x02\x02\x02\u0233\u0231\x03" +
+		"\x02\x02\x02\u0233\u0234\x03\x02\x02\x02\u0234\u0236\x03\x02\x02\x02\u0235" +
+		"\u0233\x03\x02\x02\x02\u0236\u0238\x074\x02\x02\u0237\u0239\x07<\x02\x02" +
+		"\u0238\u0237\x03\x02\x02\x02\u0238\u0239\x03\x02\x02\x02\u0239G\x03\x02" +
+		"\x02\x02\u023A\u023D\x05J&\x02\u023B\u023D\x05L\'\x02\u023C\u023A\x03" +
+		"\x02\x02\x02\u023C\u023B\x03\x02\x02\x02\u023DI\x03\x02\x02\x02\u023E" +
+		"\u023F\x05d3\x02\u023F\u0240\x07=\x02\x02\u0240\u0242\x05^0\x02\u0241" +
+		"\u0243\x07<\x02\x02\u0242\u0241\x03\x02\x02\x02\u0242\u0243\x03\x02\x02" +
+		"\x02\u0243K\x03\x02\x02\x02\u0244\u0245\x05d3\x02\u0245\u0246\x073\x02" +
+		"\x02\u0246\u0247\x05^0\x02\u0247\u0248\x074\x02\x02\u0248\u0249\x07=\x02" +
+		"\x02\u0249\u024B\x05^0\x02\u024A\u024C\x07<\x02\x02\u024B\u024A\x03\x02" +
+		"\x02\x02\u024B\u024C\x03\x02\x02\x02\u024CM\x03\x02\x02\x02\u024D\u024E" +
+		"\b(\x01\x02\u024E\u024F\x07\x0E\x02\x02\u024F\u025C\x05N(\x11\u0250\u025C" +
+		"\x05P)\x02\u0251\u025C\x05R*\x02\u0252\u025C\x05V,\x02\u0253\u025C\x05" +
+		"X-\x02\u0254\u025C\x05Z.\x02\u0255\u025C\x05\\/\x02\u0256\u025C\x05d3" +
+		"\x02\u0257\u0258\x071\x02\x02\u0258\u0259\x05N(\x02\u0259\u025A\x072\x02" +
+		"\x02\u025A\u025C\x03\x02\x02\x02\u025B\u024D\x03\x02\x02\x02\u025B\u0250" +
+		"\x03\x02\x02\x02\u025B\u0251\x03\x02\x02\x02\u025B\u0252\x03\x02\x02\x02" +
+		"\u025B\u0253\x03\x02\x02\x02\u025B\u0254\x03\x02\x02\x02\u025B\u0255\x03" +
+		"\x02\x02\x02\u025B\u0256\x03\x02\x02\x02\u025B\u0257\x03\x02\x02\x02\u025C" +
+		"\u029B\x03\x02\x02\x02\u025D\u0261\f\x14\x02\x02\u025E\u0262\x07N\x02" +
+		"\x02\u025F\u0262\x07P\x02\x02\u0260\u0262\x07R\x02\x02\u0261\u025E\x03" +
+		"\x02\x02\x02\u0261\u025F\x03\x02\x02\x02\u0261\u0260\x03\x02\x02\x02\u0262" +
+		"\u0263\x03\x02\x02\x02\u0263\u029A\x05N(\x15\u0264\u0267\f\x13\x02\x02" +
+		"\u0265\u0268\x07J\x02\x02\u0266\u0268\x07L\x02\x02\u0267\u0265\x03\x02" +
+		"\x02\x02\u0267\u0266\x03\x02\x02\x02\u0268\u0269\x03\x02\x02\x02\u0269" +
+		"\u029A\x05N(\x14\u026A\u026F\f\x12\x02\x02\u026B\u0270\x07T\x02\x02\u026C" +
+		"\u0270\x07V\x02\x02\u026D\u0270\x07U\x02\x02\u026E\u0270\x07W\x02\x02" +
+		"\u026F\u026B\x03\x02\x02\x02\u026F\u026C\x03\x02\x02\x02\u026F\u026D\x03" +
+		"\x02\x02\x02\u026F\u026E\x03\x02\x02\x02\u0270\u0271\x03\x02\x02\x02\u0271" +
+		"\u029A\x05N(\x13\u0272\u0273\f\x10\x02\x02\u0273\u0274\x079\x02\x02\u0274" +
+		"\u029A\x05N(\x11\u0275\u0276\f\x0F\x02\x02\u0276\u0277\x07\x15\x02\x02" +
+		"\u0277\u029A\x05N(\x10\u0278\u027B\f\r\x02\x02\u0279\u027C\x07H\x02\x02" +
+		"\u027A\u027C\x07I\x02\x02\u027B\u0279\x03\x02\x02\x02\u027B\u027A\x03" +
+		"\x02\x02\x02\u027C\u027D\x03\x02\x02\x02\u027D\u029A\x05N(\x0E\u027E\u027F" +
+		"\f\f\x02\x02\u027F\u0280\x07 \x02\x02\u0280\u029A\x05N(\r\u0281\u0282" +
+		"\f\v\x02\x02\u0282\u0283\x07!\x02\x02\u0283\u029A\x05N(\f\u0284\u0285" +
+		"\f\x19\x02\x02\u0285\u0286\x077\x02\x02\u0286\u029A\x05d3\x02\u0287\u0288" +
+		"\f\x18\x02\x02\u0288\u0289\x073\x02\x02\u0289\u028A\x05N(\x02\u028A\u028B" +
+		"\x074\x02\x02\u028B\u029A\x03\x02\x02\x02\u028C\u028D\f\x17\x02\x02\u028D" +
+		"\u028E\x071\x02\x02\u028E\u028F\x05v<\x02\u028F\u0290\x072\x02\x02\u0290" +
+		"\u029A\x03\x02\x02\x02\u0291\u0292\f\x16\x02\x02\u0292\u0293\x07/\x02" +
+		"\x02\u0293\u029A\x05^0\x02\u0294\u0295\f\x15\x02\x02\u0295\u029A\x07:" +
+		"\x02\x02\u0296\u0297\f\x0E\x02\x02\u0297\u0298\x07\x19\x02\x02\u0298\u029A" +
+		"\x05^0\x02\u0299\u025D\x03\x02\x02\x02\u0299\u0264\x03\x02\x02\x02\u0299" +
+		"\u026A\x03\x02\x02\x02\u0299\u0272\x03\x02\x02\x02\u0299\u0275\x03\x02" +
+		"\x02\x02\u0299\u0278\x03\x02\x02\x02\u0299\u027E\x03\x02\x02\x02\u0299" +
+		"\u0281\x03\x02\x02\x02\u0299\u0284\x03\x02\x02\x02\u0299\u0287\x03\x02" +
+		"\x02\x02\u0299\u028C\x03\x02\x02\x02\u0299\u0291\x03\x02\x02\x02\u0299" +
+		"\u0294\x03\x02\x02\x02\u0299\u0296\x03\x02\x02\x02\u029A\u029D\x03\x02" +
+		"\x02\x02\u029B\u0299\x03\x02\x02\x02\u029B\u029C\x03\x02\x02\x02\u029C" +
+		"O\x03\x02\x02\x02\u029D\u029B\x03\x02\x02\x02\u029E\u029F\x07\x18\x02" +
+		"\x02\u029F\u02A0\x05N(\x02\u02A0\u02A4\x075\x02\x02\u02A1\u02A3\x05\x04" +
+		"\x03\x02\u02A2\u02A1\x03\x02\x02\x02\u02A3\u02A6\x03\x02\x02\x02\u02A4" +
+		"\u02A2\x03\x02\x02\x02\u02A4\u02A5\x03\x02\x02\x02\u02A5\u02A7\x03\x02" +
+		"\x02\x02\u02A6\u02A4\x03\x02\x02\x02\u02A7\u02B1\x076\x02\x02\u02A8\u02A9" +
+		"\x07\x1C\x02\x02\u02A9\u02AD\x075\x02\x02\u02AA\u02AC\x05\x04\x03\x02" +
+		"\u02AB\u02AA\x03\x02\x02\x02\u02AC\u02AF\x03\x02\x02\x02\u02AD\u02AB\x03" +
+		"\x02\x02\x02\u02AD\u02AE\x03\x02\x02\x02\u02AE\u02B0\x03\x02\x02\x02\u02AF" +
+		"\u02AD\x03\x02\x02\x02\u02B0\u02B2\x076\x02\x02\u02B1\u02A8\x03\x02\x02" +
+		"\x02\u02B1\u02B2\x03\x02\x02\x02\u02B2Q\x03\x02\x02\x02\u02B3\u02B4\x07" +
+		"\x1A\x02\x02\u02B4\u02B8\x075\x02\x02\u02B5\u02B7\x05\x04\x03\x02\u02B6" +
+		"\u02B5\x03\x02\x02\x02\u02B7\u02BA\x03\x02\x02\x02\u02B8\u02B6\x03\x02" +
+		"\x02\x02\u02B8\u02B9\x03\x02\x02\x02\u02B9\u02BB\x03\x02\x02\x02\u02BA" +
+		"\u02B8\x03\x02\x02\x02\u02BB\u02BF\x076\x02\x02\u02BC\u02BE\x05T+\x02" +
+		"\u02BD\u02BC\x03\x02\x02\x02\u02BE\u02C1\x03\x02\x02\x02\u02BF\u02BD\x03" +
+		"\x02\x02\x02\u02BF\u02C0\x03\x02\x02\x02\u02C0\u02CB\x03\x02\x02\x02\u02C1" +
+		"\u02BF\x03\x02\x02\x02\u02C2\u02C3\x07\x1C\x02\x02\u02C3\u02C7\x075\x02" +
+		"\x02\u02C4\u02C6\x05\x04\x03\x02\u02C5\u02C4\x03\x02\x02\x02\u02C6\u02C9" +
+		"\x03\x02\x02\x02\u02C7\u02C5\x03\x02\x02\x02\u02C7\u02C8\x03\x02\x02\x02" +
+		"\u02C8\u02CA\x03\x02\x02\x02\u02C9\u02C7\x03\x02\x02\x02\u02CA\u02CC\x07" +
+		"6\x02\x02\u02CB\u02C2\x03\x02\x02\x02\u02CB\u02CC\x03\x02\x02\x02\u02CC" +
+		"S\x03\x02\x02\x02\u02CD\u02CE\x07\x1B\x02\x02\u02CE\u02CF\x05^0\x02\u02CF" +
+		"\u02D3\x075\x02\x02\u02D0\u02D2\x05\x04\x03\x02\u02D1\u02D0\x03\x02\x02" +
+		"\x02\u02D2\u02D5\x03\x02\x02\x02\u02D3\u02D1\x03\x02\x02\x02\u02D3\u02D4" +
+		"\x03\x02\x02\x02\u02D4\u02D6\x03\x02\x02\x02\u02D5\u02D3\x03\x02\x02\x02" +
+		"\u02D6\u02D7\x076\x02\x02\u02D7U\x03\x02\x02\x02\u02D8\u02DA\x07;\x02" +
+		"\x02\u02D9\u02D8\x03\x02\x02\x02\u02D9\u02DA\x03\x02\x02\x02\u02DA\u02DB" +
+		"\x03\x02\x02\x02\u02DB\u02DD\x07D\x02\x02\u02DC\u02DE\x05p9\x02\u02DD" +
+		"\u02DC\x03\x02\x02\x02\u02DD\u02DE\x03\x02\x02\x02\u02DE\u02DF\x03\x02" +
+		"\x02\x02\u02DF\u02E2\x07D\x02\x02\u02E0\u02E1\x07B\x02\x02\u02E1\u02E3" +
+		"\x05^0\x02\u02E2\u02E0\x03\x02\x02\x02\u02E2\u02E3\x03\x02\x02\x02\u02E3" +
+		"\u02E4\x03\x02\x02\x02\u02E4\u02E8\x075\x02\x02\u02E5\u02E7\x05\x04\x03" +
+		"\x02\u02E6\u02E5\x03\x02\x02\x02\u02E7\u02EA\x03\x02\x02\x02\u02E8\u02E6" +
+		"\x03\x02\x02\x02\u02E8\u02E9\x03\x02\x02\x02\u02E9\u02EB\x03\x02\x02\x02" +
+		"\u02EA\u02E8\x03\x02\x02\x02\u02EB\u02EC\x076\x02\x02\u02ECW\x03\x02\x02" +
+		"\x02\u02ED\u02EE\x05^0\x02\u02EE\u02F0\x075\x02\x02\u02EF\u02F1\x05t;" +
+		"\x02\u02F0\u02EF\x03\x02\x02\x02\u02F0\u02F1\x03\x02\x02\x02\u02F1\u02F2" +
+		"\x03\x02\x02\x02\u02F2\u02F3\x076\x02\x02\u02F3Y\x03\x02\x02\x02\u02F4" +
+		"\u02F8\x073\x02\x02\u02F5\u02F7\x05N(\x02\u02F6\u02F5\x03\x02\x02\x02" +
+		"\u02F7\u02FA\x03\x02\x02\x02\u02F8\u02F6\x03\x02\x02\x02\u02F8\u02F9\x03" +
+		"\x02\x02\x02\u02F9\u02FB\x03\x02\x02\x02\u02FA\u02F8\x03\x02\x02\x02\u02FB" +
+		"\u02FC\x074\x02\x02\u02FC[\x03\x02\x02\x02\u02FD\u0303\x07[\x02\x02\u02FE" +
+		"\u0303\x07\\\x02\x02\u02FF\u0303\x07]\x02\x02\u0300\u0303\x07^\x02\x02" +
+		"\u0301\u0303\x07\x1E\x02\x02\u0302\u02FD\x03\x02\x02\x02\u0302\u02FE\x03" +
+		"\x02\x02\x02\u0302\u02FF\x03\x02\x02\x02\u0302\u0300\x03\x02\x02\x02\u0302" +
+		"\u0301\x03\x02\x02\x02\u0303]\x03\x02\x02\x02\u0304\u0305\b0\x01\x02\u0305" +
+		"\u0306\x071\x02\x02\u0306\u0307\x05^0\x02\u0307\u0308\x072\x02\x02\u0308" +
+		"\u0316\x03\x02\x02\x02\u0309\u030A\x073\x02\x02\u030A\u030B\x05^0\x02" +
+		"\u030B\u030C\x07<\x02\x02\u030C\u030D\x07\\\x02\x02\u030D\u030E\x074\x02" +
+		"\x02\u030E\u0316\x03\x02\x02\x02\u030F\u0316\x05&\x14\x02\u0310\u0316" +
+		"\x05(\x15\x02\u0311\u0316\x05*\x16\x02\u0312\u0316\x05,\x17\x02\u0313" +
+		"\u0316\x05`1\x02\u0314\u0316\x05d3\x02\u0315\u0304\x03\x02\x02\x02\u0315" +
+		"\u0309\x03\x02\x02\x02\u0315\u030F\x03\x02\x02\x02\u0315\u0310\x03\x02" +
+		"\x02\x02\u0315\u0311\x03\x02\x02\x02\u0315\u0312\x03\x02\x02\x02\u0315" +
+		"\u0313\x03\x02\x02\x02\u0315\u0314\x03\x02\x02\x02\u0316\u0323\x03\x02" +
+		"\x02\x02\u0317\u0318\f\f\x02\x02\u0318\u0319\x073\x02\x02\u0319\u031A" +
+		"\x05r:\x02\u031A\u031B\x074\x02\x02\u031B\u0322\x03\x02\x02\x02\u031C" +
+		"\u031D\f\v\x02\x02\u031D\u031E\x077\x02\x02\u031E\u0322\x05d3\x02\u031F" +
+		"\u0320\f\x05\x02\x02\u0320\u0322\x07:\x02\x02\u0321\u0317\x03\x02\x02" +
+		"\x02\u0321\u031C\x03\x02\x02\x02\u0321\u031F\x03\x02\x02\x02\u0322\u0325" +
+		"\x03\x02\x02\x02\u0323\u0321\x03\x02\x02\x02\u0323\u0324\x03\x02\x02\x02" +
+		"\u0324_\x03\x02\x02\x02\u0325\u0323\x03\x02\x02\x02\u0326\u0327\x07Z\x02" +
+		"\x02\u0327a\x03\x02\x02\x02\u0328\u032D\x05`1\x02\u0329\u032A\x078\x02" +
+		"\x02\u032A\u032C\x05`1\x02\u032B\u0329\x03\x02\x02\x02\u032C\u032F\x03" +
+		"\x02\x02\x02\u032D\u032B\x03\x02\x02\x02\u032D\u032E\x03\x02\x02\x02\u032E" +
+		"c\x03\x02\x02\x02\u032F\u032D\x03\x02\x02\x02\u0330\u0333\x07Y\x02\x02" +
+		"\u0331\u0333\x05x=\x02\u0332\u0330\x03\x02\x02\x02\u0332\u0331\x03\x02" +
+		"\x02\x02\u0333e\x03\x02\x02\x02\u0334\u0336\x05d3\x02\u0335\u0337\x07" +
+		":\x02\x02\u0336\u0335\x03\x02\x02\x02\u0336\u0337\x03\x02\x02\x02\u0337" +
+		"\u0338\x03\x02\x02\x02\u0338\u033A\x07=\x02\x02\u0339\u033B\x05^0\x02" +
+		"\u033A\u0339\x03\x02\x02\x02\u033A\u033B\x03\x02\x02\x02\u033Bg\x03\x02" +
+		"\x02\x02\u033C\u033D\x05d3\x02\u033D\u033E\x07=\x02\x02\u033E\u033F\x05" +
+		"^0\x02\u033Fi\x03\x02\x02\x02\u0340\u0341\x05d3\x02\u0341\u0342\x07G\x02" +
+		"\x02\u0342\u0343\x05N(\x02\u0343k\x03\x02\x02\x02\u0344\u0347\x05N(\x02" +
+		"\u0345\u0347\x05j6\x02\u0346\u0344\x03\x02\x02\x02\u0346\u0345\x03\x02" +
+		"\x02\x02\u0347m\x03\x02\x02\x02\u0348\u034D\x05d3\x02\u0349\u034A\x07" +
+		"8\x02\x02\u034A\u034C\x05d3\x02\u034B\u0349\x03\x02\x02\x02\u034C\u034F" +
+		"\x03\x02\x02\x02\u034D\u034B\x03\x02\x02\x02\u034D\u034E\x03\x02\x02\x02" +
+		"\u034Eo\x03\x02\x02\x02\u034F\u034D\x03\x02\x02\x02\u0350\u0355\x05f4" +
+		"\x02\u0351\u0352\x078\x02\x02\u0352\u0354\x05f4\x02\u0353\u0351\x03\x02" +
+		"\x02\x02\u0354\u0357\x03\x02\x02\x02\u0355\u0353\x03\x02\x02\x02\u0355" +
+		"\u0356\x03\x02\x02\x02\u0356q\x03\x02\x02\x02\u0357\u0355\x03\x02\x02" +
+		"\x02\u0358\u035D\x05^0\x02\u0359\u035A\x078\x02\x02\u035A\u035C\x05^0" +
+		"\x02\u035B\u0359\x03\x02\x02\x02\u035C\u035F\x03\x02\x02\x02\u035D\u035B" +
+		"\x03\x02\x02\x02\u035D\u035E\x03\x02\x02\x02\u035Es\x03\x02\x02\x02\u035F" +
+		"\u035D\x03\x02\x02\x02\u0360\u0365\x05h5\x02\u0361\u0362\x078\x02\x02" +
+		"\u0362\u0364\x05h5\x02\u0363\u0361\x03\x02\x02\x02\u0364\u0367\x03\x02" +
+		"\x02\x02\u0365\u0363\x03\x02\x02\x02\u0365\u0366\x03\x02\x02\x02\u0366" +
+		"u\x03\x02\x02\x02\u0367\u0365\x03\x02\x02\x02\u0368\u036D\x05l7\x02\u0369" +
+		"\u036A\x078\x02\x02\u036A\u036C\x05l7\x02\u036B\u0369\x03\x02\x02\x02" +
+		"\u036C\u036F\x03\x02\x02\x02\u036D\u036B\x03\x02\x02\x02\u036D\u036E\x03" +
+		"\x02\x02\x02\u036Ew\x03\x02\x02\x02\u036F\u036D\x03\x02\x02\x02\u0370" +
+		"\u0371\t\x03\x02\x02\u0371y\x03\x02\x02\x02r}\x93\x96\x9B\xA1\xA9\xAE" +
+		"\xB2\xB7\xBA\xC0\xC6\xCC\xD4\xDD\xE2\xE7\xF1\xF6\xFB\u0100\u0105\u0115" +
+		"\u011B\u011F\u0125\u012A\u0130\u0136\u013B\u0143\u0147\u0151\u0157\u0159" +
+		"\u0161\u0165\u0169\u0170\u0174\u017C\u0180\u0184\u018B\u0191\u0196\u019D" +
+		"\u01A1\u01A6\u01B2\u01B7\u01BD\u01C2\u01C8\u01CD\u01D3\u01D7\u01DE\u01E3" +
+		"\u01E9\u01ED\u01F4\u01F9\u01FF\u0203\u020A\u020F\u0215\u0219\u021F\u0224" +
+		"\u022C\u0233\u0238\u023C\u0242\u024B\u025B\u0261\u0267\u026F\u027B\u0299" +
+		"\u029B\u02A4\u02AD\u02B1\u02B8\u02BF\u02C7\u02CB\u02D3\u02D9\u02DD\u02E2" +
+		"\u02E8\u02F0\u02F8\u0302\u0315\u0321\u0323\u032D\u0332\u0336\u033A\u0346" +
+		"\u034D\u0355\u035D\u0365\u036D";
 	public static readonly _serializedATN: string = Utils.join(
 		[
 			CWScriptParser._serializedATNSegment0,
@@ -5714,23 +4929,16 @@ export class CWScriptParser extends Parser {
 }
 
 export class SourceFileContext extends ParserRuleContext {
+	public _stmt!: StmtContext;
+	public _stmts: StmtContext[] = [];
 	public EOF(): TerminalNode { return this.getToken(CWScriptParser.EOF, 0); }
-	public topLevelStmt(): TopLevelStmtContext[];
-	public topLevelStmt(i: number): TopLevelStmtContext;
-	public topLevelStmt(i?: number): TopLevelStmtContext | TopLevelStmtContext[] {
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(TopLevelStmtContext);
+			return this.getRuleContexts(StmtContext);
 		} else {
-			return this.getRuleContext(i, TopLevelStmtContext);
-		}
-	}
-	public SEMI(): TerminalNode[];
-	public SEMI(i: number): TerminalNode;
-	public SEMI(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.SEMI);
-		} else {
-			return this.getToken(CWScriptParser.SEMI, i);
+			return this.getRuleContext(i, StmtContext);
 		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
@@ -5761,40 +4969,764 @@ export class SourceFileContext extends ParserRuleContext {
 }
 
 
-export class TopLevelStmtContext extends ParserRuleContext {
+export class StmtContext extends ParserRuleContext {
 	public importStmt(): ImportStmtContext | undefined {
 		return this.tryGetRuleContext(0, ImportStmtContext);
 	}
+	public letStmt(): LetStmtContext | undefined {
+		return this.tryGetRuleContext(0, LetStmtContext);
+	}
+	public constStmt(): ConstStmtContext | undefined {
+		return this.tryGetRuleContext(0, ConstStmtContext);
+	}
+	public assignStmt(): AssignStmtContext | undefined {
+		return this.tryGetRuleContext(0, AssignStmtContext);
+	}
+	public memberAssignStmt(): MemberAssignStmtContext | undefined {
+		return this.tryGetRuleContext(0, MemberAssignStmtContext);
+	}
+	public indexAssignStmt(): IndexAssignStmtContext | undefined {
+		return this.tryGetRuleContext(0, IndexAssignStmtContext);
+	}
+	public ifExpr_(): IfExpr_Context | undefined {
+		return this.tryGetRuleContext(0, IfExpr_Context);
+	}
+	public tryCatchElseExpr_(): TryCatchElseExpr_Context | undefined {
+		return this.tryGetRuleContext(0, TryCatchElseExpr_Context);
+	}
+	public forStmt(): ForStmtContext | undefined {
+		return this.tryGetRuleContext(0, ForStmtContext);
+	}
+	public execStmt(): ExecStmtContext | undefined {
+		return this.tryGetRuleContext(0, ExecStmtContext);
+	}
+	public instantiateStmt(): InstantiateStmtContext | undefined {
+		return this.tryGetRuleContext(0, InstantiateStmtContext);
+	}
+	public emitStmt(): EmitStmtContext | undefined {
+		return this.tryGetRuleContext(0, EmitStmtContext);
+	}
+	public failStmt(): FailStmtContext | undefined {
+		return this.tryGetRuleContext(0, FailStmtContext);
+	}
+	public returnStmt(): ReturnStmtContext | undefined {
+		return this.tryGetRuleContext(0, ReturnStmtContext);
+	}
+	public defn(): DefnContext | undefined {
+		return this.tryGetRuleContext(0, DefnContext);
+	}
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_stmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStmt) {
+			listener.enterStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStmt) {
+			listener.exitStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStmt) {
+			return visitor.visitStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ImportStmtContext extends ParserRuleContext {
+	public _items!: IdentListContext;
+	public _src!: Token;
+	public IMPORT(): TerminalNode { return this.getToken(CWScriptParser.IMPORT, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public FROM(): TerminalNode { return this.getToken(CWScriptParser.FROM, 0); }
+	public StringLiteral(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.StringLiteral, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public identList(): IdentListContext | undefined {
+		return this.tryGetRuleContext(0, IdentListContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_importStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterImportStmt) {
+			listener.enterImportStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitImportStmt) {
+			listener.exitImportStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitImportStmt) {
+			return visitor.visitImportStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class LetStmtContext extends ParserRuleContext {
+	public _binding!: Binding_Context;
+	public _value!: ExprContext;
+	public LET(): TerminalNode { return this.getToken(CWScriptParser.LET, 0); }
+	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
+	public binding_(): Binding_Context | undefined {
+		return this.tryGetRuleContext(0, Binding_Context);
+	}
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_letStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterLetStmt) {
+			listener.enterLetStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitLetStmt) {
+			listener.exitLetStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitLetStmt) {
+			return visitor.visitLetStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class Binding_Context extends ParserRuleContext {
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_binding_; }
+	public copyFrom(ctx: Binding_Context): void {
+		super.copyFrom(ctx);
+	}
+}
+export class IdentBindingContext extends Binding_Context {
+	public _name!: IdentContext;
+	public _ty!: TypeExprContext;
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(ctx: Binding_Context) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterIdentBinding) {
+			listener.enterIdentBinding(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitIdentBinding) {
+			listener.exitIdentBinding(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitIdentBinding) {
+			return visitor.visitIdentBinding(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class TupleBindingContext extends Binding_Context {
+	public _names!: IdentListContext;
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public identList(): IdentListContext | undefined {
+		return this.tryGetRuleContext(0, IdentListContext);
+	}
+	constructor(ctx: Binding_Context) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterTupleBinding) {
+			listener.enterTupleBinding(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitTupleBinding) {
+			listener.exitTupleBinding(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitTupleBinding) {
+			return visitor.visitTupleBinding(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class StructBindingContext extends Binding_Context {
+	public _names!: IdentListContext;
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public identList(): IdentListContext | undefined {
+		return this.tryGetRuleContext(0, IdentListContext);
+	}
+	constructor(ctx: Binding_Context) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStructBinding) {
+			listener.enterStructBinding(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStructBinding) {
+			listener.exitStructBinding(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStructBinding) {
+			return visitor.visitStructBinding(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ConstStmtContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _ty!: TypeExprContext;
+	public _value!: ExprContext;
+	public CONST(): TerminalNode { return this.getToken(CWScriptParser.CONST, 0); }
+	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_constStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterConstStmt) {
+			listener.enterConstStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitConstStmt) {
+			listener.exitConstStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitConstStmt) {
+			return visitor.visitConstStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class AssignStmtContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _assignOp!: Token;
+	public _value!: ExprContext;
+	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
+	public PLUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.PLUS_EQ, 0); }
+	public MINUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MINUS_EQ, 0); }
+	public MUL_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL_EQ, 0); }
+	public DIV_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DIV_EQ, 0); }
+	public MOD_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MOD_EQ, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_assignStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterAssignStmt) {
+			listener.enterAssignStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitAssignStmt) {
+			listener.exitAssignStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitAssignStmt) {
+			return visitor.visitAssignStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class MemberAssignStmtContext extends ParserRuleContext {
+	public _obj!: ExprContext;
+	public _memberName!: IdentContext;
+	public _assignOp!: Token;
+	public _value!: ExprContext;
+	public DOT(): TerminalNode { return this.getToken(CWScriptParser.DOT, 0); }
+	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
+	public PLUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.PLUS_EQ, 0); }
+	public MINUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MINUS_EQ, 0); }
+	public MUL_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL_EQ, 0); }
+	public DIV_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DIV_EQ, 0); }
+	public MOD_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MOD_EQ, 0); }
+	public expr(): ExprContext[];
+	public expr(i: number): ExprContext;
+	public expr(i?: number): ExprContext | ExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ExprContext);
+		} else {
+			return this.getRuleContext(i, ExprContext);
+		}
+	}
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_memberAssignStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterMemberAssignStmt) {
+			listener.enterMemberAssignStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitMemberAssignStmt) {
+			listener.exitMemberAssignStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitMemberAssignStmt) {
+			return visitor.visitMemberAssignStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class IndexAssignStmtContext extends ParserRuleContext {
+	public _obj!: ExprContext;
+	public _index!: ExprContext;
+	public _assignOp!: Token;
+	public _value!: ExprContext;
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public expr(): ExprContext[];
+	public expr(i: number): ExprContext;
+	public expr(i?: number): ExprContext | ExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ExprContext);
+		} else {
+			return this.getRuleContext(i, ExprContext);
+		}
+	}
+	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
+	public PLUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.PLUS_EQ, 0); }
+	public MINUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MINUS_EQ, 0); }
+	public MUL_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL_EQ, 0); }
+	public DIV_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DIV_EQ, 0); }
+	public MOD_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MOD_EQ, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_indexAssignStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterIndexAssignStmt) {
+			listener.enterIndexAssignStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitIndexAssignStmt) {
+			listener.exitIndexAssignStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitIndexAssignStmt) {
+			return visitor.visitIndexAssignStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ReturnStmtContext extends ParserRuleContext {
+	public _value!: ExprContext;
+	public RETURN(): TerminalNode { return this.getToken(CWScriptParser.RETURN, 0); }
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_returnStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterReturnStmt) {
+			listener.enterReturnStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitReturnStmt) {
+			listener.exitReturnStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitReturnStmt) {
+			return visitor.visitReturnStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class FailStmtContext extends ParserRuleContext {
+	public _value!: ExprContext;
+	public FAIL(): TerminalNode { return this.getToken(CWScriptParser.FAIL, 0); }
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_failStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterFailStmt) {
+			listener.enterFailStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitFailStmt) {
+			listener.exitFailStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitFailStmt) {
+			return visitor.visitFailStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ForStmtContext extends ParserRuleContext {
+	public _binding!: Binding_Context;
+	public _iter!: ExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public FOR(): TerminalNode { return this.getToken(CWScriptParser.FOR, 0); }
+	public IN(): TerminalNode { return this.getToken(CWScriptParser.IN, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public binding_(): Binding_Context | undefined {
+		return this.tryGetRuleContext(0, Binding_Context);
+	}
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_forStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterForStmt) {
+			listener.enterForStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitForStmt) {
+			listener.exitForStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitForStmt) {
+			return visitor.visitForStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ExecStmtContext extends ParserRuleContext {
+	public _value!: ExprContext;
+	public EXEC_NOW(): TerminalNode { return this.getToken(CWScriptParser.EXEC_NOW, 0); }
+	public expr(): ExprContext {
+		return this.getRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_execStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterExecStmt) {
+			listener.enterExecStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitExecStmt) {
+			listener.exitExecStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitExecStmt) {
+			return visitor.visitExecStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class InstantiateStmtContext extends ParserRuleContext {
+	public _value!: ExprContext;
+	public INSTANTIATE_NOW(): TerminalNode { return this.getToken(CWScriptParser.INSTANTIATE_NOW, 0); }
+	public expr(): ExprContext {
+		return this.getRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_instantiateStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterInstantiateStmt) {
+			listener.enterInstantiateStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitInstantiateStmt) {
+			listener.exitInstantiateStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitInstantiateStmt) {
+			return visitor.visitInstantiateStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class EmitStmtContext extends ParserRuleContext {
+	public _value!: ExprContext;
+	public EMIT(): TerminalNode { return this.getToken(CWScriptParser.EMIT, 0); }
+	public expr(): ExprContext {
+		return this.getRuleContext(0, ExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_emitStmt; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterEmitStmt) {
+			listener.enterEmitStmt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitEmitStmt) {
+			listener.exitEmitStmt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitEmitStmt) {
+			return visitor.visitEmitStmt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class DefnContext extends ParserRuleContext {
 	public contractDefn(): ContractDefnContext | undefined {
 		return this.tryGetRuleContext(0, ContractDefnContext);
 	}
 	public interfaceDefn(): InterfaceDefnContext | undefined {
 		return this.tryGetRuleContext(0, InterfaceDefnContext);
 	}
-	public stmt(): StmtContext | undefined {
-		return this.tryGetRuleContext(0, StmtContext);
+	public structDefn(): StructDefnContext | undefined {
+		return this.tryGetRuleContext(0, StructDefnContext);
+	}
+	public tupleDefn(): TupleDefnContext | undefined {
+		return this.tryGetRuleContext(0, TupleDefnContext);
+	}
+	public unitDefn(): UnitDefnContext | undefined {
+		return this.tryGetRuleContext(0, UnitDefnContext);
+	}
+	public enumDefn(): EnumDefnContext | undefined {
+		return this.tryGetRuleContext(0, EnumDefnContext);
+	}
+	public typeAliasDefn(): TypeAliasDefnContext | undefined {
+		return this.tryGetRuleContext(0, TypeAliasDefnContext);
+	}
+	public fnDefn(): FnDefnContext | undefined {
+		return this.tryGetRuleContext(0, FnDefnContext);
+	}
+	public instantiateDefn(): InstantiateDefnContext | undefined {
+		return this.tryGetRuleContext(0, InstantiateDefnContext);
+	}
+	public execDefn(): ExecDefnContext | undefined {
+		return this.tryGetRuleContext(0, ExecDefnContext);
+	}
+	public queryDefn(): QueryDefnContext | undefined {
+		return this.tryGetRuleContext(0, QueryDefnContext);
+	}
+	public errorDefn(): ErrorDefnContext | undefined {
+		return this.tryGetRuleContext(0, ErrorDefnContext);
+	}
+	public eventDefn(): EventDefnContext | undefined {
+		return this.tryGetRuleContext(0, EventDefnContext);
+	}
+	public stateBlockDefn(): StateBlockDefnContext | undefined {
+		return this.tryGetRuleContext(0, StateBlockDefnContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_topLevelStmt; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_defn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTopLevelStmt) {
-			listener.enterTopLevelStmt(this);
+		if (listener.enterDefn) {
+			listener.enterDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTopLevelStmt) {
-			listener.exitTopLevelStmt(this);
+		if (listener.exitDefn) {
+			listener.exitDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTopLevelStmt) {
-			return visitor.visitTopLevelStmt(this);
+		if (visitor.visitDefn) {
+			return visitor.visitDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -5803,39 +5735,37 @@ export class TopLevelStmtContext extends ParserRuleContext {
 
 
 export class ContractDefnContext extends ParserRuleContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
 	public _name!: IdentContext;
-	public _base!: TypePathContext;
-	public _typePath!: TypePathContext;
-	public _interfaces: TypePathContext[] = [];
-	public _body!: ContractBlockContext;
+	public _base!: IdentContext;
+	public _interfaces!: TypeExprListContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
 	public CONTRACT(): TerminalNode { return this.getToken(CWScriptParser.CONTRACT, 0); }
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public ident(): IdentContext[];
+	public ident(i: number): IdentContext;
+	public ident(i?: number): IdentContext | IdentContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(IdentContext);
+		} else {
+			return this.getRuleContext(i, IdentContext);
+		}
 	}
 	public EXTENDS(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EXTENDS, 0); }
 	public IMPLEMENTS(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.IMPLEMENTS, 0); }
-	public contractBlock(): ContractBlockContext | undefined {
-		return this.tryGetRuleContext(0, ContractBlockContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
+			return this.getRuleContexts(StmtContext);
 		} else {
-			return this.getRuleContext(i, AnnotContext);
+			return this.getRuleContext(i, StmtContext);
 		}
 	}
-	public typePath(): TypePathContext[];
-	public typePath(i: number): TypePathContext;
-	public typePath(i?: number): TypePathContext | TypePathContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(TypePathContext);
-		} else {
-			return this.getRuleContext(i, TypePathContext);
-		}
+	public typeExprList(): TypeExprListContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -5866,30 +5796,29 @@ export class ContractDefnContext extends ParserRuleContext {
 
 
 export class InterfaceDefnContext extends ParserRuleContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
 	public _name!: IdentContext;
-	public _base!: TypePathContext;
-	public _body!: ContractBlockContext;
+	public _baseInterfaces!: TypeExprListContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
 	public INTERFACE(): TerminalNode { return this.getToken(CWScriptParser.INTERFACE, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
 	public EXTENDS(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EXTENDS, 0); }
-	public contractBlock(): ContractBlockContext | undefined {
-		return this.tryGetRuleContext(0, ContractBlockContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
+			return this.getRuleContexts(StmtContext);
 		} else {
-			return this.getRuleContext(i, AnnotContext);
+			return this.getRuleContext(i, StmtContext);
 		}
 	}
-	public typePath(): TypePathContext | undefined {
-		return this.tryGetRuleContext(0, TypePathContext);
+	public typeExprList(): TypeExprListContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -5919,266 +5848,48 @@ export class InterfaceDefnContext extends ParserRuleContext {
 }
 
 
-export class ContractBlockContext extends ParserRuleContext {
-	public _contractItem!: ContractItemContext;
-	public _body: ContractItemContext[] = [];
-	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public contractItem(): ContractItemContext[];
-	public contractItem(i: number): ContractItemContext;
-	public contractItem(i?: number): ContractItemContext | ContractItemContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ContractItemContext);
-		} else {
-			return this.getRuleContext(i, ContractItemContext);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_contractBlock; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterContractBlock) {
-			listener.enterContractBlock(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitContractBlock) {
-			listener.exitContractBlock(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitContractBlock) {
-			return visitor.visitContractBlock(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ImportStmtContext extends ParserRuleContext {
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_importStmt; }
-	public copyFrom(ctx: ImportStmtContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class ImportAllStmtContext extends ImportStmtContext {
-	public _src!: Token;
-	public IMPORT(): TerminalNode { return this.getToken(CWScriptParser.IMPORT, 0); }
-	public MUL(): TerminalNode { return this.getToken(CWScriptParser.MUL, 0); }
-	public FROM(): TerminalNode { return this.getToken(CWScriptParser.FROM, 0); }
-	public StringLiteral(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.StringLiteral, 0); }
-	constructor(ctx: ImportStmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterImportAllStmt) {
-			listener.enterImportAllStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitImportAllStmt) {
-			listener.exitImportAllStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitImportAllStmt) {
-			return visitor.visitImportAllStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ImportItemsStmtContext extends ImportStmtContext {
-	public _ident!: IdentContext;
-	public _items: IdentContext[] = [];
-	public _src!: Token;
-	public IMPORT(): TerminalNode { return this.getToken(CWScriptParser.IMPORT, 0); }
-	public FROM(): TerminalNode { return this.getToken(CWScriptParser.FROM, 0); }
-	public StringLiteral(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.StringLiteral, 0); }
+export class StructDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _typeVars!: TypeVarListContext;
+	public _fields!: ParamListContext;
+	public STRUCT(): TerminalNode { return this.getToken(CWScriptParser.STRUCT, 0); }
 	public LBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACE, 0); }
 	public RBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACE, 0); }
-	public ident(): IdentContext[];
-	public ident(i: number): IdentContext;
-	public ident(i?: number): IdentContext | IdentContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(IdentContext);
-		} else {
-			return this.getRuleContext(i, IdentContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: ImportStmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterImportItemsStmt) {
-			listener.enterImportItemsStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitImportItemsStmt) {
-			listener.exitImportItemsStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitImportItemsStmt) {
-			return visitor.visitImportItemsStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ContractItemContext extends ParserRuleContext {
-	public typeDefn(): TypeDefnContext | undefined {
-		return this.tryGetRuleContext(0, TypeDefnContext);
-	}
-	public constStmt_(): ConstStmt_Context | undefined {
-		return this.tryGetRuleContext(0, ConstStmt_Context);
-	}
-	public fnDefn(): FnDefnContext | undefined {
-		return this.tryGetRuleContext(0, FnDefnContext);
-	}
-	public errorDefn(): ErrorDefnContext | undefined {
-		return this.tryGetRuleContext(0, ErrorDefnContext);
-	}
-	public errorDefnBlock(): ErrorDefnBlockContext | undefined {
-		return this.tryGetRuleContext(0, ErrorDefnBlockContext);
-	}
-	public eventDefn(): EventDefnContext | undefined {
-		return this.tryGetRuleContext(0, EventDefnContext);
-	}
-	public eventDefnBlock(): EventDefnBlockContext | undefined {
-		return this.tryGetRuleContext(0, EventDefnBlockContext);
-	}
-	public stateDefnBlock(): StateDefnBlockContext | undefined {
-		return this.tryGetRuleContext(0, StateDefnBlockContext);
-	}
-	public instantiateDefn(): InstantiateDefnContext | undefined {
-		return this.tryGetRuleContext(0, InstantiateDefnContext);
-	}
-	public instantiateDecl(): InstantiateDeclContext | undefined {
-		return this.tryGetRuleContext(0, InstantiateDeclContext);
-	}
-	public execDefn(): ExecDefnContext | undefined {
-		return this.tryGetRuleContext(0, ExecDefnContext);
-	}
-	public execDecl(): ExecDeclContext | undefined {
-		return this.tryGetRuleContext(0, ExecDeclContext);
-	}
-	public queryDefn(): QueryDefnContext | undefined {
-		return this.tryGetRuleContext(0, QueryDefnContext);
-	}
-	public queryDecl(): QueryDeclContext | undefined {
-		return this.tryGetRuleContext(0, QueryDeclContext);
-	}
-	public replyDefn(): ReplyDefnContext | undefined {
-		return this.tryGetRuleContext(0, ReplyDefnContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_contractItem; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterContractItem) {
-			listener.enterContractItem(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitContractItem) {
-			listener.exitContractItem(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitContractItem) {
-			return visitor.visitContractItem(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ParamContext extends ParserRuleContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public _name!: IdentContext;
-	public _optional!: Token;
-	public _ty!: TypeExprContext;
-	public _default!: ExprContext;
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
+	public LBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACK, 0); }
+	public typeVarList(): TypeVarListContext | undefined {
+		return this.tryGetRuleContext(0, TypeVarListContext);
 	}
-	public QUEST(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.QUEST, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
 	}
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
+	public LPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RPAREN, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_param; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_structDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterParam) {
-			listener.enterParam(this);
+		if (listener.enterStructDefn) {
+			listener.enterStructDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitParam) {
-			listener.exitParam(this);
+		if (listener.exitStructDefn) {
+			listener.exitStructDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitParam) {
-			return visitor.visitParam(this);
+		if (visitor.visitStructDefn) {
+			return visitor.visitStructDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -6186,134 +5897,53 @@ export class ParamContext extends ParserRuleContext {
 }
 
 
-export class ParamListContext extends ParserRuleContext {
-	public param(): ParamContext[];
-	public param(i: number): ParamContext;
-	public param(i?: number): ParamContext | ParamContext[] {
+export class TupleDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _typeVars!: TypeVarListContext;
+	public _elements!: TypeExprListContext;
+	public TUPLE(): TerminalNode { return this.getToken(CWScriptParser.TUPLE, 0); }
+	public LBRACK(): TerminalNode[];
+	public LBRACK(i: number): TerminalNode;
+	public LBRACK(i?: number): TerminalNode | TerminalNode[] {
 		if (i === undefined) {
-			return this.getRuleContexts(ParamContext);
+			return this.getTokens(CWScriptParser.LBRACK);
 		} else {
-			return this.getRuleContext(i, ParamContext);
+			return this.getToken(CWScriptParser.LBRACK, i);
 		}
 	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_paramList; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterParamList) {
-			listener.enterParamList(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitParamList) {
-			listener.exitParamList(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitParamList) {
-			return visitor.visitParamList(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class FnParamsContext extends ParserRuleContext {
-	public _param!: ParamContext;
-	public _params: ParamContext[] = [];
-	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
 	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
-	public param(): ParamContext[];
-	public param(i: number): ParamContext;
-	public param(i?: number): ParamContext | ParamContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ParamContext);
-		} else {
-			return this.getRuleContext(i, ParamContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_fnParams; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterFnParams) {
-			listener.enterFnParams(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitFnParams) {
-			listener.exitFnParams(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitFnParams) {
-			return visitor.visitFnParams(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class StructDefn_fnContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _params!: FnParamsContext;
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public fnParams(): FnParamsContext | undefined {
-		return this.tryGetRuleContext(0, FnParamsContext);
+	public RBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACK, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public typeVarList(): TypeVarListContext | undefined {
+		return this.tryGetRuleContext(0, TypeVarListContext);
+	}
+	public typeExprList(): TypeExprListContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_structDefn_fn; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_tupleDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterStructDefn_fn) {
-			listener.enterStructDefn_fn(this);
+		if (listener.enterTupleDefn) {
+			listener.enterTupleDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitStructDefn_fn) {
-			listener.exitStructDefn_fn(this);
+		if (listener.exitTupleDefn) {
+			listener.exitTupleDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitStructDefn_fn) {
-			return visitor.visitStructDefn_fn(this);
+		if (visitor.visitTupleDefn) {
+			return visitor.visitTupleDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -6321,667 +5951,40 @@ export class StructDefn_fnContext extends ParserRuleContext {
 }
 
 
-export class ErrorDefnContext extends ParserRuleContext {
-	public _defn!: StructDefn_fnContext;
-	public ERROR(): TerminalNode { return this.getToken(CWScriptParser.ERROR, 0); }
-	public structDefn_fn(): StructDefn_fnContext {
-		return this.getRuleContext(0, StructDefn_fnContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_errorDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterErrorDefn) {
-			listener.enterErrorDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitErrorDefn) {
-			listener.exitErrorDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitErrorDefn) {
-			return visitor.visitErrorDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ErrorDefnBlockContext extends ParserRuleContext {
-	public _structDefn_fn!: StructDefn_fnContext;
-	public _defns: StructDefn_fnContext[] = [];
-	public ERROR(): TerminalNode { return this.getToken(CWScriptParser.ERROR, 0); }
-	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public structDefn_fn(): StructDefn_fnContext[];
-	public structDefn_fn(i: number): StructDefn_fnContext;
-	public structDefn_fn(i?: number): StructDefn_fnContext | StructDefn_fnContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(StructDefn_fnContext);
-		} else {
-			return this.getRuleContext(i, StructDefn_fnContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_errorDefnBlock; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterErrorDefnBlock) {
-			listener.enterErrorDefnBlock(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitErrorDefnBlock) {
-			listener.exitErrorDefnBlock(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitErrorDefnBlock) {
-			return visitor.visitErrorDefnBlock(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class EventDefnContext extends ParserRuleContext {
-	public EVENT(): TerminalNode { return this.getToken(CWScriptParser.EVENT, 0); }
-	public structDefn_fn(): StructDefn_fnContext {
-		return this.getRuleContext(0, StructDefn_fnContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_eventDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterEventDefn) {
-			listener.enterEventDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitEventDefn) {
-			listener.exitEventDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitEventDefn) {
-			return visitor.visitEventDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class EventDefnBlockContext extends ParserRuleContext {
-	public _structDefn_fn!: StructDefn_fnContext;
-	public _defns: StructDefn_fnContext[] = [];
-	public EVENT(): TerminalNode { return this.getToken(CWScriptParser.EVENT, 0); }
-	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public structDefn_fn(): StructDefn_fnContext[];
-	public structDefn_fn(i: number): StructDefn_fnContext;
-	public structDefn_fn(i?: number): StructDefn_fnContext | StructDefn_fnContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(StructDefn_fnContext);
-		} else {
-			return this.getRuleContext(i, StructDefn_fnContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_eventDefnBlock; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterEventDefnBlock) {
-			listener.enterEventDefnBlock(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitEventDefnBlock) {
-			listener.exitEventDefnBlock(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitEventDefnBlock) {
-			return visitor.visitEventDefnBlock(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class StateDefnBlockContext extends ParserRuleContext {
-	public _stateDefn!: StateDefnContext;
-	public _defns: StateDefnContext[] = [];
-	public STATE(): TerminalNode { return this.getToken(CWScriptParser.STATE, 0); }
-	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public stateDefn(): StateDefnContext[];
-	public stateDefn(i: number): StateDefnContext;
-	public stateDefn(i?: number): StateDefnContext | StateDefnContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(StateDefnContext);
-		} else {
-			return this.getRuleContext(i, StateDefnContext);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_stateDefnBlock; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterStateDefnBlock) {
-			listener.enterStateDefnBlock(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitStateDefnBlock) {
-			listener.exitStateDefnBlock(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitStateDefnBlock) {
-			return visitor.visitStateDefnBlock(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class StateDefnContext extends ParserRuleContext {
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_stateDefn; }
-	public copyFrom(ctx: StateDefnContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class StateDefn_ItemContext extends StateDefnContext {
+export class UnitDefnContext extends ParserRuleContext {
+	public _typeVars!: TypeVarListContext;
 	public _name!: IdentContext;
-	public _ty!: TypeExprContext;
-	public _default!: ExprContext;
-	public COLON(): TerminalNode { return this.getToken(CWScriptParser.COLON, 0); }
+	public UNIT(): TerminalNode { return this.getToken(CWScriptParser.UNIT, 0); }
+	public LBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACK, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
-	constructor(ctx: StateDefnContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterStateDefn_Item) {
-			listener.enterStateDefn_Item(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitStateDefn_Item) {
-			listener.exitStateDefn_Item(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitStateDefn_Item) {
-			return visitor.visitStateDefn_Item(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class StateDefn_MapContext extends StateDefnContext {
-	public _name!: IdentContext;
-	public _mapKeyDefn!: MapKeyDefnContext;
-	public _mapKeys: MapKeyDefnContext[] = [];
-	public _ty!: TypeExprContext;
-	public _default!: ExprContext;
-	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public COLON(): TerminalNode { return this.getToken(CWScriptParser.COLON, 0); }
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
-	}
-	public mapKeyDefn(): MapKeyDefnContext[];
-	public mapKeyDefn(i: number): MapKeyDefnContext;
-	public mapKeyDefn(i?: number): MapKeyDefnContext | MapKeyDefnContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(MapKeyDefnContext);
-		} else {
-			return this.getRuleContext(i, MapKeyDefnContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
-	constructor(ctx: StateDefnContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterStateDefn_Map) {
-			listener.enterStateDefn_Map(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitStateDefn_Map) {
-			listener.exitStateDefn_Map(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitStateDefn_Map) {
-			return visitor.visitStateDefn_Map(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class MapKeyDefnContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _ty!: TypeExprContext;
-	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public typeVarList(): TypeVarListContext | undefined {
+		return this.tryGetRuleContext(0, TypeVarListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_mapKeyDefn; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_unitDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterMapKeyDefn) {
-			listener.enterMapKeyDefn(this);
+		if (listener.enterUnitDefn) {
+			listener.enterUnitDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitMapKeyDefn) {
-			listener.exitMapKeyDefn(this);
+		if (listener.exitUnitDefn) {
+			listener.exitUnitDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitMapKeyDefn) {
-			return visitor.visitMapKeyDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class InstantiateDefnContext extends ParserRuleContext {
-	public _params!: FnParamsContext;
-	public _body!: BlockContext;
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public INSTANTIATE(): TerminalNode { return this.getToken(CWScriptParser.INSTANTIATE, 0); }
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_instantiateDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterInstantiateDefn) {
-			listener.enterInstantiateDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitInstantiateDefn) {
-			listener.exitInstantiateDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitInstantiateDefn) {
-			return visitor.visitInstantiateDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class InstantiateDeclContext extends ParserRuleContext {
-	public _params!: FnParamsContext;
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public INSTANTIATE(): TerminalNode { return this.getToken(CWScriptParser.INSTANTIATE, 0); }
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_instantiateDecl; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterInstantiateDecl) {
-			listener.enterInstantiateDecl(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitInstantiateDecl) {
-			listener.exitInstantiateDecl(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitInstantiateDecl) {
-			return visitor.visitInstantiateDecl(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ExecDefnContext extends ParserRuleContext {
-	public _tup!: Token;
-	public _name!: IdentContext;
-	public _params!: FnParamsContext;
-	public _body!: BlockContext;
-	public EXEC(): TerminalNode { return this.getToken(CWScriptParser.EXEC, 0); }
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public ident(): IdentContext {
-		return this.getRuleContext(0, IdentContext);
-	}
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
-	}
-	public MUL(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL, 0); }
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_execDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterExecDefn) {
-			listener.enterExecDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitExecDefn) {
-			listener.exitExecDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitExecDefn) {
-			return visitor.visitExecDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ExecDeclContext extends ParserRuleContext {
-	public _tup!: Token;
-	public _name!: IdentContext;
-	public _params!: FnParamsContext;
-	public EXEC(): TerminalNode { return this.getToken(CWScriptParser.EXEC, 0); }
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public ident(): IdentContext {
-		return this.getRuleContext(0, IdentContext);
-	}
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public MUL(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL, 0); }
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_execDecl; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterExecDecl) {
-			listener.enterExecDecl(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitExecDecl) {
-			listener.exitExecDecl(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitExecDecl) {
-			return visitor.visitExecDecl(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class QueryDefnContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _params!: FnParamsContext;
-	public _retTy!: TypeExprContext;
-	public _body!: BlockContext;
-	public QUERY(): TerminalNode { return this.getToken(CWScriptParser.QUERY, 0); }
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public ident(): IdentContext {
-		return this.getRuleContext(0, IdentContext);
-	}
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
-	}
-	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_queryDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterQueryDefn) {
-			listener.enterQueryDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitQueryDefn) {
-			listener.exitQueryDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitQueryDefn) {
-			return visitor.visitQueryDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class QueryDeclContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _params!: FnParamsContext;
-	public _retTy!: TypeExprContext;
-	public QUERY(): TerminalNode { return this.getToken(CWScriptParser.QUERY, 0); }
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public ident(): IdentContext {
-		return this.getRuleContext(0, IdentContext);
-	}
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_queryDecl; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterQueryDecl) {
-			listener.enterQueryDecl(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitQueryDecl) {
-			listener.exitQueryDecl(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitQueryDecl) {
-			return visitor.visitQueryDecl(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ReplyDefnContext extends ParserRuleContext {
-	public _on!: IdentContext;
-	public _name!: IdentContext;
-	public _params!: FnParamsContext;
-	public _body!: BlockContext;
-	public REPLY(): TerminalNode { return this.getToken(CWScriptParser.REPLY, 0); }
-	public ident(): IdentContext[];
-	public ident(i: number): IdentContext;
-	public ident(i?: number): IdentContext | IdentContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(IdentContext);
-		} else {
-			return this.getRuleContext(i, IdentContext);
-		}
-	}
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
-	}
-	public DOT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DOT, 0); }
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_replyDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterReplyDefn) {
-			listener.enterReplyDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitReplyDefn) {
-			listener.exitReplyDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitReplyDefn) {
-			return visitor.visitReplyDefn(this);
+		if (visitor.visitUnitDefn) {
+			return visitor.visitUnitDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -6991,31 +5994,22 @@ export class ReplyDefnContext extends ParserRuleContext {
 
 export class EnumDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public _variant_!: Variant_Context;
-	public _variants: Variant_Context[] = [];
+	public _typeVars!: TypeVarListContext;
+	public _variants!: EnumVariantListContext;
 	public ENUM(): TerminalNode { return this.getToken(CWScriptParser.ENUM, 0); }
 	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
 	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public variant_(): Variant_Context[];
-	public variant_(i: number): Variant_Context;
-	public variant_(i?: number): Variant_Context | Variant_Context[] {
-		if (i === undefined) {
-			return this.getRuleContexts(Variant_Context);
-		} else {
-			return this.getRuleContext(i, Variant_Context);
-		}
-	}
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
+	public LBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACK, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public typeVarList(): TypeVarListContext | undefined {
+		return this.tryGetRuleContext(0, TypeVarListContext);
+	}
+	public enumVariantList(): EnumVariantListContext | undefined {
+		return this.tryGetRuleContext(0, EnumVariantListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -7045,34 +6039,46 @@ export class EnumDefnContext extends ParserRuleContext {
 }
 
 
-export class Variant_Context extends ParserRuleContext {
-	public variant_struct(): Variant_structContext | undefined {
-		return this.tryGetRuleContext(0, Variant_structContext);
+export class EnumVariantListContext extends ParserRuleContext {
+	public enumVariant(): EnumVariantContext[];
+	public enumVariant(i: number): EnumVariantContext;
+	public enumVariant(i?: number): EnumVariantContext | EnumVariantContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(EnumVariantContext);
+		} else {
+			return this.getRuleContext(i, EnumVariantContext);
+		}
 	}
-	public variant_unit(): Variant_unitContext | undefined {
-		return this.tryGetRuleContext(0, Variant_unitContext);
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_variant_; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_enumVariantList; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterVariant_) {
-			listener.enterVariant_(this);
+		if (listener.enterEnumVariantList) {
+			listener.enterEnumVariantList(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitVariant_) {
-			listener.exitVariant_(this);
+		if (listener.exitEnumVariantList) {
+			listener.exitEnumVariantList(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitVariant_) {
-			return visitor.visitVariant_(this);
+		if (visitor.visitEnumVariantList) {
+			return visitor.visitEnumVariantList(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -7080,41 +6086,78 @@ export class Variant_Context extends ParserRuleContext {
 }
 
 
-export class Variant_structContext extends ParserRuleContext {
+export class EnumVariantContext extends ParserRuleContext {
+	public enumVariantStructDefn(): EnumVariantStructDefnContext | undefined {
+		return this.tryGetRuleContext(0, EnumVariantStructDefnContext);
+	}
+	public enumVariantTupleDefn(): EnumVariantTupleDefnContext | undefined {
+		return this.tryGetRuleContext(0, EnumVariantTupleDefnContext);
+	}
+	public enumVariantUnitDefn(): EnumVariantUnitDefnContext | undefined {
+		return this.tryGetRuleContext(0, EnumVariantUnitDefnContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_enumVariant; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterEnumVariant) {
+			listener.enterEnumVariant(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitEnumVariant) {
+			listener.exitEnumVariant(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitEnumVariant) {
+			return visitor.visitEnumVariant(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class EnumVariantStructDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public _members!: ParamListContext;
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public LPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LPAREN, 0); }
-	public RPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RPAREN, 0); }
+	public _fields!: ParamListContext;
+	public LBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACE, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
 	public paramList(): ParamListContext | undefined {
 		return this.tryGetRuleContext(0, ParamListContext);
 	}
-	public LBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACE, 0); }
+	public LPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RPAREN, 0); }
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_variant_struct; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_enumVariantStructDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterVariant_struct) {
-			listener.enterVariant_struct(this);
+		if (listener.enterEnumVariantStructDefn) {
+			listener.enterEnumVariantStructDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitVariant_struct) {
-			listener.exitVariant_struct(this);
+		if (listener.exitEnumVariantStructDefn) {
+			listener.exitEnumVariantStructDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitVariant_struct) {
-			return visitor.visitVariant_struct(this);
+		if (visitor.visitEnumVariantStructDefn) {
+			return visitor.visitEnumVariantStructDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -7122,593 +6165,38 @@ export class Variant_structContext extends ParserRuleContext {
 }
 
 
-export class Variant_unitContext extends ParserRuleContext {
+export class EnumVariantTupleDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_variant_unit; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterVariant_unit) {
-			listener.enterVariant_unit(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitVariant_unit) {
-			listener.exitVariant_unit(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitVariant_unit) {
-			return visitor.visitVariant_unit(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class TypeExprContext extends ParserRuleContext {
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_typeExpr; }
-	public copyFrom(ctx: TypeExprContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class TypeAppTContext extends TypeExprContext {
-	public LT(): TerminalNode { return this.getToken(CWScriptParser.LT, 0); }
-	public typeExpr(): TypeExprContext {
-		return this.getRuleContext(0, TypeExprContext);
-	}
-	public GT(): TerminalNode { return this.getToken(CWScriptParser.GT, 0); }
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypeAppT) {
-			listener.enterTypeAppT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypeAppT) {
-			listener.exitTypeAppT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypeAppT) {
-			return visitor.visitTypeAppT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class PathTContext extends TypeExprContext {
-	public typePath(): TypePathContext {
-		return this.getRuleContext(0, TypePathContext);
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterPathT) {
-			listener.enterPathT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitPathT) {
-			listener.exitPathT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitPathT) {
-			return visitor.visitPathT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class VariantTContext extends TypeExprContext {
-	public typeVariant(): TypeVariantContext {
-		return this.getRuleContext(0, TypeVariantContext);
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterVariantT) {
-			listener.enterVariantT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitVariantT) {
-			listener.exitVariantT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitVariantT) {
-			return visitor.visitVariantT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class LensTContext extends TypeExprContext {
-	public typeLens(): TypeLensContext {
-		return this.getRuleContext(0, TypeLensContext);
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterLensT) {
-			listener.enterLensT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitLensT) {
-			listener.exitLensT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitLensT) {
-			return visitor.visitLensT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class FnTContext extends TypeExprContext {
-	public fnType(): FnTypeContext {
-		return this.getRuleContext(0, FnTypeContext);
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterFnT) {
-			listener.enterFnT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitFnT) {
-			listener.exitFnT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitFnT) {
-			return visitor.visitFnT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class OptionTContext extends TypeExprContext {
-	public typeExpr(): TypeExprContext {
-		return this.getRuleContext(0, TypeExprContext);
-	}
-	public QUEST(): TerminalNode { return this.getToken(CWScriptParser.QUEST, 0); }
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterOptionT) {
-			listener.enterOptionT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitOptionT) {
-			listener.exitOptionT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitOptionT) {
-			return visitor.visitOptionT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ListTContext extends TypeExprContext {
-	public _len!: Token;
-	public typeExpr(): TypeExprContext {
-		return this.getRuleContext(0, TypeExprContext);
-	}
+	public _elements!: TypeExprListContext;
 	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public IntLiteral(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.IntLiteral, 0); }
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterListT) {
-			listener.enterListT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitListT) {
-			listener.exitListT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitListT) {
-			return visitor.visitListT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class TupleTContext extends TypeExprContext {
-	public _typeExpr!: TypeExprContext;
-	public _items: TypeExprContext[] = [];
-	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public typeExpr(): TypeExprContext[];
-	public typeExpr(i: number): TypeExprContext;
-	public typeExpr(i?: number): TypeExprContext | TypeExprContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(TypeExprContext);
-		} else {
-			return this.getRuleContext(i, TypeExprContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTupleT) {
-			listener.enterTupleT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTupleT) {
-			listener.exitTupleT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTupleT) {
-			return visitor.visitTupleT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ParamzdTContext extends TypeExprContext {
-	public _typeArg!: TypeArgContext;
-	public _args: TypeArgContext[] = [];
-	public typePath(): TypePathContext {
-		return this.getRuleContext(0, TypePathContext);
-	}
-	public LT(): TerminalNode { return this.getToken(CWScriptParser.LT, 0); }
-	public GT(): TerminalNode { return this.getToken(CWScriptParser.GT, 0); }
-	public typeArg(): TypeArgContext[];
-	public typeArg(i: number): TypeArgContext;
-	public typeArg(i?: number): TypeArgContext | TypeArgContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(TypeArgContext);
-		} else {
-			return this.getRuleContext(i, TypeArgContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterParamzdT) {
-			listener.enterParamzdT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitParamzdT) {
-			listener.exitParamzdT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitParamzdT) {
-			return visitor.visitParamzdT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class DefnTContext extends TypeExprContext {
-	public typeDefn(): TypeDefnContext {
-		return this.getRuleContext(0, TypeDefnContext);
-	}
-	constructor(ctx: TypeExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterDefnT) {
-			listener.enterDefnT(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitDefnT) {
-			listener.exitDefnT(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitDefnT) {
-			return visitor.visitDefnT(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class TypeArgContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _value!: TypeExprContext;
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_typeArg; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypeArg) {
-			listener.enterTypeArg(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypeArg) {
-			listener.exitTypeArg(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypeArg) {
-			return visitor.visitTypeArg(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class FnTypeContext extends ParserRuleContext {
-	public _fallible!: Token;
-	public _params!: ParamListContext;
-	public _retTy!: TypeExprContext;
-	public FN(): TerminalNode { return this.getToken(CWScriptParser.FN, 0); }
-	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
 	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
-	public ARROW(): TerminalNode { return this.getToken(CWScriptParser.ARROW, 0); }
-	public typeExpr(): TypeExprContext {
-		return this.getRuleContext(0, TypeExprContext);
-	}
-	public BANG(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.BANG, 0); }
-	public paramList(): ParamListContext | undefined {
-		return this.tryGetRuleContext(0, ParamListContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_fnType; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterFnType) {
-			listener.enterFnType(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitFnType) {
-			listener.exitFnType(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitFnType) {
-			return visitor.visitFnType(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class TypeLensContext extends ParserRuleContext {
-	public _scope!: Token;
-	public typePath(): TypePathContext {
-		return this.getRuleContext(0, TypePathContext);
-	}
-	public INSTANTIATE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.INSTANTIATE, 0); }
-	public EXEC(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EXEC, 0); }
-	public QUERY(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.QUERY, 0); }
-	public MUT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUT, 0); }
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_typeLens; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypeLens) {
-			listener.enterTypeLens(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypeLens) {
-			listener.exitTypeLens(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypeLens) {
-			return visitor.visitTypeLens(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class TypePathContext extends ParserRuleContext {
-	public _ident!: IdentContext;
-	public _segments: IdentContext[] = [];
-	public ident(): IdentContext[];
-	public ident(i: number): IdentContext;
-	public ident(i?: number): IdentContext | IdentContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(IdentContext);
-		} else {
-			return this.getRuleContext(i, IdentContext);
-		}
-	}
-	public DOT(): TerminalNode[];
-	public DOT(i: number): TerminalNode;
-	public DOT(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.DOT);
-		} else {
-			return this.getToken(CWScriptParser.DOT, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_typePath; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypePath) {
-			listener.enterTypePath(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypePath) {
-			listener.exitTypePath(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypePath) {
-			return visitor.visitTypePath(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class TypeVariantContext extends ParserRuleContext {
-	public _variant!: IdentContext;
-	public typePath(): TypePathContext {
-		return this.getRuleContext(0, TypePathContext);
-	}
-	public DOT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DOT, 0); }
-	public HASH(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.HASH, 0); }
-	public LPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LPAREN, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
-	public RPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RPAREN, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
+	public typeExprList(): TypeExprListContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprListContext);
+	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_typeVariant; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_enumVariantTupleDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypeVariant) {
-			listener.enterTypeVariant(this);
+		if (listener.enterEnumVariantTupleDefn) {
+			listener.enterEnumVariantTupleDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypeVariant) {
-			listener.exitTypeVariant(this);
+		if (listener.exitEnumVariantTupleDefn) {
+			listener.exitEnumVariantTupleDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypeVariant) {
-			return visitor.visitTypeVariant(this);
+		if (visitor.visitEnumVariantTupleDefn) {
+			return visitor.visitEnumVariantTupleDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -7716,95 +6204,32 @@ export class TypeVariantContext extends ParserRuleContext {
 }
 
 
-export class TypeDefnContext extends ParserRuleContext {
-	public structDefn(): StructDefnContext | undefined {
-		return this.tryGetRuleContext(0, StructDefnContext);
-	}
-	public enumDefn(): EnumDefnContext | undefined {
-		return this.tryGetRuleContext(0, EnumDefnContext);
-	}
-	public typeAliasDefn(): TypeAliasDefnContext | undefined {
-		return this.tryGetRuleContext(0, TypeAliasDefnContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_typeDefn; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypeDefn) {
-			listener.enterTypeDefn(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypeDefn) {
-			listener.exitTypeDefn(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypeDefn) {
-			return visitor.visitTypeDefn(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class StructDefnContext extends ParserRuleContext {
+export class EnumVariantUnitDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public _param!: ParamContext;
-	public _members: ParamContext[] = [];
-	public STRUCT(): TerminalNode { return this.getToken(CWScriptParser.STRUCT, 0); }
-	public LPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LPAREN, 0); }
-	public RPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RPAREN, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public param(): ParamContext[];
-	public param(i: number): ParamContext;
-	public param(i?: number): ParamContext | ParamContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ParamContext);
-		} else {
-			return this.getRuleContext(i, ParamContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	public LBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACE, 0); }
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_structDefn; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_enumVariantUnitDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterStructDefn) {
-			listener.enterStructDefn(this);
+		if (listener.enterEnumVariantUnitDefn) {
+			listener.enterEnumVariantUnitDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitStructDefn) {
-			listener.exitStructDefn(this);
+		if (listener.exitEnumVariantUnitDefn) {
+			listener.exitEnumVariantUnitDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitStructDefn) {
-			return visitor.visitStructDefn(this);
+		if (visitor.visitEnumVariantUnitDefn) {
+			return visitor.visitEnumVariantUnitDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -7814,14 +6239,21 @@ export class StructDefnContext extends ParserRuleContext {
 
 export class TypeAliasDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public _value!: TypeExprContext;
+	public _typeVars!: TypeVarListContext;
+	public _ty!: TypeExprContext;
 	public TYPE(): TerminalNode { return this.getToken(CWScriptParser.TYPE, 0); }
 	public EQ(): TerminalNode { return this.getToken(CWScriptParser.EQ, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
+	public LBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACK, 0); }
 	public typeExpr(): TypeExprContext | undefined {
 		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public typeVarList(): TypeVarListContext | undefined {
+		return this.tryGetRuleContext(0, TypeVarListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -7853,22 +6285,32 @@ export class TypeAliasDefnContext extends ParserRuleContext {
 
 export class FnDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public _fallible!: Token;
-	public _params!: FnParamsContext;
-	public _retTy!: TypeExprContext;
-	public _body!: BlockContext;
+	public _params!: ParamListContext;
+	public _returnTy!: TypeExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
 	public FN(): TerminalNode { return this.getToken(CWScriptParser.FN, 0); }
-	public fnParams(): FnParamsContext {
-		return this.getRuleContext(0, FnParamsContext);
-	}
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
-	}
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
 	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
-	public BANG(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.BANG, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
+	}
 	public typeExpr(): TypeExprContext | undefined {
 		return this.tryGetRuleContext(0, TypeExprContext);
 	}
@@ -7900,811 +6342,34 @@ export class FnDefnContext extends ParserRuleContext {
 }
 
 
-export class AnnotContext extends ParserRuleContext {
-	public _isTag!: Token;
-	public _path!: TypePathContext;
-	public _arg!: ArgContext;
-	public _args: ArgContext[] = [];
-	public AT(): TerminalNode[];
-	public AT(i: number): TerminalNode;
-	public AT(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.AT);
-		} else {
-			return this.getToken(CWScriptParser.AT, i);
-		}
-	}
-	public typePath(): TypePathContext | undefined {
-		return this.tryGetRuleContext(0, TypePathContext);
-	}
-	public LPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LPAREN, 0); }
-	public RPAREN(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RPAREN, 0); }
-	public arg(): ArgContext | undefined {
-		return this.tryGetRuleContext(0, ArgContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_annot; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterAnnot) {
-			listener.enterAnnot(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitAnnot) {
-			listener.exitAnnot(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitAnnot) {
-			return visitor.visitAnnot(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class CallOptionsContext extends ParserRuleContext {
-	public LBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACE, 0); }
-	public memberVal(): MemberValContext[];
-	public memberVal(i: number): MemberValContext;
-	public memberVal(i?: number): MemberValContext | MemberValContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(MemberValContext);
-		} else {
-			return this.getRuleContext(i, MemberValContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_callOptions; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterCallOptions) {
-			listener.enterCallOptions(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitCallOptions) {
-			listener.exitCallOptions(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitCallOptions) {
-			return visitor.visitCallOptions(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class StmtContext extends ParserRuleContext {
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_stmt; }
-	public copyFrom(ctx: StmtContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class AnnotBlockStmtContext extends StmtContext {
-	public annot(): AnnotContext {
-		return this.getRuleContext(0, AnnotContext);
-	}
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterAnnotBlockStmt) {
-			listener.enterAnnotBlockStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitAnnotBlockStmt) {
-			listener.exitAnnotBlockStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitAnnotBlockStmt) {
-			return visitor.visitAnnotBlockStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class DebugStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public debugStmt_(): DebugStmt_Context {
-		return this.getRuleContext(0, DebugStmt_Context);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterDebugStmt) {
-			listener.enterDebugStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitDebugStmt) {
-			listener.exitDebugStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitDebugStmt) {
-			return visitor.visitDebugStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class LetStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public letStmt_(): LetStmt_Context {
-		return this.getRuleContext(0, LetStmt_Context);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterLetStmt) {
-			listener.enterLetStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitLetStmt) {
-			listener.exitLetStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitLetStmt) {
-			return visitor.visitLetStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ConstStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public constStmt_(): ConstStmt_Context {
-		return this.getRuleContext(0, ConstStmt_Context);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterConstStmt) {
-			listener.enterConstStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitConstStmt) {
-			listener.exitConstStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitConstStmt) {
-			return visitor.visitConstStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class AssignStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public assignStmt_(): AssignStmt_Context {
-		return this.getRuleContext(0, AssignStmt_Context);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterAssignStmt) {
-			listener.enterAssignStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitAssignStmt) {
-			listener.exitAssignStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitAssignStmt) {
-			return visitor.visitAssignStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class IfStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public ifStmt_(): IfStmt_Context {
-		return this.getRuleContext(0, IfStmt_Context);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIfStmt) {
-			listener.enterIfStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIfStmt) {
-			listener.exitIfStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIfStmt) {
-			return visitor.visitIfStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ForStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public forStmt_(): ForStmt_Context {
-		return this.getRuleContext(0, ForStmt_Context);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterForStmt) {
-			listener.enterForStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitForStmt) {
-			listener.exitForStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitForStmt) {
-			return visitor.visitForStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ExecStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public _defer!: Token;
-	public _options!: CallOptionsContext;
-	public EXEC_NOW(): TerminalNode { return this.getToken(CWScriptParser.EXEC_NOW, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	public DEFER(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DEFER, 0); }
-	public callOptions(): CallOptionsContext | undefined {
-		return this.tryGetRuleContext(0, CallOptionsContext);
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterExecStmt) {
-			listener.enterExecStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitExecStmt) {
-			listener.exitExecStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitExecStmt) {
-			return visitor.visitExecStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class DelegateExecStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public _defer!: Token;
-	public DELEGATE_EXEC(): TerminalNode { return this.getToken(CWScriptParser.DELEGATE_EXEC, 0); }
-	public HASH(): TerminalNode { return this.getToken(CWScriptParser.HASH, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	public DEFER(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DEFER, 0); }
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterDelegateExecStmt) {
-			listener.enterDelegateExecStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitDelegateExecStmt) {
-			listener.exitDelegateExecStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitDelegateExecStmt) {
-			return visitor.visitDelegateExecStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class InstantiateStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public _defer!: Token;
-	public _new!: Token;
-	public _options!: CallOptionsContext;
-	public INSTANTIATE_NOW(): TerminalNode { return this.getToken(CWScriptParser.INSTANTIATE_NOW, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	public DEFER(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DEFER, 0); }
-	public HASH(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.HASH, 0); }
-	public callOptions(): CallOptionsContext | undefined {
-		return this.tryGetRuleContext(0, CallOptionsContext);
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterInstantiateStmt) {
-			listener.enterInstantiateStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitInstantiateStmt) {
-			listener.exitInstantiateStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitInstantiateStmt) {
-			return visitor.visitInstantiateStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class EmitStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public _defer!: Token;
-	public EMIT(): TerminalNode { return this.getToken(CWScriptParser.EMIT, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	public DEFER(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DEFER, 0); }
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterEmitStmt) {
-			listener.enterEmitStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitEmitStmt) {
-			listener.exitEmitStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitEmitStmt) {
-			return visitor.visitEmitStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ReturnStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public RETURN(): TerminalNode { return this.getToken(CWScriptParser.RETURN, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterReturnStmt) {
-			listener.enterReturnStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitReturnStmt) {
-			listener.exitReturnStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitReturnStmt) {
-			return visitor.visitReturnStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class FailStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public FAIL(): TerminalNode { return this.getToken(CWScriptParser.FAIL, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterFailStmt) {
-			listener.enterFailStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitFailStmt) {
-			listener.exitFailStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitFailStmt) {
-			return visitor.visitFailStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ExprStmtContext extends StmtContext {
-	public _annot!: AnnotContext;
-	public _ann: AnnotContext[] = [];
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public annot(): AnnotContext[];
-	public annot(i: number): AnnotContext;
-	public annot(i?: number): AnnotContext | AnnotContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(AnnotContext);
-		} else {
-			return this.getRuleContext(i, AnnotContext);
-		}
-	}
-	constructor(ctx: StmtContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterExprStmt) {
-			listener.enterExprStmt(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitExprStmt) {
-			listener.exitExprStmt(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitExprStmt) {
-			return visitor.visitExprStmt(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class DebugStmt_Context extends ParserRuleContext {
-	public DEBUG(): TerminalNode { return this.getToken(CWScriptParser.DEBUG, 0); }
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
-	}
-	public stmt(): StmtContext | undefined {
-		return this.tryGetRuleContext(0, StmtContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_debugStmt_; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterDebugStmt_) {
-			listener.enterDebugStmt_(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitDebugStmt_) {
-			listener.exitDebugStmt_(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitDebugStmt_) {
-			return visitor.visitDebugStmt_(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class LetStmt_Context extends ParserRuleContext {
-	public LET(): TerminalNode { return this.getToken(CWScriptParser.LET, 0); }
-	public let_binding(): Let_bindingContext {
-		return this.getRuleContext(0, Let_bindingContext);
-	}
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_letStmt_; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterLetStmt_) {
-			listener.enterLetStmt_(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitLetStmt_) {
-			listener.exitLetStmt_(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitLetStmt_) {
-			return visitor.visitLetStmt_(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ConstStmt_Context extends ParserRuleContext {
-	public CONST(): TerminalNode { return this.getToken(CWScriptParser.CONST, 0); }
-	public ident(): IdentContext {
-		return this.getRuleContext(0, IdentContext);
-	}
-	public EQ(): TerminalNode { return this.getToken(CWScriptParser.EQ, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_constStmt_; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterConstStmt_) {
-			listener.enterConstStmt_(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitConstStmt_) {
-			listener.exitConstStmt_(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitConstStmt_) {
-			return visitor.visitConstStmt_(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class IdentBinding_Context extends ParserRuleContext {
+export class InstantiateDefnContext extends ParserRuleContext {
 	public _name!: IdentContext;
-	public _ty!: TypeExprContext;
+	public _returnTy!: TypeExprContext;
+	public _params!: ParamListContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public INSTANTIATE(): TerminalNode { return this.getToken(CWScriptParser.INSTANTIATE, 0); }
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
+	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
+	}
 	public typeExpr(): TypeExprContext | undefined {
 		return this.tryGetRuleContext(0, TypeExprContext);
 	}
@@ -8712,23 +6377,23 @@ export class IdentBinding_Context extends ParserRuleContext {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_identBinding_; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_instantiateDefn; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIdentBinding_) {
-			listener.enterIdentBinding_(this);
+		if (listener.enterInstantiateDefn) {
+			listener.enterInstantiateDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIdentBinding_) {
-			listener.exitIdentBinding_(this);
+		if (listener.exitInstantiateDefn) {
+			listener.exitInstantiateDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIdentBinding_) {
-			return visitor.visitIdentBinding_(this);
+		if (visitor.visitInstantiateDefn) {
+			return visitor.visitInstantiateDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -8736,300 +6401,382 @@ export class IdentBinding_Context extends ParserRuleContext {
 }
 
 
-export class Let_bindingContext extends ParserRuleContext {
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_let_binding; }
-	public copyFrom(ctx: Let_bindingContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class IdentBindingContext extends Let_bindingContext {
-	public identBinding_(): IdentBinding_Context {
-		return this.getRuleContext(0, IdentBinding_Context);
-	}
-	constructor(ctx: Let_bindingContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIdentBinding) {
-			listener.enterIdentBinding(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIdentBinding) {
-			listener.exitIdentBinding(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIdentBinding) {
-			return visitor.visitIdentBinding(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class StructBindingContext extends Let_bindingContext {
-	public _identBinding_!: IdentBinding_Context;
-	public _bindings: IdentBinding_Context[] = [];
+export class ExecDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _params!: ParamListContext;
+	public _returnTy!: TypeExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public EXEC(): TerminalNode { return this.getToken(CWScriptParser.EXEC, 0); }
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
 	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
 	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public identBinding_(): IdentBinding_Context | undefined {
-		return this.tryGetRuleContext(0, IdentBinding_Context);
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: Let_bindingContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterStructBinding) {
-			listener.enterStructBinding(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitStructBinding) {
-			listener.exitStructBinding(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitStructBinding) {
-			return visitor.visitStructBinding(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class TupleBindingContext extends Let_bindingContext {
-	public _identBinding_!: IdentBinding_Context;
-	public _bindings: IdentBinding_Context[] = [];
-	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public identBinding_(): IdentBinding_Context[];
-	public identBinding_(i: number): IdentBinding_Context;
-	public identBinding_(i?: number): IdentBinding_Context | IdentBinding_Context[] {
-		if (i === undefined) {
-			return this.getRuleContexts(IdentBinding_Context);
-		} else {
-			return this.getRuleContext(i, IdentBinding_Context);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: Let_bindingContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTupleBinding) {
-			listener.enterTupleBinding(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTupleBinding) {
-			listener.exitTupleBinding(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTupleBinding) {
-			return visitor.visitTupleBinding(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class AssignStmt_Context extends ParserRuleContext {
-	public _lhs!: AssignLHSContext;
-	public _assignOp!: Token;
-	public _rhs!: ExprContext;
-	public assignLHS(): AssignLHSContext | undefined {
-		return this.tryGetRuleContext(0, AssignLHSContext);
-	}
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public PLUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.PLUS_EQ, 0); }
-	public MINUS_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MINUS_EQ, 0); }
-	public MUL_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL_EQ, 0); }
-	public DIV_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DIV_EQ, 0); }
-	public MOD_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MOD_EQ, 0); }
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_assignStmt_; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterAssignStmt_) {
-			listener.enterAssignStmt_(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitAssignStmt_) {
-			listener.exitAssignStmt_(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitAssignStmt_) {
-			return visitor.visitAssignStmt_(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class AssignLHSContext extends ParserRuleContext {
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_assignLHS; }
-	public copyFrom(ctx: AssignLHSContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class IdentLHSContext extends AssignLHSContext {
-	public _symbol!: IdentContext;
-	public ident(): IdentContext {
-		return this.getRuleContext(0, IdentContext);
-	}
-	constructor(ctx: AssignLHSContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIdentLHS) {
-			listener.enterIdentLHS(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIdentLHS) {
-			listener.exitIdentLHS(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIdentLHS) {
-			return visitor.visitIdentLHS(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class DotLHSContext extends AssignLHSContext {
-	public _obj!: ExprContext;
-	public _member!: IdentContext;
-	public DOT(): TerminalNode { return this.getToken(CWScriptParser.DOT, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	constructor(ctx: AssignLHSContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
+	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
+	}
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
 	}
 	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_execDefn; }
+	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterDotLHS) {
-			listener.enterDotLHS(this);
+		if (listener.enterExecDefn) {
+			listener.enterExecDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitDotLHS) {
-			listener.exitDotLHS(this);
+		if (listener.exitExecDefn) {
+			listener.exitExecDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitDotLHS) {
-			return visitor.visitDotLHS(this);
+		if (visitor.visitExecDefn) {
+			return visitor.visitExecDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
-export class IndexLHSContext extends AssignLHSContext {
-	public _obj!: ExprContext;
-	public _expr!: ExprContext;
-	public _args: ExprContext[] = [];
-	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public expr(): ExprContext[];
-	public expr(i: number): ExprContext;
-	public expr(i?: number): ExprContext | ExprContext[] {
+
+
+export class QueryDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _params!: ParamListContext;
+	public _returnTy!: TypeExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public QUERY(): TerminalNode { return this.getToken(CWScriptParser.QUERY, 0); }
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(ExprContext);
+			return this.getRuleContexts(StmtContext);
 		} else {
-			return this.getRuleContext(i, ExprContext);
+			return this.getRuleContext(i, StmtContext);
 		}
 	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
 	}
-	constructor(ctx: AssignLHSContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
 	}
 	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_queryDefn; }
+	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIndexLHS) {
-			listener.enterIndexLHS(this);
+		if (listener.enterQueryDefn) {
+			listener.enterQueryDefn(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIndexLHS) {
-			listener.exitIndexLHS(this);
+		if (listener.exitQueryDefn) {
+			listener.exitQueryDefn(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIndexLHS) {
-			return visitor.visitIndexLHS(this);
+		if (visitor.visitQueryDefn) {
+			return visitor.visitQueryDefn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ErrorDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _params!: ParamListContext;
+	public _returnTy!: TypeExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public ERROR(): TerminalNode { return this.getToken(CWScriptParser.ERROR, 0); }
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
+	}
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_errorDefn; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterErrorDefn) {
+			listener.enterErrorDefn(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitErrorDefn) {
+			listener.exitErrorDefn(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitErrorDefn) {
+			return visitor.visitErrorDefn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class EventDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _params!: ParamListContext;
+	public EVENT(): TerminalNode { return this.getToken(CWScriptParser.EVENT, 0); }
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_eventDefn; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterEventDefn) {
+			listener.enterEventDefn(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitEventDefn) {
+			listener.exitEventDefn(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitEventDefn) {
+			return visitor.visitEventDefn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class StateBlockDefnContext extends ParserRuleContext {
+	public _stateDefn!: StateDefnContext;
+	public _stateVars: StateDefnContext[] = [];
+	public STATE(): TerminalNode { return this.getToken(CWScriptParser.STATE, 0); }
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	public stateDefn(): StateDefnContext[];
+	public stateDefn(i: number): StateDefnContext;
+	public stateDefn(i?: number): StateDefnContext | StateDefnContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StateDefnContext);
+		} else {
+			return this.getRuleContext(i, StateDefnContext);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_stateBlockDefn; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStateBlockDefn) {
+			listener.enterStateBlockDefn(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStateBlockDefn) {
+			listener.exitStateBlockDefn(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStateBlockDefn) {
+			return visitor.visitStateBlockDefn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class StateDefnContext extends ParserRuleContext {
+	public stateItemDefn(): StateItemDefnContext | undefined {
+		return this.tryGetRuleContext(0, StateItemDefnContext);
+	}
+	public stateMapDefn(): StateMapDefnContext | undefined {
+		return this.tryGetRuleContext(0, StateMapDefnContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_stateDefn; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStateDefn) {
+			listener.enterStateDefn(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStateDefn) {
+			listener.exitStateDefn(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStateDefn) {
+			return visitor.visitStateDefn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class StateItemDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _ty!: TypeExprContext;
+	public COLON(): TerminalNode { return this.getToken(CWScriptParser.COLON, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_stateItemDefn; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStateItemDefn) {
+			listener.enterStateItemDefn(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStateItemDefn) {
+			listener.exitStateItemDefn(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStateItemDefn) {
+			return visitor.visitStateItemDefn(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class StateMapDefnContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _indexTy!: TypeExprContext;
+	public _ty!: TypeExprContext;
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public COLON(): TerminalNode { return this.getToken(CWScriptParser.COLON, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public typeExpr(): TypeExprContext[];
+	public typeExpr(i: number): TypeExprContext;
+	public typeExpr(i?: number): TypeExprContext | TypeExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(TypeExprContext);
+		} else {
+			return this.getRuleContext(i, TypeExprContext);
+		}
+	}
+	public SEMI(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.SEMI, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_stateMapDefn; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStateMapDefn) {
+			listener.enterStateMapDefn(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStateMapDefn) {
+			listener.exitStateMapDefn(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStateMapDefn) {
+			return visitor.visitStateMapDefn(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -9047,40 +6794,8 @@ export class ExprContext extends ParserRuleContext {
 		super.copyFrom(ctx);
 	}
 }
-export class GroupedExprContext extends ExprContext {
-	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterGroupedExpr) {
-			listener.enterGroupedExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitGroupedExpr) {
-			listener.exitGroupedExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitGroupedExpr) {
-			return visitor.visitGroupedExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
 export class DotExprContext extends ExprContext {
-	public _unwrap!: Token;
-	public _member!: IdentContext;
+	public _memberName!: IdentContext;
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);
 	}
@@ -9088,8 +6803,6 @@ export class DotExprContext extends ExprContext {
 	public ident(): IdentContext | undefined {
 		return this.tryGetRuleContext(0, IdentContext);
 	}
-	public BANG(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.BANG, 0); }
-	public QUEST(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.QUEST, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
@@ -9115,14 +6828,87 @@ export class DotExprContext extends ExprContext {
 		}
 	}
 }
+export class IndexExprContext extends ExprContext {
+	public _index!: ExprContext;
+	public expr(): ExprContext[];
+	public expr(i: number): ExprContext;
+	public expr(i?: number): ExprContext | ExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ExprContext);
+		} else {
+			return this.getRuleContext(i, ExprContext);
+		}
+	}
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	constructor(ctx: ExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterIndexExpr) {
+			listener.enterIndexExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitIndexExpr) {
+			listener.exitIndexExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitIndexExpr) {
+			return visitor.visitIndexExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class CallExprContext extends ExprContext {
+	public _args!: ArgListContext;
+	public expr(): ExprContext {
+		return this.getRuleContext(0, ExprContext);
+	}
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
+	public argList(): ArgListContext | undefined {
+		return this.tryGetRuleContext(0, ArgListContext);
+	}
+	constructor(ctx: ExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterCallExpr) {
+			listener.enterCallExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitCallExpr) {
+			listener.exitCallExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitCallExpr) {
+			return visitor.visitCallExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
 export class AsExprContext extends ExprContext {
 	public _ty!: TypeExprContext;
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);
 	}
 	public AS(): TerminalNode { return this.getToken(CWScriptParser.AS, 0); }
-	public typeExpr(): TypeExprContext {
-		return this.getRuleContext(0, TypeExprContext);
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9149,173 +6935,31 @@ export class AsExprContext extends ExprContext {
 		}
 	}
 }
-export class IndexExprContext extends ExprContext {
-	public _arg!: ArgContext;
-	public _args: ArgContext[] = [];
+export class ExistsExprContext extends ExprContext {
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);
 	}
-	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public arg(): ArgContext[];
-	public arg(i: number): ArgContext;
-	public arg(i?: number): ArgContext | ArgContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ArgContext);
-		} else {
-			return this.getRuleContext(i, ArgContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
+	public QUEST(): TerminalNode { return this.getToken(CWScriptParser.QUEST, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIndexExpr) {
-			listener.enterIndexExpr(this);
+		if (listener.enterExistsExpr) {
+			listener.enterExistsExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIndexExpr) {
-			listener.exitIndexExpr(this);
+		if (listener.exitExistsExpr) {
+			listener.exitExistsExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIndexExpr) {
-			return visitor.visitIndexExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class DColonExprContext extends ExprContext {
-	public _member!: IdentContext;
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public D_COLON(): TerminalNode { return this.getToken(CWScriptParser.D_COLON, 0); }
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
-	}
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterDColonExpr) {
-			listener.enterDColonExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitDColonExpr) {
-			listener.exitDColonExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitDColonExpr) {
-			return visitor.visitDColonExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class TypeDColonExprContext extends ExprContext {
-	public _member!: IdentContext;
-	public typeExpr(): TypeExprContext {
-		return this.getRuleContext(0, TypeExprContext);
-	}
-	public D_COLON(): TerminalNode { return this.getToken(CWScriptParser.D_COLON, 0); }
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
-	}
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTypeDColonExpr) {
-			listener.enterTypeDColonExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTypeDColonExpr) {
-			listener.exitTypeDColonExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTypeDColonExpr) {
-			return visitor.visitTypeDColonExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class FnCallExprContext extends ExprContext {
-	public _fallible!: Token;
-	public _arg!: ArgContext;
-	public _args: ArgContext[] = [];
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
-	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
-	public BANG(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.BANG, 0); }
-	public arg(): ArgContext[];
-	public arg(i: number): ArgContext;
-	public arg(i?: number): ArgContext | ArgContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ArgContext);
-		} else {
-			return this.getRuleContext(i, ArgContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterFnCallExpr) {
-			listener.enterFnCallExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitFnCallExpr) {
-			listener.exitFnCallExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitFnCallExpr) {
-			return visitor.visitFnCallExpr(this);
+		if (visitor.visitExistsExpr) {
+			return visitor.visitExistsExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -9323,7 +6967,6 @@ export class FnCallExprContext extends ExprContext {
 }
 export class MulExprContext extends ExprContext {
 	public _op!: Token;
-	public _rhs!: ExprContext;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -9333,9 +6976,9 @@ export class MulExprContext extends ExprContext {
 			return this.getRuleContext(i, ExprContext);
 		}
 	}
-	public MUL(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL, 0); }
 	public DIV(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.DIV, 0); }
 	public MOD(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MOD, 0); }
+	public MUL(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MUL, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
@@ -9362,8 +7005,7 @@ export class MulExprContext extends ExprContext {
 	}
 }
 export class AddExprContext extends ExprContext {
-	public _op!: Token;
-	public _rhs!: ExprContext;
+	public _addOp!: Token;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -9373,8 +7015,8 @@ export class AddExprContext extends ExprContext {
 			return this.getRuleContext(i, ExprContext);
 		}
 	}
-	public PLUS(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.PLUS, 0); }
 	public MINUS(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.MINUS, 0); }
+	public PLUS(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.PLUS, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
@@ -9401,8 +7043,7 @@ export class AddExprContext extends ExprContext {
 	}
 }
 export class CompExprContext extends ExprContext {
-	public _op!: Token;
-	public _rhs!: ExprContext;
+	public _compOp!: Token;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -9412,10 +7053,10 @@ export class CompExprContext extends ExprContext {
 			return this.getRuleContext(i, ExprContext);
 		}
 	}
-	public LT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LT, 0); }
 	public GT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.GT, 0); }
 	public LT_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LT_EQ, 0); }
 	public GT_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.GT_EQ, 0); }
+	public LT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LT, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
@@ -9441,150 +7082,37 @@ export class CompExprContext extends ExprContext {
 		}
 	}
 }
-export class EqExprContext extends ExprContext {
-	public _op!: Token;
-	public _rhs!: ExprContext;
-	public expr(): ExprContext[];
-	public expr(i: number): ExprContext;
-	public expr(i?: number): ExprContext | ExprContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ExprContext);
-		} else {
-			return this.getRuleContext(i, ExprContext);
-		}
-	}
-	public EQ_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ_EQ, 0); }
-	public NEQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.NEQ, 0); }
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterEqExpr) {
-			listener.enterEqExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitEqExpr) {
-			listener.exitEqExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitEqExpr) {
-			return visitor.visitEqExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class NoneCheckExprContext extends ExprContext {
+export class QueryExprContext extends ExprContext {
+	public QUERY_NOW(): TerminalNode { return this.getToken(CWScriptParser.QUERY_NOW, 0); }
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);
 	}
-	public QUEST(): TerminalNode { return this.getToken(CWScriptParser.QUEST, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterNoneCheckExpr) {
-			listener.enterNoneCheckExpr(this);
+		if (listener.enterQueryExpr) {
+			listener.enterQueryExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitNoneCheckExpr) {
-			listener.exitNoneCheckExpr(this);
+		if (listener.exitQueryExpr) {
+			listener.exitQueryExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitNoneCheckExpr) {
-			return visitor.visitNoneCheckExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class IsExprContext extends ExprContext {
-	public _negative!: Token;
-	public _rhs!: TypeExprContext;
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	public IS(): TerminalNode { return this.getToken(CWScriptParser.IS, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public NOT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.NOT, 0); }
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIsExpr) {
-			listener.enterIsExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIsExpr) {
-			listener.exitIsExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIsExpr) {
-			return visitor.visitIsExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class InExprContext extends ExprContext {
-	public _rhs!: ExprContext;
-	public expr(): ExprContext[];
-	public expr(i: number): ExprContext;
-	public expr(i?: number): ExprContext | ExprContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ExprContext);
-		} else {
-			return this.getRuleContext(i, ExprContext);
-		}
-	}
-	public IN(): TerminalNode { return this.getToken(CWScriptParser.IN, 0); }
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterInExpr) {
-			listener.enterInExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitInExpr) {
-			listener.exitInExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitInExpr) {
-			return visitor.visitInExpr(this);
+		if (visitor.visitQueryExpr) {
+			return visitor.visitQueryExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
 export class ShortTryExprContext extends ExprContext {
-	public _rhs!: ExprContext;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -9620,39 +7148,50 @@ export class ShortTryExprContext extends ExprContext {
 		}
 	}
 }
-export class TryCatchElseExprContext extends ExprContext {
-	public tryCatchElseExpr_(): TryCatchElseExpr_Context {
-		return this.getRuleContext(0, TryCatchElseExpr_Context);
+export class InExprContext extends ExprContext {
+	public expr(): ExprContext[];
+	public expr(i: number): ExprContext;
+	public expr(i?: number): ExprContext | ExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ExprContext);
+		} else {
+			return this.getRuleContext(i, ExprContext);
+		}
 	}
+	public IN(): TerminalNode { return this.getToken(CWScriptParser.IN, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTryCatchElseExpr) {
-			listener.enterTryCatchElseExpr(this);
+		if (listener.enterInExpr) {
+			listener.enterInExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTryCatchElseExpr) {
-			listener.exitTryCatchElseExpr(this);
+		if (listener.exitInExpr) {
+			listener.exitInExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTryCatchElseExpr) {
-			return visitor.visitTryCatchElseExpr(this);
+		if (visitor.visitInExpr) {
+			return visitor.visitInExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
-export class NotExprContext extends ExprContext {
-	public NOT(): TerminalNode { return this.getToken(CWScriptParser.NOT, 0); }
+export class IsExprContext extends ExprContext {
+	public _ty!: TypeExprContext;
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);
+	}
+	public IS(): TerminalNode { return this.getToken(CWScriptParser.IS, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9660,27 +7199,64 @@ export class NotExprContext extends ExprContext {
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterNotExpr) {
-			listener.enterNotExpr(this);
+		if (listener.enterIsExpr) {
+			listener.enterIsExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitNotExpr) {
-			listener.exitNotExpr(this);
+		if (listener.exitIsExpr) {
+			listener.exitIsExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitNotExpr) {
-			return visitor.visitNotExpr(this);
+		if (visitor.visitIsExpr) {
+			return visitor.visitIsExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class EqExprContext extends ExprContext {
+	public _eqOp!: Token;
+	public expr(): ExprContext[];
+	public expr(i: number): ExprContext;
+	public expr(i?: number): ExprContext | ExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ExprContext);
+		} else {
+			return this.getRuleContext(i, ExprContext);
+		}
+	}
+	public NEQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.NEQ, 0); }
+	public EQ_EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ_EQ, 0); }
+	constructor(ctx: ExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterEqExpr) {
+			listener.enterEqExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitEqExpr) {
+			listener.exitEqExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitEqExpr) {
+			return visitor.visitEqExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
 export class AndExprContext extends ExprContext {
-	public _rhs!: ExprContext;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -9717,7 +7293,6 @@ export class AndExprContext extends ExprContext {
 	}
 }
 export class OrExprContext extends ExprContext {
-	public _rhs!: ExprContext;
 	public expr(): ExprContext[];
 	public expr(i: number): ExprContext;
 	public expr(i?: number): ExprContext | ExprContext[] {
@@ -9754,8 +7329,8 @@ export class OrExprContext extends ExprContext {
 	}
 }
 export class IfExprContext extends ExprContext {
-	public ifStmt_(): IfStmt_Context {
-		return this.getRuleContext(0, IfStmt_Context);
+	public ifExpr_(): IfExpr_Context {
+		return this.getRuleContext(0, IfExpr_Context);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9782,10 +7357,9 @@ export class IfExprContext extends ExprContext {
 		}
 	}
 }
-export class QueryNowExprContext extends ExprContext {
-	public QUERY_NOW(): TerminalNode { return this.getToken(CWScriptParser.QUERY_NOW, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
+export class TryCatchElseExprContext extends ExprContext {
+	public tryCatchElseExpr_(): TryCatchElseExpr_Context {
+		return this.getRuleContext(0, TryCatchElseExpr_Context);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9793,58 +7367,28 @@ export class QueryNowExprContext extends ExprContext {
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterQueryNowExpr) {
-			listener.enterQueryNowExpr(this);
+		if (listener.enterTryCatchElseExpr) {
+			listener.enterTryCatchElseExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitQueryNowExpr) {
-			listener.exitQueryNowExpr(this);
+		if (listener.exitTryCatchElseExpr) {
+			listener.exitTryCatchElseExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitQueryNowExpr) {
-			return visitor.visitQueryNowExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class FailExprContext extends ExprContext {
-	public FAIL(): TerminalNode { return this.getToken(CWScriptParser.FAIL, 0); }
-	public expr(): ExprContext {
-		return this.getRuleContext(0, ExprContext);
-	}
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterFailExpr) {
-			listener.enterFailExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitFailExpr) {
-			listener.exitFailExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitFailExpr) {
-			return visitor.visitFailExpr(this);
+		if (visitor.visitTryCatchElseExpr) {
+			return visitor.visitTryCatchElseExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
 export class ClosureExprContext extends ExprContext {
-	public closure(): ClosureContext {
-		return this.getRuleContext(0, ClosureContext);
+	public closureExpr_(): ClosureExpr_Context {
+		return this.getRuleContext(0, ClosureExpr_Context);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9871,79 +7415,9 @@ export class ClosureExprContext extends ExprContext {
 		}
 	}
 }
-export class TupleExprContext extends ExprContext {
-	public _expr!: ExprContext;
-	public _items: ExprContext[] = [];
-	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
-	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
-	public expr(): ExprContext[];
-	public expr(i: number): ExprContext;
-	public expr(i?: number): ExprContext | ExprContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ExprContext);
-		} else {
-			return this.getRuleContext(i, ExprContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(ctx: ExprContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterTupleExpr) {
-			listener.enterTupleExpr(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitTupleExpr) {
-			listener.exitTupleExpr(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitTupleExpr) {
-			return visitor.visitTupleExpr(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
 export class StructExprContext extends ExprContext {
-	public _memberVal!: MemberValContext;
-	public _members: MemberValContext[] = [];
-	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public memberVal(): MemberValContext[];
-	public memberVal(i: number): MemberValContext;
-	public memberVal(i?: number): MemberValContext | MemberValContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(MemberValContext);
-		} else {
-			return this.getRuleContext(i, MemberValContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
+	public structExpr_(): StructExpr_Context {
+		return this.getRuleContext(0, StructExpr_Context);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9970,9 +7444,9 @@ export class StructExprContext extends ExprContext {
 		}
 	}
 }
-export class UnitVariantExprContext extends ExprContext {
-	public typeVariant(): TypeVariantContext {
-		return this.getRuleContext(0, TypeVariantContext);
+export class TupleExprContext extends ExprContext {
+	public tupleExpr_(): TupleExpr_Context {
+		return this.getRuleContext(0, TupleExpr_Context);
 	}
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9980,20 +7454,20 @@ export class UnitVariantExprContext extends ExprContext {
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterUnitVariantExpr) {
-			listener.enterUnitVariantExpr(this);
+		if (listener.enterTupleExpr) {
+			listener.enterTupleExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitUnitVariantExpr) {
-			listener.exitUnitVariantExpr(this);
+		if (listener.exitTupleExpr) {
+			listener.exitTupleExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitUnitVariantExpr) {
-			return visitor.visitUnitVariantExpr(this);
+		if (visitor.visitTupleExpr) {
+			return visitor.visitTupleExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10057,31 +7531,32 @@ export class IdentExprContext extends ExprContext {
 		}
 	}
 }
-export class Grouped2ExprContext extends ExprContext {
+export class GroupedExprContext extends ExprContext {
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);
 	}
-	public TILDE(): TerminalNode { return this.getToken(CWScriptParser.TILDE, 0); }
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
 	constructor(ctx: ExprContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterGrouped2Expr) {
-			listener.enterGrouped2Expr(this);
+		if (listener.enterGroupedExpr) {
+			listener.enterGroupedExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitGrouped2Expr) {
-			listener.exitGrouped2Expr(this);
+		if (listener.exitGroupedExpr) {
+			listener.exitGroupedExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitGrouped2Expr) {
-			return visitor.visitGrouped2Expr(this);
+		if (visitor.visitGroupedExpr) {
+			return visitor.visitGroupedExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10089,124 +7564,34 @@ export class Grouped2ExprContext extends ExprContext {
 }
 
 
-export class ClosureParamsContext extends ParserRuleContext {
-	public _param!: ParamContext;
-	public _params: ParamContext[] = [];
-	public BAR(): TerminalNode[];
-	public BAR(i: number): TerminalNode;
-	public BAR(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.BAR);
-		} else {
-			return this.getToken(CWScriptParser.BAR, i);
-		}
-	}
-	public param(): ParamContext[];
-	public param(i: number): ParamContext;
-	public param(i?: number): ParamContext | ParamContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(ParamContext);
-		} else {
-			return this.getRuleContext(i, ParamContext);
-		}
-	}
-	public COMMA(): TerminalNode[];
-	public COMMA(i: number): TerminalNode;
-	public COMMA(i?: number): TerminalNode | TerminalNode[] {
-		if (i === undefined) {
-			return this.getTokens(CWScriptParser.COMMA);
-		} else {
-			return this.getToken(CWScriptParser.COMMA, i);
-		}
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_closureParams; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterClosureParams) {
-			listener.enterClosureParams(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitClosureParams) {
-			listener.exitClosureParams(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitClosureParams) {
-			return visitor.visitClosureParams(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class ClosureContext extends ParserRuleContext {
-	public _fallible!: Token;
-	public _params!: ClosureParamsContext;
-	public _retTy!: TypeExprContext;
-	public stmt(): StmtContext | undefined {
-		return this.tryGetRuleContext(0, StmtContext);
-	}
-	public closureParams(): ClosureParamsContext | undefined {
-		return this.tryGetRuleContext(0, ClosureParamsContext);
-	}
-	public BANG(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.BANG, 0); }
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
-	}
-	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_closure; }
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterClosure) {
-			listener.enterClosure(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitClosure) {
-			listener.exitClosure(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitClosure) {
-			return visitor.visitClosure(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-
-
-export class BlockContext extends ParserRuleContext {
+export class IfExpr_Context extends ParserRuleContext {
+	public _cond!: ExprContext;
 	public _stmt!: StmtContext;
-	public _body: StmtContext[] = [];
-	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
-	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
-	public SEMI(): TerminalNode[];
-	public SEMI(i: number): TerminalNode;
-	public SEMI(i?: number): TerminalNode | TerminalNode[] {
+	public _thenBody: StmtContext[] = [];
+	public _elseBody: StmtContext[] = [];
+	public IF(): TerminalNode { return this.getToken(CWScriptParser.IF, 0); }
+	public LBRACE(): TerminalNode[];
+	public LBRACE(i: number): TerminalNode;
+	public LBRACE(i?: number): TerminalNode | TerminalNode[] {
 		if (i === undefined) {
-			return this.getTokens(CWScriptParser.SEMI);
+			return this.getTokens(CWScriptParser.LBRACE);
 		} else {
-			return this.getToken(CWScriptParser.SEMI, i);
+			return this.getToken(CWScriptParser.LBRACE, i);
 		}
 	}
+	public RBRACE(): TerminalNode[];
+	public RBRACE(i: number): TerminalNode;
+	public RBRACE(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.RBRACE);
+		} else {
+			return this.getToken(CWScriptParser.RBRACE, i);
+		}
+	}
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public ELSE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ELSE, 0); }
 	public stmt(): StmtContext[];
 	public stmt(i: number): StmtContext;
 	public stmt(i?: number): StmtContext | StmtContext[] {
@@ -10220,23 +7605,23 @@ export class BlockContext extends ParserRuleContext {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_block; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_ifExpr_; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterBlock) {
-			listener.enterBlock(this);
+		if (listener.enterIfExpr_) {
+			listener.enterIfExpr_(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitBlock) {
-			listener.exitBlock(this);
+		if (listener.exitIfExpr_) {
+			listener.exitIfExpr_(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitBlock) {
-			return visitor.visitBlock(this);
+		if (visitor.visitIfExpr_) {
+			return visitor.visitIfExpr_(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10245,13 +7630,39 @@ export class BlockContext extends ParserRuleContext {
 
 
 export class TryCatchElseExpr_Context extends ParserRuleContext {
-	public _body!: BlockContext;
+	public _stmt!: StmtContext;
+	public _tryBody: StmtContext[] = [];
 	public _catchClause!: CatchClauseContext;
-	public _catches: CatchClauseContext[] = [];
-	public _else_!: ElseClauseContext;
+	public _catchClauses: CatchClauseContext[] = [];
+	public _elseBody: StmtContext[] = [];
 	public TRY(): TerminalNode { return this.getToken(CWScriptParser.TRY, 0); }
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
+	public LBRACE(): TerminalNode[];
+	public LBRACE(i: number): TerminalNode;
+	public LBRACE(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.LBRACE);
+		} else {
+			return this.getToken(CWScriptParser.LBRACE, i);
+		}
+	}
+	public RBRACE(): TerminalNode[];
+	public RBRACE(i: number): TerminalNode;
+	public RBRACE(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.RBRACE);
+		} else {
+			return this.getToken(CWScriptParser.RBRACE, i);
+		}
+	}
+	public ELSE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ELSE, 0); }
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
 	}
 	public catchClause(): CatchClauseContext[];
 	public catchClause(i: number): CatchClauseContext;
@@ -10261,9 +7672,6 @@ export class TryCatchElseExpr_Context extends ParserRuleContext {
 		} else {
 			return this.getRuleContext(i, CatchClauseContext);
 		}
-	}
-	public elseClause(): ElseClauseContext | undefined {
-		return this.tryGetRuleContext(0, ElseClauseContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -10294,85 +7702,45 @@ export class TryCatchElseExpr_Context extends ParserRuleContext {
 
 
 export class CatchClauseContext extends ParserRuleContext {
+	public _ty!: TypeExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public CATCH(): TerminalNode { return this.getToken(CWScriptParser.CATCH, 0); }
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
+	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
 	public get ruleIndex(): number { return CWScriptParser.RULE_catchClause; }
-	public copyFrom(ctx: CatchClauseContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class CatchContext extends CatchClauseContext {
-	public _ty!: TypeExprContext;
-	public _body!: BlockContext;
-	public CATCH(): TerminalNode { return this.getToken(CWScriptParser.CATCH, 0); }
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
-	}
-	constructor(ctx: CatchClauseContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterCatch) {
-			listener.enterCatch(this);
+		if (listener.enterCatchClause) {
+			listener.enterCatchClause(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitCatch) {
-			listener.exitCatch(this);
+		if (listener.exitCatchClause) {
+			listener.exitCatchClause(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitCatch) {
-			return visitor.visitCatch(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class CatchBindContext extends CatchClauseContext {
-	public _name!: IdentContext;
-	public _ty!: TypeExprContext;
-	public _body!: BlockContext;
-	public CATCH(): TerminalNode { return this.getToken(CWScriptParser.CATCH, 0); }
-	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
-	}
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
-	}
-	public typeExpr(): TypeExprContext | undefined {
-		return this.tryGetRuleContext(0, TypeExprContext);
-	}
-	constructor(ctx: CatchClauseContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterCatchBind) {
-			listener.enterCatchBind(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitCatchBind) {
-			listener.exitCatchBind(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitCatchBind) {
-			return visitor.visitCatchBind(this);
+		if (visitor.visitCatchClause) {
+			return visitor.visitCatchClause(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10380,37 +7748,61 @@ export class CatchBindContext extends CatchClauseContext {
 }
 
 
-export class ArgContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _value!: ExprContext;
-	public EQ(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EQ, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
+export class ClosureExpr_Context extends ParserRuleContext {
+	public _fallible!: Token;
+	public _params!: ParamListContext;
+	public _returnTy!: TypeExprContext;
+	public _stmt!: StmtContext;
+	public _body: StmtContext[] = [];
+	public BAR(): TerminalNode[];
+	public BAR(i: number): TerminalNode;
+	public BAR(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.BAR);
+		} else {
+			return this.getToken(CWScriptParser.BAR, i);
+		}
 	}
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
+	public LBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.RBRACE, 0); }
+	public ARROW(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ARROW, 0); }
+	public BANG(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.BANG, 0); }
+	public paramList(): ParamListContext | undefined {
+		return this.tryGetRuleContext(0, ParamListContext);
+	}
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	public stmt(): StmtContext[];
+	public stmt(i: number): StmtContext;
+	public stmt(i?: number): StmtContext | StmtContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(StmtContext);
+		} else {
+			return this.getRuleContext(i, StmtContext);
+		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_arg; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_closureExpr_; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterArg) {
-			listener.enterArg(this);
+		if (listener.enterClosureExpr_) {
+			listener.enterClosureExpr_(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitArg) {
-			listener.exitArg(this);
+		if (listener.exitClosureExpr_) {
+			listener.exitClosureExpr_(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitArg) {
-			return visitor.visitArg(this);
+		if (visitor.visitClosureExpr_) {
+			return visitor.visitClosureExpr_(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10418,37 +7810,80 @@ export class ArgContext extends ParserRuleContext {
 }
 
 
-export class MemberValContext extends ParserRuleContext {
-	public _name!: IdentContext;
-	public _value!: ExprContext;
-	public ident(): IdentContext | undefined {
-		return this.tryGetRuleContext(0, IdentContext);
+export class StructExpr_Context extends ParserRuleContext {
+	public _ty!: TypeExprContext;
+	public _fields!: FieldListContext;
+	public LBRACE(): TerminalNode { return this.getToken(CWScriptParser.LBRACE, 0); }
+	public RBRACE(): TerminalNode { return this.getToken(CWScriptParser.RBRACE, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
 	}
-	public COLON(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.COLON, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
+	public fieldList(): FieldListContext | undefined {
+		return this.tryGetRuleContext(0, FieldListContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_memberVal; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_structExpr_; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterMemberVal) {
-			listener.enterMemberVal(this);
+		if (listener.enterStructExpr_) {
+			listener.enterStructExpr_(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitMemberVal) {
-			listener.exitMemberVal(this);
+		if (listener.exitStructExpr_) {
+			listener.exitStructExpr_(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitMemberVal) {
-			return visitor.visitMemberVal(this);
+		if (visitor.visitStructExpr_) {
+			return visitor.visitStructExpr_(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class TupleExpr_Context extends ParserRuleContext {
+	public _expr!: ExprContext;
+	public _elements: ExprContext[] = [];
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public expr(): ExprContext[];
+	public expr(i: number): ExprContext;
+	public expr(i?: number): ExprContext | ExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ExprContext);
+		} else {
+			return this.getRuleContext(i, ExprContext);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_tupleExpr_; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterTupleExpr_) {
+			listener.enterTupleExpr_(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitTupleExpr_) {
+			listener.exitTupleExpr_(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitTupleExpr_) {
+			return visitor.visitTupleExpr_(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10603,41 +8038,350 @@ export class NoneLitContext extends LiteralContext {
 }
 
 
-export class IfStmt_Context extends ParserRuleContext {
-	public _pred!: ExprContext;
-	public _body!: BlockContext;
-	public _else_!: ElseClauseContext;
-	public IF(): TerminalNode { return this.getToken(CWScriptParser.IF, 0); }
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
-	}
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
-	}
-	public elseClause(): ElseClauseContext | undefined {
-		return this.tryGetRuleContext(0, ElseClauseContext);
-	}
+export class TypeExprContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_ifStmt_; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_typeExpr; }
+	public copyFrom(ctx: TypeExprContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class GroupedTypeExprContext extends TypeExprContext {
+	public LPAREN(): TerminalNode { return this.getToken(CWScriptParser.LPAREN, 0); }
+	public typeExpr(): TypeExprContext {
+		return this.getRuleContext(0, TypeExprContext);
+	}
+	public RPAREN(): TerminalNode { return this.getToken(CWScriptParser.RPAREN, 0); }
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterIfStmt_) {
-			listener.enterIfStmt_(this);
+		if (listener.enterGroupedTypeExpr) {
+			listener.enterGroupedTypeExpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitIfStmt_) {
-			listener.exitIfStmt_(this);
+		if (listener.exitGroupedTypeExpr) {
+			listener.exitGroupedTypeExpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitIfStmt_) {
-			return visitor.visitIfStmt_(this);
+		if (visitor.visitGroupedTypeExpr) {
+			return visitor.visitGroupedTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class ParamzdTypeExprContext extends TypeExprContext {
+	public _typeArgs!: TypeExprListContext;
+	public typeExpr(): TypeExprContext {
+		return this.getRuleContext(0, TypeExprContext);
+	}
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public typeExprList(): TypeExprListContext {
+		return this.getRuleContext(0, TypeExprListContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterParamzdTypeExpr) {
+			listener.enterParamzdTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitParamzdTypeExpr) {
+			listener.exitParamzdTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitParamzdTypeExpr) {
+			return visitor.visitParamzdTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class MemberTypeExprContext extends TypeExprContext {
+	public _memberName!: IdentContext;
+	public typeExpr(): TypeExprContext {
+		return this.getRuleContext(0, TypeExprContext);
+	}
+	public DOT(): TerminalNode { return this.getToken(CWScriptParser.DOT, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterMemberTypeExpr) {
+			listener.enterMemberTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitMemberTypeExpr) {
+			listener.exitMemberTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitMemberTypeExpr) {
+			return visitor.visitMemberTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class ArrayTypeExprContext extends TypeExprContext {
+	public _ty!: TypeExprContext;
+	public _size!: Token;
+	public LBRACK(): TerminalNode { return this.getToken(CWScriptParser.LBRACK, 0); }
+	public SEMI(): TerminalNode { return this.getToken(CWScriptParser.SEMI, 0); }
+	public RBRACK(): TerminalNode { return this.getToken(CWScriptParser.RBRACK, 0); }
+	public typeExpr(): TypeExprContext {
+		return this.getRuleContext(0, TypeExprContext);
+	}
+	public IntLiteral(): TerminalNode { return this.getToken(CWScriptParser.IntLiteral, 0); }
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterArrayTypeExpr) {
+			listener.enterArrayTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitArrayTypeExpr) {
+			listener.exitArrayTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitArrayTypeExpr) {
+			return visitor.visitArrayTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class StructDefnTypeExprContext extends TypeExprContext {
+	public structDefn(): StructDefnContext {
+		return this.getRuleContext(0, StructDefnContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterStructDefnTypeExpr) {
+			listener.enterStructDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitStructDefnTypeExpr) {
+			listener.exitStructDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitStructDefnTypeExpr) {
+			return visitor.visitStructDefnTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class TupleDefnTypeExprContext extends TypeExprContext {
+	public tupleDefn(): TupleDefnContext {
+		return this.getRuleContext(0, TupleDefnContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterTupleDefnTypeExpr) {
+			listener.enterTupleDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitTupleDefnTypeExpr) {
+			listener.exitTupleDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitTupleDefnTypeExpr) {
+			return visitor.visitTupleDefnTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class UnitDefnTypeExprContext extends TypeExprContext {
+	public unitDefn(): UnitDefnContext {
+		return this.getRuleContext(0, UnitDefnContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterUnitDefnTypeExpr) {
+			listener.enterUnitDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitUnitDefnTypeExpr) {
+			listener.exitUnitDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitUnitDefnTypeExpr) {
+			return visitor.visitUnitDefnTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class EnumDefnTypeExprContext extends TypeExprContext {
+	public enumDefn(): EnumDefnContext {
+		return this.getRuleContext(0, EnumDefnContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterEnumDefnTypeExpr) {
+			listener.enterEnumDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitEnumDefnTypeExpr) {
+			listener.exitEnumDefnTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitEnumDefnTypeExpr) {
+			return visitor.visitEnumDefnTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class OptionTypeExprContext extends TypeExprContext {
+	public typeExpr(): TypeExprContext {
+		return this.getRuleContext(0, TypeExprContext);
+	}
+	public QUEST(): TerminalNode { return this.getToken(CWScriptParser.QUEST, 0); }
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterOptionTypeExpr) {
+			listener.enterOptionTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitOptionTypeExpr) {
+			listener.exitOptionTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitOptionTypeExpr) {
+			return visitor.visitOptionTypeExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class TypeVarExprContext extends TypeExprContext {
+	public typeVar(): TypeVarContext {
+		return this.getRuleContext(0, TypeVarContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterTypeVarExpr) {
+			listener.enterTypeVarExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitTypeVarExpr) {
+			listener.exitTypeVarExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitTypeVarExpr) {
+			return visitor.visitTypeVarExpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class IdentTypeExprContext extends TypeExprContext {
+	public ident(): IdentContext {
+		return this.getRuleContext(0, IdentContext);
+	}
+	constructor(ctx: TypeExprContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterIdentTypeExpr) {
+			listener.enterIdentTypeExpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitIdentTypeExpr) {
+			listener.exitIdentTypeExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitIdentTypeExpr) {
+			return visitor.visitIdentTypeExpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10645,35 +8389,29 @@ export class IfStmt_Context extends ParserRuleContext {
 }
 
 
-export class ElseClauseContext extends ParserRuleContext {
-	public ELSE(): TerminalNode { return this.getToken(CWScriptParser.ELSE, 0); }
-	public block(): BlockContext | undefined {
-		return this.tryGetRuleContext(0, BlockContext);
-	}
-	public stmt(): StmtContext | undefined {
-		return this.tryGetRuleContext(0, StmtContext);
-	}
+export class TypeVarContext extends ParserRuleContext {
+	public TypeVar(): TerminalNode { return this.getToken(CWScriptParser.TypeVar, 0); }
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_elseClause; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_typeVar; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterElseClause) {
-			listener.enterElseClause(this);
+		if (listener.enterTypeVar) {
+			listener.enterTypeVar(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitElseClause) {
-			listener.exitElseClause(this);
+		if (listener.exitTypeVar) {
+			listener.exitTypeVar(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitElseClause) {
-			return visitor.visitElseClause(this);
+		if (visitor.visitTypeVar) {
+			return visitor.visitTypeVar(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10681,42 +8419,46 @@ export class ElseClauseContext extends ParserRuleContext {
 }
 
 
-export class ForStmt_Context extends ParserRuleContext {
-	public _binding!: Let_bindingContext;
-	public _iter!: ExprContext;
-	public _body!: BlockContext;
-	public FOR(): TerminalNode { return this.getToken(CWScriptParser.FOR, 0); }
-	public IN(): TerminalNode { return this.getToken(CWScriptParser.IN, 0); }
-	public block(): BlockContext {
-		return this.getRuleContext(0, BlockContext);
+export class TypeVarListContext extends ParserRuleContext {
+	public typeVar(): TypeVarContext[];
+	public typeVar(i: number): TypeVarContext;
+	public typeVar(i?: number): TypeVarContext | TypeVarContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(TypeVarContext);
+		} else {
+			return this.getRuleContext(i, TypeVarContext);
+		}
 	}
-	public let_binding(): Let_bindingContext | undefined {
-		return this.tryGetRuleContext(0, Let_bindingContext);
-	}
-	public expr(): ExprContext | undefined {
-		return this.tryGetRuleContext(0, ExprContext);
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return CWScriptParser.RULE_forStmt_; }
+	public get ruleIndex(): number { return CWScriptParser.RULE_typeVarList; }
 	// @Override
 	public enterRule(listener: CWScriptParserListener): void {
-		if (listener.enterForStmt_) {
-			listener.enterForStmt_(this);
+		if (listener.enterTypeVarList) {
+			listener.enterTypeVarList(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: CWScriptParserListener): void {
-		if (listener.exitForStmt_) {
-			listener.exitForStmt_(this);
+		if (listener.exitTypeVarList) {
+			listener.exitTypeVarList(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
-		if (visitor.visitForStmt_) {
-			return visitor.visitForStmt_(this);
+		if (visitor.visitTypeVarList) {
+			return visitor.visitTypeVarList(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -10757,6 +8499,392 @@ export class IdentContext extends ParserRuleContext {
 }
 
 
+export class ParamContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _optional!: Token;
+	public _ty!: TypeExprContext;
+	public COLON(): TerminalNode { return this.getToken(CWScriptParser.COLON, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public QUEST(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.QUEST, 0); }
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_param; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterParam) {
+			listener.enterParam(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitParam) {
+			listener.exitParam(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitParam) {
+			return visitor.visitParam(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class FieldContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _ty!: TypeExprContext;
+	public COLON(): TerminalNode { return this.getToken(CWScriptParser.COLON, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public typeExpr(): TypeExprContext | undefined {
+		return this.tryGetRuleContext(0, TypeExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_field; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterField) {
+			listener.enterField(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitField) {
+			listener.exitField(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitField) {
+			return visitor.visitField(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class NamedArgContext extends ParserRuleContext {
+	public _name!: IdentContext;
+	public _value!: ExprContext;
+	public EQ(): TerminalNode { return this.getToken(CWScriptParser.EQ, 0); }
+	public ident(): IdentContext | undefined {
+		return this.tryGetRuleContext(0, IdentContext);
+	}
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_namedArg; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterNamedArg) {
+			listener.enterNamedArg(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitNamedArg) {
+			listener.exitNamedArg(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitNamedArg) {
+			return visitor.visitNamedArg(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ArgContext extends ParserRuleContext {
+	public expr(): ExprContext | undefined {
+		return this.tryGetRuleContext(0, ExprContext);
+	}
+	public namedArg(): NamedArgContext | undefined {
+		return this.tryGetRuleContext(0, NamedArgContext);
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_arg; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterArg) {
+			listener.enterArg(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitArg) {
+			listener.exitArg(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitArg) {
+			return visitor.visitArg(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class IdentListContext extends ParserRuleContext {
+	public ident(): IdentContext[];
+	public ident(i: number): IdentContext;
+	public ident(i?: number): IdentContext | IdentContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(IdentContext);
+		} else {
+			return this.getRuleContext(i, IdentContext);
+		}
+	}
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_identList; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterIdentList) {
+			listener.enterIdentList(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitIdentList) {
+			listener.exitIdentList(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitIdentList) {
+			return visitor.visitIdentList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ParamListContext extends ParserRuleContext {
+	public param(): ParamContext[];
+	public param(i: number): ParamContext;
+	public param(i?: number): ParamContext | ParamContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ParamContext);
+		} else {
+			return this.getRuleContext(i, ParamContext);
+		}
+	}
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_paramList; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterParamList) {
+			listener.enterParamList(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitParamList) {
+			listener.exitParamList(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitParamList) {
+			return visitor.visitParamList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class TypeExprListContext extends ParserRuleContext {
+	public typeExpr(): TypeExprContext[];
+	public typeExpr(i: number): TypeExprContext;
+	public typeExpr(i?: number): TypeExprContext | TypeExprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(TypeExprContext);
+		} else {
+			return this.getRuleContext(i, TypeExprContext);
+		}
+	}
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_typeExprList; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterTypeExprList) {
+			listener.enterTypeExprList(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitTypeExprList) {
+			listener.exitTypeExprList(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitTypeExprList) {
+			return visitor.visitTypeExprList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class FieldListContext extends ParserRuleContext {
+	public field(): FieldContext[];
+	public field(i: number): FieldContext;
+	public field(i?: number): FieldContext | FieldContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(FieldContext);
+		} else {
+			return this.getRuleContext(i, FieldContext);
+		}
+	}
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_fieldList; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterFieldList) {
+			listener.enterFieldList(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitFieldList) {
+			listener.exitFieldList(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitFieldList) {
+			return visitor.visitFieldList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ArgListContext extends ParserRuleContext {
+	public arg(): ArgContext[];
+	public arg(i: number): ArgContext;
+	public arg(i?: number): ArgContext | ArgContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(ArgContext);
+		} else {
+			return this.getRuleContext(i, ArgContext);
+		}
+	}
+	public COMMA(): TerminalNode[];
+	public COMMA(i: number): TerminalNode;
+	public COMMA(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(CWScriptParser.COMMA);
+		} else {
+			return this.getToken(CWScriptParser.COMMA, i);
+		}
+	}
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return CWScriptParser.RULE_argList; }
+	// @Override
+	public enterRule(listener: CWScriptParserListener): void {
+		if (listener.enterArgList) {
+			listener.enterArgList(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: CWScriptParserListener): void {
+		if (listener.exitArgList) {
+			listener.exitArgList(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: CWScriptParserVisitor<Result>): Result {
+		if (visitor.visitArgList) {
+			return visitor.visitArgList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
 export class ReservedKeywordContext extends ParserRuleContext {
 	public CONTRACT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.CONTRACT, 0); }
 	public INTERFACE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.INTERFACE, 0); }
@@ -10782,6 +8910,8 @@ export class ReservedKeywordContext extends ParserRuleContext {
 	public FALSE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.FALSE, 0); }
 	public LET(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.LET, 0); }
 	public STRUCT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.STRUCT, 0); }
+	public TUPLE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.TUPLE, 0); }
+	public UNIT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.UNIT, 0); }
 	public ENUM(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.ENUM, 0); }
 	public TYPE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.TYPE, 0); }
 	public EMIT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EMIT, 0); }
