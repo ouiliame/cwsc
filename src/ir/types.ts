@@ -1,4 +1,4 @@
-import { IR, Param } from './ir-base';
+import { IR, Param, CWSType, CWSExpr, CWSValue } from './ir-base';
 import * as Value from './values';
 import * as Expr from './exprs';
 import * as Stmt from './stmts';
@@ -6,37 +6,6 @@ import * as Stmt from './stmts';
 import { SymbolTable } from '../symbol-table';
 
 // #region Types
-export class CWSType extends IR {
-  public isType(): this is CWSType {
-    return true;
-  }
-
-  constructor(
-    public name: string,
-    public supertypes: CWSType[] = []
-  ) {
-    super();
-  }
-
-  public eval(symbols: SymbolTable): CWSType {
-    return this;
-  }
-
-  public option(): CWSOptionType<this> {
-    return new CWSOptionType(this);
-  }
-
-  public isEqualTo(other: CWSType): boolean {
-    return this.name === other.name;
-  }
-
-  public isSubtypeOf(other: CWSType): boolean {
-    return (
-      this.isEqualTo(other) || this.supertypes.some((x) => x.isSubtypeOf(other))
-    );
-  }
-}
-
 export class CWSTypeParam {
   constructor(
     public name: string,
@@ -623,8 +592,6 @@ const uintTy = new CWSType('Uint', [intTy]);
 
 const addFnTy = fnTy(false, [intTy, intTy], intTy);
 const divFnTy = fnTy(true, [intTy, intTy], intTy);
-
-const opt = new CWSTypeFn('Option', [tp('T')], ({ T }) => T.option());
 
 /*
 struct Map[%K, %V] {

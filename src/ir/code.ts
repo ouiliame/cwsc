@@ -1,5 +1,5 @@
 import { SymbolTable } from '../symbol-table';
-import { IR } from './ir-base';
+import { IR, CWSType, CWSValue, CWSExpr } from './ir-base';
 import * as Type from './types';
 import * as Value from './values';
 
@@ -8,11 +8,11 @@ export class SourceFile extends IR {
     super();
   }
 
-  public isType(): this is Type.CWSType {
+  public isType(): this is CWSType {
     return false;
   }
 
-  eval(symbols: SymbolTable): Value.CWSValue | Type.CWSType {
+  eval(symbols: SymbolTable): CWSValue | CWSType {
     return Value.NoneValue;
   }
 
@@ -28,13 +28,13 @@ export class SourceFile extends IR {
     ) as Type.CWSInterfaceType[];
   }
 
-  public get typedefs(): Type.CWSType[] {
+  public get typedefs(): CWSType[] {
     return this.children.filter(
       (child) =>
         child instanceof Type.CWSStructType ||
         child instanceof Type.CWSEnumType ||
         child instanceof Type.CWSTypeAliasType
-    ) as Type.CWSType[];
+    ) as CWSType[];
   }
 
   public get fns(): Value.Fn[] {

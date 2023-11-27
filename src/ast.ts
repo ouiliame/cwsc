@@ -6,6 +6,26 @@ export class AST {
 
   constructor(public $parent: AST | null = null) {}
 
+  public isStmt(): this is Stmt {
+    return false;
+  }
+
+  public isDefn(): this is Defn {
+    return false;
+  }
+
+  public isExpr(): this is Expr {
+    return false;
+  }
+
+  public isTypeExpr(): this is TypeExpr {
+    return false;
+  }
+
+  public isLiteral(): this is Literal<any> {
+    return false;
+  }
+
   static isNode(x: any): x is AST {
     return x instanceof AST;
   }
@@ -237,6 +257,22 @@ export class SourceFile extends List<Stmt> {
 //#region Statements
 
 export class Stmt extends AST {
+  public isStmt(): this is Stmt {
+    return true;
+  }
+
+  public isExpr(): this is Expr {
+    return false;
+  }
+
+  public isTypeExpr(): this is TypeExpr {
+    return false;
+  }
+
+  public isLiteral(): this is Literal<any> {
+    return false;
+  }
+
   toIR(): IR.IR {
     throw new Error('Not implemented');
   }
@@ -466,16 +502,6 @@ export class EmitStmt extends Stmt {
   }
 }
 
-export class ReturnStmt extends Stmt {
-  constructor(public value: Expr) {
-    super();
-  }
-
-  toIR(): IR.Stmt.Return {
-    return new IR.Stmt.Return(this.value.toIR());
-  }
-}
-
 export class FailStmt extends Stmt {
   constructor(public value: Expr) {
     super();
@@ -486,11 +512,37 @@ export class FailStmt extends Stmt {
   }
 }
 
+export class ReturnStmt extends Stmt {
+  constructor(public value: Expr) {
+    super();
+  }
+
+  toIR(): IR.Stmt.Return {
+    return new IR.Stmt.Return(this.value.toIR());
+  }
+}
+
 //#endregion Statements
 
 //#region Expressions
 export class Expr extends AST {
-  toIR(): IR.Expr.CWSExpr | IR.Value.CWSValue {
+  public isStmt(): this is Stmt {
+    return true;
+  }
+
+  public isExpr(): this is Expr {
+    return true;
+  }
+
+  public isTypeExpr(): this is TypeExpr {
+    return false;
+  }
+
+  public isLiteral(): this is Literal<any> {
+    return false;
+  }
+
+  toIR(): IR.CWSExpr | IR.CWSValue {
     throw new Error('Not implemented');
   }
 }
@@ -528,7 +580,7 @@ export class GroupedExpr extends Expr {
     super();
   }
 
-  toIR(): IR.Expr.CWSExpr {
+  toIR(): IR.CWSExpr {
     return this.expr.toIR();
   }
 }
@@ -831,7 +883,28 @@ export class IdentExpr extends Expr {
 
 //#endregion Expressions
 //#region Definitions
-export class Defn extends AST {}
+export class Defn extends AST {
+  public isStmt(): this is Stmt {
+    return true;
+  }
+
+  public isDefn(): this is Defn {
+    return true;
+  }
+
+  public isExpr(): this is Expr {
+    return false;
+  }
+
+  public isTypeExpr(): this is TypeExpr {
+    return false;
+  }
+
+  public isLiteral(): this is Literal<any> {
+    return false;
+  }
+}
+
 export class ContractDefn extends Defn {
   constructor(
     public name: Ident,
@@ -899,8 +972,8 @@ export class UnitDefn extends Defn {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
-    return new IR.Type.CWSType(this.name.value);
+  toIR(): IR.CWSType {
+    return new IR.CWSType(this.name.value);
   }
 }
 
@@ -1151,7 +1224,23 @@ export class StateMapDefn extends Defn {
 
 //#region Type Expressions
 export class TypeExpr extends AST {
-  toIR(): IR.Type.CWSType {
+  public isStmt(): this is Stmt {
+    return true;
+  }
+
+  public isExpr(): this is Expr {
+    return false;
+  }
+
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
+
+  public isLiteral(): this is Literal<any> {
+    return false;
+  }
+
+  toIR(): IR.CWSType {
     return IR.Type.Infer;
   }
 }
@@ -1161,7 +1250,7 @@ export class GroupedTypeExpr extends TypeExpr {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     return this.ty.toIR();
   }
 }
@@ -1174,7 +1263,7 @@ export class ParamzdTypeExpr extends TypeExpr {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     throw new Error('Not implemented');
   }
 }
@@ -1187,7 +1276,7 @@ export class MemberTypeExpr extends TypeExpr {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     throw new Error('Not implemented');
   }
 }
@@ -1230,7 +1319,7 @@ export class UnitDefnTypeExpr extends TypeExpr {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     return this.unitDefn.toIR();
   }
 }
@@ -1260,7 +1349,7 @@ export class TypeVar extends AST {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     throw new Error('Not implemented');
   }
 }
@@ -1270,7 +1359,7 @@ export class TypeVarExpr extends TypeExpr {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     throw new Error('Not implemented');
   }
 }
@@ -1280,7 +1369,7 @@ export class IdentTypeExpr extends TypeExpr {
     super();
   }
 
-  toIR(): IR.Type.CWSType {
+  toIR(): IR.CWSType {
     throw new Error('Not implemented');
   }
 }
@@ -1289,11 +1378,15 @@ export class IdentTypeExpr extends TypeExpr {
 
 //#region Literals
 export class Literal<T> extends Expr {
+  public isLiteral(): this is Literal<T> {
+    return true;
+  }
+
   constructor(public value: T) {
     super();
   }
 
-  toIR(): IR.Value.CWSValue {
+  toIR(): IR.CWSValue {
     throw new Error('Not implemented');
   }
 }

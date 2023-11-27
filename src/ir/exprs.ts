@@ -1,20 +1,12 @@
 import { SymbolTable } from '../symbol-table';
-import { IR, Arg } from './ir-base';
+import { IR, Arg, CWSExpr, CWSType, CWSValue } from './ir-base';
 import * as Type from './types';
 import * as Value from './values';
 import type { Op } from '../ast';
 
-export abstract class CWSExpr extends IR {
-  public isType(): this is Type.CWSType {
-    return false;
-  }
-
-  abstract eval(symbols: SymbolTable): Value.CWSValue | CWSExpr | Type.CWSType;
-}
-
 export class Dot extends CWSExpr {
   constructor(
-    public expr: CWSExpr | Value.CWSValue,
+    public expr: CWSExpr | CWSValue,
     public memberName: string
   ) {
     super();
@@ -32,23 +24,23 @@ export class Dot extends CWSExpr {
 
 export class Index extends CWSExpr {
   constructor(
-    public expr: CWSExpr | Value.CWSValue,
-    public index: CWSExpr | Value.CWSValue
+    public expr: CWSExpr | CWSValue,
+    public index: CWSExpr | CWSValue
   ) {
     super();
   }
 
   public eval(symbols: SymbolTable) {
-    const obj = this.expr.evalValue(symbols);
-    const index = this.index.evalValue(symbols);
-    return obj.getIndex(index);
+    const obj = this.expr.eval(symbols);
+    const index = this.index.eval(symbols);
+    return obj.getIndex(index as any);
   }
 }
 
 export class Call extends CWSExpr {
   constructor(
     public fn: CWSExpr,
-    public typeArgs: Type.CWSType[],
+    public typeArgs: CWSType[],
     public args: Arg[]
   ) {
     super();
@@ -80,7 +72,7 @@ export class Call extends CWSExpr {
 export class As extends CWSExpr {
   constructor(
     public expr: CWSExpr,
-    public ty: Type.CWSType
+    public ty: CWSType
   ) {
     super();
   }
@@ -109,7 +101,7 @@ export class Is extends CWSExpr {
   constructor(
     public negative: boolean,
     public lhs: CWSExpr,
-    public rhs: Type.CWSType
+    public rhs: CWSType
   ) {
     super();
   }
@@ -137,7 +129,7 @@ export class TryCatchElse extends CWSExpr {
 
 export class CatchClause {
   constructor(
-    public matchErr: Type.CWSType,
+    public matchErr: CWSType,
     public body: IR[]
   ) {}
 }
@@ -149,7 +141,7 @@ export class Exists extends CWSExpr {
 
   public eval(symbols: SymbolTable) {
     const expr = this.expr.eval(symbols);
-    if (expr instanceof Value.CWSValue) {
+    if (expr instanceof CWSValue) {
       if (expr instanceof Value.None) {
         return new Value.Bool(false);
       } else {
@@ -262,7 +254,7 @@ export class Fail extends CWSExpr {
 
 export class Tuple extends CWSExpr {
   constructor(
-    public tupleTy: Type.CWSType,
+    public tupleTy: CWSType,
     public elements: CWSExpr[] = []
   ) {
     super();
@@ -271,7 +263,7 @@ export class Tuple extends CWSExpr {
   public eval(symbols: SymbolTable) {
     return new Value.Tuple(
       this.tupleTy,
-      this.elements.map((x) => x.eval(symbols) as Value.CWSValue)
+      this.elements.map((x) => x.eval(symbols) as CWSValue)
     );
   }
 }

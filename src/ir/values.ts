@@ -1,50 +1,28 @@
 import { SymbolTable } from '../symbol-table';
-import { IR, Param, Arg, ValueMember, TypeMember } from './ir-base';
+import {
+  CWSType,
+  CWSValue,
+  CWSExpr,
+  IR,
+  Param,
+  Arg,
+  ValueMember,
+  TypeMember,
+} from './ir-base';
 import * as Type from './types';
 import * as Stmt from './stmts';
 import * as Expr from './exprs';
 
-export abstract class CWSValue extends IR {
-  public isType(): this is Type.CWSType {
-    return false;
-  }
-  abstract get ty(): Type.CWSType;
-  public eval(symbols: SymbolTable): CWSValue {
-    return this;
-  }
-
-  public get members(): (ValueMember | TypeMember)[] {
-    return [
-      {
-        name: 'Type',
-        ty: this.ty,
-      },
-    ];
-  }
-
-  public getMember(
-    name: string
-  ): CWSValue | Type.CWSType | Expr.CWSExpr | undefined {
-    // if the member doesn't exist on this value, check the type
-    const member = super.getMember(name);
-    if (member === undefined) {
-      return this.ty.getMember(name);
-    } else {
-      return member;
-    }
-  }
-}
-
 export type StateItem = {
   item: {
-    ty: Type.CWSType;
+    ty: CWSType;
   };
 };
 
 export type StateMap = {
   map: {
-    indexTy: Type.CWSType;
-    ty: Type.CWSType;
+    indexTy: CWSType;
+    ty: CWSType;
   };
 };
 
@@ -53,7 +31,7 @@ export type ContractState = {
 };
 
 export class Contract extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return new Type.CWSContractType(this.name);
   }
 
@@ -65,7 +43,7 @@ export class Contract extends CWSValue {
     public query: QueryFn[] = [],
     public events: Type.CWSEventType[] = [],
     public errors: Type.CWSErrorType[] = [],
-    public typedefs: Type.CWSType[] = []
+    public typedefs: CWSType[] = []
   ) {
     super();
   }
@@ -76,7 +54,7 @@ export class Fn extends CWSValue {
     public name: string,
     public typeParams: Type.CWSTypeParam[],
     public params: Param[],
-    public returnTy: Type.CWSType,
+    public returnTy: CWSType,
     public body: IR[] = []
   ) {
     super();
@@ -104,15 +82,15 @@ export class Fn extends CWSValue {
 
   public call(
     symbols: SymbolTable,
-    typeArgs: Type.CWSType[],
+    typeArgs: CWSType[],
     args: Arg[]
-  ): CWSValue | Type.CWSType | Expr.CWSExpr {
+  ): CWSValue | CWSType | CWSExpr {
     const scope = new SymbolTable(symbols);
     // args must be in canonical order -- positional first, then named
     // if a named arg follows a positional arg, it is invalid
 
     // resolve type arguments
-    const typeArgMap = new Map<string, Type.CWSType>();
+    const typeArgMap = new Map<string, CWSType>();
     this.typeParams.forEach((param, i) => {
       typeArgMap.set(param.name, typeArgs[i]);
     });
@@ -159,7 +137,7 @@ export class Fn extends CWSValue {
     });
 
     // evaluate the body
-    let result: CWSValue | Expr.CWSExpr | Type.CWSType = NoneValue;
+    let result: CWSValue | CWSExpr | CWSType = NoneValue;
     for (const stmt of this.body) {
       if (stmt instanceof Stmt.Return) {
         return stmt.expr.eval(scope) as CWSValue;
@@ -212,7 +190,7 @@ export class QueryFn extends Fn {
 }
 
 export class Struct extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return this.structTy;
   }
 
@@ -221,8 +199,8 @@ export class Struct extends CWSValue {
   }
 
   constructor(
-    public structTy: Type.CWSType,
-    public fields: { name: string; value: Expr.CWSExpr | CWSValue }[] = []
+    public structTy: CWSType,
+    public fields: { name: string; value: CWSExpr | CWSValue }[] = []
   ) {
     super();
   }
@@ -230,7 +208,7 @@ export class Struct extends CWSValue {
 
 export class Tuple extends CWSValue {
   constructor(
-    public ty: Type.CWSType,
+    public ty: CWSType,
     public elements: CWSValue[] = []
   ) {
     super();
@@ -238,18 +216,18 @@ export class Tuple extends CWSValue {
 }
 
 export class Unit extends CWSValue {
-  constructor(public ty: Type.CWSType) {
+  constructor(public ty: CWSType) {
     super();
   }
 }
 
 export class List extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return new Type.CWSListType(this.elementTy);
   }
 
   constructor(
-    public elementTy: Type.CWSType,
+    public elementTy: CWSType,
     public elements: CWSValue[] = []
   ) {
     super();
@@ -257,7 +235,7 @@ export class List extends CWSValue {
 }
 
 export class String extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return Type.CWSStringType;
   }
 
@@ -267,7 +245,7 @@ export class String extends CWSValue {
 }
 
 export class Int extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return Type.CWSIntType;
   }
 
@@ -277,7 +255,7 @@ export class Int extends CWSValue {
 }
 
 export class Dec extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return Type.CWSDecType;
   }
 
@@ -287,7 +265,7 @@ export class Dec extends CWSValue {
 }
 
 export class Bool extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return Type.CWSBoolType;
   }
 
@@ -297,20 +275,20 @@ export class Bool extends CWSValue {
 }
 
 export class None extends CWSValue {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     return Type.CWSNoneType;
   }
 }
 
 export class CWSError extends Struct {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     const ty = super.ty as Type.CWSStructType;
     return new Type.CWSErrorType(ty.name, ty.fields);
   }
 }
 
 export class Event extends Struct {
-  public get ty(): Type.CWSType {
+  public get ty(): CWSType {
     const ty = super.ty as Type.CWSStructType;
     return new Type.CWSEventType(ty.name, ty.fields);
   }

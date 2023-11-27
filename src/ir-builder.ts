@@ -71,7 +71,7 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
       ...node.descendantsOfType(AST.StructDefn),
       ...node.descendantsOfType(AST.EnumDefn),
       ...node.descendantsOfType(AST.TypeAliasDefn),
-    ].map((x) => this.visit(x) as IR.Type.CWSType);
+    ].map((x) => this.visit(x) as IR.CWSType);
 
     return new IR.Value.Contract(
       name,
@@ -101,7 +101,7 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     };
   }
 
-  public visitTypeExpr(node: AST.TypeExpr): IR.Type.CWSType {
+  public visitTypeExpr(node: AST.TypeExpr): IR.CWSType {
     let res = this.visit(node);
     if (!res.isType()) {
       throw new Error('Expected a type');
@@ -154,8 +154,8 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     );
   }
 
-  public visitTypeAliasDefn(node: AST.TypeAliasDefn): IR.Type.CWSType {
-    return new IR.Type.CWSTypeAliasType(
+  public visitTypeAliasDefn(node: AST.TypeAliasDefn): IR.CWSType {
+    return new IR.CWSTypeAliasType(
       node.name.value,
       this.visitTypeExpr(node.value)
     );
@@ -200,18 +200,15 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     return new IR.Type.CWSEnumVariantUnitType(node.name.value);
   }
 
-  public visitTypePath(node: AST.TypePath): IR.Type.CWSTypePathType {
-    return new IR.Type.CWSTypePathType(node.segments.map((x) => x.value));
+  public visitTypePath(node: AST.TypePath): IR.CWSTypePathType {
+    return new IR.CWSTypePathType(node.segments.map((x) => x.value));
   }
 
-  public visitExpr(node: AST.Expr): IR.Expr.CWSExpr | IR.Value.CWSValue {
+  public visitExpr(node: AST.Expr): IR.CWSExpr | IR.CWSValue {
     console.log(`${node.constructor.name} -- ${node.$ctx!.text}`);
     let expr = this.visit(node);
     console.log(expr);
-    if (
-      !(expr instanceof IR.Expr.CWSExpr) &&
-      !(expr instanceof IR.Value.CWSValue)
-    ) {
+    if (!(expr instanceof IR.CWSExpr) && !(expr instanceof IR.CWSValue)) {
       throw new Error(
         'Expected an expression or value, got ' + expr.constructor.name
       );
@@ -221,11 +218,11 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
 
   public visitStructExpr(node: AST.StructExpr): IR.Value.Struct {
     // turn args to object of fields
-    let fields: { [name: string]: IR.Value.CWSValue } = {};
+    let fields: { [name: string]: IR.CWSValue } = {};
     node.args.map((x) => {
       // TODO: this needs to eval
       fields[x.name.value] = x.value
-        ? (this.visitExpr(x.value) as IR.Value.CWSValue)
+        ? (this.visitExpr(x.value) as IR.CWSValue)
         : IR.Value.NoneValue;
     });
 
@@ -236,9 +233,7 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
   }
 
   public visitTupleExpr(node: AST.TupleExpr): IR.Value.Tuple {
-    const elements = node.exprs.map(
-      (x) => this.visitExpr(x) as IR.Value.CWSValue
-    );
+    const elements = node.exprs.map((x) => this.visitExpr(x) as IR.CWSValue);
 
     return new IR.Value.Tuple(IR.Type.Infer, elements);
   }
@@ -334,15 +329,11 @@ export class IRBuilder extends AST.ASTVisitor<IR.IR> {
     return new IR.Expr.Ident(node.symbol.value);
   }
 
-  public visitGroupedExpr(
-    node: AST.GroupedExpr
-  ): IR.Expr.CWSExpr | IR.Value.CWSValue {
+  public visitGroupedExpr(node: AST.GroupedExpr): IR.CWSExpr | IR.CWSValue {
     return this.visitExpr(node.expr);
   }
 
-  public visitGrouped2Expr(
-    node: AST.Grouped2Expr
-  ): IR.Expr.CWSExpr | IR.Value.CWSValue {
+  public visitGrouped2Expr(node: AST.Grouped2Expr): IR.CWSExpr | IR.CWSValue {
     return this.visitExpr(node.expr);
   }
 

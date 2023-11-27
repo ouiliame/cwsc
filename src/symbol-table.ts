@@ -4,8 +4,8 @@ import * as IR from './ir';
 export interface SymbolTableEntry {
   type: string;
   ast?: AST.AST;
-  value?: IR.Value.CWSValue | IR.Expr.CWSExpr;
-  ty?: IR.Type.CWSType;
+  value?: IR.CWSValue | IR.CWSExpr;
+  ty?: IR.CWSType;
 }
 
 export class SymbolTable {
