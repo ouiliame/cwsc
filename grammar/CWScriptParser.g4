@@ -226,8 +226,11 @@ ifExpr_:
 
 tryCatchElseExpr_:
 	TRY LBRACE (tryBody += stmt)* RBRACE (
-		CATCH (catchParam = param)? LBRACE (catchBody += stmt)* RBRACE
-	);
+		catchClauses += catchClause
+	)* (ELSE LBRACE (elseBody += stmt)* RBRACE)?;
+
+catchClause:
+	CATCH (ty = typeExpr) LBRACE (body += stmt)* RBRACE;
 
 closureExpr_:
 	(fallible = BANG)? BAR (params = paramList)? BAR (
@@ -250,20 +253,17 @@ literal:
 
 // TYPE EXPRESSIONS
 typeExpr:
-	ident													# IdentTypeExpr
-	| typeVar												# TypeVarExpr
+	LPAREN typeExpr RPAREN									# GroupedTypeExpr
 	| typeExpr LBRACK typeArgs = typeExprList RBRACK		# ParamzdTypeExpr
 	| typeExpr DOT (memberName = ident)						# MemberTypeExpr
-	| typeExpr QUEST										# OptionTypeExpr
 	| LBRACK ty = typeExpr SEMI size = IntLiteral RBRACK	# ArrayTypeExpr
-	| TILDE typeExpr										# NegationTypeExpr
-	| lhs = typeExpr AMP rhs = typeExpr						# IntersectionTypeExpr
-	| lhs = typeExpr BAR rhs = typeExpr						# UnionTypeExpr
 	| structDefn											# StructDefnTypeExpr
 	| tupleDefn												# TupleDefnTypeExpr
 	| unitDefn												# UnitDefnTypeExpr
-	| typeAliasDefn											# TypeAliasDefnTypeExpr
-	| enumDefn												# EnumDefnTypeExpr;
+	| enumDefn												# EnumDefnTypeExpr
+	| typeExpr QUEST										# OptionTypeExpr
+	| typeVar												# TypeVarExpr
+	| ident													# IdentTypeExpr;
 
 typeVar: TypeVar;
 typeVarList: (typeVar (COMMA typeVar)*);
@@ -311,6 +311,8 @@ reservedKeyword:
 	| FALSE
 	| LET
 	| STRUCT
+	| TUPLE
+	| UNIT
 	| ENUM
 	| TYPE
 	| EMIT;
