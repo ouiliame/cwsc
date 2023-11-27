@@ -21,7 +21,7 @@ stmt:
 	| failStmt
 	| returnStmt
 	| defn
-	| expr
+	| (expr SEMI?)
 	| typeExpr;
 
 importStmt:
@@ -33,13 +33,11 @@ letStmt: LET (binding = binding_) (EQ value = expr) SEMI?;
 
 binding_:
 	(name = ident) (COLON ty = typeExpr)?	# IdentBinding
-	| LBRACK (names = identList) RBRACK		# TupleBinding
-	| LBRACE (names = identList) RBRACE		# StructBinding;
+	| LBRACK (names = identList)? RBRACK	# TupleBinding
+	| LBRACE (names = identList)? RBRACE	# StructBinding;
 
 constStmt:
-	CONST (name = ident) (COLON* ty = typeExpr)? (
-		EQ value = expr
-	) SEMI?;
+	CONST (name = ident) (COLON ty = typeExpr)? (EQ value = expr) SEMI?;
 
 assignStmt:
 	(name = ident) assignOp = (
@@ -77,11 +75,11 @@ failStmt: FAIL (value = expr) SEMI?;
 forStmt:
 	FOR (binding = binding_) IN (iter = expr) LBRACE (
 		body += stmt
-	)* RBRACE;
+	)* RBRACE SEMI?;
 
-execStmt: EXEC_NOW expr SEMI?;
-instantiateStmt: INSTANTIATE_NOW expr SEMI?;
-emitStmt: EMIT expr SEMI?;
+execStmt: EXEC_NOW value = expr SEMI?;
+instantiateStmt: INSTANTIATE_NOW value = expr SEMI?;
+emitStmt: EMIT value = expr SEMI?;
 
 // END STATEMENTS
 
@@ -105,17 +103,17 @@ defn:
 contractDefn:
 	CONTRACT (name = ident) (EXTENDS (base = ident))? (
 		IMPLEMENTS (interfaces = typeExprList)
-	)? LBRACE (body += stmt)* RBRACE;
+	)? LBRACE (body += stmt)* RBRACE SEMI?;
 
 interfaceDefn:
 	INTERFACE (name = ident) (
 		EXTENDS (baseInterfaces = typeExprList)
-	)? LBRACE (body += stmt)* RBRACE;
+	)? LBRACE (body += stmt)* RBRACE SEMI?;
 
 structDefn:
 	STRUCT (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
 		fields = paramList
-	) RBRACE
+	)? RBRACE
 	| STRUCT (name = ident) (
 		LBRACK typeVars = typeVarList RBRACK
 	)? LPAREN (fields = paramList) RPAREN SEMI?;
@@ -123,7 +121,7 @@ structDefn:
 tupleDefn:
 	TUPLE (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACK (
 		elements = typeExprList
-	) RPAREN SEMI?;
+	)? RPAREN SEMI?;
 
 unitDefn:
 	UNIT (LBRACK typeVars = typeVarList RBRACK)? (name = ident) SEMI?;
@@ -131,7 +129,7 @@ unitDefn:
 enumDefn:
 	ENUM (name = ident) (LBRACK typeVars = typeVarList RBRACK)? LBRACE (
 		variants = enumVariantList
-	) RBRACE SEMI?;
+	)? RBRACE SEMI?;
 
 enumVariantList: (enumVariant (COMMA enumVariant)*);
 
@@ -141,46 +139,50 @@ enumVariant:
 	| enumVariantUnitDefn;
 
 enumVariantStructDefn:
-	(name = ident) LBRACE (fields = paramList) RBRACE
-	| (name = ident) LPAREN (fields = paramList) RPAREN;
+	(name = ident) LBRACE (fields = paramList)? RBRACE
+	| (name = ident) LPAREN (fields = paramList)? RPAREN;
 
 enumVariantTupleDefn: (name = ident) LBRACK (
 		elements = typeExprList
-	) RPAREN;
+	)? RPAREN;
 
 enumVariantUnitDefn: (name = ident);
 
-typeAliasDefn: TYPE (name = ident) EQ (ty = typeExpr) SEMI?;
+typeAliasDefn:
+	TYPE (name = ident) (LBRACK typeVars = typeVarList RBRACK)? EQ (
+		ty = typeExpr
+	) SEMI?;
 
 fnDefn:
 	FN (name = ident) LPAREN (params = paramList)? RPAREN (
 		ARROW (returnTy = typeExpr)
-	)? LBRACE (body += stmt)* RBRACE;
+	)? LBRACE (body += stmt)* RBRACE SEMI?;
 
 instantiateDefn:
 	INSTANTIATE (name = ident) (ARROW (returnTy = typeExpr))? LPAREN (
 		params = paramList
-	)? RPAREN LBRACE (body += stmt)* RBRACE;
+	)? RPAREN LBRACE (body += stmt)* RBRACE SEMI?;
 
 execDefn:
 	EXEC (name = ident) LPAREN (params = paramList)? (
 		ARROW (returnTy = typeExpr)
-	)? RPAREN LBRACE (body += stmt)* RBRACE;
+	)? RPAREN LBRACE (body += stmt)* RBRACE SEMI?;
 
 queryDefn:
 	QUERY (name = ident) LPAREN (params = paramList)? (
 		ARROW (returnTy = typeExpr)
-	)? RPAREN LBRACE (body += stmt)* RBRACE;
+	)? RPAREN LBRACE (body += stmt)* RBRACE SEMI?;
 
 errorDefn:
 	ERROR (name = ident) LPAREN (params = paramList)? (
 		ARROW (returnTy = typeExpr)
-	)? LBRACE (body += stmt)* RBRACE;
+	)? LBRACE (body += stmt)* RBRACE SEMI?;
 
 eventDefn:
-	EVENT (name = ident) LPAREN (params = paramList) RPAREN;
+	EVENT (name = ident) LPAREN (params = paramList) RPAREN SEMI?;
 
-stateBlockDefn: STATE LBRACK (stateVars += stateDefn)* RBRACK;
+stateBlockDefn:
+	STATE LBRACK (stateVars += stateDefn)* RBRACK SEMI?;
 
 stateDefn: stateItemDefn | stateMapDefn;
 

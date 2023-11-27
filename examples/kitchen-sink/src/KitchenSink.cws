@@ -1,2 +1,19 @@
-import { } from "./TestImport.cws"
-import { A } from "./TestImport.cws"
+// import { } from "./TestImport.cws"
+// import { A } from "./TestImport.cws"
+
+// let a = 3;
+// let a: Ty = 3;
+// let [a, b] = 3;
+// let {a, b} = 3;
+
+// const a: List[A] = 3;
+
+// a -= 5;
+// a.item[item][item] = 5;
+
+return None;
+fail! None;
+
+for [] in expr {
+  
+}
