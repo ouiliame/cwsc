@@ -1,4 +1,248 @@
-import { AndExpr, AsExpr, AssignStmt, BinOpExpr, Block, CallExpr, ClosureExpr, ConstStmt, DotExpr, EmitStmt, ExecStmt, ExistsExpr, Expr, FailExpr, FailStmt, ForStmt, GroupedExpr, IdentExpr, IfExpr, IfStmt, ImportStmt, InExpr, IndexAssignStmt, IndexExpr, InstantiateStmt, IsExpr, LetStmt, MemberAssignStmt, NotExpr, OrExpr, QueryExpr, QueryNowExpr, ReturnStmt, ShortTryExpr, Stmt, StructExpr, TryCatchElseExpr, TupleExpr, UnitExpr } from "../ast";
+import { AndExpr, AsExpr, AssignOp, AssignStmt, BinOpExpr, Binding, Block, CallExpr, ClosureExpr, ConstStmt, ContractDefn, Defn, DotExpr, EmitStmt, EnumDefn, ExecStmt, ExistsExpr, Expr, FailExpr, FailStmt, FnDefn, ForStmt, GroupedExpr, IdentBinding, IdentExpr, IfExpr, IfStmt, ImportStmt, InExpr, IndexAssignStmt, IndexExpr, InstantiateDefn, InstantiateStmt, InterfaceDefn, IsExpr, LetStmt, MemberAssignStmt, NotExpr, OrExpr, QueryExpr, QueryNowExpr, ReturnStmt, ShortTryExpr, Stmt, StructBinding, StructDefn, StructExpr, TryCatchElseExpr, TupleBinding, TupleDefn, TupleExpr, TypeAliasDefn, UnitDefn, UnitExpr } from "../ast";
+import { CWSExecFnType, CWSQueryFnType } from "../ir/types";
+import { variantStruct } from "../rust-syntax";
+
+type Type = InterfaceType | StructType | TupleType | EnumType | UnitType | FnType | AliasType
+
+interface InterfaceType {
+    $type: "interface"
+    name: string
+    members: [string, Type][]
+}
+
+interface StructType {
+    $type: "struct"
+    name: string
+    members: [string, Type][]
+}
+
+interface AnonymousStructType {
+    $type: "anonymous-struct"
+}
+
+interface EnumType {
+    $type: "enum"
+    variants: [string, Type][]
+}
+
+interface EnumValue {
+    $type: EnumType,
+    variant: string,
+    value: any,
+}
+
+interface StructValue {
+    $type: StructType | AnonymousStructType,
+}
+
+interface TupleType {
+    $type: "tuple"
+    name: string
+    members: Type[]
+}
+
+interface AnonymousTupleType {
+    $type: "anonymous-tuple"
+}
+interface TupleValue {
+    $type: TupleType | AnonymousTupleType, 
+    [key: number]: any
+    length: number
+}
+
+interface UnitType {
+    $type: "unit"
+    name: string
+}
+
+interface UnitValue {
+    $type: UnitType
+}
+
+interface FnType {
+    $type: "fn"
+    name: string
+    params: [string, Type][]
+    returnType: Type
+    fn: (args: any[]) => any
+}
+
+interface AliasType {
+    $type: "alias"
+    name: string
+}
+
+// Mockup "contract" with top level definitions and state
+export class EvaluatorContract {
+    name: string = ""
+    base: EvaluatorContract | null = null
+    instantiate: () => any = () => undefined,
+    execs: Map<string, () => any> = new Map()
+    queries: Map<string, () => any> = new Map()
+    types: Map<string, Type> = new Map()
+    events: Map<string, () => any> = new Map()
+    errors: Map<string, () => any> = new Map()
+    state: Map<string, any> = new Map()
+
+    //#region Definitions
+    evalDefn(defn: Defn): Type {
+        if (defn instanceof ContractDefn) {
+            throw new Error("nested contracts not allowed")
+        }
+
+        if (defn instanceof InterfaceDefn) {
+            return this.evalInterfaceDefn(defn);
+        }
+
+        if (defn instanceof StructDefn) {
+            return this.evalStructDefn(defn);
+        }
+
+        if (defn instanceof TupleDefn) {
+            return this.evalTupleDefn(defn);
+        }
+
+        if (defn instanceof UnitDefn) {
+            return this.evalUnitDefn(defn);
+        }
+
+        if (defn instanceof EnumDefn) {
+            return this.evalEnumDefn(defn);
+        }
+
+        if (defn instanceof TypeAliasDefn) {
+            return this.evalTypeAliasDefn(defn);
+        }
+
+        if (defn instanceof FnDefn) {
+            return this.evalFnDefn(defn);
+        }
+
+        if (defn instanceof InstantiateDefn) {
+            return this.evalInstantiateDefn(defn);
+        }
+
+        if (defn instanceof ExecDefn) {
+            return this.evalExecDefn(defn);
+        }
+
+        if (defn instanceof QueryDefn) {
+            return this.evalQueryDefn(defn);
+        }
+
+        if (defn instanceof ErrorDefn) {
+            return this.evalErrorDefn(defn);
+        }
+
+        if (defn instanceof EventDefn) {
+            return this.evalEventDefn(defn);
+        }
+
+        if (defn instanceof StateBlockDefn) {
+            return this.evalStateBlockDefn(defn);
+        }
+
+        if (defn instanceof StateItemDefn) {
+            return this.evalStateItemDefn(defn);
+        }
+
+        if (defn instanceof StateMapDefn) {
+            return this.evalStateMapDefn(defn);
+        }
+
+        throw new Error("Method not implemented.");
+    }
+
+    constructor(defn: ContractDefn) {
+        this.evalContractDefn(defn)
+    }
+
+    evalContractDefn(defn: ContractDefn) {
+        if (this.name) {
+            throw new Error("Contract already defined");
+        }
+        this.name = defn.name.value;
+
+        if (defn.base) {
+            this.base = this.evalType(defn.base);
+        }
+        
+        if (defn.interfaces) {
+            defn.interfaces.map(iface => {
+                const typ = this.evalType(iface)
+                this.types.set(typ.name, typ)
+            })
+        }
+
+        defn.body.forEach(defn => this.evalDefn(defn))
+
+        return this
+    }
+
+    evalInterfaceDefn(defn: InterfaceDefn): InterfaceType {
+        throw new Error("Method not implemented.");
+    }
+
+    evalStructDefn(defn: StructDefn): StructType {
+        const fields = defn.fields.map(field => this.evalField(field))
+
+        const typ: StructType = {
+            $type: "struct",
+            name: defn.name.value,
+            members: fields,
+        }
+
+        return typ
+    }
+
+    evalTupleDefn(defn: TupleDefn): TupleType {
+        const members = defn.elements.map(member => this.evalType(member))
+        const typ: TupleType = {
+            $type: "tuple",
+            name: defn.name.value,
+            members: members,
+        }
+
+        return typ
+    }
+
+    evalUnitDefn(defn: UnitDefn): UnitType {
+        const typ: UnitType = {
+            $type: "unit",
+            name: defn.name.value,
+        }
+
+        return typ
+    }
+
+    evalEnumDefn(defn: EnumDefn): Type {
+        const typ: EnumType = {
+            $type: "enum",
+            variants: defn.variants.map(variant => this.evalVariant(variant)),
+        }
+    }
+
+    evalTypeAliasDefn(defn: TypeAliasDefn): Type {
+        return {
+            $type: "alias",
+            name: defn.name.value,
+        }
+    }
+    evalFnDefn(defn: FnDefn): Type {
+        const fn = (args) => {
+            
+        }
+
+        return {
+            $type: "fn",
+            name: defn.name.value,
+            params: defn.params.map(param => this.evalParam(param)),
+            returnType: this.evalType(defn.returnType),
+            fn: fn,
+        }
+    }
+    //#endregion Definitions
+}
 
 // Evaluator iterates over the AST and yields the result of each node
 export class Evaluator {
@@ -90,13 +334,166 @@ export class Evaluator {
         }
     }
 
-    evalImportStmt(stmt: ImportStmt): any {
+    evalImportStmt(stmt: ImportStmt) {
         throw new Error("Method not implemented.");
     }
 
-    evalLetStmt(stmt: LetStmt): any {
-        this.bindings[this.bindings.length - 1].set(stmt.ident.value, this.evalExpr(stmt.expr))
+    bindValue(binding: Binding, expr: Expr): [string, any][] {
+        const value = this.evalExpr(expr)
+        const queue: [string, any][] = []
+
+        if (binding instanceof IdentBinding) {
+            queue.push([binding.name.value, value])
+        }
+
+        if (binding instanceof TupleBinding) {
+            for (let i = 0; i < binding.names.length; i++) {
+                queue.push([binding.names.children[i].value, value[i]])
+            }
+        }
+
+        if (binding instanceof StructBinding) {
+            for (let i = 0; i < binding.names.length; i++) {
+                const name = binding.names.children[i].value
+                queue.push([name, value[name]])
+            }
+        }
+
+        return queue
     }
+
+    evalLetStmt(stmt: LetStmt) {
+        const queue = this.bindValue(stmt.binding, stmt.value)
+        queue.forEach(([name, value]) => this.setBinding(name, value))
+    }
+
+    evalConstStmt(stmt: ConstStmt) {
+        // TODO: typecheck, constant
+        this.setBinding(stmt.name.value, this.evalExpr(stmt.value))
+    }
+
+    evalAssignStmt(stmt: AssignStmt) {
+        // TODO: check const
+
+        switch (stmt.assignOp) {
+            case AssignOp.EQ:
+                this.setBinding(stmt.name.value, this.evalExpr(stmt.value));
+                return;
+            case AssignOp.PLUS_EQ:
+                this.setBinding(stmt.name.value, this.getBinding(stmt.name.value) + this.evalExpr(stmt.value));
+                return;
+            case AssignOp.MINUS_EQ:
+                this.setBinding(stmt.name.value, this.getBinding(stmt.name.value) - this.evalExpr(stmt.value));
+                return;
+            case AssignOp.MUL_EQ:
+                this.setBinding(stmt.name.value, this.getBinding(stmt.name.value) * this.evalExpr(stmt.value));
+                return;
+            case AssignOp.DIV_EQ:
+                this.setBinding(stmt.name.value, this.getBinding(stmt.name.value) / this.evalExpr(stmt.value));
+                return;
+            case AssignOp.MOD_EQ:
+                this.setBinding(stmt.name.value, this.getBinding(stmt.name.value) % this.evalExpr(stmt.value));
+                return;
+            default:
+                throw new Error("Invalid assignment operator");
+        }
+    }
+
+    evalMemberAssignStmt(stmt: MemberAssignStmt) {
+        const obj = this.evalExpr(stmt.obj)
+        const value = this.evalExpr(stmt.value)
+
+        switch (stmt.assignOp) {
+            case AssignOp.EQ:
+                obj[stmt.memberName.value] = value
+                return;
+            case AssignOp.PLUS_EQ:
+                obj[stmt.memberName.value] += value
+                return;
+            case AssignOp.MINUS_EQ:
+                obj[stmt.memberName.value] -= value
+                return;
+            case AssignOp.MUL_EQ:
+                obj[stmt.memberName.value] *= value
+                return;
+            case AssignOp.DIV_EQ:
+                obj[stmt.memberName.value] /= value
+                return;
+            case AssignOp.MOD_EQ:
+                obj[stmt.memberName.value] %= value
+                return;
+            default:
+                throw new Error("Invalid assignment operator");
+        }
+    }
+
+    evalIndexAssignStmt(stmt: IndexAssignStmt) {
+        const obj = this.evalExpr(stmt.obj)
+        const index = this.evalExpr(stmt.index)
+        const value = this.evalExpr(stmt.value)
+
+        switch (stmt.assignOp) {
+            case AssignOp.EQ:
+                obj[index] = value
+                return;
+            case AssignOp.PLUS_EQ:
+                obj[index] += value
+                return;
+            case AssignOp.MINUS_EQ:
+                obj[index] -= value
+                return;
+            case AssignOp.MUL_EQ:
+                obj[index] *= value
+                return;
+            case AssignOp.DIV_EQ:
+                obj[index] /= value
+                return;
+            case AssignOp.MOD_EQ:
+                obj[index] %= value
+                return;
+            default:
+                throw new Error("Invalid assignment operator");
+        }
+    }
+
+    evalIfStmt(stmt: IfStmt) {
+        if (this.evalExpr(stmt.pred)) {
+            this.evalBlock(stmt.thenBody)
+        } else if (stmt.elseBody) {
+            this.evalBlock(stmt.elseBody)
+        }
+    }
+
+    evalForStmt(stmt: ForStmt) {
+        throw new Error("Method not implemented.");
+    }
+
+    evalEmitStmt(stmt: EmitStmt) {
+        throw new Error("Method not implemented.");
+    }
+
+    evalFailStmt(stmt: FailStmt) {
+        throw new FailError(this.evalExpr(stmt.value));
+    }
+
+    evalReturnStmt(stmt: ReturnStmt) {
+
+    }
+
+    // ENTRYPOINTS
+    evalExecStmt(stmt: ExecStmt) {
+
+    }
+
+    evalInstantiateStmt(stmt: InstantiateStmt) {
+        throw new Error("Method not implemented.");
+    }
+
+    evalQueryStmt(stmt: QueryExpr) {
+        throw new Error("Method not implemented.");
+    }
+
+
     //#endregion Statements
 
     //#region Expressions
@@ -321,7 +718,6 @@ export class Evaluator {
 
         throw new Error(`Undefined variable ${expr.ident.value}`);
     }
-
-
     //#endregion Expressions
+
 }
