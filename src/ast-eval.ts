@@ -54,7 +54,17 @@ export class ASTEvaluator extends AST.ASTVisitor<any> {
   }
 
   visitBinOpExpr(node: AST.BinOpExpr) {
-    // TODO: type checking
+    const lhs = this.visit(node.lhs);
+    const rhs = this.visit(node.rhs);
+    console.log('+', lhs, rhs);
+  }
+
+  visitIdentExpr(node: AST.IdentExpr) {
+    const symbol = this.symbols.get(node.ident.value);
+    if (!symbol) {
+      throw new Error(`Undefined symbol ${node.ident.value}`);
+    }
+    return symbol.value;
   }
 
   visitIfExpr(node: AST.IfExpr) {

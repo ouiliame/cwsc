@@ -289,7 +289,7 @@ export class ImportStmt extends Stmt {
     return new IR.Stmt.Import(this.items?.map((x) => x.value) ?? [], this.src);
   }
 }
-export class LetStmt extends AST {
+export class LetStmt extends Stmt {
   constructor(
     public binding: Binding,
     public value: Expr
@@ -378,7 +378,7 @@ export enum AssignOp {
   MOD_EQ = '%=',
 }
 
-export class AssignStmt extends AST {
+export class AssignStmt extends Stmt {
   constructor(
     public name: Ident,
     public assignOp: AssignOp,
@@ -396,7 +396,7 @@ export class AssignStmt extends AST {
   }
 }
 
-export class MemberAssignStmt extends AST {
+export class MemberAssignStmt extends Stmt {
   constructor(
     public obj: Expr,
     public memberName: Ident,
@@ -416,7 +416,7 @@ export class MemberAssignStmt extends AST {
   }
 }
 
-export class IndexAssignStmt extends AST {
+export class IndexAssignStmt extends Stmt {
   constructor(
     public obj: Expr,
     public index: Expr,
@@ -436,7 +436,7 @@ export class IndexAssignStmt extends AST {
   }
 }
 
-export class IfStmt extends AST {
+export class IfStmt extends Stmt {
   constructor(
     public pred: Expr,
     public thenBody: Block,
@@ -454,7 +454,7 @@ export class IfStmt extends AST {
   }
 }
 
-export class ForStmt extends AST {
+export class ForStmt extends Stmt {
   constructor(
     public binding: Binding,
     public iter: Expr,

@@ -21,6 +21,8 @@ import { A } from "./TestImport.cws"
   // None;
 // }
 
+let a = 5;
+
 a + b == 5
 
 a + b * 5

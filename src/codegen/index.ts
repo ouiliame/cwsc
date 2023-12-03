@@ -1,4 +1,4 @@
-import prettier from 'prettier';
+import * as prettier from 'prettier';
 import * as rustPlugin from 'prettier-plugin-rust';
 
 export interface Render {
@@ -1009,7 +1009,12 @@ let counterMod = mod('counter', [
 ]);
 
 async function main() {
-  let code = prettier.format(counterMod.render(), { plugins: [rustPlugin] });
+  let code = await prettier.format(counterMod.render(), {
+    plugins: [rustPlugin],
+    parser: 'jinx-rust',
+    printWidth: 80,
+    tabWidth: 2,
+  });
   console.log(code);
 }
 
