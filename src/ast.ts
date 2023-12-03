@@ -248,11 +248,7 @@ export class List<T extends AST = AST> extends AST {
   }
 }
 
-export class SourceFile extends List<Stmt> {
-  toIR(): IR.IR[] {
-    return this.children.map((x) => x.toIR());
-  }
-}
+export class SourceFile extends List<Stmt> {}
 
 //#region Statements
 
@@ -272,51 +268,21 @@ export class Stmt extends AST {
   public isLiteral(): this is Literal<any> {
     return false;
   }
-
-  toIR(): IR.IR {
-    throw new Error('Not implemented');
-  }
 }
 export class ImportStmt extends Stmt {
-  constructor(
-    public items: List<Ident> | null,
-    public src: string
-  ) {
+  constructor(public items: List<Ident> | null, public src: string) {
     super();
-  }
-
-  toIR(): IR.Stmt.Import {
-    return new IR.Stmt.Import(this.items?.map((x) => x.value) ?? [], this.src);
   }
 }
 export class LetStmt extends Stmt {
-  constructor(
-    public binding: Binding,
-    public value: Expr
-  ) {
+  constructor(public binding: Binding, public value: Expr) {
     super();
-  }
-
-  toIR(): IR.Stmt.Let {
-    return new IR.Stmt.Let(this.binding.toIR(), this.value.toIR());
   }
 }
 
 export class IdentBinding extends AST {
-  constructor(
-    public name: Ident,
-    public ty: TypeExpr | null
-  ) {
+  constructor(public name: Ident, public ty: TypeExpr | null) {
     super();
-  }
-
-  toIR(): IR.Stmt.IdentBinding {
-    return {
-      ident: {
-        name: this.name.value,
-        ty: this.ty?.toIR() ?? IR.Type.Infer,
-      },
-    };
   }
 }
 
@@ -324,29 +290,11 @@ export class TupleBinding extends AST {
   constructor(public names: List<Ident>) {
     super();
   }
-
-  toIR(): IR.Stmt.TupleBinding {
-    return {
-      tuple: this.names.map((x) => ({
-        name: x.value,
-        ty: IR.Type.Infer,
-      })),
-    };
-  }
 }
 
 export class StructBinding extends AST {
   constructor(public names: List<Ident>) {
     super();
-  }
-
-  toIR(): IR.Stmt.StructBinding {
-    return {
-      struct: this.names.map((x) => ({
-        name: x.value,
-        ty: IR.Type.Infer,
-      })),
-    };
   }
 }
 
@@ -360,15 +308,8 @@ export class ConstStmt extends Stmt {
   ) {
     super();
   }
-
-  toIR(): IR.Stmt.Const {
-    return new IR.Stmt.Const(
-      this.name.value,
-      this.ty?.toIR() ?? IR.Type.Infer,
-      this.value.toIR()
-    );
-  }
 }
+
 export enum AssignOp {
   EQ = '=',
   PLUS_EQ = '+=',
@@ -386,14 +327,6 @@ export class AssignStmt extends Stmt {
   ) {
     super();
   }
-
-  toIR(): IR.Stmt.Assign {
-    return new IR.Stmt.Assign(
-      this.name.value,
-      this.assignOp,
-      this.value.toIR()
-    );
-  }
 }
 
 export class MemberAssignStmt extends Stmt {
@@ -404,15 +337,6 @@ export class MemberAssignStmt extends Stmt {
     public value: Expr
   ) {
     super();
-  }
-
-  toIR(): IR.Stmt.AssignMember {
-    return new IR.Stmt.AssignMember(
-      this.obj.toIR(),
-      this.memberName.value,
-      this.assignOp,
-      this.value.toIR()
-    );
   }
 }
 
@@ -425,15 +349,6 @@ export class IndexAssignStmt extends Stmt {
   ) {
     super();
   }
-
-  toIR(): IR.Stmt.AssignIndex {
-    return new IR.Stmt.AssignIndex(
-      this.obj.toIR(),
-      this.index.toIR(),
-      this.assignOp,
-      this.value.toIR()
-    );
-  }
 }
 
 export class IfStmt extends Stmt {
@@ -444,31 +359,11 @@ export class IfStmt extends Stmt {
   ) {
     super();
   }
-
-  toIR(): IR.Stmt.If {
-    return new IR.Stmt.If(
-      this.pred.toIR(),
-      this.thenBody.toIR(),
-      this.elseBody?.toIR() ?? []
-    );
-  }
 }
 
 export class ForStmt extends Stmt {
-  constructor(
-    public binding: Binding,
-    public iter: Expr,
-    public body: Block
-  ) {
+  constructor(public binding: Binding, public iter: Expr, public body: Block) {
     super();
-  }
-
-  toIR(): IR.Stmt.For {
-    return new IR.Stmt.For(
-      this.binding.toIR(),
-      this.iter.toIR(),
-      this.body.toIR()
-    );
   }
 }
 
@@ -476,19 +371,11 @@ export class ExecStmt extends Stmt {
   constructor(public value: Expr) {
     super();
   }
-
-  toIR(): IR.Stmt.Exec {
-    return new IR.Stmt.Exec(this.value.toIR());
-  }
 }
 
 export class InstantiateStmt extends Stmt {
   constructor(public value: Expr) {
     super();
-  }
-
-  toIR(): IR.Stmt.Instantiate {
-    return new IR.Stmt.Instantiate(this.value.toIR());
   }
 }
 
@@ -496,29 +383,17 @@ export class EmitStmt extends Stmt {
   constructor(public value: Expr) {
     super();
   }
-
-  toIR(): IR.Stmt.Emit {
-    return new IR.Stmt.Emit(this.value.toIR());
-  }
 }
 
 export class FailStmt extends Stmt {
   constructor(public value: Expr) {
     super();
   }
-
-  toIR(): IR.Stmt.Fail {
-    return new IR.Stmt.Fail(this.value.toIR());
-  }
 }
 
 export class ReturnStmt extends Stmt {
   constructor(public value: Expr) {
     super();
-  }
-
-  toIR(): IR.Stmt.Return {
-    return new IR.Stmt.Return(this.value.toIR());
   }
 }
 
@@ -541,47 +416,22 @@ export class Expr extends AST {
   public isLiteral(): this is Literal<any> {
     return false;
   }
-
-  toIR(): IR.CWSExpr | IR.CWSValue {
-    throw new Error('Not implemented');
-  }
 }
 export class TupleExpr extends Expr {
   constructor(public exprs: List<Expr>) {
     super();
   }
-
-  toIR(): IR.Expr.Tuple {
-    return new IR.Expr.Tuple(
-      IR.Type.Infer,
-      this.exprs.map((x) => x.toIR())
-    );
-  }
 }
 
 export class StructExpr extends Expr {
-  constructor(
-    public ty: TypeExpr,
-    public fields: List<Field> | null
-  ) {
+  constructor(public ty: TypeExpr, public fields: List<Field> | null) {
     super();
-  }
-
-  toIR(): IR.Value.Struct {
-    return new IR.Value.Struct(
-      this.ty.toIR(),
-      this.fields?.map((x) => x.toIR()) ?? []
-    );
   }
 }
 
 export class GroupedExpr extends Expr {
   constructor(public expr: Expr) {
     super();
-  }
-
-  toIR(): IR.CWSExpr {
-    return this.expr.toIR();
   }
 }
 
@@ -591,41 +441,20 @@ export enum UnwrapOp {
 }
 
 export class DotExpr extends Expr {
-  constructor(
-    public obj: Expr,
-    public memberName: Ident
-  ) {
+  constructor(public obj: Expr, public memberName: Ident) {
     super();
-  }
-
-  toIR(): IR.Expr.Dot {
-    return new IR.Expr.Dot(this.obj.toIR(), this.memberName.value);
   }
 }
 
 export class AsExpr extends Expr {
-  constructor(
-    public expr: Expr,
-    public ty: TypeExpr
-  ) {
+  constructor(public expr: Expr, public ty: TypeExpr) {
     super();
-  }
-
-  toIR(): IR.Expr.As {
-    return new IR.Expr.As(this.expr.toIR(), this.ty.toIR());
   }
 }
 
 export class IndexExpr extends Expr {
-  constructor(
-    public obj: Expr,
-    public index: Expr
-  ) {
+  constructor(public obj: Expr, public index: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.Index {
-    return new IR.Expr.Index(this.obj.toIR(), this.index.toIR());
   }
 }
 
@@ -637,23 +466,11 @@ export class CallExpr extends Expr {
   ) {
     super();
   }
-
-  toIR(): IR.Expr.Call {
-    return new IR.Expr.Call(
-      this.fn.toIR(),
-      this.typeArgs?.map((x) => x.toIR()) ?? [],
-      this.args?.map((x) => x.toIR()) ?? []
-    );
-  }
 }
 
 export class ExistsExpr extends Expr {
   constructor(public expr: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.Exists {
-    return new IR.Expr.Exists(this.expr.toIR());
   }
 }
 
@@ -664,14 +481,6 @@ export class IfExpr extends Expr {
     public elseBody: Block | null
   ) {
     super();
-  }
-
-  toIR(): IR.Stmt.If {
-    return new IR.Stmt.If(
-      this.pred.toIR(),
-      this.thenBody.toIR(),
-      this.elseBody?.toIR() ?? []
-    );
   }
 }
 
@@ -690,42 +499,20 @@ export enum Op {
 }
 
 export class BinOpExpr extends Expr {
-  constructor(
-    public lhs: Expr,
-    public op: Op,
-    public rhs: Expr
-  ) {
+  constructor(public lhs: Expr, public op: Op, public rhs: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.BinOp {
-    return new IR.Expr.BinOp(this.lhs.toIR(), this.op, this.rhs.toIR());
   }
 }
 
 export class AndExpr extends Expr {
-  constructor(
-    public lhs: Expr,
-    public rhs: Expr
-  ) {
+  constructor(public lhs: Expr, public rhs: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.And {
-    return new IR.Expr.And(this.lhs.toIR(), this.rhs.toIR());
   }
 }
 
 export class OrExpr extends Expr {
-  constructor(
-    public lhs: Expr,
-    public rhs: Expr
-  ) {
+  constructor(public lhs: Expr, public rhs: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.Or {
-    return new IR.Expr.Or(this.lhs.toIR(), this.rhs.toIR());
   }
 }
 
@@ -737,35 +524,17 @@ export class IsExpr extends Expr {
   ) {
     super();
   }
-
-  toIR(): IR.Expr.Is {
-    return new IR.Expr.Is(this.negative, this.lhs.toIR(), this.rhs.toIR());
-  }
 }
 
 export class InExpr extends Expr {
-  constructor(
-    public lhs: Expr,
-    public rhs: Expr
-  ) {
+  constructor(public lhs: Expr, public rhs: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.In {
-    return new IR.Expr.In(this.lhs.toIR(), this.rhs.toIR());
   }
 }
 
 export class ShortTryExpr extends Expr {
-  constructor(
-    public lhs: Expr,
-    public rhs: Expr
-  ) {
+  constructor(public lhs: Expr, public rhs: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.TryCatchElse {
-    return new IR.Expr.TryCatchElse([this.lhs.toIR()], [], [this.rhs.toIR()]);
   }
 }
 
@@ -777,26 +546,11 @@ export class TryCatchElseExpr extends Expr {
   ) {
     super();
   }
-
-  toIR(): IR.Expr.TryCatchElse {
-    return new IR.Expr.TryCatchElse(
-      this.body.toIR(),
-      this.catchClauses?.map((x) => x.toIR()) ?? [],
-      this.elseBody?.toIR() ?? []
-    );
-  }
 }
 
 export class CatchClause extends AST {
-  constructor(
-    public ty: TypeExpr,
-    public body: Block
-  ) {
+  constructor(public ty: TypeExpr, public body: Block) {
     super();
-  }
-
-  toIR(): IR.Expr.CatchClause {
-    return new IR.Expr.CatchClause(this.ty.toIR(), this.body.toIR());
   }
 }
 
@@ -809,25 +563,11 @@ export class ClosureExpr extends Expr {
   ) {
     super();
   }
-
-  toIR(): IR.Value.Fn {
-    return new IR.Value.Fn(
-      this.fallible ? '<anon>!' : '<anon>',
-      [],
-      this.params?.map((x) => x.toIR()) ?? [],
-      this.returnTy?.toIR() ?? IR.Type.Infer,
-      this.body.toIR()
-    );
-  }
 }
 
 export class NotExpr extends Expr {
   constructor(public expr: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.Not {
-    return new IR.Expr.Not(this.expr.toIR());
   }
 }
 
@@ -835,19 +575,11 @@ export class QueryExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
-
-  toIR(): IR.Expr.Query {
-    return new IR.Expr.Query(this.expr.toIR());
-  }
 }
 
 export class QueryNowExpr extends Expr {
   constructor(public expr: Expr) {
     super();
-  }
-
-  toIR(): IR.Expr.QueryNow {
-    return new IR.Expr.QueryNow(this.expr.toIR());
   }
 }
 
@@ -855,29 +587,17 @@ export class FailExpr extends Expr {
   constructor(public expr: Expr) {
     super();
   }
-
-  toIR(): IR.Expr.Fail {
-    return new IR.Expr.Fail(this.expr.toIR());
-  }
 }
 
 export class UnitExpr extends Expr {
   constructor(public ty: TypeExpr) {
     super();
   }
-
-  toIR(): IR.Value.Unit {
-    return new IR.Value.Unit(this.ty.toIR());
-  }
 }
 
 export class IdentExpr extends Expr {
   constructor(public ident: Ident) {
     super();
-  }
-
-  toIR(): IR.Expr.Ident {
-    return new IR.Expr.Ident(this.ident.value);
   }
 }
 
@@ -914,10 +634,6 @@ export class ContractDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Value.Contract {
-    return new IR.Value.Contract(this.name.value);
-  }
 }
 
 export class InterfaceDefn extends Defn {
@@ -938,13 +654,6 @@ export class StructDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Type.CWSStructType {
-    return new IR.Type.CWSStructType(
-      this.name.value,
-      this.fields.map((x) => x.toIR())
-    );
-  }
 }
 
 export class TupleDefn extends Defn {
@@ -955,25 +664,11 @@ export class TupleDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Type.CWSTupleType {
-    return new IR.Type.CWSTupleType(
-      this.name.value,
-      this.elements.map((x) => x.toIR())
-    );
-  }
 }
 
 export class UnitDefn extends Defn {
-  constructor(
-    public name: Ident,
-    public typeParams: List<TypeVar> | null
-  ) {
+  constructor(public name: Ident, public typeParams: List<TypeVar> | null) {
     super();
-  }
-
-  toIR(): IR.CWSType {
-    return new IR.CWSType(this.name.value);
   }
 }
 
@@ -985,59 +680,27 @@ export class EnumDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Type.CWSEnumType {
-    return new IR.Type.CWSEnumType(
-      this.name.value,
-      this.variants.map((x) => x.toIR())
-    );
-  }
 }
 
 export abstract class EnumVariantDefn extends Defn {
   abstract name: Ident;
-  abstract toIR(): IR.Type.CWSEnumVariant;
 }
 
 export class EnumVariantStructDefn extends EnumVariantDefn {
-  constructor(
-    public name: Ident,
-    public fields: List<Param>
-  ) {
+  constructor(public name: Ident, public fields: List<Param>) {
     super();
-  }
-
-  toIR(): IR.Type.CWSEnumVariantStructType {
-    return new IR.Type.CWSEnumVariantStructType(
-      this.name.value,
-      this.fields.map((x) => x.toIR())
-    );
   }
 }
 
 export class EnumVariantTupleDefn extends EnumVariantDefn {
-  constructor(
-    public name: Ident,
-    public fields: List<TypeExpr> | null
-  ) {
+  constructor(public name: Ident, public fields: List<TypeExpr> | null) {
     super();
-  }
-
-  toIR(): IR.Type.CWSEnumVariantTupleType {
-    return new IR.Type.CWSEnumVariantTupleType(
-      this.name.value,
-      this.fields?.map((x) => x.toIR()) ?? []
-    );
   }
 }
 
 export class EnumVariantUnitDefn extends EnumVariantDefn {
   constructor(public name: Ident) {
     super();
-  }
-
-  toIR(): IR.Type.CWSEnumVariantUnitType {
-    return new IR.Type.CWSEnumVariantUnitType(this.name.value);
   }
 }
 
@@ -1048,10 +711,6 @@ export class TypeAliasDefn extends Defn {
     public ty: TypeExpr
   ) {
     super();
-  }
-
-  toIR(): IR.Type.CWSTypeAliasType {
-    return new IR.Type.CWSTypeAliasType(this.name.value, this.ty.toIR());
   }
 }
 
@@ -1065,16 +724,6 @@ export class FnDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Value.Fn {
-    return new IR.Value.Fn(
-      this.name.value,
-      this.typeParams?.map((x) => x.toIR()) ?? [],
-      this.params.map((x) => x.toIR()),
-      this.returnTy?.toIR() ?? IR.Type.Infer,
-      this.body.toIR()
-    );
-  }
 }
 
 export class InstantiateDefn extends Defn {
@@ -1084,16 +733,6 @@ export class InstantiateDefn extends Defn {
     public body: Block
   ) {
     super();
-  }
-
-  toIR(): IR.Value.Fn {
-    return new IR.Value.Fn(
-      '<anon>',
-      [],
-      this.params.map((x) => x.toIR()),
-      this.returnTy?.toIR() ?? IR.Type.Infer,
-      this.body.toIR()
-    );
   }
 }
 
@@ -1106,14 +745,6 @@ export class ExecDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Value.ExecFn {
-    return new IR.Value.ExecFn(
-      this.name.value,
-      this.params.map((x) => x.toIR()),
-      this.body.toIR()
-    );
-  }
 }
 
 export class QueryDefn extends Defn {
@@ -1125,45 +756,17 @@ export class QueryDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Value.QueryFn {
-    return new IR.Value.QueryFn(
-      this.name.value,
-      this.params.map((x) => x.toIR()),
-      this.body.toIR()
-    );
-  }
 }
 
 export class ErrorDefn extends Defn {
-  constructor(
-    public name: Ident,
-    public fields: List<Param> | null
-  ) {
+  constructor(public name: Ident, public fields: List<Param> | null) {
     super();
-  }
-
-  toIR(): IR.Type.CWSErrorType {
-    return new IR.Type.CWSErrorType(
-      this.name.value,
-      this.fields?.map((x) => x.toIR()) ?? []
-    );
   }
 }
 
 export class EventDefn extends Defn {
-  constructor(
-    public name: Ident,
-    public fields: List<Param> | null
-  ) {
+  constructor(public name: Ident, public fields: List<Param> | null) {
     super();
-  }
-
-  toIR(): IR.Type.CWSEventType {
-    return new IR.Type.CWSEventType(
-      this.name.value,
-      this.fields?.map((x) => x.toIR()) ?? []
-    );
   }
 }
 
@@ -1174,30 +777,11 @@ export class StateBlockDefn extends Defn {
   ) {
     super();
   }
-
-  toIR(): IR.Value.ContractState {
-    let contractState: IR.Value.ContractState = {};
-    this.stateFields.forEach((x) => {
-      contractState[x.name.value] = x.toIR();
-    });
-    return contractState;
-  }
 }
 
 export class StateItemDefn extends Defn {
-  constructor(
-    public name: Ident,
-    public ty: TypeExpr
-  ) {
+  constructor(public name: Ident, public ty: TypeExpr) {
     super();
-  }
-
-  toIR(): IR.Value.StateItem {
-    return {
-      item: {
-        ty: this.ty.toIR(),
-      },
-    };
   }
 }
 
@@ -1208,15 +792,6 @@ export class StateMapDefn extends Defn {
     public ty: TypeExpr
   ) {
     super();
-  }
-
-  toIR(): IR.Value.StateMap {
-    return {
-      map: {
-        indexTy: this.indexTy.toIR(),
-        ty: this.ty.toIR(),
-      },
-    };
   }
 }
 
@@ -1239,58 +814,29 @@ export class TypeExpr extends AST {
   public isLiteral(): this is Literal<any> {
     return false;
   }
-
-  toIR(): IR.CWSType {
-    return IR.Type.Infer;
-  }
 }
 
 export class GroupedTypeExpr extends TypeExpr {
   constructor(public ty: TypeExpr) {
     super();
   }
-
-  toIR(): IR.CWSType {
-    return this.ty.toIR();
-  }
 }
 
 export class ParamzdTypeExpr extends TypeExpr {
-  constructor(
-    public ty: TypeExpr,
-    public typeArgs: List<TypeExpr>
-  ) {
+  constructor(public ty: TypeExpr, public typeArgs: List<TypeExpr>) {
     super();
-  }
-
-  toIR(): IR.CWSType {
-    throw new Error('Not implemented');
   }
 }
 
 export class MemberTypeExpr extends TypeExpr {
-  constructor(
-    public ty: TypeExpr,
-    public memberName: Ident
-  ) {
+  constructor(public ty: TypeExpr, public memberName: Ident) {
     super();
-  }
-
-  toIR(): IR.CWSType {
-    throw new Error('Not implemented');
   }
 }
 
 export class ArrayTypeExpr extends TypeExpr {
-  constructor(
-    public ty: TypeExpr,
-    public size: number
-  ) {
+  constructor(public ty: TypeExpr, public size: number) {
     super();
-  }
-
-  toIR(): IR.Type.CWSArrayType {
-    return new IR.Type.CWSArrayType(this.ty.toIR(), this.size);
   }
 }
 
@@ -1298,19 +844,11 @@ export class StructDefnTypeExpr extends TypeExpr {
   constructor(public structDefn: StructDefn) {
     super();
   }
-
-  toIR(): IR.Type.CWSStructType {
-    return this.structDefn.toIR();
-  }
 }
 
 export class TupleDefnTypeExpr extends TypeExpr {
   constructor(public tupleDefn: TupleDefn) {
     super();
-  }
-
-  toIR(): IR.Type.CWSTupleType {
-    return this.tupleDefn.toIR();
   }
 }
 
@@ -1318,19 +856,11 @@ export class UnitDefnTypeExpr extends TypeExpr {
   constructor(public unitDefn: UnitDefn) {
     super();
   }
-
-  toIR(): IR.CWSType {
-    return this.unitDefn.toIR();
-  }
 }
 
 export class EnumDefnTypeExpr extends TypeExpr {
   constructor(public enumDefn: EnumDefn) {
     super();
-  }
-
-  toIR(): IR.Type.CWSEnumType {
-    return this.enumDefn.toIR();
   }
 }
 
@@ -1338,19 +868,11 @@ export class OptionTypeExpr extends TypeExpr {
   constructor(public ty: TypeExpr) {
     super();
   }
-
-  toIR(): IR.Type.CWSOptionType {
-    return new IR.Type.CWSOptionType(this.ty.toIR());
-  }
 }
 
 export class TypeVar extends AST {
   constructor(public value: string) {
     super();
-  }
-
-  toIR(): IR.CWSType {
-    throw new Error('Not implemented');
   }
 }
 
@@ -1358,19 +880,11 @@ export class TypeVarExpr extends TypeExpr {
   constructor(public typeVar: TypeVar) {
     super();
   }
-
-  toIR(): IR.CWSType {
-    throw new Error('Not implemented');
-  }
 }
 
 export class IdentTypeExpr extends TypeExpr {
   constructor(public ident: Ident) {
     super();
-  }
-
-  toIR(): IR.CWSType {
-    throw new Error('Not implemented');
   }
 }
 
@@ -1385,28 +899,16 @@ export class Literal<T> extends Expr {
   constructor(public value: T) {
     super();
   }
-
-  toIR(): IR.CWSValue {
-    throw new Error('Not implemented');
-  }
 }
 
 export class StringLit extends Literal<string> {
   constructor(public value: string) {
     super(value);
   }
-
-  toIR(): IR.Value.String {
-    return new IR.Value.String(this.value);
-  }
 }
 export class IntLit extends Literal<string> {
   constructor(public value: string) {
     super(value);
-  }
-
-  toIR(): IR.Value.Int {
-    return new IR.Value.Int(this.value);
   }
 }
 
@@ -1414,28 +916,16 @@ export class DecLit extends Literal<string> {
   constructor(public value: string) {
     super(value);
   }
-
-  toIR(): IR.Value.Dec {
-    return new IR.Value.Dec(this.value);
-  }
 }
 
 export class BoolLit extends Literal<boolean> {
   constructor(public value: boolean) {
     super(value);
   }
-
-  toIR(): IR.Value.Bool {
-    return new IR.Value.Bool(this.value);
-  }
 }
 export class NoneLit extends Literal<null> {
   constructor() {
     super(null);
-  }
-
-  toIR(): IR.Value.None {
-    return IR.Value.NoneValue;
   }
 }
 //#endregion Literals
@@ -1444,10 +934,6 @@ export class NoneLit extends Literal<null> {
 export class Ident extends AST {
   constructor(public value: string) {
     super();
-  }
-
-  toIR(): IR.Expr.Ident {
-    return new IR.Expr.Ident(this.value);
   }
 }
 
@@ -1459,55 +945,23 @@ export class Param extends AST {
   ) {
     super();
   }
-
-  toIR(): IR.Param {
-    return {
-      name: this.name.value,
-      optional: this.optional,
-      ty: this.ty?.toIR() ?? IR.Type.Infer,
-    };
-  }
 }
 
 export class Field extends AST {
-  constructor(
-    public name: Ident,
-    public value: Expr | null
-  ) {
+  constructor(public name: Ident, public value: Expr | null) {
     super();
-  }
-
-  toIR(): IR.Arg {
-    return {
-      name: this.name.value,
-      value: this.value?.toIR() ?? IR.Value.NoneValue,
-    };
   }
 }
 
 export class Arg extends AST {
-  constructor(
-    public name: Ident | null,
-    public value: Expr
-  ) {
+  constructor(public name: Ident | null, public value: Expr) {
     super();
-  }
-
-  toIR(): IR.Arg {
-    return {
-      name: this.name?.value ?? '',
-      value: this.value.toIR(),
-    };
   }
 }
 
 export class Block extends List<Stmt> {
   constructor(public stmts: List<Stmt>) {
     super(stmts.toArray());
-  }
-
-  toIR(): IR.IR[] {
-    return this.stmts.map((x) => x.toIR());
   }
 }
 
