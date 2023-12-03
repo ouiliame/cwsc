@@ -26,10 +26,53 @@ export class CWScriptCompiler {
       };
     });
 
-    console.log(ctx.sources);
+    return ctx;
   }
 }
 
 const project = CWScriptProject.fromProjectRoot('examples/counter');
 const compiler = new CWScriptCompiler(project);
-compiler.build();
+const ctx = compiler.build();
+const counterFile =
+  '/Users/william/cwscript/cwsc-v1/examples/counter/src/Counter.cws';
+const ast = ctx.sources[counterFile].ast;
+
+/*
+fn function() {
+  3 + 4;
+}
+
+=> 
+
+{
+  type: 'function',
+  name: 'function',
+  body: [
+    {
+      type: 'expression',
+      value: {
+        type: 'binary',
+        operator: '+',
+        left: {
+          type: 'number',
+          value: 3
+        },
+        right: {
+          type: 'number',
+          value: 4
+        }
+      }
+    }
+  ]
+}
+
+*/
+
+function printAST(ast: AST.AST, indent = 0) {
+  console.log(' '.repeat(indent) + ast.constructor.name);
+  ast.children.forEach((child) => {
+    printAST(child, indent + 1);
+  });
+}
+
+printAST(ast);
