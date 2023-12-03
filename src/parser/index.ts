@@ -1,6 +1,12 @@
 // @ts-nocheck
 import * as fs from 'fs';
-import { ANTLRErrorListener, CharStreams, CommonTokenStream } from 'antlr4ts';
+import {
+  ANTLRErrorListener,
+  CharStreams,
+  CommonTokenStream,
+  DefaultErrorStrategy,
+  Parser,
+} from 'antlr4ts';
 import { RecognitionException } from 'antlr4ts/RecognitionException';
 import path from 'path';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
@@ -31,7 +37,32 @@ export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
         start: { line: line - 1, character: charPositionInLine },
         end: { line: line - 1, character: charPositionInLine + 1 },
       },
+      source: 'cwscript/parser',
     });
+  }
+}
+
+export class CWSErrorStrategy extends DefaultErrorStrategy {
+  protected getErrorRecoverySet(recognizer: Parser): IntervalSet {
+    let recoverySet = super.getErrorRecoverySet(recognizer);
+    recoverySet.add(ANTLRCWScriptParser.SEMI);
+    return recoverySet;
+  }
+
+  recover(recognizer: Parser, e: RecognitionException): void {
+    for (
+      let t = recognizer.inputStream.LA(1);
+      t !== Parser.EOF;
+      t = recognizer.inputStream.LA(1)
+    ) {
+      if (t === ANTLRCWScriptParser.SEMI) {
+        recognizer.consume();
+        break;
+      }
+      recognizer.consume(); // consume until we hit a semicolon
+    }
+
+    this.endErrorCondition(recognizer);
   }
 }
 
@@ -77,6 +108,7 @@ export class CWScriptParser {
     );
     antlrParser.removeErrorListeners();
     antlrParser.addErrorListener(syntaxErrorListener);
+    antlrParser.errorHandler = new CWSErrorStrategy();
 
     let tree = antlrParser.sourceFile();
     let errors = syntaxErrorListener.diagnostics.filter(
