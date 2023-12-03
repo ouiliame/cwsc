@@ -36,10 +36,7 @@ export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
 }
 
 export class CWScriptParser {
-  constructor(
-    public sourceInput: string,
-    sourceFile: string | null = null
-  ) {
+  constructor(public sourceInput: string, sourceFile: string | null = null) {
     this.sourceText = new TextView(sourceInput);
     this.sourceFile = sourceFile ? path.resolve(sourceFile) : null;
   }

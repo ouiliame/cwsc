@@ -1,6 +1,7 @@
 import toml from '@iarna/toml';
 import * as fs from 'fs';
 import * as path from 'path';
+import { formatRust } from './format';
 
 const DEFAULT_CARGO_TOML: CargoToml = {
   dependencies: {
@@ -170,6 +171,10 @@ export class RustCrate {
       // if directory for file does not exist, create it
       let dir = path.dirname(filePath);
       fs.mkdirSync(path.join(crateDir, dir), { recursive: true });
+      if (filePath.endsWith('.rs')) {
+        // format rust
+        file = formatRust(file);
+      }
       fs.writeFileSync(path.join(crateDir, filePath), file);
     }
   }
