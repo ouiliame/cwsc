@@ -1,28 +1,27 @@
 import { ParserRuleContext } from 'antlr4ts';
-import * as IR from './ir';
 
-export class AST {
+export abstract class AST {
   public $ctx: ParserRuleContext | null = null;
 
   constructor(public $parent: AST | null = null) {}
 
-  public isStmt(): this is Stmt {
+  public isStmt(): boolean {
     return false;
   }
 
-  public isDefn(): this is Defn {
+  public isDefn(): boolean {
     return false;
   }
 
-  public isExpr(): this is Expr {
+  public isExpr(): boolean {
     return false;
   }
 
-  public isTypeExpr(): this is TypeExpr {
+  public isTypeExpr(): boolean {
     return false;
   }
 
-  public isLiteral(): this is Literal<any> {
+  public isLiteral(): boolean {
     return false;
   }
 
@@ -247,6 +246,9 @@ export class List<T extends AST = AST> extends AST {
     return this.$children.length;
   }
 }
+
+export class Empty extends AST {}
+export const EMPTY = new Empty();
 
 export class SourceFile extends List<Stmt> {}
 
@@ -718,7 +720,7 @@ export class FnDefn extends Defn {
   constructor(
     public name: Ident,
     public typeParams: List<TypeVar> | null,
-    public params: List<Param>,
+    public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -728,7 +730,7 @@ export class FnDefn extends Defn {
 
 export class InstantiateDefn extends Defn {
   constructor(
-    public params: List<Param>,
+    public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -739,7 +741,7 @@ export class InstantiateDefn extends Defn {
 export class ExecDefn extends Defn {
   constructor(
     public name: Ident,
-    public params: List<Param>,
+    public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -750,7 +752,7 @@ export class ExecDefn extends Defn {
 export class QueryDefn extends Defn {
   constructor(
     public name: Ident,
-    public params: List<Param>,
+    public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {

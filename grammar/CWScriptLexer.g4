@@ -14,6 +14,7 @@ INSTANTIATE_NOW: 'instantiate!';
 EXEC_NOW: 'exec!';
 QUERY_NOW: 'query!';
 DELEGATE_EXEC: 'delegate_exec!';
+H_INSTANTIATE: '#instantiate';
 INSTANTIATE: 'instantiate';
 EXEC: 'exec';
 QUERY: 'query';
@@ -91,7 +92,7 @@ GT_EQ: '>=';
 POW: '**';
 
 // Identifiers
-Ident: [_a-zA-Z#$][_a-zA-Z0-9]*;
+Ident: [_a-zA-Z$][_a-zA-Z0-9]*;
 
 // TypeVar names
 TypeVar: '%' [_a-zA-Z][_a-zA-Z0-9]*;

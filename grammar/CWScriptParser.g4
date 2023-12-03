@@ -159,19 +159,19 @@ fnDefn:
 	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 instantiateDefn:
-	INSTANTIATE (name = ident) (ARROW (returnTy = typeExpr))? LPAREN (
-		params = paramList
-	)? RPAREN (body = block) SEMI?;
+	H_INSTANTIATE LPAREN (params = paramList)? RPAREN (
+		ARROW (returnTy = typeExpr)
+	)? (body = block) SEMI?;
 
 execDefn:
-	EXEC (name = ident) LPAREN (params = paramList)? (
+	EXEC HASH (name = ident) LPAREN (params = paramList)? RPAREN (
 		ARROW (returnTy = typeExpr)
-	)? RPAREN (body = block) SEMI?;
+	)? (body = block) SEMI?;
 
 queryDefn:
-	QUERY (name = ident) LPAREN (params = paramList)? (
+	QUERY HASH (name = ident) LPAREN (params = paramList)? RPAREN (
 		ARROW (returnTy = typeExpr)
-	)? RPAREN (body = block) SEMI?;
+	)? (body = block) SEMI?;
 
 errorDefn:
 	ERROR (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
@@ -199,28 +199,28 @@ expr:
 	expr DOT (memberName = ident) # DotExpr
 	| expr (LBRACK (typeArgs = typeExprList) RBRACK)? LPAREN (
 		args = argList
-	)? RPAREN									# CallExpr
-	| expr LBRACK (index = expr) RBRACK			# IndexExpr
-	| expr AS (ty = typeExpr)					# AsExpr
-	| expr QUEST								# ExistsExpr
-	| expr (op = MUL | DIV | MOD) expr			# MulExpr
-	| expr (op = PLUS | MINUS) expr				# AddExpr
-	| expr (op = LT | GT | LT_EQ | GT_EQ) expr	# CompExpr
-	| QUERY_NOW expr							# QueryExpr
-	| expr D_QUEST expr							# ShortTryExpr
-	| expr IN expr								# InExpr
-	| expr IS (ty = typeExpr)					# IsExpr
-	| expr (op = EQ_EQ | NEQ) expr				# EqExpr
-	| expr AND expr								# AndExpr
-	| expr OR expr								# OrExpr
-	| ifExpr_									# IfExpr
-	| tryCatchElseExpr_							# TryCatchElseExpr
-	| closureExpr_								# ClosureExpr
-	| structExpr_								# StructExpr
-	| tupleExpr_								# TupleExpr
-	| literal									# LiteralExpr
-	| ident										# IdentExpr
-	| LPAREN expr RPAREN						# GroupedExpr;
+	)? RPAREN										# CallExpr
+	| expr LBRACK (index = expr) RBRACK				# IndexExpr
+	| expr AS (ty = typeExpr)						# AsExpr
+	| expr QUEST									# ExistsExpr
+	| expr (op = (MUL | DIV | MOD)) expr			# MulExpr
+	| expr (op = (PLUS | MINUS)) expr				# AddExpr
+	| expr (op = (LT | GT | LT_EQ | GT_EQ)) expr	# CompExpr
+	| QUERY_NOW expr								# QueryExpr
+	| expr D_QUEST expr								# ShortTryExpr
+	| expr IN expr									# InExpr
+	| expr IS (ty = typeExpr)						# IsExpr
+	| expr (op = (EQ_EQ | NEQ)) expr				# EqExpr
+	| expr AND expr									# AndExpr
+	| expr OR expr									# OrExpr
+	| ifExpr_										# IfExpr
+	| tryCatchElseExpr_								# TryCatchElseExpr
+	| closureExpr_									# ClosureExpr
+	| structExpr_									# StructExpr
+	| tupleExpr_									# TupleExpr
+	| literal										# LiteralExpr
+	| ident											# IdentExpr
+	| LPAREN expr RPAREN							# GroupedExpr;
 
 ifExpr_:
 	IF (pred = expr) (thenBody = block) (ELSE (elseBody = block))? SEMI?;
