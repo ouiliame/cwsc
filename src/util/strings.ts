@@ -1,9 +1,9 @@
 export function isSnakeCase(s: string): boolean {
-  return /^[a-z]+(_[a-z]+)*$/.test(s);
+  return /^(#|\$)?[a-z]+(_[a-z]+)*$/.test(s);
 }
 
 export function isPascalCase(s: string): boolean {
-  return /^[A-Z][a-zA-Z]*$/.test(s);
+  return /^(#|\$)?[A-Z][a-zA-Z]*$/.test(s);
 }
 
 export function isCapitalSnake(s: string): boolean {

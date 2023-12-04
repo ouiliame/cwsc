@@ -44,30 +44,6 @@ export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
   }
 }
 
-export class CWSErrorStrategy extends DefaultErrorStrategy {
-  protected getErrorRecoverySet(recognizer: Parser): IntervalSet {
-    let recoverySet = super.getErrorRecoverySet(recognizer);
-    recoverySet.add(ANTLRCWScriptParser.SEMI);
-    return recoverySet;
-  }
-
-  recover(recognizer: Parser, e: RecognitionException): void {
-    for (
-      let t = recognizer.inputStream.LA(1);
-      t !== Parser.EOF;
-      t = recognizer.inputStream.LA(1)
-    ) {
-      if (t === ANTLRCWScriptParser.SEMI) {
-        recognizer.consume();
-        break;
-      }
-      recognizer.consume(); // consume until we hit a semicolon
-    }
-
-    this.endErrorCondition(recognizer);
-  }
-}
-
 export interface ParseResult {
   ast?: AST.SourceFile;
   diagnostics: Diagnostic[];
@@ -100,7 +76,6 @@ export class CWScriptParser {
    */
   public parse(): ParseResult {
     const { parseTree, diagnostics } = this.antlrParse();
-    if (diagnostics.length > 0) return { diagnostics };
     const astBuilder = new ASTBuilderVisitor(this.sourceText);
     const ast = astBuilder.visitSourceFile(parseTree);
     const astValidator = new ASTValidatorVisitor(
@@ -126,7 +101,6 @@ export class CWScriptParser {
     );
     antlrParser.removeErrorListeners();
     antlrParser.addErrorListener(syntaxErrorListener);
-    antlrParser.errorHandler = new CWSErrorStrategy();
 
     const parseTree = antlrParser.sourceFile();
     return { parseTree, diagnostics: syntaxErrorListener.diagnostics };

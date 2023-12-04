@@ -942,6 +942,14 @@ export class Ident extends AST {
   constructor(public value: string) {
     super();
   }
+
+  public get isHashIdent(): boolean {
+    return this.value.startsWith('#');
+  }
+
+  public get isDollarIdent(): boolean {
+    return this.value.startsWith('$');
+  }
 }
 
 export class Param extends AST {

@@ -113,7 +113,7 @@ interfaceDefn:
 structDefn:
 	STRUCT (name = ident) (
 		LBRACK typeParams = typeVarList RBRACK
-	)? LBRACE (fields = paramList)? RBRACE
+	)? LBRACE (fields = paramList)? RBRACE SEMI?
 	| STRUCT (name = ident) (
 		LBRACK typeParams = typeVarList RBRACK
 	)? LPAREN (fields = paramList) RPAREN SEMI?;
@@ -211,7 +211,7 @@ expr:
 	| QUERY_NOW expr								# QueryExpr
 	| expr D_QUEST expr								# ShortTryExpr
 	| expr IN expr									# InExpr
-	| expr IS (ty = typeExpr)						# IsExpr
+	| expr IS (negative = NOT)? (ty = typeExpr)		# IsExpr
 	| expr (op = (EQ_EQ | NEQ)) expr				# EqExpr
 	| expr AND expr									# AndExpr
 	| expr OR expr									# OrExpr
@@ -278,7 +278,7 @@ ident: HashIdent | Ident | reservedKeyword;
 param: (name = ident) (optional = QUEST)? COLON (
 		(ty = typeExpr)?
 	);
-field: (name = ident) COLON (value = expr);
+field: (name = ident) (COLON (value = expr))?;
 namedArg: (name = ident) EQ (value = expr);
 arg: (expr | namedArg);
 

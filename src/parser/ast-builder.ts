@@ -28,7 +28,7 @@ export class ASTBuilderVisitor
   implements ANTLRCWScriptParserVisitor<AST.AST>
 {
   protected defaultResult(): AST.AST {
-    throw new Error('Visitor not implemented');
+    return AST.EMPTY;
   }
 
   visitSourceFile(ctx: P.SourceFileContext): AST.SourceFile {
@@ -377,6 +377,12 @@ export class ASTBuilderVisitor
     return new AST.ShortTryExpr(lhs, rhs).$(ctx);
   }
 
+  visitIsExpr(ctx: P.IsExprContext): AST.IsExpr {
+    const [lhs, rhs] = [this.expr(ctx.expr()), this.typeExpr(ctx._ty)];
+    const negative = ctx._negative ? true : false;
+    return new AST.IsExpr(negative, lhs, rhs).$(ctx);
+  }
+
   visitInExpr(ctx: P.InExprContext): AST.InExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
     return new AST.InExpr(lhs, rhs).$(ctx);
@@ -562,7 +568,7 @@ export class ASTBuilderVisitor
 
   visitField(ctx: P.FieldContext): AST.Field {
     const name = this.visitIdent(ctx._name);
-    const value = this.expr(ctx._value);
+    const value = ctx._value ? this.expr(ctx._value) : null;
     return new AST.Field(name, value).$(ctx);
   }
 

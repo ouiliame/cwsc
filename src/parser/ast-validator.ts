@@ -119,13 +119,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
   visitIdentBinding(node: AST.IdentBinding): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     // check that variables use snake_case
+    if (node.name.value[0] === '#') {
+      diagnostics.push(
+        this.makeWarning(node.name, 'Variable names should not start with a #')
+      );
+    }
+
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node, 'Variable names should be snake_case')
       );
-    }
-    if (!node.ty) {
-      diagnostics.push(this.makeWarning(node, 'Missing type annotation'));
     }
     return diagnostics;
   }
@@ -254,7 +257,12 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
   visitEnumVariantStructDefn(node: AST.EnumVariantStructDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
 
-    if (!isPascalCase(node.name.value)) {
+    if (node.name.value[0] !== '#') {
+      diagnostics.push(
+        this.makeError(node.name, 'Enum variant names must with #')
+      );
+    }
+    if (!isPascalCase(node.name.value.substring(1))) {
       diagnostics.push(
         this.makeWarning(node.name, 'Enum variant names should be PascalCase')
       );
@@ -265,7 +273,13 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
   visitEnumVariantTupleDefn(node: AST.EnumVariantTupleDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
 
-    if (!isPascalCase(node.name.value)) {
+    if (!node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Enum variant names must with #')
+      );
+    }
+
+    if (isPascalCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Enum variant names should be PascalCase')
       );
@@ -275,6 +289,12 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitEnumVariantUnitDefn(node: AST.EnumVariantUnitDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+
+    if (!node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Enum variant names must with #')
+      );
+    }
 
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -286,6 +306,17 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitTypeAliasDefn(node: AST.TypeAliasDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Type alias names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Type alias names cannot start with $')
+      );
+    }
+
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Type alias names should be PascalCase')
@@ -296,6 +327,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitFnDefn(node: AST.FnDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Function names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Function names cannot start with $')
+      );
+    }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Function names should be snake_case')
@@ -324,6 +365,11 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
         this.makeHint(node, 'exec #fn return type can be omitted')
       );
     }
+    if (!node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Exec names must start with #')
+      );
+    }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Exec names should be snake_case')
@@ -334,6 +380,11 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitQueryDefn(node: AST.QueryDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (!node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Query names must start with #')
+      );
+    }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Query names should be snake_case')
@@ -344,6 +395,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitErrorDefn(node: AST.ErrorDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Error names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Error names cannot start with $')
+      );
+    }
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Error names should be PascalCase')
@@ -354,6 +415,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitEventDefn(node: AST.EventDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Event names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Event names cannot start with $')
+      );
+    }
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Event names should be PascalCase')
@@ -364,6 +435,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitStateItemDefn(node: AST.StateItemDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'State item names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'State item names cannot start with $')
+      );
+    }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'State item names should be snake_case')
@@ -374,6 +455,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitStateMapDefn(node: AST.StateMapDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'State map names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'State map names cannot start with $')
+      );
+    }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'State map names should be snake_case')
@@ -383,7 +474,28 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
   }
 
   // SKIP: DotExpr
-  // TODO: CallExpr
+
+  public visitCallExpr(node: AST.CallExpr): Diagnostic[] {
+    let diagnostics = this.defaultVisit(node);
+    // argument list - named arguments must come after positional arguments
+    if (node.args) {
+      let seenNamed = false;
+      node.args.forEach((arg) => {
+        if (arg.name) {
+          seenNamed = true;
+        } else if (seenNamed) {
+          diagnostics.push(
+            this.makeError(
+              arg,
+              'Positional arguments must precede named arguments'
+            )
+          );
+        }
+      });
+    }
+    return diagnostics;
+  }
+
   // Skip: IndexExpr
   // SKIP: AsExpr
   // SKIP: ExistsExpr
@@ -408,11 +520,6 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
   // SKIP: ParameterizedTypeExpr
   visitMemberTypeExpr(node: AST.MemberTypeExpr): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
-    if (!isPascalCase(node.memberName.value)) {
-      diagnostics.push(
-        this.makeWarning(node.memberName, 'Type names should be PascalCase')
-      );
-    }
     return diagnostics;
   }
   // SKIP: ArrayTypeExpr
@@ -420,7 +527,13 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
   // SKIP: TupleDefnTypeExpr
   // SKIP: UnitDefnTypeExpr
   // SKIP: EnumDefnTypeExpr
-  // SKIP: OptionTypeExpr
+  visitOptionTypeExpr(node: AST.OptionTypeExpr): Diagnostic[] {
+    let diagnostics = this.defaultVisit(node);
+    if (node.ty instanceof AST.OptionTypeExpr) {
+      diagnostics.push(this.makeWarning(node, 'Redundant optional type'));
+    }
+    return diagnostics;
+  }
   // SKIP: TypeVarExpr
   // SKIP: IdentTypeExpr
 
@@ -447,6 +560,16 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
 
   visitParam(node: AST.Param): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
+    if (node.name.isHashIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Parameter names cannot start with #')
+      );
+    }
+    if (node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Parameter names cannot start with $')
+      );
+    }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Parameter names should be snake_case')
@@ -454,16 +577,6 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
     }
     if (!node.ty) {
       diagnostics.push(this.makeWarning(node, 'Missing type annotation'));
-    }
-    return diagnostics;
-  }
-
-  visitField(node: AST.Field): Diagnostic[] {
-    let diagnostics = this.defaultVisit(node);
-    if (!isSnakeCase(node.name.value)) {
-      diagnostics.push(
-        this.makeWarning(node.name, 'Field names should be snake_case')
-      );
     }
     return diagnostics;
   }
@@ -477,7 +590,7 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
         seenOptional = true;
       } else if (seenOptional) {
         diagnostics.push(
-          this.makeError(param, 'Optional parameters must be at the end')
+          this.makeError(param, 'Optional parameters must follow required ones')
         );
       }
     });
