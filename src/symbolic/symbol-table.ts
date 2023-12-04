@@ -1,5 +1,5 @@
-import * as AST from './ast';
-import * as IR from './ir';
+import * as AST from '../ast';
+import * as IR from '../ir';
 
 export interface SymbolTableEntry {
   type: string;

@@ -1,4 +1,4 @@
-import { SymbolTable } from '../symbol-table';
+import { SymbolTable } from '../symbolic/symbol-table';
 import {
   CWSType,
   CWSValue,

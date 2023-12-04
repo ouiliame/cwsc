@@ -2,7 +2,7 @@ import * as Type from './types';
 import * as Value from './values';
 import * as Expr from './exprs';
 
-import { SymbolTable } from '../symbol-table';
+import { SymbolTable } from '../symbolic/symbol-table';
 export abstract class IR {
   public isType(): this is CWSType {
     return false;
@@ -33,7 +33,7 @@ export abstract class IR {
 }
 
 export interface Param {
-  name: string;
+  name?: string;
   ty: CWSType;
   optional?: boolean;
 }

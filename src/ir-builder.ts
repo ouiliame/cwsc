@@ -1,6 +1,6 @@
 import * as AST from './ast';
 import * as IR from './ir';
-import { SymbolTable } from './symbol-table';
+import { SymbolTable } from './symbolic/symbol-table';
 import { CWSTupleType, CWSType } from './ir/types';
 import { CWScriptProject } from './projects';
 

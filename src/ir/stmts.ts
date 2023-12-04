@@ -3,7 +3,7 @@ import * as Value from './values';
 import * as Expr from './exprs';
 import * as Type from './types';
 
-import { SymbolTable } from '../symbol-table';
+import { SymbolTable } from '../symbolic/symbol-table';
 
 export class Stmt extends IR {
   public isType(): this is CWSType {

@@ -1,4 +1,4 @@
-import { SymbolTable } from '../symbol-table';
+import { SymbolTable } from '../symbolic/symbol-table';
 import { IR, Arg, CWSExpr, CWSType, CWSValue } from './ir-base';
 import * as Type from './types';
 import * as Value from './values';

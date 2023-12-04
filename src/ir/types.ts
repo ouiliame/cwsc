@@ -3,7 +3,7 @@ import * as Value from './values';
 import * as Expr from './exprs';
 import * as Stmt from './stmts';
 
-import { SymbolTable } from '../symbol-table';
+import { SymbolTable } from '../symbolic/symbol-table';
 
 // #region Types
 export class CWSTypeParam {
@@ -26,6 +26,24 @@ export class CWSTypeFn {
       typeArgs[this.typeParams[i].name] = typeArgsList[i];
     }
     return this.body(typeArgs);
+  }
+}
+
+export class CWSVoidType extends CWSType {
+  constructor() {
+    super('Void');
+  }
+}
+
+export class CWSPlaceholderType extends CWSType {
+  constructor(name: string) {
+    super(name);
+  }
+}
+
+export class CWSAnyType extends CWSType {
+  constructor() {
+    super('Any');
   }
 }
 
@@ -92,8 +110,8 @@ export class CWSStructType extends CWSType {
           this,
           this.fields.map((x) => {
             return {
-              name: x.name,
-              value: new Expr.Ident(x.name),
+              name: x.name!,
+              value: new Expr.Ident(x.name!),
             };
           })
         )
@@ -235,7 +253,7 @@ export class CWSMessageType extends CWSType {
 export class CWSFnType extends CWSType {
   constructor(
     public fallible: boolean,
-    public paramTys: CWSType[],
+    public paramTys: Param[],
     public returnTy: CWSType
   ) {
     super(
@@ -255,7 +273,8 @@ export class CWSFnType extends CWSType {
         return false;
       }
       for (let i = 0; i < this.paramTys.length; i++) {
-        if (!this.paramTys[i].isEqualTo(other.paramTys[i])) {
+        // TODO: check optional
+        if (!this.paramTys[i].ty.isEqualTo(other.paramTys[i].ty)) {
           return false;
         }
       }
@@ -275,7 +294,8 @@ export class CWSFnType extends CWSType {
         return false;
       }
       for (let i = 0; i < this.paramTys.length; i++) {
-        if (!other.paramTys[i].isSubtypeOf(this.paramTys[i])) {
+        // TODO: check optional
+        if (!other.paramTys[i].ty.isSubtypeOf(this.paramTys[i].ty)) {
           return false;
         }
       }
@@ -296,7 +316,7 @@ export class CWSInstantiateFnType extends CWSFnType {
   constructor(public params: Param[]) {
     super(
       true,
-      params.map((x) => x.ty),
+      params,
       new CWSContractResponseType()
     );
   }
@@ -341,7 +361,7 @@ export class CWSExecFnType extends CWSFnType {
   ) {
     super(
       true,
-      params.map((x) => x.ty),
+      params,
       new CWSContractResponseType()
     );
   }
@@ -389,7 +409,7 @@ export class CWSQueryFnType extends CWSFnType {
   ) {
     super(
       true,
-      params.map((x) => x.ty),
+      params,
       new CWSContractResponseType()
     );
   }
