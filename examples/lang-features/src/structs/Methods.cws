@@ -1,0 +1,12 @@
+struct Point {
+  x: Int,
+  y: Int
+}
+
+// methods for types are implemented in a dedicated `impl` block
+
+impl Point {
+  fn __add__(self, other: Point) -> Point {
+    return Point(self.x + other.x, self.y + other.y);
+  }
+}

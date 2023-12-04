@@ -66,6 +66,11 @@ export class CWSErrorStrategy extends DefaultErrorStrategy {
   }
 }
 
+export interface ParseResult {
+  ast?: AST.SourceFile;
+  diagnostics: Diagnostic[];
+}
+
 export class CWScriptParser {
   constructor(public sourceInput: string, sourceFile: string | null = null) {
     this.sourceText = new TextView(sourceInput);
@@ -75,8 +80,8 @@ export class CWScriptParser {
   public static parse(
     sourceInput: string,
     sourceFile: string | null = null
-  ): AST.AST {
-    let parser = new CWScriptParser(sourceInput, sourceFile);
+  ): ParseResult {
+    const parser = new CWScriptParser(sourceInput, sourceFile);
     return parser.parse();
   }
 
@@ -90,10 +95,25 @@ export class CWScriptParser {
   /**
    * This is the public-facing interface for parsing a source file.
    */
-  public parse(): AST.SourceFile {
-    let parseTree = this.antlrParse();
-    let astBuilder = new ASTBuilderVisitor(this.sourceText);
-    return astBuilder.visitSourceFile(parseTree);
+  public parse(): ParseResult {
+    const diagnostics: Diagnostic[] = [];
+    let parseTree: SourceFileContext?;
+    try {
+      parseTree = this.antlrParse();
+    } catch (e) {
+      return {
+        diagnostics: [
+          {
+            severity: DiagnosticSeverity.Error,
+            message: e.message,
+            range: this.sourceText.range,
+            source: 'cwscript/parser',
+          },
+        ],
+      };
+    }
+    const astBuilder = new ASTBuilderVisitor(this.sourceText);
+    let ast = astBuilder.visitSourceFile(parseTree);
   }
 
   protected antlrParse(): SourceFileContext {
@@ -115,8 +135,7 @@ export class CWScriptParser {
       (d) => d.severity === DiagnosticSeverity.Error
     );
     if (errors.length > 0) {
-      console.table(errors[0]);
-      throw new Error('Syntax error occurred while parsing.');
+      throw new Error(errors[0].message);
     }
     return tree;
   }

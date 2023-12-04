@@ -1,26 +1,43 @@
 import { CWScriptParser } from './parser';
-import { SymbolIndex, SymbolTable } from './symbol-table';
-import { RustCodegen } from './codegen';
 import { CWScriptProject } from './projects';
+import { Pipeline, PipelineStage } from './pipelines';
 import * as AST from './ast';
-import * as IR from './ir';
 
 import * as fs from 'fs';
+
+export interface BuildContext {
+  sourceFiles: {
+    [k: string]: {
+      text?: string;
+      ast?: AST.SourceFile;
+    };
+  };
+}
+
+export class BuildPipeline extends Pipeline {
+  constructor(public ctx: BuildContext) {
+    super(ctx);
+  }
+
+  public get stages(): PipelineStage[] {
+    return [];
+  }
+}
 
 export class CWScriptCompiler {
   constructor(public project: CWScriptProject) {}
 
   public build() {
     // create new context for the build
-    const ctx: any = { sources: {} };
+    const ctx: BuildContext = { sourceFiles: {} };
     // gather source files
     const { sourceFiles } = this.project;
 
-    // go through and read each source file, parse
+    // read each file's contents and parse into AST
     sourceFiles.forEach((sourceFile) => {
       const text = fs.readFileSync(sourceFile, 'utf8');
-      const ast = CWScriptParser.parse(text, sourceFile);
-      ctx.sources[sourceFile] = {
+      const ast = CWScriptParser.parse(text, sourceFile) as AST.SourceFile;
+      ctx.sourceFiles[sourceFile] = {
         text,
         ast,
       };
@@ -35,44 +52,4 @@ const compiler = new CWScriptCompiler(project);
 const ctx = compiler.build();
 const counterFile =
   '/Users/william/cwscript/cwsc-v1/examples/counter/src/Counter.cws';
-const ast = ctx.sources[counterFile].ast;
-
-/*
-fn function() {
-  3 + 4;
-}
-
-=> 
-
-{
-  type: 'function',
-  name: 'function',
-  body: [
-    {
-      type: 'expression',
-      value: {
-        type: 'binary',
-        operator: '+',
-        left: {
-          type: 'number',
-          value: 3
-        },
-        right: {
-          type: 'number',
-          value: 4
-        }
-      }
-    }
-  ]
-}
-
-*/
-
-function printAST(ast: AST.AST, indent = 0) {
-  console.log(' '.repeat(indent) + ast.constructor.name);
-  ast.children.forEach((child) => {
-    printAST(child, indent + 1);
-  });
-}
-
-printAST(ast);
+const ast = ctx.sourceFiles[counterFile].ast;

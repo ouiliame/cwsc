@@ -177,7 +177,7 @@ errorDefn:
 	ERROR (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
 
 eventDefn:
-	EVENT (name = ident) LPAREN (params = paramList) RPAREN SEMI?;
+	EVENT (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
 
 stateBlockDefn:
 	STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;

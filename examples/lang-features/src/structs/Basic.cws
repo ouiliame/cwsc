@@ -1,0 +1,11 @@
+struct Ex1 {
+  a: Int
+}
+
+// traditional instantiation
+let a = Ex1 { a: 32 };
+
+// function-like instantiation
+let b = Ex1(32);
+
+assert! a == b;
