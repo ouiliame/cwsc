@@ -64,7 +64,6 @@ BANG: '!';
 SEMI: ';';
 COLON: ':';
 D_COLON: '::';
-HASH: '#';
 AT: '@';
 AMP: '&';
 ARROW: '->';
@@ -92,6 +91,7 @@ GT_EQ: '>=';
 POW: '**';
 
 // Identifiers
+HashIdent: '#' [_a-zA-Z$][_a-zA-Z0-9]*;
 Ident: [_a-zA-Z$][_a-zA-Z0-9]*;
 
 // TypeVar names

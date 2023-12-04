@@ -154,24 +154,26 @@ typeAliasDefn:
 	) SEMI?;
 
 fnDefn:
-	FN (name = ident) (LBRACK typeParams = typeVarList RBRACK)? LPAREN (
-		params = paramList
-	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	FN (name = ident) (fallible = BANG)? (
+		LBRACK typeParams = typeVarList RBRACK
+	)? LPAREN (params = paramList)? RPAREN (
+		ARROW (returnTy = typeExpr)
+	)? (body = block) SEMI?;
 
 instantiateDefn:
-	H_INSTANTIATE LPAREN (params = paramList)? RPAREN (
+	H_INSTANTIATE (fallible = BANG)? LPAREN (params = paramList)? RPAREN (
 		ARROW (returnTy = typeExpr)
 	)? (body = block) SEMI?;
 
 execDefn:
-	EXEC HASH (name = ident) LPAREN (params = paramList)? RPAREN (
-		ARROW (returnTy = typeExpr)
-	)? (body = block) SEMI?;
+	EXEC (name = ident) (fallible = BANG)? LPAREN (
+		params = paramList
+	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 queryDefn:
-	QUERY HASH (name = ident) LPAREN (params = paramList)? RPAREN (
-		ARROW (returnTy = typeExpr)
-	)? (body = block) SEMI?;
+	QUERY (name = ident) (fallible = BANG)? LPAREN (
+		params = paramList
+	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 errorDefn:
 	ERROR (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
@@ -197,9 +199,9 @@ expr:
 	/* f[A, B]() */
 	// f[T](x) //I:s it parameterized function call or call to the closure stored in the array?
 	expr DOT (memberName = ident) # DotExpr
-	| expr (LBRACK (typeArgs = typeExprList) RBRACK)? LPAREN (
-		args = argList
-	)? RPAREN										# CallExpr
+	| expr (fallible = BANG)? (
+		LBRACK (typeArgs = typeExprList) RBRACK
+	)? LPAREN (args = argList)? RPAREN				# CallExpr
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
 	| expr AS (ty = typeExpr)						# AsExpr
 	| expr QUEST									# ExistsExpr
@@ -238,7 +240,7 @@ closureExpr_:
 	)? (body = block);
 
 structExpr_: (ty = typeExpr) LBRACE (fields = fieldList)? RBRACE;
-tupleExpr_: LBRACK (elements += expr)* RBRACK;
+tupleExpr_: LBRACK (elements = exprList)? RBRACK;
 // END EXPRESSIONS
 
 // LITERALS
@@ -272,7 +274,7 @@ typeVarList: (typeVar (COMMA typeVar)*);
 
 // COMMON ELEMENTS
 
-ident: Ident | reservedKeyword;
+ident: HashIdent | Ident | reservedKeyword;
 param: (name = ident) (optional = QUEST)? COLON (
 		(ty = typeExpr)?
 	);
@@ -283,6 +285,7 @@ arg: (expr | namedArg);
 identList: (ident (COMMA ident)*);
 paramList: (param (COMMA param)*);
 typeExprList: (typeExpr (COMMA typeExpr)*);
+exprList: (expr (COMMA expr)*);
 fieldList: (field (COMMA field)*);
 argList: (arg (COMMA arg)*);
 block: LBRACE (stmts += stmt)* RBRACE;

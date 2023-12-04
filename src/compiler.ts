@@ -60,5 +60,3 @@ async function main() {
   const { ast, diagnostics } = ctx.sourceFiles[counterFile];
   console.dir(diagnostics);
 }
-
-main();

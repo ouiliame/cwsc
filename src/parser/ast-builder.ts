@@ -28,7 +28,7 @@ export class ASTBuilderVisitor
   implements ANTLRCWScriptParserVisitor<AST.AST>
 {
   protected defaultResult(): AST.AST {
-    return AST.EMPTY;
+    throw new Error('Visitor not implemented');
   }
 
   visitSourceFile(ctx: P.SourceFileContext): AST.SourceFile {
@@ -279,36 +279,42 @@ export class ASTBuilderVisitor
 
   visitFnDefn(ctx: P.FnDefnContext): AST.FnDefn {
     const name = this.visitIdent(ctx._name);
+    const fallible = ctx._fallible ? true : false;
     const typeParams = ctx._typeParams
       ? this.visitTypeVarList(ctx._typeParams)
       : null;
     const params = ctx._params ? this.visitParamList(ctx._params) : null;
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.FnDefn(name, typeParams, params, returnTy, body).$(ctx);
+    return new AST.FnDefn(name, fallible, typeParams, params, returnTy, body).$(
+      ctx
+    );
   }
 
   visitInstantiateDefn(ctx: P.InstantiateDefnContext): AST.InstantiateDefn {
+    const fallible = ctx._fallible ? true : false;
     const params = ctx._params ? this.visitParamList(ctx._params) : null;
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.InstantiateDefn(params, returnTy, body).$(ctx);
+    return new AST.InstantiateDefn(fallible, params, returnTy, body).$(ctx);
   }
 
   visitExecDefn(ctx: P.ExecDefnContext): AST.ExecDefn {
     const name = this.visitIdent(ctx._name);
+    const fallible = ctx._fallible ? true : false;
     const params = ctx._params ? this.visitParamList(ctx._params) : null;
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.ExecDefn(name, params, returnTy, body).$(ctx);
+    return new AST.ExecDefn(name, fallible, params, returnTy, body).$(ctx);
   }
 
   visitQueryDefn(ctx: P.QueryDefnContext): AST.QueryDefn {
     const name = this.visitIdent(ctx._name);
+    const fallible = ctx._fallible ? true : false;
     const params = ctx._params ? this.visitParamList(ctx._params) : null;
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.QueryDefn(name, params, returnTy, body).$(ctx);
+    return new AST.QueryDefn(name, fallible, params, returnTy, body).$(ctx);
   }
 
   //#endregion Definitions
@@ -322,11 +328,12 @@ export class ASTBuilderVisitor
 
   visitCallExpr(ctx: P.CallExprContext): AST.CallExpr {
     const fn = this.expr(ctx.expr());
+    const fallible = ctx._fallible ? true : false;
     const typeArgs = ctx._typeArgs
       ? this.visitTypeExprList(ctx._typeArgs)
       : null;
     const args = ctx._args ? this.visitArgList(ctx._args) : null;
-    return new AST.CallExpr(fn, typeArgs, args).$(ctx);
+    return new AST.CallExpr(fn, fallible, typeArgs, args).$(ctx);
   }
 
   visitIndexExpr(ctx: P.IndexExprContext): AST.IndexExpr {
@@ -425,9 +432,7 @@ export class ASTBuilderVisitor
   }
 
   visitTupleExpr_(ctx: P.TupleExpr_Context): AST.TupleExpr {
-    let elements = ctx._elements
-      ? new AST.List(ctx._elements.map((e) => this.expr(e)))
-      : AST.List.empty<AST.Expr>();
+    let elements = ctx._elements ? this.visitExprList(ctx._elements) : null;
     return new AST.TupleExpr(elements).$(ctx);
   }
 
@@ -579,6 +584,10 @@ export class ASTBuilderVisitor
 
   visitParamList(ctx: P.ParamListContext): AST.List<AST.Param> {
     return new AST.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
+  }
+
+  visitExprList(ctx: P.ExprListContext): AST.List<AST.Expr> {
+    return new AST.List(ctx.expr().map((e) => this.expr(e))).$(ctx);
   }
 
   visitTypeExprList(ctx: P.TypeExprListContext): AST.List<AST.TypeExpr> {

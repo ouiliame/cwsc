@@ -420,7 +420,7 @@ export class Expr extends AST {
   }
 }
 export class TupleExpr extends Expr {
-  constructor(public exprs: List<Expr>) {
+  constructor(public exprs: List<Expr> | null) {
     super();
   }
 }
@@ -463,6 +463,7 @@ export class IndexExpr extends Expr {
 export class CallExpr extends Expr {
   constructor(
     public fn: Expr,
+    public fallible: boolean,
     public typeArgs: List<TypeExpr> | null,
     public args: List<Arg> | null
   ) {
@@ -719,6 +720,7 @@ export class TypeAliasDefn extends Defn {
 export class FnDefn extends Defn {
   constructor(
     public name: Ident,
+    public fallible: boolean,
     public typeParams: List<TypeVar> | null,
     public params: List<Param> | null,
     public returnTy: TypeExpr | null,
@@ -730,6 +732,7 @@ export class FnDefn extends Defn {
 
 export class InstantiateDefn extends Defn {
   constructor(
+    public fallible: boolean,
     public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block
@@ -741,6 +744,7 @@ export class InstantiateDefn extends Defn {
 export class ExecDefn extends Defn {
   constructor(
     public name: Ident,
+    public fallible: boolean,
     public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block
@@ -752,6 +756,7 @@ export class ExecDefn extends Defn {
 export class QueryDefn extends Defn {
   constructor(
     public name: Ident,
+    public fallible: boolean,
     public params: List<Param> | null,
     public returnTy: TypeExpr | null,
     public body: Block

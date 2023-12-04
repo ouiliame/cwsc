@@ -102,6 +102,7 @@ import { ArgContext } from "./CWScriptParser";
 import { IdentListContext } from "./CWScriptParser";
 import { ParamListContext } from "./CWScriptParser";
 import { TypeExprListContext } from "./CWScriptParser";
+import { ExprListContext } from "./CWScriptParser";
 import { FieldListContext } from "./CWScriptParser";
 import { ArgListContext } from "./CWScriptParser";
 import { BlockContext } from "./CWScriptParser";
@@ -1285,6 +1286,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeExprList?: (ctx: TypeExprListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.exprList`.
+	 * @param ctx the parse tree
+	 */
+	enterExprList?: (ctx: ExprListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.exprList`.
+	 * @param ctx the parse tree
+	 */
+	exitExprList?: (ctx: ExprListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.fieldList`.

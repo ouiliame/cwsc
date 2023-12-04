@@ -88,7 +88,7 @@ export class CWScriptParser {
     return parser.parse();
   }
 
-  public static async parseFile(sourceFile: string): AST.SourceFile {
+  public static async parseFile(sourceFile: string): Promise<ParseResult> {
     // read the file
     let sourceInput = await readFile(sourceFile, 'utf8');
     let parser = new CWScriptParser(sourceInput, sourceFile);
@@ -100,6 +100,7 @@ export class CWScriptParser {
    */
   public parse(): ParseResult {
     const { parseTree, diagnostics } = this.antlrParse();
+    if (diagnostics.length > 0) return { diagnostics };
     const astBuilder = new ASTBuilderVisitor(this.sourceText);
     const ast = astBuilder.visitSourceFile(parseTree);
     const astValidator = new ASTValidatorVisitor(
