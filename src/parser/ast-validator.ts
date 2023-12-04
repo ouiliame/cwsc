@@ -38,7 +38,10 @@ const RESERVED_KEYWORDS = [
 ];
 
 export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
-  constructor(public sourceText: TextView) {
+  constructor(
+    public sourceText: TextView,
+    public sourceFile: string | null = null
+  ) {
     super();
   }
 
@@ -47,7 +50,7 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
       message,
       range: this.rangeOfNode(node),
       severity: DiagnosticSeverity.Error,
-      source: 'cwscript/ast-validator',
+      source: 'cwscript/parser/ast-validator',
     };
   }
 
@@ -56,7 +59,7 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
       message,
       range: this.rangeOfNode(node),
       severity: DiagnosticSeverity.Warning,
-      source: 'cwscript/ast-validator',
+      source: 'cwscript/parser/ast-validator',
     };
   }
 
@@ -65,7 +68,7 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
       message,
       range: this.rangeOfNode(node),
       severity: DiagnosticSeverity.Information,
-      source: 'cwscript/ast-validator',
+      source: 'cwscript/parser/ast-validator',
     };
   }
 
@@ -74,7 +77,7 @@ export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
       message,
       range: this.rangeOfNode(node),
       severity: DiagnosticSeverity.Hint,
-      source: 'cwscript/ast-validator',
+      source: 'cwscript/parser/ast-validator',
     };
   }
 

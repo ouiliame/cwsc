@@ -2,6 +2,7 @@ import toml from '@iarna/toml';
 import * as fs from 'fs';
 import * as path from 'path';
 import { formatRust } from './format';
+import { writeFile } from 'src/util/filesystem';
 
 const DEFAULT_CARGO_TOML: CargoToml = {
   dependencies: {
@@ -164,18 +165,16 @@ export class RustCrate {
   public writeToDisk(parentDir: string) {
     let root = path.resolve(parentDir);
     let crateDir = path.join(root, this.config.package.name);
-    fs.mkdirSync(crateDir, { recursive: true });
-    fs.writeFileSync(path.join(crateDir, 'Cargo.toml'), this.cargoToml());
+    writeFile(path.join(crateDir, 'Cargo.toml'), this.cargoToml());
     for (let filePath in this.files) {
       let file = this.getFile(filePath);
       // if directory for file does not exist, create it
       let dir = path.dirname(filePath);
-      fs.mkdirSync(path.join(crateDir, dir), { recursive: true });
       if (filePath.endsWith('.rs')) {
         // format rust
         file = formatRust(file);
       }
-      fs.writeFileSync(path.join(crateDir, filePath), file);
+      writeFile(path.join(crateDir, filePath), file);
     }
   }
 }
