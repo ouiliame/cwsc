@@ -45,7 +45,7 @@ export class Call extends CWSExpr {
   ) {
     super();
   }
-
+/*
   public eval(symbols: SymbolTable) {
     const fn = this.fn.eval(symbols);
     if (fn instanceof Value.Fn) {
@@ -66,7 +66,7 @@ export class Call extends CWSExpr {
     } else {
       throw new Error('Cannot call non-function');
     }
-  }
+  }*/
 }
 
 export class As extends CWSExpr {

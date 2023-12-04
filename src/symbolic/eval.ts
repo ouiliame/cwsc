@@ -1,7 +1,7 @@
 import { AST, AndExpr, ArrayTypeExpr, AsExpr, AssignOp, AssignStmt, BinOpExpr, Binding, CallExpr, ClosureExpr, ConstStmt, ContractDefn, Defn, DotExpr, EmitStmt, EnumDefn, EnumDefnTypeExpr, EnumVariantStructDefn, EnumVariantTupleDefn, EnumVariantUnitDefn, ErrorDefn, EventDefn, ExecDefn, ExecStmt, ExistsExpr, Expr, FailExpr, FailStmt, FnDefn, ForStmt, GroupedExpr, GroupedTypeExpr, Ident, IdentBinding, IdentExpr, IdentTypeExpr, IfExpr, IfStmt, ImportStmt, InExpr, IndexAssignStmt, IndexExpr, InstantiateDefn, InstantiateStmt, InterfaceDefn, IsExpr, LetStmt, MemberAssignStmt, MemberTypeExpr, NotExpr, OptionTypeExpr, OrExpr, Param, ParamzdTypeExpr, QueryDefn, QueryExpr, QueryNowExpr, ReturnStmt, ShortTryExpr, StateBlockDefn, StateItemDefn, StateMapDefn, Stmt, StructBinding, StructDefn, StructDefnTypeExpr, StructExpr, TryCatchElseExpr, TupleBinding, TupleDefn, TupleDefnTypeExpr, TupleExpr, TypeAliasDefn, TypeExpr, TypeVarExpr, UnitDefn, UnitDefnTypeExpr, UnitExpr, Block, List } from "../ast";
 import { ArrayTypeExprContext } from "../grammar/CWScriptParser";
 import { CWSExpr, CWSType, CWSValue, IR } from "../ir";
-import { CWSAnyType, CWSArrayType, CWSBoolType, CWSContractType, CWSEnumType, CWSEnumVariant, CWSEnumVariantStructType, CWSEnumVariantTupleType, CWSErrorType, CWSEventType, CWSExecFnType, CWSFnType, CWSInstantiateFnType, CWSInterfaceType, CWSOptionType, CWSPlaceholderType, CWSQueryFnType, CWSStructType, CWSTupleType, CWSTypeAliasType, CWSVoidType } from "../ir/types";
+import { CWSAnyType, CWSArrayType, CWSBoolType, CWSContractType, CWSEnumType, CWSEnumVariant, CWSEnumVariantStructType, CWSEnumVariantTupleType, CWSErrorType, CWSEventType, CWSExecFnType, CWSFnType, CWSInstantiateFnType, CWSInterfaceType, CWSMapType, CWSOptionType, CWSPlaceholderType, CWSQueryFnType, CWSStructType, CWSTupleType, CWSTypeAliasType, CWSVoidType } from "../ir/types";
 import { variantStruct } from "../rust-syntax";
 
 export interface ProjectSymbolTable {
@@ -263,37 +263,29 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
 
         if (defn instanceof StateBlockDefn) {
             if (!evaluate) {
-                if (this._state.fields.find(x => x.name == defn.name.value)) {
+                if (this._state) {
                     throw new Error("state already defined")
                 }
-                this._state.fields.push({name: defn.name.value, ty: new CWSPlaceholderType(defn.name.value)})
+                
+                defn.stateFields.forEach(field => {
+                    if (field instanceof StateItemDefn) {
+                        this._state.fields.push({ name: field.name.value, ty: new CWSPlaceholderType(field.name.value) })
+                    }
+                    if (field instanceof StateMapDefn) {
+                        this._state.fields.push({ name: field.name.value, ty: new CWSPlaceholderType(field.name.value) })
+                    }
+                })
             }
-            throw new Error("Method not implemented.");
-        }
 
-        if (defn instanceof StateItemDefn) {
-            if (!evaluate) {
-                if (this._state.fields.find(x => x.name == defn.name.value)) {
-                    throw new Error("state already defined")
+            defn.stateFields.forEach((field, i) => {
+                if (field instanceof StateItemDefn) {
+                    this._state.fields[i].ty = evalType(this, field.ty)
                 }
-                this._state.fields.push({name: defn.name.value, ty: new CWSPlaceholderType(defn.name.value)})
-                return
-            }
-            let index = this._state.fields.findIndex(x => x.name == defn.name.value)
-            this._state.fields[index].ty = evalType(this, defn.ty)
-        }
-
-        if (defn instanceof StateMapDefn) {
-            if (!evaluate) {
-                if (this._state.fields.find(x => x.name == defn.name.value)) {
-                    throw new Error("state already defined")
+                if (field instanceof StateMapDefn) {
+                    this._state.fields[i].ty = new CWSMapType(evalType(this, field.indexTy), evalType(this, field.ty)) 
                 }
-                this._state.fields.push({name: defn.name.value, ty: new CWSPlaceholderType(defn.name.value)})
-                return
-            }
-            throw new Error("Method not implemented.");
-            // this._state.set(defn.name.value, new CWSMapType(this.evalType(defn.indexTy), this.evalType(defn.valueTy)))
-        }
+            })
+        } 
 
         throw new Error("Method not implemented.");
     }

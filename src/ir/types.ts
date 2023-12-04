@@ -70,6 +70,15 @@ export class CWSOptionType<T extends CWSType = CWSType> extends CWSType {
   }
 }
 
+export class CWSMapType extends CWSType {
+  constructor(
+    public keyTy: CWSType,
+    public valueTy: CWSType
+  ) {
+    super(`Map[${keyTy.name}, ${valueTy.name}]`);
+  }
+}
+
 export class CWSArrayType<T extends CWSType = CWSType> extends CWSType {
   constructor(
     public ty: T,
@@ -596,7 +605,7 @@ export function structTy(
 export function tp(name: string, bound?: CWSType): CWSTypeParam {
   return new CWSTypeParam(name, bound);
 }
-
+/*
 export function fnTy(
   fallible: boolean,
   paramTys: CWSType[],
@@ -612,7 +621,7 @@ const uintTy = new CWSType('Uint', [intTy]);
 
 const addFnTy = fnTy(false, [intTy, intTy], intTy);
 const divFnTy = fnTy(true, [intTy, intTy], intTy);
-
+*/
 /*
 struct Map[%K, %V] {
   key: K,
@@ -641,6 +650,7 @@ struct Map[%K, %V] {
 
 // let f5: (T, T) -> U
 // let f6: (U, U) -> T
+/*
 const T = tp('T');
 const U = tp('U');
 const f5 = new CWSTypeFn('f5', [T, U], ({ T, U }) =>
@@ -652,7 +662,7 @@ const f6 = new CWSTypeFn('f6', [T, U], ({ T, U }) =>
 
 console.log(f5.isSubtypeOf(f6));
 console.log(f6.isSubtypeOf(f5));
-
+*/
 /*
 struct Map[%K, %V] {
   key: K,
@@ -664,7 +674,7 @@ let b: Map[Uint, Int]
 let c: Map[Int, Uint]
 let d: Map[Int, Int]
 */
-
+/*
 const mapStructTy = new CWSTypeFn('Map', [tp('K'), tp('V')], ({ K, V }) =>
   structTy(`Map[${K.name}, ${V.name}]`, { key: K, value: V })
 );
@@ -710,3 +720,4 @@ console.table([
     tyD.isSubtypeOf(tyD),
   ],
 ]);
+*/

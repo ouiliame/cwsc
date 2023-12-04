@@ -1,5 +1,5 @@
 import { CWScriptParser } from './parser';
-import { SymbolIndex, SymbolTable } from './symbol-table';
+import { SymbolIndex, SymbolTable } from './symbolic/symbol-table';
 import * as AST from './ast';
 import * as IR from './ir';
 import { RustCodegen } from './codegen';

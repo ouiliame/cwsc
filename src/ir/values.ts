@@ -59,14 +59,14 @@ export class Fn extends CWSValue {
   ) {
     super();
   }
-
+/*
   public get ty(): Type.CWSFnType {
     return new Type.CWSFnType(
       this.fallible,
       this.params.map((x) => x.ty),
       this.returnTy
     );
-  }
+  }*/
 
   public get isGeneric(): boolean {
     return this.typeParams.length > 0;
@@ -79,7 +79,7 @@ export class Fn extends CWSValue {
   public get fallible(): boolean {
     return this.name.endsWith('!');
   }
-
+/*
   public call(
     symbols: SymbolTable,
     typeArgs: CWSType[],
@@ -145,7 +145,7 @@ export class Fn extends CWSValue {
       result = stmt.eval(scope);
     }
     return result;
-  }
+  }*/
 }
 
 export class InstantiateFn extends Fn {

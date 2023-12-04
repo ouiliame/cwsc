@@ -10,7 +10,6 @@ export class SourceFileEntry {
   constructor(public path: string, public symbols: SymbolEntry[]) {}
 }
 
-
 export class SymbolEntry {
   constructor(public name: string, public value: any) {}
 }
