@@ -1,6 +1,7 @@
 import * as IR from './ir';
 import { CWScriptProject } from './projects';
 import * as Rust from './rust-syntax';
+import { writeFile } from './util/filesystem';
 import { pascalToSnake, snakeToPascal } from './util/strings';
 
 import * as toml from '@iarna/toml';
@@ -168,19 +169,20 @@ const DOTCARGO_CONFIG = toml.stringify({
 
 export class CGEnv {
   constructor(public crates: { [name: string]: Crate } = {}) {}
-  public writeToDisk(buildDir: string) {
+  public async writeToDisk(buildDir: string) {
     let root = path.resolve(buildDir);
     for (let crateName in this.crates) {
       let crate = this.crates[crateName];
       let crateDir = path.join(root, crateName.split('-')[1]);
-      fs.mkdirSync(crateDir, { recursive: true });
-      fs.writeFileSync(path.join(crateDir, 'Cargo.toml'), crate.cargoToml());
+      await writeFile(path.join(crateDir, 'Cargo.toml'), crate.cargoToml());
       for (let filePath in crate.files) {
         let file = crate.files[filePath];
         // if directory for file does not exist, create it
         let dir = path.dirname(filePath);
-        fs.mkdirSync(path.join(crateDir, dir), { recursive: true });
-        fs.writeFileSync(path.join(crateDir, filePath), file);
+        await writeFile(
+          path.join(crateDir, dir, path.basename(filePath)),
+          file
+        );
       }
     }
   }

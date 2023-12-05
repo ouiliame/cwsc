@@ -1,7 +1,6 @@
-import * as fs from 'fs';
 import * as path from 'path';
-import { globSync } from 'glob';
 import * as zod from 'zod';
+import { findFiles, readFile, writeFile } from './util/filesystem';
 
 /*
  Considerations: we might be using this from a browser, -- we need to separate the
@@ -68,10 +67,7 @@ export type CWScriptProjectConfig = zod.infer<
 export class CWScriptProject {
   public config: CWScriptProjectConfig;
 
-  constructor(
-    public projectRoot: string,
-    config: CWScriptProjectConfig
-  ) {
+  constructor(public projectRoot: string, config: CWScriptProjectConfig) {
     this.config = CWScriptProjectConfigSchema.parse(config);
   }
 
@@ -79,14 +75,14 @@ export class CWScriptProject {
     return new CWScriptProject(projectRoot, config);
   }
 
-  public update(newConfig: Partial<CWScriptProjectConfig> = {}) {
+  public async update(newConfig: Partial<CWScriptProjectConfig> = {}) {
     let config = {
       ...this.config,
       ...newConfig,
     };
     this.config = CWScriptProjectConfigSchema.parse(config);
     // write the new config to the project config file
-    fs.writeFileSync(
+    await writeFile(
       path.join(this.projectRoot, 'cwsproject.json'),
       JSON.stringify(config, null, 2)
     );
@@ -105,32 +101,34 @@ export class CWScriptProject {
     return path.resolve(this.projectRoot, this.config.packagesDir);
   }
 
-  public static fromConfigFile(configPath: string): CWScriptProject {
+  public static async fromConfigFile(
+    configPath: string
+  ): Promise<CWScriptProject> {
     let absPath = path.resolve(configPath);
-    let configJson = fs.readFileSync(absPath, 'utf8');
+    let configJson = await readFile(absPath);
     return new CWScriptProject(path.dirname(absPath), JSON.parse(configJson));
   }
 
-  public static fromProjectRoot(projectRoot: string): CWScriptProject {
+  public static async fromProjectRoot(
+    projectRoot: string
+  ): Promise<CWScriptProject> {
     return CWScriptProject.fromConfigFile(
       path.join(projectRoot, 'cwsproject.json')
     );
   }
 
-  public get sourceFiles(): string[] {
-    return globSync('**/*.cws', { cwd: this.sourceDir, absolute: true });
+  public async getSourceFiles(): Promise<string[]> {
+    return findFiles(this.sourceDir, /\.cws$/);
   }
 
-  public get packages(): CWScriptProject[] {
+  public async getPackages(): Promise<CWScriptProject[]> {
     let packagesDirPath = path.join(this.projectRoot, this.packagesDir);
-    let packageCfgs = globSync('**/cwsproject.json', {
-      cwd: packagesDirPath,
-      absolute: true,
-    });
-    return packageCfgs.map((cfgPath) => {
+    let packageCfgs = await findFiles(packagesDirPath, /\/?cwsproject\.json$/);
+    let packages = packageCfgs.map(async (cfgPath) => {
       // read the package's cwsproject.json
-      return CWScriptProject.fromConfigFile(cfgPath);
+      return await CWScriptProject.fromConfigFile(cfgPath);
     });
+    return Promise.all(packages);
   }
 
   public build() {}

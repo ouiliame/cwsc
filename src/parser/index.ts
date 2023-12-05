@@ -1,6 +1,12 @@
 // @ts-nocheck
-import * as fs from 'fs';
-import { ANTLRErrorListener, CharStreams, CommonTokenStream } from 'antlr4ts';
+import {
+  ANTLRErrorListener,
+  CharStreams,
+  CommonTokenStream,
+  DefaultErrorStrategy,
+  Parser,
+  IntervalSet,
+} from 'antlr4ts';
 import { RecognitionException } from 'antlr4ts/RecognitionException';
 import path from 'path';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
@@ -12,6 +18,8 @@ import {
 } from '../grammar/CWScriptParser';
 import { TextView } from '../util/position';
 import { ASTBuilderVisitor } from './ast-builder';
+import { ASTValidatorVisitor } from './ast-validator';
+import { readFile } from '../util/filesystem';
 
 export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
   public diagnostics: Diagnostic[] = [];
@@ -31,15 +39,19 @@ export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
         start: { line: line - 1, character: charPositionInLine },
         end: { line: line - 1, character: charPositionInLine + 1 },
       },
+      source: 'cwscript/parser/antlr',
     });
   }
 }
 
+export interface ParseResult {
+  ast?: AST.SourceFile;
+  diagnostics: Diagnostic[];
+}
+
 export class CWScriptParser {
-  constructor(
-    public sourceInput: string,
-    sourceFile: string | null = null
-  ) {
+  public sourceFile: string | null;
+  constructor(public sourceInput: string, sourceFile: string | null = null) {
     this.sourceText = new TextView(sourceInput);
     this.sourceFile = sourceFile ? path.resolve(sourceFile) : null;
   }
@@ -47,14 +59,14 @@ export class CWScriptParser {
   public static parse(
     sourceInput: string,
     sourceFile: string | null = null
-  ): AST.AST {
-    let parser = new CWScriptParser(sourceInput, sourceFile);
+  ): ParseResult {
+    const parser = new CWScriptParser(sourceInput, sourceFile);
     return parser.parse();
   }
 
-  public static parseFile(sourceFile: string): AST.SourceFile {
+  public static async parseFile(sourceFile: string): Promise<ParseResult> {
     // read the file
-    let sourceInput = fs.readFileSync(sourceFile, 'utf8');
+    let sourceInput = await readFile(sourceFile, 'utf8');
     let parser = new CWScriptParser(sourceInput, sourceFile);
     return parser.parse();
   }
@@ -62,33 +74,35 @@ export class CWScriptParser {
   /**
    * This is the public-facing interface for parsing a source file.
    */
-  public parse(): AST.SourceFile {
-    let parseTree = this.antlrParse();
-    let astBuilder = new ASTBuilderVisitor(this.sourceText);
-    return astBuilder.visitSourceFile(parseTree);
+  public parse(): ParseResult {
+    const { parseTree, diagnostics } = this.antlrParse();
+    const astBuilder = new ASTBuilderVisitor(this.sourceText);
+    const ast = astBuilder.visitSourceFile(parseTree);
+    const astValidator = new ASTValidatorVisitor(
+      this.sourceText,
+      this.sourceFile
+    );
+    diagnostics.push(...astValidator.visit(ast));
+    return { ast, diagnostics };
   }
 
-  protected antlrParse(): SourceFileContext {
-    let syntaxErrorListener = new CWSSyntaxErrorListener();
-    let antlrLexer = new ANTLRCWScriptLexer(
+  protected antlrParse(): {
+    parseTree: SourceFileContext;
+    diagnostics: Diagnostic[];
+  } {
+    const syntaxErrorListener = new CWSSyntaxErrorListener();
+    const antlrLexer = new ANTLRCWScriptLexer(
       CharStreams.fromString(this.sourceInput)
     );
     antlrLexer.removeErrorListeners();
     antlrLexer.addErrorListener(syntaxErrorListener);
-    let antlrParser = new ANTLRCWScriptParser(
+    const antlrParser = new ANTLRCWScriptParser(
       new CommonTokenStream(antlrLexer)
     );
     antlrParser.removeErrorListeners();
     antlrParser.addErrorListener(syntaxErrorListener);
 
-    let tree = antlrParser.sourceFile();
-    let errors = syntaxErrorListener.diagnostics.filter(
-      (d) => d.severity === DiagnosticSeverity.Error
-    );
-    if (errors.length > 0) {
-      console.table(errors[0]);
-      throw new Error('Syntax error occurred while parsing.');
-    }
-    return tree;
+    const parseTree = antlrParser.sourceFile();
+    return { parseTree, diagnostics: syntaxErrorListener.diagnostics };
   }
 }
