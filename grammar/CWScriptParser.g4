@@ -283,12 +283,12 @@ namedArg: (name = ident) EQ (value = expr);
 arg: (expr | namedArg);
 
 identList: (ident (COMMA ident)*);
-parenParamList: LPAREN (param (COMMA param)*) RPAREN;
-braceParamList: LBRACE (param (COMMA param)*) COMMA? RBRACE;
-barParamList: BAR (param (COMMA param)*) BAR;
-brackTypeParamList: LBRACK (typeVar (COMMA typeVar)*) RBRACK;
-brackTypeExprList: LBRACK (typeExpr (COMMA typeExpr)*) RBRACK;
-braceFieldList: LBRACE (field (COMMA field)*) COMMA? RBRACE;
+parenParamList: LPAREN (param (COMMA param)*)? RPAREN;
+braceParamList: LBRACE (param (COMMA param)*)? COMMA? RBRACE;
+barParamList: BAR (param (COMMA param)*)? BAR;
+brackTypeParamList: LBRACK (typeVar (COMMA typeVar)*)? RBRACK;
+brackTypeExprList: LBRACK (typeExpr (COMMA typeExpr)*)? RBRACK;
+braceFieldList: LBRACE (field (COMMA field)*)? COMMA? RBRACE;
 
 typeExprList: (typeExpr (COMMA typeExpr)*);
 block: LBRACE (stmts += stmt)* RBRACE;

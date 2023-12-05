@@ -640,6 +640,9 @@ export class ContractDefn extends Defn {
 }
 
 export class InterfaceDefn extends Defn {
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
   constructor(
     public name: Ident,
     public baseInterfaces: List<TypeExpr>,
@@ -650,6 +653,10 @@ export class InterfaceDefn extends Defn {
 }
 
 export class StructDefn extends Defn {
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
+
   constructor(
     public name: Ident,
     public typeParams: List<TypeVar>,
@@ -660,6 +667,9 @@ export class StructDefn extends Defn {
 }
 
 export class TupleDefn extends Defn {
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
   constructor(
     public name: Ident,
     public typeParams: List<TypeVar>,
@@ -670,12 +680,18 @@ export class TupleDefn extends Defn {
 }
 
 export class UnitDefn extends Defn {
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
   constructor(public name: Ident, public typeParams: List<TypeVar>) {
     super();
   }
 }
 
 export class EnumDefn extends Defn {
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
   constructor(
     public name: Ident,
     public typeParams: List<TypeVar>,
@@ -708,6 +724,10 @@ export class EnumVariantUnitDefn extends EnumVariantDefn {
 }
 
 export class TypeAliasDefn extends Defn {
+  public isTypeExpr(): this is TypeExpr {
+    return true;
+  }
+
   constructor(
     public name: Ident,
     public typeParams: List<TypeVar>,
