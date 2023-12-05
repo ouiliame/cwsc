@@ -1,6 +1,5 @@
 import * as AST from '../ast';
-import { TextView } from '../util/position';
-import { Diagnostic, DiagnosticSeverity, Range } from 'vscode-languageserver';
+import type { Diagnostic } from 'vscode-languageserver';
 import { isSnakeCase, isPascalCase, isCapitalSnake } from '../util/strings';
 
 const RESERVED_KEYWORDS = [
@@ -37,72 +36,8 @@ const RESERVED_KEYWORDS = [
   'unit',
 ];
 
-export class ASTValidatorVisitor extends AST.ASTVisitor<Diagnostic[]> {
-  constructor(
-    public sourceText: TextView,
-    public sourceFile: string | null = null
-  ) {
-    super();
-  }
-
-  makeError(node: AST.AST, message: string): Diagnostic {
-    return {
-      message,
-      range: this.rangeOfNode(node),
-      severity: DiagnosticSeverity.Error,
-      source: 'cwscript/parser/ast-validator',
-    };
-  }
-
-  makeWarning(node: AST.AST, message: string): Diagnostic {
-    return {
-      message,
-      range: this.rangeOfNode(node),
-      severity: DiagnosticSeverity.Warning,
-      source: 'cwscript/parser/ast-validator',
-    };
-  }
-
-  makeInfo(node: AST.AST, message: string): Diagnostic {
-    return {
-      message,
-      range: this.rangeOfNode(node),
-      severity: DiagnosticSeverity.Information,
-      source: 'cwscript/parser/ast-validator',
-    };
-  }
-
-  makeHint(node: AST.AST, message: string): Diagnostic {
-    return {
-      message,
-      range: this.rangeOfNode(node),
-      severity: DiagnosticSeverity.Hint,
-      source: 'cwscript/parser/ast-validator',
-    };
-  }
-
-  rangeOfNode(node: AST.AST): Range {
-    if (!node.$ctx) {
-      throw new Error('Cannot get range for node without context');
-    }
-    return this.sourceText.rangeOfNode(node.$ctx)!;
-  }
-
-  rangeOfToken(node: AST.AST, token: string): Range {
-    if (!node.$ctx) {
-      throw new Error('Cannot get range for node without context');
-    }
-    return this.sourceText.rangeOfToken(node.$ctx, token)!;
-  }
-
-  collect(values: Diagnostic[][]): Diagnostic[] {
-    return values.flat();
-  }
-
-  defaultVisit(node: AST.AST): Diagnostic[] {
-    return this.collect(this.visitChildren(node));
-  }
-
+export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
+  public readonly SOURCE = 'cwscript/parser/syntax-validator';
   // SKIP: SourceFile
 
   visitImportStmt(node: AST.ImportStmt): Diagnostic[] {

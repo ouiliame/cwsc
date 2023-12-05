@@ -10,6 +10,7 @@ import { Diagnostic } from 'vscode-languageserver';
 import { readFile } from './util/filesystem';
 import { TextView } from './util/position';
 import { SymbolicEvalVisitor } from './symbolic/eval-visitor';
+import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
 
 export interface BuildContext {
   sourceFiles: {
@@ -43,14 +44,14 @@ export class CWScriptCompiler {
     // read each file's contents and parse into AST
     for (let sourceFile of sourceFiles) {
       const text = await readFile(sourceFile);
-      const textView = new TextView(text);
       const { ast, diagnostics } = CWScriptParser.parse(text, sourceFile);
       if (!ast) {
-        continue; 
+        continue;
       }
-      const evalVisitor = new SymbolicEvalVisitor(textView, sourceFile);
-      const { contracts } = evalVisitor.visitSourceFile(ast);
-      console.dir(contracts);
+
+      const staticAnalysisVisitor = new StaticAnalysisVisitor(text, sourceFile);
+      diagnostics.push(...staticAnalysisVisitor.visit(ast));
+
       ctx.sourceFiles[sourceFile] = {
         text,
         ast,
@@ -87,6 +88,7 @@ async function main() {
   const ctx = await compiler.build();
   const counterFile = path.resolve('examples/counter/src/Counter.cws');
   const { ast, diagnostics } = ctx.sourceFiles[counterFile];
+  console.dir(diagnostics);
 }
 
 main();

@@ -1,5 +1,11 @@
 import { ParserRuleContext } from 'antlr4ts';
 import type { SymbolTable } from './symbol-table';
+import { TextView } from './util/position';
+import {
+  type Range,
+  type Diagnostic,
+  DiagnosticSeverity,
+} from 'vscode-languageserver';
 
 export abstract class AST {
   public $ctx: ParserRuleContext | null = null;
@@ -11,7 +17,7 @@ export abstract class AST {
   }
 
   public get symbols(): SymbolTable {
-    return (this._symbols ?? this.$parent?.symbols)!
+    return (this._symbols ?? this.$parent?.symbols)!;
   }
 
   constructor(public $parent: AST | null = null) {}
@@ -1007,7 +1013,7 @@ export class Block extends List<Stmt> {}
 //#endregion Common
 
 export class ASTVisitor<T> {
-  private getVisitor(node: AST): ((node: AST) => T) | undefined {
+  protected getVisitor(node: AST): ((node: AST) => T) | undefined {
     // @ts-ignore
     return this[`visit${node.constructor.name}`];
   }
@@ -1031,5 +1037,73 @@ export class ASTVisitor<T> {
     } else {
       return this.defaultVisit(node);
     }
+  }
+}
+
+export abstract class ASTValidatorVisitor extends ASTVisitor<Diagnostic[]> {
+  abstract get SOURCE(): string;
+
+  public readonly sourceText: TextView;
+  constructor(
+    sourceText: string | TextView,
+    public readonly sourceFile: string | null = null
+  ) {
+    super();
+    if (typeof sourceText === 'string') {
+      this.sourceText = new TextView(sourceText);
+    } else {
+      this.sourceText = sourceText;
+    }
+  }
+
+  makeError(node: AST, message: string): Diagnostic {
+    return {
+      message,
+      range: this.rangeOfNode(node),
+      severity: DiagnosticSeverity.Error,
+      source: this.SOURCE,
+    };
+  }
+
+  makeWarning(node: AST, message: string): Diagnostic {
+    return {
+      message,
+      range: this.rangeOfNode(node),
+      severity: DiagnosticSeverity.Warning,
+      source: this.SOURCE,
+    };
+  }
+
+  makeInfo(node: AST, message: string): Diagnostic {
+    return {
+      message,
+      range: this.rangeOfNode(node),
+      severity: DiagnosticSeverity.Information,
+      source: this.SOURCE,
+    };
+  }
+
+  makeHint(node: AST, message: string): Diagnostic {
+    return {
+      message,
+      range: this.rangeOfNode(node),
+      severity: DiagnosticSeverity.Hint,
+      source: this.SOURCE,
+    };
+  }
+
+  rangeOfNode(node: AST): Range {
+    if (!node.$ctx) {
+      throw new Error('Cannot get range for node without context');
+    }
+    return this.sourceText.rangeOfNode(node.$ctx)!;
+  }
+
+  collect(values: Diagnostic[][]): Diagnostic[] {
+    return values.flat();
+  }
+
+  defaultVisit(node: AST): Diagnostic[] {
+    return this.collect(this.visitChildren(node));
   }
 }

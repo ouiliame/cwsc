@@ -18,7 +18,7 @@ import {
 } from '../grammar/CWScriptParser';
 import { TextView } from '../util/position';
 import { ASTBuilderVisitor } from './ast-builder';
-import { ASTValidatorVisitor } from './ast-validator';
+import { SyntaxValidatorVisitor } from './syntax-validator';
 import { readFile } from '../util/filesystem';
 
 export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
@@ -50,8 +50,11 @@ export interface ParseResult {
 }
 
 export class CWScriptParser {
-  public sourceFile: string | null;
-  constructor(public sourceInput: string, sourceFile: string | null = null) {
+  public readonly sourceFile: string | null;
+  constructor(
+    public readonly sourceInput: string,
+    sourceFile: string | null = null
+  ) {
     this.sourceText = new TextView(sourceInput);
     this.sourceFile = sourceFile ? path.resolve(sourceFile) : null;
   }
@@ -78,11 +81,11 @@ export class CWScriptParser {
     const { parseTree, diagnostics } = this.antlrParse();
     const astBuilder = new ASTBuilderVisitor(this.sourceText);
     const ast = astBuilder.visitSourceFile(parseTree);
-    const astValidator = new ASTValidatorVisitor(
+    const syntaxValidator = new SyntaxValidatorVisitor(
       this.sourceText,
       this.sourceFile
     );
-    diagnostics.push(...astValidator.visit(ast));
+    diagnostics.push(...syntaxValidator.visit(ast));
     return { ast, diagnostics };
   }
 
