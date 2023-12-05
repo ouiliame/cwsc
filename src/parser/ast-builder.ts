@@ -317,6 +317,43 @@ export class ASTBuilderVisitor
     return new AST.QueryDefn(name, fallible, params, returnTy, body).$(ctx);
   }
 
+  visitErrorDefn(ctx: P.ErrorDefnContext): AST.ErrorDefn {
+    const name = this.visitIdent(ctx._name);
+    const params = ctx._params ? this.visitParamList(ctx._params) : null;
+    return new AST.ErrorDefn(name, params).$(ctx);
+  }
+
+  visitEventDefn(ctx: P.EventDefnContext): AST.EventDefn {
+    const name = this.visitIdent(ctx._name);
+    const params = ctx._params ? this.visitParamList(ctx._params) : null;
+    return new AST.EventDefn(name, params).$(ctx);
+  }
+
+  visitStateBlockDefn(ctx: P.StateBlockDefnContext): AST.StateBlockDefn {
+    const stateFields = ctx._stateFields.map((f) => this.visitStateDefn(f));
+    return new AST.StateBlockDefn(new AST.List(stateFields)).$(ctx);
+  }
+
+  visitStateDefn(
+    ctx: P.StateDefnContext
+  ): AST.StateItemDefn | AST.StateMapDefn {
+    let defn = ctx.stateItemDefn() ?? ctx.stateMapDefn();
+    return this.visit(defn!) as AST.StateItemDefn | AST.StateMapDefn;
+  }
+
+  visitStateItemDefn(ctx: P.StateItemDefnContext): AST.StateItemDefn {
+    const name = this.visitIdent(ctx._name);
+    const ty = this.typeExpr(ctx._ty);
+    return new AST.StateItemDefn(name, ty).$(ctx);
+  }
+
+  visitStateMapDefn(ctx: P.StateMapDefnContext): AST.StateMapDefn {
+    const name = this.visitIdent(ctx._name);
+    const indexTy = this.typeExpr(ctx._indexTy);
+    const ty = this.typeExpr(ctx._ty);
+    return new AST.StateMapDefn(name, indexTy, ty).$(ctx);
+  }
+
   //#endregion Definitions
 
   //#region Expressions

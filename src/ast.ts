@@ -778,10 +778,7 @@ export class EventDefn extends Defn {
 }
 
 export class StateBlockDefn extends Defn {
-  constructor(
-    public name: Ident,
-    public stateFields: List<StateItemDefn | StateMapDefn>
-  ) {
+  constructor(public stateFields: List<StateItemDefn | StateMapDefn>) {
     super();
   }
 }
