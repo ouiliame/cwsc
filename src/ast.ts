@@ -272,7 +272,7 @@ export class Stmt extends AST {
   }
 }
 export class ImportStmt extends Stmt {
-  constructor(public items: List<Ident> | null, public src: string) {
+  constructor(public items: List<Ident>, public src: StringLit) {
     super();
   }
 }
@@ -420,13 +420,13 @@ export class Expr extends AST {
   }
 }
 export class TupleExpr extends Expr {
-  constructor(public exprs: List<Expr> | null) {
+  constructor(public exprs: List<Expr>) {
     super();
   }
 }
 
 export class StructExpr extends Expr {
-  constructor(public ty: TypeExpr, public fields: List<Field> | null) {
+  constructor(public ty: TypeExpr, public fields: List<Field>) {
     super();
   }
 }
@@ -464,8 +464,8 @@ export class CallExpr extends Expr {
   constructor(
     public fn: Expr,
     public fallible: boolean,
-    public typeArgs: List<TypeExpr> | null,
-    public args: List<Arg> | null
+    public typeArgs: List<TypeExpr>,
+    public args: List<Arg>
   ) {
     super();
   }
@@ -544,7 +544,7 @@ export class ShortTryExpr extends Expr {
 export class TryCatchElseExpr extends Expr {
   constructor(
     public body: Block,
-    public catchClauses: List<CatchClause> | null,
+    public catchClauses: List<CatchClause>,
     public elseBody: Block | null
   ) {
     super();
@@ -560,7 +560,7 @@ export class CatchClause extends AST {
 export class ClosureExpr extends Expr {
   constructor(
     public fallible: boolean,
-    public params: List<Param> | null,
+    public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -632,7 +632,7 @@ export class ContractDefn extends Defn {
   constructor(
     public name: Ident,
     public base: TypeExpr | null,
-    public interfaces: List<TypeExpr> | null,
+    public interfaces: List<TypeExpr>,
     public body: Block
   ) {
     super();
@@ -642,7 +642,7 @@ export class ContractDefn extends Defn {
 export class InterfaceDefn extends Defn {
   constructor(
     public name: Ident,
-    public baseInterfaces: List<TypeExpr> | null,
+    public baseInterfaces: List<TypeExpr>,
     public body: Block
   ) {
     super();
@@ -652,7 +652,7 @@ export class InterfaceDefn extends Defn {
 export class StructDefn extends Defn {
   constructor(
     public name: Ident,
-    public typeParams: List<TypeVar> | null,
+    public typeParams: List<TypeVar>,
     public fields: List<Param>
   ) {
     super();
@@ -662,7 +662,7 @@ export class StructDefn extends Defn {
 export class TupleDefn extends Defn {
   constructor(
     public name: Ident,
-    public typeParams: List<TypeVar> | null,
+    public typeParams: List<TypeVar>,
     public elements: List<TypeExpr>
   ) {
     super();
@@ -670,7 +670,7 @@ export class TupleDefn extends Defn {
 }
 
 export class UnitDefn extends Defn {
-  constructor(public name: Ident, public typeParams: List<TypeVar> | null) {
+  constructor(public name: Ident, public typeParams: List<TypeVar>) {
     super();
   }
 }
@@ -678,7 +678,7 @@ export class UnitDefn extends Defn {
 export class EnumDefn extends Defn {
   constructor(
     public name: Ident,
-    public typeParams: List<TypeVar> | null,
+    public typeParams: List<TypeVar>,
     public variants: List<EnumVariantDefn>
   ) {
     super();
@@ -696,7 +696,7 @@ export class EnumVariantStructDefn extends EnumVariantDefn {
 }
 
 export class EnumVariantTupleDefn extends EnumVariantDefn {
-  constructor(public name: Ident, public fields: List<TypeExpr> | null) {
+  constructor(public name: Ident, public fields: List<TypeExpr>) {
     super();
   }
 }
@@ -710,7 +710,7 @@ export class EnumVariantUnitDefn extends EnumVariantDefn {
 export class TypeAliasDefn extends Defn {
   constructor(
     public name: Ident,
-    public typeParams: List<TypeVar> | null,
+    public typeParams: List<TypeVar>,
     public ty: TypeExpr
   ) {
     super();
@@ -721,8 +721,8 @@ export class FnDefn extends Defn {
   constructor(
     public name: Ident,
     public fallible: boolean,
-    public typeParams: List<TypeVar> | null,
-    public params: List<Param> | null,
+    public typeParams: List<TypeVar>,
+    public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -733,7 +733,7 @@ export class FnDefn extends Defn {
 export class InstantiateDefn extends Defn {
   constructor(
     public fallible: boolean,
-    public params: List<Param> | null,
+    public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -745,7 +745,7 @@ export class ExecDefn extends Defn {
   constructor(
     public name: Ident,
     public fallible: boolean,
-    public params: List<Param> | null,
+    public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -757,7 +757,7 @@ export class QueryDefn extends Defn {
   constructor(
     public name: Ident,
     public fallible: boolean,
-    public params: List<Param> | null,
+    public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -766,13 +766,13 @@ export class QueryDefn extends Defn {
 }
 
 export class ErrorDefn extends Defn {
-  constructor(public name: Ident, public fields: List<Param> | null) {
+  constructor(public name: Ident, public fields: List<Param>) {
     super();
   }
 }
 
 export class EventDefn extends Defn {
-  constructor(public name: Ident, public fields: List<Param> | null) {
+  constructor(public name: Ident, public fields: List<Param>) {
     super();
   }
 }
@@ -839,7 +839,7 @@ export class MemberTypeExpr extends TypeExpr {
 }
 
 export class ArrayTypeExpr extends TypeExpr {
-  constructor(public ty: TypeExpr, public size: number) {
+  constructor(public ty: TypeExpr, public size: IntLit) {
     super();
   }
 }

@@ -29,7 +29,7 @@ stmt:
 
 importStmt:
 	IMPORT LBRACE (items = identList)? RBRACE FROM (
-		src = StringLiteral
+		src = stringLit
 	) SEMI?;
 
 letStmt: LET (binding = binding_) (EQ value = expr) SEMI?;
@@ -111,23 +111,23 @@ interfaceDefn:
 	)? (body = block) SEMI?;
 
 structDefn:
-	STRUCT (name = ident) (
-		LBRACK typeParams = typeVarList RBRACK
-	)? LBRACE (fields = paramList)? RBRACE SEMI?
-	| STRUCT (name = ident) (
-		LBRACK typeParams = typeVarList RBRACK
-	)? LPAREN (fields = paramList) RPAREN SEMI?;
+	STRUCT (name = ident) (typeParams = brackTypeParamList)? (
+		fields = braceParamList
+	) SEMI? # StructDefnBrace
+	| STRUCT (name = ident) (typeParams = brackTypeParamList)? (
+		fields = parenParamList
+	) SEMI? # StructDefnParen;
 
 tupleDefn:
-	TUPLE (name = ident) (LBRACK typeParams = typeVarList RBRACK)? LBRACK (
-		elements = typeExprList
-	)? RPAREN SEMI?;
+	TUPLE (name = ident) (typeParams = brackTypeParamList)? (
+		elements = brackTypeExprList
+	) SEMI?;
 
 unitDefn:
-	UNIT (LBRACK typeParams = typeVarList RBRACK)? (name = ident) SEMI?;
+	UNIT (typeParams = brackTypeParamList)? (name = ident) SEMI?;
 
 enumDefn:
-	ENUM (name = ident) (LBRACK typeParams = typeVarList RBRACK)? LBRACE (
+	ENUM (name = ident) (typeParams = brackTypeParamList)? LBRACE (
 		variants = enumVariantDefnList
 	)? RBRACE SEMI?;
 
@@ -139,47 +139,46 @@ enumVariantDefn:
 	| enumVariantUnitDefn;
 
 enumVariantStructDefn:
-	(name = ident) LBRACE (fields = paramList)? RBRACE
-	| (name = ident) LPAREN (fields = paramList)? RPAREN;
+	(name = ident) (fields = braceParamList)	# EnumVariantStructDefnBrace
+	| (name = ident) (fields = parenParamList)	# EnumVariantStructDefnParen;
 
-enumVariantTupleDefn: (name = ident) LBRACK (
-		elements = typeExprList
-	)? RPAREN;
+enumVariantTupleDefn: (name = ident) (
+		elements = brackTypeExprList
+	);
 
 enumVariantUnitDefn: (name = ident);
 
 typeAliasDefn:
-	TYPE (name = ident) (LBRACK typeParams = typeVarList RBRACK)? EQ (
+	TYPE (name = ident) (typeParams = brackTypeParamList)? EQ (
 		ty = typeExpr
 	) SEMI?;
 
 fnDefn:
 	FN (name = ident) (fallible = BANG)? (
-		LBRACK typeParams = typeVarList RBRACK
-	)? LPAREN (params = paramList)? RPAREN (
-		ARROW (returnTy = typeExpr)
-	)? (body = block) SEMI?;
+		typeParams = brackTypeParamList
+	)? (params = parenParamList) (ARROW (returnTy = typeExpr))? (
+		body = block
+	) SEMI?;
 
 instantiateDefn:
-	H_INSTANTIATE (fallible = BANG)? LPAREN (params = paramList)? RPAREN (
+	H_INSTANTIATE (fallible = BANG)? (params = parenParamList) (
 		ARROW (returnTy = typeExpr)
 	)? (body = block) SEMI?;
 
 execDefn:
-	EXEC (name = ident) (fallible = BANG)? LPAREN (
-		params = paramList
-	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	EXEC (name = ident) (fallible = BANG)? (
+		params = parenParamList
+	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 queryDefn:
-	QUERY (name = ident) (fallible = BANG)? LPAREN (
-		params = paramList
-	)? RPAREN (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	QUERY (name = ident) (fallible = BANG)? (
+		params = parenParamList
+	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
-errorDefn:
-	ERROR (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
+errorDefn: ERROR (name = ident) (params = parenParamList) SEMI?;
 
 eventDefn:
-	EVENT (name = ident) LPAREN (params = paramList)? RPAREN SEMI?;
+	EVENT (name = ident) (params = parenParamList) RPAREN SEMI?;
 
 stateBlockDefn:
 	STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;
@@ -199,9 +198,9 @@ expr:
 	/* f[A, B]() */
 	// f[T](x) //I:s it parameterized function call or call to the closure stored in the array?
 	expr DOT (memberName = ident) # DotExpr
-	| expr (fallible = BANG)? (
-		LBRACK (typeArgs = typeExprList) RBRACK
-	)? LPAREN (args = argList)? RPAREN				# CallExpr
+	| expr (fallible = BANG)? (typeArgs = brackTypeExprList)? LPAREN (
+		(args += arg) (COMMA args += arg)*
+	)? RPAREN										# CallExpr
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
 	| expr AS (ty = typeExpr)						# AsExpr
 	| expr QUEST									# ExistsExpr
@@ -235,30 +234,32 @@ tryCatchElseExpr_:
 catchClause: CATCH (ty = typeExpr) (body = block);
 
 closureExpr_:
-	(fallible = BANG)? BAR (params = paramList)? BAR (
+	(fallible = BANG)? (params = barParamList) (
 		ARROW (returnTy = typeExpr)
 	)? (body = block);
 
-structExpr_: (ty = typeExpr) LBRACE (fields = fieldList)? RBRACE;
-tupleExpr_: LBRACK (elements = exprList)? RBRACK;
+structExpr_: (ty = typeExpr) (fields = braceFieldList);
+tupleExpr_:
+	LBRACK ((elements += expr) (COMMA (elements += expr))*)? RBRACK;
 // END EXPRESSIONS
 
 // LITERALS
-literal:
-	StringLiteral	# StringLit
-	| IntLiteral	# IntLit
-	| DecLiteral	# DecLit
-	| BoolLiteral	# BoolLit
-	| NONE			# NoneLit;
+literal: stringLit | intLit | decLit | boolLit | noneLit;
+
+stringLit: StringLiteral;
+intLit: IntLiteral;
+decLit: DecLiteral;
+boolLit: BoolLiteral;
+noneLit: NONE;
 
 // END LITERALS
 
 // TYPE EXPRESSIONS
 typeExpr:
 	LPAREN typeExpr RPAREN									# GroupedTypeExpr
-	| typeExpr LBRACK typeArgs = typeExprList RBRACK		# ParameterizedTypeExpr
+	| typeExpr (typeArgs = brackTypeExprList)				# ParameterizedTypeExpr
 	| typeExpr DOT (memberName = ident)						# MemberTypeExpr
-	| LBRACK ty = typeExpr SEMI size = IntLiteral RBRACK	# ArrayTypeExpr
+	| LBRACK (ty = typeExpr) SEMI (size = intLit) RBRACK	# ArrayTypeExpr
 	| structDefn											# StructDefnTypeExpr
 	| tupleDefn												# TupleDefnTypeExpr
 	| unitDefn												# UnitDefnTypeExpr
@@ -268,7 +269,6 @@ typeExpr:
 	| ident													# IdentTypeExpr;
 
 typeVar: TypeVar;
-typeVarList: (typeVar (COMMA typeVar)*);
 
 // END TYPE EXPRESSIONS
 
@@ -283,11 +283,14 @@ namedArg: (name = ident) EQ (value = expr);
 arg: (expr | namedArg);
 
 identList: (ident (COMMA ident)*);
-paramList: (param (COMMA param)*);
+parenParamList: LPAREN (param (COMMA param)*) RPAREN;
+braceParamList: LBRACE (param (COMMA param)*) COMMA? RBRACE;
+barParamList: BAR (param (COMMA param)*) BAR;
+brackTypeParamList: LBRACK (typeVar (COMMA typeVar)*) RBRACK;
+brackTypeExprList: LBRACK (typeExpr (COMMA typeExpr)*) RBRACK;
+braceFieldList: LBRACE (field (COMMA field)*) COMMA? RBRACE;
+
 typeExprList: (typeExpr (COMMA typeExpr)*);
-exprList: (expr (COMMA expr)*);
-fieldList: (field (COMMA field)*);
-argList: (arg (COMMA arg)*);
 block: LBRACE (stmts += stmt)* RBRACE;
 
 reservedKeyword:

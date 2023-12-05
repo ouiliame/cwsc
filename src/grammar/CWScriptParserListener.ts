@@ -3,11 +3,10 @@
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
-import { StringLitContext } from "./CWScriptParser";
-import { IntLitContext } from "./CWScriptParser";
-import { DecLitContext } from "./CWScriptParser";
-import { BoolLitContext } from "./CWScriptParser";
-import { NoneLitContext } from "./CWScriptParser";
+import { StructDefnBraceContext } from "./CWScriptParser";
+import { StructDefnParenContext } from "./CWScriptParser";
+import { EnumVariantStructDefnBraceContext } from "./CWScriptParser";
+import { EnumVariantStructDefnParenContext } from "./CWScriptParser";
 import { DotExprContext } from "./CWScriptParser";
 import { CallExprContext } from "./CWScriptParser";
 import { IndexExprContext } from "./CWScriptParser";
@@ -91,20 +90,26 @@ import { ClosureExpr_Context } from "./CWScriptParser";
 import { StructExpr_Context } from "./CWScriptParser";
 import { TupleExpr_Context } from "./CWScriptParser";
 import { LiteralContext } from "./CWScriptParser";
+import { StringLitContext } from "./CWScriptParser";
+import { IntLitContext } from "./CWScriptParser";
+import { DecLitContext } from "./CWScriptParser";
+import { BoolLitContext } from "./CWScriptParser";
+import { NoneLitContext } from "./CWScriptParser";
 import { TypeExprContext } from "./CWScriptParser";
 import { TypeVarContext } from "./CWScriptParser";
-import { TypeVarListContext } from "./CWScriptParser";
 import { IdentContext } from "./CWScriptParser";
 import { ParamContext } from "./CWScriptParser";
 import { FieldContext } from "./CWScriptParser";
 import { NamedArgContext } from "./CWScriptParser";
 import { ArgContext } from "./CWScriptParser";
 import { IdentListContext } from "./CWScriptParser";
-import { ParamListContext } from "./CWScriptParser";
+import { ParenParamListContext } from "./CWScriptParser";
+import { BraceParamListContext } from "./CWScriptParser";
+import { BarParamListContext } from "./CWScriptParser";
+import { BrackTypeParamListContext } from "./CWScriptParser";
+import { BrackTypeExprListContext } from "./CWScriptParser";
+import { BraceFieldListContext } from "./CWScriptParser";
 import { TypeExprListContext } from "./CWScriptParser";
-import { ExprListContext } from "./CWScriptParser";
-import { FieldListContext } from "./CWScriptParser";
-import { ArgListContext } from "./CWScriptParser";
 import { BlockContext } from "./CWScriptParser";
 import { ReservedKeywordContext } from "./CWScriptParser";
 
@@ -115,69 +120,56 @@ import { ReservedKeywordContext } from "./CWScriptParser";
  */
 export interface CWScriptParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the `StringLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Enter a parse tree produced by the `StructDefnBrace`
+	 * labeled alternative in `CWScriptParser.structDefn`.
 	 * @param ctx the parse tree
 	 */
-	enterStringLit?: (ctx: StringLitContext) => void;
+	enterStructDefnBrace?: (ctx: StructDefnBraceContext) => void;
 	/**
-	 * Exit a parse tree produced by the `StringLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Exit a parse tree produced by the `StructDefnBrace`
+	 * labeled alternative in `CWScriptParser.structDefn`.
 	 * @param ctx the parse tree
 	 */
-	exitStringLit?: (ctx: StringLitContext) => void;
+	exitStructDefnBrace?: (ctx: StructDefnBraceContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `IntLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Enter a parse tree produced by the `StructDefnParen`
+	 * labeled alternative in `CWScriptParser.structDefn`.
 	 * @param ctx the parse tree
 	 */
-	enterIntLit?: (ctx: IntLitContext) => void;
+	enterStructDefnParen?: (ctx: StructDefnParenContext) => void;
 	/**
-	 * Exit a parse tree produced by the `IntLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Exit a parse tree produced by the `StructDefnParen`
+	 * labeled alternative in `CWScriptParser.structDefn`.
 	 * @param ctx the parse tree
 	 */
-	exitIntLit?: (ctx: IntLitContext) => void;
+	exitStructDefnParen?: (ctx: StructDefnParenContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `DecLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Enter a parse tree produced by the `EnumVariantStructDefnBrace`
+	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
 	 * @param ctx the parse tree
 	 */
-	enterDecLit?: (ctx: DecLitContext) => void;
+	enterEnumVariantStructDefnBrace?: (ctx: EnumVariantStructDefnBraceContext) => void;
 	/**
-	 * Exit a parse tree produced by the `DecLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Exit a parse tree produced by the `EnumVariantStructDefnBrace`
+	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
 	 * @param ctx the parse tree
 	 */
-	exitDecLit?: (ctx: DecLitContext) => void;
+	exitEnumVariantStructDefnBrace?: (ctx: EnumVariantStructDefnBraceContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `BoolLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Enter a parse tree produced by the `EnumVariantStructDefnParen`
+	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
 	 * @param ctx the parse tree
 	 */
-	enterBoolLit?: (ctx: BoolLitContext) => void;
+	enterEnumVariantStructDefnParen?: (ctx: EnumVariantStructDefnParenContext) => void;
 	/**
-	 * Exit a parse tree produced by the `BoolLit`
-	 * labeled alternative in `CWScriptParser.literal`.
+	 * Exit a parse tree produced by the `EnumVariantStructDefnParen`
+	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
 	 * @param ctx the parse tree
 	 */
-	exitBoolLit?: (ctx: BoolLitContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `NoneLit`
-	 * labeled alternative in `CWScriptParser.literal`.
-	 * @param ctx the parse tree
-	 */
-	enterNoneLit?: (ctx: NoneLitContext) => void;
-	/**
-	 * Exit a parse tree produced by the `NoneLit`
-	 * labeled alternative in `CWScriptParser.literal`.
-	 * @param ctx the parse tree
-	 */
-	exitNoneLit?: (ctx: NoneLitContext) => void;
+	exitEnumVariantStructDefnParen?: (ctx: EnumVariantStructDefnParenContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `DotExpr`
@@ -1167,6 +1159,61 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitLiteral?: (ctx: LiteralContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `CWScriptParser.stringLit`.
+	 * @param ctx the parse tree
+	 */
+	enterStringLit?: (ctx: StringLitContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.stringLit`.
+	 * @param ctx the parse tree
+	 */
+	exitStringLit?: (ctx: StringLitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.intLit`.
+	 * @param ctx the parse tree
+	 */
+	enterIntLit?: (ctx: IntLitContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.intLit`.
+	 * @param ctx the parse tree
+	 */
+	exitIntLit?: (ctx: IntLitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.decLit`.
+	 * @param ctx the parse tree
+	 */
+	enterDecLit?: (ctx: DecLitContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.decLit`.
+	 * @param ctx the parse tree
+	 */
+	exitDecLit?: (ctx: DecLitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.boolLit`.
+	 * @param ctx the parse tree
+	 */
+	enterBoolLit?: (ctx: BoolLitContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.boolLit`.
+	 * @param ctx the parse tree
+	 */
+	exitBoolLit?: (ctx: BoolLitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.noneLit`.
+	 * @param ctx the parse tree
+	 */
+	enterNoneLit?: (ctx: NoneLitContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.noneLit`.
+	 * @param ctx the parse tree
+	 */
+	exitNoneLit?: (ctx: NoneLitContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `CWScriptParser.typeExpr`.
 	 * @param ctx the parse tree
 	 */
@@ -1187,17 +1234,6 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeVar?: (ctx: TypeVarContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.typeVarList`.
-	 * @param ctx the parse tree
-	 */
-	enterTypeVarList?: (ctx: TypeVarListContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.typeVarList`.
-	 * @param ctx the parse tree
-	 */
-	exitTypeVarList?: (ctx: TypeVarListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.ident`.
@@ -1266,15 +1302,70 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitIdentList?: (ctx: IdentListContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `CWScriptParser.paramList`.
+	 * Enter a parse tree produced by `CWScriptParser.parenParamList`.
 	 * @param ctx the parse tree
 	 */
-	enterParamList?: (ctx: ParamListContext) => void;
+	enterParenParamList?: (ctx: ParenParamListContext) => void;
 	/**
-	 * Exit a parse tree produced by `CWScriptParser.paramList`.
+	 * Exit a parse tree produced by `CWScriptParser.parenParamList`.
 	 * @param ctx the parse tree
 	 */
-	exitParamList?: (ctx: ParamListContext) => void;
+	exitParenParamList?: (ctx: ParenParamListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.braceParamList`.
+	 * @param ctx the parse tree
+	 */
+	enterBraceParamList?: (ctx: BraceParamListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.braceParamList`.
+	 * @param ctx the parse tree
+	 */
+	exitBraceParamList?: (ctx: BraceParamListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.barParamList`.
+	 * @param ctx the parse tree
+	 */
+	enterBarParamList?: (ctx: BarParamListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.barParamList`.
+	 * @param ctx the parse tree
+	 */
+	exitBarParamList?: (ctx: BarParamListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.brackTypeParamList`.
+	 * @param ctx the parse tree
+	 */
+	enterBrackTypeParamList?: (ctx: BrackTypeParamListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.brackTypeParamList`.
+	 * @param ctx the parse tree
+	 */
+	exitBrackTypeParamList?: (ctx: BrackTypeParamListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.brackTypeExprList`.
+	 * @param ctx the parse tree
+	 */
+	enterBrackTypeExprList?: (ctx: BrackTypeExprListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.brackTypeExprList`.
+	 * @param ctx the parse tree
+	 */
+	exitBrackTypeExprList?: (ctx: BrackTypeExprListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.braceFieldList`.
+	 * @param ctx the parse tree
+	 */
+	enterBraceFieldList?: (ctx: BraceFieldListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.braceFieldList`.
+	 * @param ctx the parse tree
+	 */
+	exitBraceFieldList?: (ctx: BraceFieldListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.typeExprList`.
@@ -1286,39 +1377,6 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeExprList?: (ctx: TypeExprListContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.exprList`.
-	 * @param ctx the parse tree
-	 */
-	enterExprList?: (ctx: ExprListContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.exprList`.
-	 * @param ctx the parse tree
-	 */
-	exitExprList?: (ctx: ExprListContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.fieldList`.
-	 * @param ctx the parse tree
-	 */
-	enterFieldList?: (ctx: FieldListContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.fieldList`.
-	 * @param ctx the parse tree
-	 */
-	exitFieldList?: (ctx: FieldListContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.argList`.
-	 * @param ctx the parse tree
-	 */
-	enterArgList?: (ctx: ArgListContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.argList`.
-	 * @param ctx the parse tree
-	 */
-	exitArgList?: (ctx: ArgListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.block`.
