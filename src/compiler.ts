@@ -47,6 +47,25 @@ export class CWScriptCompiler {
         diagnostics,
       };
     }
+    // eval pipeline
+    // 1. new eval.SourceFile(ast)
+    // 2. gather all contract definitions in the source file
+    // 3. for each contract definition:
+    //    - gather all type definitions
+    //    - gather all function definitions
+    //    - gather all instantiate, exec, query definitions
+    // x. Build the Rust model -> Rust syntax
+
+    /*
+    type checking:
+
+    - fndefn (example)
+      - for each param, check that the type is defined
+      - for return type, check that the type is defined
+      - walk thru body statements
+      - typecheck each statement
+      - check that the body returns a value of return type
+    */
 
     return ctx;
   }
@@ -61,3 +80,5 @@ async function main() {
   const { ast, diagnostics } = ctx.sourceFiles[counterFile];
   console.dir(diagnostics);
 }
+
+main();

@@ -5,7 +5,7 @@ contract Counter {
   }
 
   error CountIsZeroError()
-  error Unauthorized()
+  error unauthorized()
 
   #instantiate(count: U32?, owner: Addr?) {
     // $state.count = count + 1; // should error because type of count is U32 | None

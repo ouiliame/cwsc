@@ -29,36 +29,57 @@ export const ProjectDependenciesSchema = zod.record(DependencyDetailSchema);
 export type ProjectDependencies = zod.infer<typeof ProjectDependenciesSchema>;
 
 export const CwscConfigSchema = zod.object({
-  languageVersion: zod.string().optional(),
-  debug: zod.boolean().optional(),
+  languageVersion: zod
+    .string()
+    .optional()
+    .describe('CWScript language version (semver)'),
+  debug: zod.boolean().optional().describe('Enable debug mode'),
   showDiagnostics: zod
     .object({
-      warnings: zod.boolean().optional(),
-      errors: zod.boolean().optional(),
-      info: zod.boolean().optional(),
+      warnings: zod.boolean().optional().describe('Show warnings'),
+      errors: zod.boolean().optional().describe('Show errors'),
+      info: zod.boolean().optional().describe('Show info messages'),
+      hint: zod.boolean().optional().describe('Show hints'),
     })
-    .optional(),
-  strict: zod.boolean().optional(),
+    .optional()
+    .describe('Flags for showing diagnostic messages during compilation'),
+  strict: zod.boolean().optional().describe('Enable strict mode'),
 });
 
 export type CwscConfig = zod.infer<typeof CwscConfigSchema>;
 
-export const CWScriptProjectConfigSchema = zod.object({
-  name: zod.string(),
-  version: zod.string(),
-  sourceDir: zod.string().default('src'),
-  buildDir: zod.string().default('build'),
-  packagesDir: zod.string().default('packages'),
-  package: zod.boolean().default(false),
-  description: zod.string().optional(),
-  authors: zod.array(zod.string()).optional(),
-  license: zod.string().optional(),
-  website: zod.string().optional(),
-  repository: zod.string().optional(),
-  dependencies: ProjectDependenciesSchema.optional(),
-  readme: zod.string().optional(),
-  cwsc: CwscConfigSchema.optional(),
-});
+export const CWScriptProjectConfigSchema = zod
+  .object({
+    name: zod.string().describe('Project name'),
+    version: zod.string().describe('Project version (semver)'),
+    sourceDir: zod
+      .string()
+      .default('src')
+      .describe('Path to directory containing CWScript source files'),
+    buildDir: zod
+      .string()
+      .default('build')
+      .describe('Path to directory for build output'),
+    packagesDir: zod
+      .string()
+      .default('packages')
+      .describe('Path to directory for package dependencies'),
+    package: zod
+      .boolean()
+      .default(false)
+      .describe('Indicates whether a project should be treated as a package'),
+    description: zod.string().optional().describe('Project description'),
+    authors: zod.array(zod.string()).optional().describe('Project authors'),
+    license: zod.string().optional().describe('Project license'),
+    website: zod.string().optional().describe('URL to project website'),
+    repository: zod.string().optional().describe('URL to project repository'),
+    dependencies: ProjectDependenciesSchema.optional().describe(
+      'External CWScript packages required by the project'
+    ),
+    readme: zod.string().optional().describe("Path or URL to project's README"),
+    cwsc: CwscConfigSchema.optional().describe('CWScript Compiler settings'),
+  })
+  .describe('CWScript Project Configuration');
 
 export type CWScriptProjectConfig = zod.infer<
   typeof CWScriptProjectConfigSchema
@@ -133,3 +154,7 @@ export class CWScriptProject {
 
   public build() {}
 }
+import { zodToJsonSchema } from 'zod-to-json-schema';
+console.log(
+  JSON.stringify(zodToJsonSchema(CWScriptProjectConfigSchema), null, 2)
+);
