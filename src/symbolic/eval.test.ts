@@ -5,27 +5,34 @@ import { Contract } from "./eval"
 test('contract type evaluation', () => {
     const parser = new CWScriptParser(
 `contract MyContract {
-    state {
-        myState: U32
-    }
-
     fn myFunction() {}
-    
-    error MyError()
 
-    instantiate() {}
+    #instantiate() {}
 
-    exec myExec() {}
+    exec #myExec() {}
 
-    query myQuery() {}
+    query #myQuery() {}
 
+    struct MyStruct {
+        field: MyStruct
+    }
 }`, null
     )
-    const ast = parser.parse()
-    const defn = ast.children[0]
+    const result = parser.parse()
+    const defn = result.ast!.children[0]
     if (!(defn instanceof ContractDefn)) {
         throw new Error('Expected ContractDefn')
     }
-    console.log(defn.body.stmts.children)
+
+    console.log(defn.body.map(x => x.toJSON()))
+
+    const table = new Contract(defn)
+
+    console.log(table.variable('myFunction'))
+    console.log(table.instantiate())
+    console.log(table.exec('#myExec'))
+    console.log(table.query('#myQuery'))
+    console.log(table.type('MyStruct'))
+
     // let table = new Contract(defn)
 })

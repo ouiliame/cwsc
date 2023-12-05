@@ -1,4 +1,6 @@
 import { AST, AndExpr, ArrayTypeExpr, AsExpr, AssignOp, AssignStmt, BinOpExpr, Binding, CallExpr, ClosureExpr, ConstStmt, ContractDefn, Defn, DotExpr, EmitStmt, EnumDefn, EnumDefnTypeExpr, EnumVariantStructDefn, EnumVariantTupleDefn, EnumVariantUnitDefn, ErrorDefn, EventDefn, ExecDefn, ExecStmt, ExistsExpr, Expr, FailExpr, FailStmt, FnDefn, ForStmt, GroupedExpr, GroupedTypeExpr, Ident, IdentBinding, IdentExpr, IdentTypeExpr, IfExpr, IfStmt, ImportStmt, InExpr, IndexAssignStmt, IndexExpr, InstantiateDefn, InstantiateStmt, InterfaceDefn, IsExpr, LetStmt, MemberAssignStmt, MemberTypeExpr, NotExpr, OptionTypeExpr, OrExpr, Param, ParamzdTypeExpr, QueryDefn, QueryExpr, QueryNowExpr, ReturnStmt, ShortTryExpr, StateBlockDefn, StateItemDefn, StateMapDefn, Stmt, StructBinding, StructDefn, StructDefnTypeExpr, StructExpr, TryCatchElseExpr, TupleBinding, TupleDefn, TupleDefnTypeExpr, TupleExpr, TypeAliasDefn, TypeExpr, TypeVarExpr, UnitDefn, UnitDefnTypeExpr, UnitExpr, Block, List } from "../ast";
+
+
 import { ArrayTypeExprContext } from "../grammar/CWScriptParser";
 import { CWSExpr, CWSType, CWSValue, IR } from "../ir";
 import { CWSAnyType, CWSArrayType, CWSBoolType, CWSContractType, CWSEnumType, CWSEnumVariant, CWSEnumVariantStructType, CWSEnumVariantTupleType, CWSErrorType, CWSEventType, CWSExecFnType, CWSFnType, CWSInstantiateFnType, CWSInterfaceType, CWSMapType, CWSOptionType, CWSPlaceholderType, CWSQueryFnType, CWSStructType, CWSTupleType, CWSTypeAliasType, CWSVoidType } from "../ir/types";
@@ -127,18 +129,20 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
             }
             let handlers = defn.body.map(handler => {
                 if (handler instanceof InstantiateDefn) {
-                    return new CWSInstantiateFnType(handler.params.map(x => evalParam(this, x)))
+                    return new CWSInstantiateFnType((handler.params ?? []).map(x => evalParam(this, x)))
                 }
                 if (handler instanceof ExecDefn) {
-                    return new CWSExecFnType(handler.name.value, handler.params.map(x => evalParam(this, x)))
+                    return new CWSExecFnType(handler.name.value, (handler.params ?? []).map(x => evalParam(this, x)))
                 }
                 if (handler instanceof QueryDefn) {
-                    return new CWSQueryFnType(handler.name.value, handler.params.map(x => evalParam(this, x)))
+                    return new CWSQueryFnType(handler.name.value, (handler.params ?? []).map(x => evalParam(this, x)))
                 }
                 throw new Error("Invalid interface handler");
             })
 
-            this._interface.set(defn.name.value, new CWSInterfaceType(defn.name.value, handlers))       
+            this._interface.set(defn.name.value, new CWSInterfaceType(defn.name.value, handlers))   
+            
+            return
         }
 
         if (defn instanceof StructDefn) {
@@ -151,6 +155,7 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
             }
             let fields = defn.fields.map(x => evalParam(this, x))
             this._struct.set(defn.name.value, new CWSStructType(defn.name.value, fields))
+            return
         }
 
         if (defn instanceof TupleDefn) {
@@ -163,6 +168,7 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
             }
             let members = defn.elements.map(x => evalType(this, x))
             this._tuple.set(defn.name.value, new CWSTupleType(defn.name.value, members))
+            return
         }
 
         if (defn instanceof UnitDefn) {
@@ -185,6 +191,8 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 return
             }
             this._enum.set(defn.name.value, evalEnum(this, defn))
+
+            return
         }
 
         if (defn instanceof FnDefn) {
@@ -196,8 +204,10 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 return
             }
             let fn = new Fn(defn, this, undefined)
-            let ty = new CWSFnType(false/*TODO*/, fn.params.map(x => evalParam(this, x)), fn.returnType ?? new CWSVoidType)
+            let ty = new CWSFnType(false/*TODO*/, (fn.params ?? []).map(x => evalParam(this, x)), fn.returnType ?? new CWSVoidType)
             this._fn.set(defn.name.value, ty)
+
+            return
         }
 
         if (defn instanceof InstantiateDefn) {
@@ -212,9 +222,11 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 return
             }
 
-            let fn = new CWSInstantiateFnType(defn.params.map(x => evalParam(this, x)))
+            let fn = new CWSInstantiateFnType((defn.params ?? []).map(x => evalParam(this, x)))
 
             this._instantiate = fn
+
+            return
         }
 
         if (defn instanceof ExecDefn) {
@@ -225,7 +237,9 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 this._exec.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
                 return
             }
-            this._exec.set(defn.name.value, new CWSExecFnType(defn.name.value, defn.params.map(x => evalParam(this, x))))
+            this._exec.set(defn.name.value, new CWSExecFnType(defn.name.value, (defn.params ?? []).map(x => evalParam(this, x))))
+
+            return
         }
 
         if (defn instanceof QueryDefn) {
@@ -236,7 +250,9 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 this._query.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
                 return
             }
-            this._query.set(defn.name.value, new CWSQueryFnType(defn.name.value, defn.params.map(x => evalParam(this, x))))
+            this._query.set(defn.name.value, new CWSQueryFnType(defn.name.value, (defn.params ?? []).map(x => evalParam(this, x))))
+
+            return
         }
 
         if (defn instanceof ErrorDefn) {
@@ -248,6 +264,8 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 return
             }
             this._error.set(defn.name.value, new CWSErrorType(defn.name.value, (defn.fields ?? []).map(x => evalParam(this, x))))
+
+            return
         }
 
         if (defn instanceof EventDefn) {
@@ -259,6 +277,8 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                 return
             }
             this._event.set(defn.name.value, new CWSEventType(defn.name.value, (defn.fields ?? []).map(x => evalParam(this, x))))
+
+            return
         }
 
         if (defn instanceof StateBlockDefn) {
@@ -285,9 +305,11 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
                     this._state.fields[i].ty = new CWSMapType(evalType(this, field.indexTy), evalType(this, field.ty)) 
                 }
             })
+
+            return
         } 
 
-        throw new Error("Method not implemented.");
+        throw new Error(`Method not implemented: ${defn.constructor.name}`);
     }
     //#endregion Definitions
 }
@@ -380,11 +402,11 @@ export class Fn extends FnDefn implements LexicalSymbolTable {
     }
 
     constructor(defn: FnDefn, public contract: ContractSymbolTable, public parent?: LexicalSymbolTable) {
-        super(defn.name, null, defn.params, defn.returnTy, defn.body);
+        super(defn.name, defn.fallible, null, defn.params, defn.returnTy, defn.body);
 
-        this.block = new BlockScope(defn.body, contract, this)
+        this.block = new BlockScope(defn.body, contract, this);
 
-        defn.params.forEach(param => this._variable.set(param.name.value, evalType(contract, param.ty ? param.ty : undefined)))
+        (defn.params ?? []).forEach(param => this._variable.set(param.name.value, evalType(contract, param.ty ? param.ty : undefined)))
         
         defn.body.forEach(stmt => this.block.evalStmt(stmt))
 
@@ -729,7 +751,7 @@ function evalBlock(scope: LexicalSymbolTable, block: Block): CWSType {
 function evalFn(scope: LexicalSymbolTable, defn: FnDefn): CWSFnType {
     let fn = new Fn(defn, scope.contract, scope)
     let returnType: CWSType = fn.returnType ?? new CWSVoidType
-    return new CWSFnType(false/*TODO*/, fn.params.map(x => evalParam(scope.contract, x)), returnType)
+    return new CWSFnType(false/*TODO*/, (fn.params ?? []).map(x => evalParam(scope.contract, x)), returnType)
 }
 
 function evalExpr(scope: LexicalSymbolTable, expr: Expr): CWSType {
@@ -829,7 +851,7 @@ function evalExpr(scope: LexicalSymbolTable, expr: Expr): CWSType {
 }
 
 function evalTupleExpr(scope: LexicalSymbolTable, expr: TupleExpr): CWSType {
-    return new CWSTupleType('__Anonymous', expr.exprs.map(expr => evalExpr(scope, expr)))
+    return new CWSTupleType('__Anonymous', (expr.exprs ?? []).map(expr => evalExpr(scope, expr)))
 }
 
 function evalStructExpr(scope: LexicalSymbolTable, expr: StructExpr): CWSType {
