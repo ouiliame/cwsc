@@ -173,8 +173,10 @@ export class ASTBuilderVisitor
   ): AST.TryCatchElseExpr {
     const body = this.visitBlock(ctx._body);
     const catchClauses = ctx._catchClauses
-      ? new AST.List(ctx._catchClauses.map((s) => this.visitCatchClause(s)))
-      : AST.List.empty<AST.CatchClause>();
+      ? new AST.List(ctx._catchClauses.map((s) => this.visitCatchClause(s))).$(
+          ctx
+        )
+      : AST.List.empty<AST.CatchClause>().$(ctx);
     const elseBody = ctx._elseBody ? this.visitBlock(ctx._elseBody) : null;
     return new AST.TryCatchElseExpr(body, catchClauses, elseBody).$(ctx);
   }
@@ -191,7 +193,7 @@ export class ASTBuilderVisitor
     const base = ctx._base ? this.typeExpr(ctx._base) : null;
     const interfaces = ctx._interfaces
       ? this.visitTypeExprList(ctx._interfaces)
-      : AST.List.empty<AST.TypeExpr>();
+      : AST.List.empty<AST.TypeExpr>().$(ctx);
     const body = this.visitBlock(ctx._body);
     return new AST.ContractDefn(name, base, interfaces, body).$(ctx);
   }
@@ -200,7 +202,7 @@ export class ASTBuilderVisitor
     const name = this.visitIdent(ctx._name);
     const extend = ctx._baseInterfaces
       ? this.visitTypeExprList(ctx._baseInterfaces)
-      : AST.List.empty<AST.TypeExpr>();
+      : AST.List.empty<AST.TypeExpr>().$(ctx);
     const body = this.visitBlock(ctx._body);
     return new AST.InterfaceDefn(name, extend, body).$(ctx);
   }
@@ -209,7 +211,7 @@ export class ASTBuilderVisitor
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>();
+      : AST.List.empty<AST.TypeVar>().$(ctx);
     const fields = this.visitBraceParamList(ctx._fields);
     return new AST.StructDefn(name, typeParams, fields).$(ctx);
   }
@@ -218,7 +220,7 @@ export class ASTBuilderVisitor
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>();
+      : AST.List.empty<AST.TypeVar>().$(ctx);
     const fields = this.visitParenParamList(ctx._fields);
     return new AST.StructDefn(name, typeParams, fields).$(ctx);
   }
@@ -236,7 +238,7 @@ export class ASTBuilderVisitor
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>();
+      : AST.List.empty<AST.TypeVar>().$(ctx);
     return new AST.UnitDefn(name, typeParams).$(ctx);
   }
 
@@ -247,7 +249,7 @@ export class ASTBuilderVisitor
       : AST.List.empty<AST.TypeVar>().$(ctx);
     const variants = ctx._variants
       ? this.visitEnumVariantDefnList(ctx._variants)
-      : AST.List.empty<AST.EnumVariantDefn>();
+      : AST.List.empty<AST.EnumVariantDefn>().$(ctx);
     return new AST.EnumDefn(name, typeParams, variants).$(ctx);
   }
 
@@ -287,7 +289,7 @@ export class ASTBuilderVisitor
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>();
+      : AST.List.empty<AST.TypeVar>().$(ctx);
     const ty = this.typeExpr(ctx._ty);
     return new AST.TypeAliasDefn(name, typeParams, ty).$(ctx);
   }
@@ -297,7 +299,7 @@ export class ASTBuilderVisitor
     const fallible = ctx._fallible ? true : false;
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>();
+      : AST.List.empty<AST.TypeVar>().$(ctx);
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
@@ -346,7 +348,7 @@ export class ASTBuilderVisitor
 
   visitStateBlockDefn(ctx: P.StateBlockDefnContext): AST.StateBlockDefn {
     const stateFields = ctx._stateFields.map((f) => this.visitStateDefn(f));
-    return new AST.StateBlockDefn(new AST.List(stateFields)).$(ctx);
+    return new AST.StateBlockDefn(new AST.List(stateFields).$(ctx)).$(ctx);
   }
 
   visitStateDefn(
@@ -383,7 +385,7 @@ export class ASTBuilderVisitor
     const fallible = ctx._fallible ? true : false;
     const typeArgs = ctx._typeArgs
       ? this.visitBrackTypeExprList(ctx._typeArgs)
-      : AST.List.empty<AST.TypeExpr>();
+      : AST.List.empty<AST.TypeExpr>().$(ctx);
     const args = new AST.List(ctx._args.map((a) => this.visitArg(a))).$(ctx);
     return new AST.CallExpr(fn, fallible, typeArgs, args).$(ctx);
   }
@@ -668,7 +670,7 @@ export class ASTBuilderVisitor
 
   visitBlock(ctx: P.BlockContext): AST.Block {
     return new AST.Block(
-      new AST.List(ctx._stmts.map((s) => this.visit(s) as AST.Stmt))
+      new AST.List(ctx._stmts.map((s) => this.stmt(s))).$(ctx)
     ).$(ctx);
   }
 
