@@ -971,11 +971,7 @@ export class Arg extends AST {
   }
 }
 
-export class Block extends List<Stmt> {
-  constructor(public stmts: List<Stmt>) {
-    super(stmts.toArray());
-  }
-}
+export class Block extends List<Stmt> {}
 
 //#endregion Common
 

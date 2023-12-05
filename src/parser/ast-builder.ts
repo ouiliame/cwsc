@@ -669,9 +669,7 @@ export class ASTBuilderVisitor
   }
 
   visitBlock(ctx: P.BlockContext): AST.Block {
-    return new AST.Block(
-      new AST.List(ctx._stmts.map((s) => this.stmt(s))).$(ctx)
-    ).$(ctx);
+    return new AST.Block(ctx._stmts.map((s) => this.stmt(s))).$(ctx);
   }
 
   //#endregion Common
