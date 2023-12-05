@@ -64,5 +64,5 @@ package-lock.json
 *v8.log
 /lib/
 .aider*
-**/target
+examples/**/target
 dist
