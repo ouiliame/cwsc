@@ -3,7 +3,7 @@ import { AST, AndExpr, ArrayTypeExpr, AsExpr, AssignOp, AssignStmt, BinOpExpr, B
 
 import { ArrayTypeExprContext } from "../grammar/CWScriptParser";
 import { CWSExpr, CWSType, CWSValue, IR } from "../ir";
-import { CWSAnyType, CWSArrayType, CWSBoolType, CWSContractType, CWSEnumType, CWSEnumVariant, CWSEnumVariantStructType, CWSEnumVariantTupleType, CWSErrorType, CWSEventType, CWSExecFnType, CWSFnType, CWSInstantiateFnType, CWSInterfaceType, CWSMapType, CWSOptionType, CWSPlaceholderType, CWSQueryFnType, CWSStructType, CWSTupleType, CWSTypeAliasType, CWSVoidType } from "../ir/types";
+import { CWSAnyType, CWSArrayType, CWSBoolType, CWSContractType, CWSEnumType, CWSEnumVariant, CWSEnumVariantStructType, CWSEnumVariantTupleType, CWSErrorType, CWSEventType, CWSExecFnType, CWSFnType, CWSInstantiateFnType, CWSIntType, CWSInterfaceType, CWSMapType, CWSOptionType, CWSPlaceholderType, CWSQueryFnType, CWSStructType, CWSTupleType, CWSTypeAliasType, CWSVoidType, Placeholder } from "../ir/types";
 import { variantStruct } from "../rust-syntax";
 
 export interface ProjectSymbolTable {
@@ -18,24 +18,24 @@ export interface FileSymbolTable {
 // Each block scope has its own LexicalSymbolTable, which may be nested.
 export interface ContractSymbolTable {
     // InstantiateStmt lookup
-    instantiate(): CWSInstantiateFnType | CWSPlaceholderType | undefined;
+    instantiate(): CWSInstantiateFnType | undefined;
     // ExecStmt lookup
-    exec(name: string): CWSExecFnType | CWSPlaceholderType | undefined;
+    exec(name: string): CWSExecFnType | undefined;
     // QueryStmt lookup
-    query(name: string): CWSQueryFnType | CWSPlaceholderType | undefined;
+    query(name: string): CWSQueryFnType | undefined;
     // Interface assertion lookup
-    interface(name: string): CWSInterfaceType | CWSPlaceholderType | undefined;
+    interface(name: string): CWSInterfaceType | undefined;
 
     // FailStmt lookup
-    error(name: string): CWSErrorType | CWSPlaceholderType | undefined;
+    error(name: string): CWSErrorType | undefined;
     // EmitStmt lookup
-    event(name: string): CWSEventType | CWSPlaceholderType | undefined;
+    event(name: string): CWSEventType | undefined;
 
     // Type lookup
-    type(name: string): CWSType | CWSPlaceholderType | undefined;
+    type(name: string): CWSType | undefined;
 
-    // State variable lookup
-    variable(name: string): CWSType | CWSPlaceholderType | undefined;
+    // $state, top level functions, and top level variables
+    variable(name: string): CWSType | undefined;
 }
 
 export interface LexicalSymbolTable {
@@ -51,7 +51,18 @@ export interface LexicalSymbolTable {
     set returnType(ty: CWSType | undefined);
 }
 
-export class Contract extends ContractDefn implements ContractSymbolTable {
+export class Contract extends ContractDefn implements ContractSymbolTable, LexicalSymbolTable {
+    public contract = this
+    public parent = undefined
+
+    get returnType(): CWSType | undefined {
+        throw new Error("unreachable")
+    }
+
+    set returnType(ty: CWSType | undefined) {
+        throw new Error("unreachable")
+    }
+
     // The constructor takes a ContractDefn and constructs an lexical symbol table enriched ContractDefn.
     // It first iterates over the top level definitions, including types, functions, and state variables.
     // They will be stored inside of the corresponding maps, with temporary values.
@@ -60,56 +71,109 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
     constructor(defn: ContractDefn) {
         super(defn.name, defn.base, defn.interfaces, defn.body);
 
-        defn.body.forEach(defn => this.evalDefn(defn, false))
-        defn.body.forEach(defn => this.evalDefn(defn, true))
+        defn.body.forEach(defn => this.evalToplevelDefn(defn))
+        // defn.body.forEach(defn => this.evalDefn(defn))
     }
 
-    _instantiate?: CWSInstantiateFnType | CWSPlaceholderType
-    instantiate(): CWSInstantiateFnType | CWSPlaceholderType | undefined {
+    _instantiate?: Placeholder<CWSInstantiateFnType>
+    instantiate(): CWSInstantiateFnType | undefined {
+        if (this._instantiate instanceof CWSPlaceholderType) {
+            return this._instantiate.resolve()
+        }
         return this._instantiate
     }
 
-    _exec: Map<string, CWSExecFnType | CWSPlaceholderType> = new Map()
-    exec(name: string): CWSExecFnType | CWSPlaceholderType | undefined {
-        return this._exec.get(name)
+    _exec: Map<string, Placeholder<CWSExecFnType>> = new Map();
+    exec(name: string): CWSExecFnType | undefined {
+        let ty = this._exec.get(name);
+        if (ty instanceof CWSPlaceholderType) {
+            return ty.resolve()
+        }
+        return ty
     }
 
-    _query: Map<string, CWSQueryFnType | CWSPlaceholderType> = new Map()
-    query(name: string): CWSQueryFnType | CWSPlaceholderType | undefined {
-        return this._query.get(name)
+    _query: Map<string, Placeholder<CWSQueryFnType>> = new Map();
+    query(name: string): CWSQueryFnType | undefined {
+        let ty = this._query.get(name);
+        if (ty instanceof CWSPlaceholderType) {
+            return ty.resolve()
+        }
+        return ty
     }
 
-    _error: Map<string, CWSErrorType | CWSPlaceholderType> = new Map()
-    error(name: string): CWSErrorType | CWSPlaceholderType | undefined {
-        return this._error.get(name)
+    _error: Map<string, Placeholder<CWSErrorType>> = new Map();
+    error(name: string): CWSErrorType | undefined {
+        let ty = this._error.get(name);
+        if (ty instanceof CWSPlaceholderType) {
+            return ty.resolve()
+        }
+        return ty
     }
 
-    _event: Map<string, CWSEventType | CWSPlaceholderType> = new Map()
-    event(name: string): CWSEventType | CWSPlaceholderType | undefined {
-        return this._event.get(name)
+    _event: Map<string, Placeholder<CWSEventType>> = new Map();
+    event(name: string): CWSEventType | undefined {
+        let ty = this._event.get(name);
+        if (ty instanceof CWSPlaceholderType) {
+            return ty.resolve()
+        }
+        return ty
     }
 
-    _interface: Map<string, CWSInterfaceType | CWSPlaceholderType> = new Map()
-    interface(name: string): CWSInterfaceType | CWSPlaceholderType | undefined {
-        return this._interface.get(name)
+    _interface: Map<string, Placeholder<CWSInterfaceType>> = new Map();
+    interface(name: string): CWSInterfaceType | undefined {
+        let ty = this._interface.get(name);
+        if (ty instanceof CWSPlaceholderType) {
+            return ty.resolve()
+        }
+        return ty
     }
 
-    _struct: Map<string, CWSStructType | CWSPlaceholderType> = new Map()
-    _enum: Map<string, CWSEnumType | CWSPlaceholderType> = new Map()
-    _tuple: Map<string, CWSTupleType | CWSPlaceholderType> = new Map()
-    type(name: string): CWSType | CWSPlaceholderType | undefined {
-        return this._interface.get(name) || this._struct.get(name) || this._enum.get(name) || this._tuple.get(name)
+    _struct: Map<string, Placeholder<CWSStructType>> = new Map();
+    _enum: Map<string, Placeholder<CWSEnumType>> = new Map();
+    _tuple: Map<string, Placeholder<CWSTupleType>> = new Map();
+    toplevelType(name: string): CWSType {
+        return this._struct.get(name) ?? this._enum.get(name) ?? this._tuple.get(name) ?? (() => { throw new Error("Type not found") })();
+    }
+    type(name: string): CWSType | undefined {
+        if (name === "Int") {
+            return new CWSPlaceholderType(() => CWSIntType)
+        }
+
+        const sty = this._struct.get(name)
+        if (sty instanceof CWSPlaceholderType) {
+            return sty.resolve()
+        }
+        if (sty) {
+            return sty
+        }
+
+        const ety = this._enum.get(name)
+        if (ety instanceof CWSPlaceholderType) {
+            return ety.resolve()
+        }
+        if (ety) {
+            return ety
+        }
+
+        const tty = this._tuple.get(name)
+        if (tty instanceof CWSPlaceholderType) {
+            return tty.resolve()
+        }
+        if (tty) {
+            return tty
+        }
+
+        return undefined
     }
 
-    _fn: Map<string, CWSFnType | CWSPlaceholderType> = new Map()
-    _state: CWSStructType = new CWSStructType('$state', [])
+    _fn: Map<string, Placeholder<CWSFnType>> = new Map();
+    _state: CWSStructType | undefined = undefined;
     variable(name: string): CWSType | undefined {
         if (name == '$state') {
-            return this._state
+            return this._state;
         }
-        return this._fn.get(name)
+        return this._fn.get(name);
     }
-
     //#region TypeExpr
     
     //#endregion TypeExpr
@@ -117,197 +181,115 @@ export class Contract extends ContractDefn implements ContractSymbolTable {
 
     //#region Definitions
     
-    // symbolic evaluation for each of the top level definitions.
-    evalDefn(defn: Defn, evaluate: boolean) {
+    // skims through the top level definitions and creates a symbol table
+    // does not evaluate the internal types
+    evalToplevelDefn(defn: Defn) {
         if (defn instanceof InterfaceDefn) {
-            if (!evaluate) {
-                if (this.interface(defn.name.value)) {
-                    throw new Error("type already defined")
-                }
-                this._interface.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            throw new Error("TODO");
+            /*
+            if (this.interface(defn.name.value)) {
+                throw new Error("type already defined")
             }
-            let handlers = defn.body.map(handler => {
-                if (handler instanceof InstantiateDefn) {
-                    return new CWSInstantiateFnType((handler.params ?? []).map(x => evalParam(this, x)))
-                }
-                if (handler instanceof ExecDefn) {
-                    return new CWSExecFnType(handler.name.value, (handler.params ?? []).map(x => evalParam(this, x)))
-                }
-                if (handler instanceof QueryDefn) {
-                    return new CWSQueryFnType(handler.name.value, (handler.params ?? []).map(x => evalParam(this, x)))
-                }
-                throw new Error("Invalid interface handler");
-            })
-
-            this._interface.set(defn.name.value, new CWSInterfaceType(defn.name.value, handlers))   
-            
+            this._interface.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
             return
+            */
         }
 
         if (defn instanceof StructDefn) {
-            if (!evaluate) {
-                if (this.type(defn.name.value)) {
-                    throw new Error("type already defined")
-                }
-                this._struct.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.type(defn.name.value)) {
+                throw new Error("type already defined")
             }
-            let fields = defn.fields.map(x => evalParam(this, x))
-            this._struct.set(defn.name.value, new CWSStructType(defn.name.value, fields))
+            this._struct.set(defn.name.value, new CWSPlaceholderType(() => new CWSStructType(defn.name.value, defn.fields.map(x => evalParam(this, x)))))
             return
         }
 
         if (defn instanceof TupleDefn) {
-            if (!evaluate) {
-                if (this.type(defn.name.value)) {
-                    throw new Error("type already defined")
-                }
-                this._tuple.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.type(defn.name.value)) {
+                throw new Error("type already defined")
             }
-            let members = defn.elements.map(x => evalType(this, x))
-            this._tuple.set(defn.name.value, new CWSTupleType(defn.name.value, members))
-            return
+            this._tuple.set(defn.name.value, new CWSPlaceholderType(() => new CWSTupleType(defn.name.value, defn.elements.map(x => evalType(this, x)))))
         }
 
         if (defn instanceof UnitDefn) {
-            if (!evaluate) {
-                if (this.type(defn.name.value)) {
-                    throw new Error("type already defined")
-                }
-                this._tuple.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
-            }
             throw new Error("TODO");
         }
-
+    
         if (defn instanceof EnumDefn) {
-            if (!evaluate) {
-                if (this.type(defn.name.value)) {
-                    throw new Error("type already defined")
-                }
-                this._enum.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.type(defn.name.value)) {
+                throw new Error("type already defined")
             }
-            this._enum.set(defn.name.value, evalEnum(this, defn))
-
-            return
+            
+            return new CWSPlaceholderType(() => evalEnum(this, defn))
         }
 
         if (defn instanceof FnDefn) {
-            if (!evaluate) {
-                if (this._fn.has(defn.name.value)) {
-                    throw new Error("function already defined")
-                }
-                this._fn.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this._fn.has(defn.name.value)) {
+                throw new Error("function already defined")
             }
-            let fn = new Fn(defn, this, undefined)
-            let ty = new CWSFnType(false/*TODO*/, (fn.params ?? []).map(x => evalParam(this, x)), fn.returnType ?? new CWSVoidType)
-            this._fn.set(defn.name.value, ty)
-
+            this._fn.set(defn.name.value, new CWSPlaceholderType(() => new CWSFnType(defn.fallible, (defn.params ?? []).map(x => evalParam(this, x)), defn.returnTy ? evalType(this, defn.returnTy) : new CWSVoidType)))
             return
         }
 
         if (defn instanceof InstantiateDefn) {
-            if (!evaluate) {
-                if (this._instantiate) {
-                    throw new Error("instantiate already defined")
-                }
-                if (this._instantiate) {
-                    throw new Error("instantiate already defined")
-                }
-                this._instantiate = new CWSPlaceholderType('instantiate')
-                return
+            if (this._instantiate) {
+                throw new Error("instantiate already defined")
             }
-
-            let fn = new CWSInstantiateFnType((defn.params ?? []).map(x => evalParam(this, x)))
-
-            this._instantiate = fn
-
+            if (this._instantiate) {
+                throw new Error("instantiate already defined")
+            }
+            this._instantiate = new CWSPlaceholderType(() => new CWSInstantiateFnType((defn.params ?? []).map(x => evalParam(this, x))))
             return
         }
-
+        
         if (defn instanceof ExecDefn) {
-            if (!evaluate) {
-                if (this.exec(defn.name.value)) {
-                    throw new Error("exec already defined")
-                }
-                this._exec.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.exec(defn.name.value)) {
+                throw new Error("exec already defined")
             }
-            this._exec.set(defn.name.value, new CWSExecFnType(defn.name.value, (defn.params ?? []).map(x => evalParam(this, x))))
-
+            this._exec.set(defn.name.value, new CWSPlaceholderType(() => new CWSExecFnType(defn.name.value, (defn.params ?? []).map(x => evalParam(this, x)))))
             return
         }
 
         if (defn instanceof QueryDefn) {
-            if (!evaluate) {
-                if (this.query(defn.name.value)) {
-                    throw new Error("query already defined")
-                }
-                this._query.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.query(defn.name.value)) {
+                throw new Error("query already defined")
             }
-            this._query.set(defn.name.value, new CWSQueryFnType(defn.name.value, (defn.params ?? []).map(x => evalParam(this, x))))
-
+            this._query.set(defn.name.value, new CWSPlaceholderType(() => new CWSQueryFnType(defn.name.value, (defn.params ?? []).map(x => evalParam(this, x)))))
             return
         }
 
         if (defn instanceof ErrorDefn) {
-            if (!evaluate) {
-                if (this.error(defn.name.value)) {
-                    throw new Error("error already defined")
-                }
-                this._error.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.error(defn.name.value)) {
+                throw new Error("error already defined")
             }
-            this._error.set(defn.name.value, new CWSErrorType(defn.name.value, (defn.fields ?? []).map(x => evalParam(this, x))))
-
+            this._error.set(defn.name.value, new CWSPlaceholderType(() => new CWSErrorType(defn.name.value, (defn.fields ?? []).map(x => evalParam(this, x)))))
             return
         }
 
         if (defn instanceof EventDefn) {
-            if (!evaluate) {
-                if (this.event(defn.name.value)) {
-                    throw new Error("event already defined")
-                }
-                this._event.set(defn.name.value, new CWSPlaceholderType(defn.name.value))
-                return
+            if (this.event(defn.name.value)) {
+                throw new Error("event already defined")
             }
-            this._event.set(defn.name.value, new CWSEventType(defn.name.value, (defn.fields ?? []).map(x => evalParam(this, x))))
-
+            this._event.set(defn.name.value, new CWSPlaceholderType(() =>  new CWSEventType(defn.name.value, (defn.fields ?? []).map(x => evalParam(this, x)))))
             return
         }
 
         if (defn instanceof StateBlockDefn) {
-            if (!evaluate) {
-                if (this._state) {
-                    throw new Error("state already defined")
-                }
-                
-                defn.stateFields.forEach(field => {
-                    if (field instanceof StateItemDefn) {
-                        this._state.fields.push({ name: field.name.value, ty: new CWSPlaceholderType(field.name.value) })
-                    }
-                    if (field instanceof StateMapDefn) {
-                        this._state.fields.push({ name: field.name.value, ty: new CWSPlaceholderType(field.name.value) })
-                    }
-                })
+            if (this._state) {
+                throw new Error("state already defined")
             }
-
-            defn.stateFields.forEach((field, i) => {
+            
+            this._state = new CWSStructType('$state', [])
+            defn.stateFields.forEach(field => {
                 if (field instanceof StateItemDefn) {
-                    this._state.fields[i].ty = evalType(this, field.ty)
+                    this._state!.fields.push({ name: field.name.value, ty: new CWSPlaceholderType(() => evalType(this, field.ty)) })
                 }
                 if (field instanceof StateMapDefn) {
-                    this._state.fields[i].ty = new CWSMapType(evalType(this, field.indexTy), evalType(this, field.ty)) 
+                    this._state!.fields.push({ name: field.name.value, ty: new CWSPlaceholderType(() => evalType(this, field.ty)) })
                 }
             })
 
             return
-        } 
+        }
 
         throw new Error(`Method not implemented: ${defn.constructor.name}`);
     }
@@ -648,8 +630,8 @@ export class Statement {
 // Type evaluator for expression nodes. Uses the symbol table to look up types of each identifier.
 
 //#region Expressions
-function evalType(scope: ContractSymbolTable, ty?: TypeExpr): CWSType {
-    if (ty == null) {
+function evalType(scope: ContractSymbolTable, ty?: TypeExpr | null | undefined): CWSType {
+    if (!ty) {
         throw new Error("Type is null")
     }
 
@@ -704,12 +686,12 @@ function evalType(scope: ContractSymbolTable, ty?: TypeExpr): CWSType {
     if (ty instanceof IdentTypeExpr) {
         let inner = scope.type(ty.ident.value)
         if (!inner) {
-            throw new Error("Invalid type")
+            throw new Error(`Type not found: ${ty.ident.value}`)
         }
         return inner
     }
 
-    throw new Error("Invalid type")
+    throw new Error(`Invalid type expression: ${ty.constructor.name}`)
 }
 
 function evalParam(scope: ContractSymbolTable, param: Param) {

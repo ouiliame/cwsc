@@ -42,9 +42,9 @@ export class CWScriptCompiler {
       const text = await readFile(sourceFile);
       const { ast, diagnostics } = CWScriptParser.parse(text, sourceFile);
       ctx.sourceFiles[sourceFile] = {
-        text: undefined,
-        ast: undefined,
-        diagnostics: [],
+        text,
+        ast,
+        diagnostics,
       };
     }
 

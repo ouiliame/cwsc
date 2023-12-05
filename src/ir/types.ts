@@ -35,9 +35,19 @@ export class CWSVoidType extends CWSType {
   }
 }
 
-export class CWSPlaceholderType extends CWSType {
-  constructor(name: string) {
-    super(name);
+export type Placeholder<T extends CWSType> = T | CWSPlaceholderType<T>;
+
+export class CWSPlaceholderType<T extends CWSType> extends CWSType {
+  public cachedTy?: T;
+  public resolve() {
+    if (this.cachedTy === undefined) {
+      this.cachedTy = this.ty();
+    }
+    return this.cachedTy;
+  }
+
+  constructor(public ty: () => T) {
+    super('__Placeholder');
   }
 }
 

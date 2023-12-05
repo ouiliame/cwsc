@@ -78,6 +78,10 @@ export class CWSType extends IR {
       this.isEqualTo(other) || this.supertypes.some((x) => x.isSubtypeOf(other))
     );
   }
+
+  public resolve(): CWSType {
+    return this;
+  }
 }
 
 export abstract class CWSValue extends IR {
