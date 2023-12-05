@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types"],
+  "include": ["src", "types", "scripts"],
   "exclude": ["/node_modules/", "./src/**/*.test.ts"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
@@ -20,7 +20,6 @@
     "outDir": "dist",
     "rootDir": "src",
     "sourceMap": true,
-    "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,

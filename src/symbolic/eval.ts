@@ -6,17 +6,9 @@ import { CWSExpr, CWSType, CWSValue, IR } from "../ir";
 import { CWSAnyType, CWSArrayType, CWSBoolType, CWSContractType, CWSEnumType, CWSEnumVariant, CWSEnumVariantStructType, CWSEnumVariantTupleType, CWSErrorType, CWSEventType, CWSExecFnType, CWSFnType, CWSInstantiateFnType, CWSIntType, CWSInterfaceType, CWSMapType, CWSOptionType, CWSPlaceholderType, CWSQueryFnType, CWSStructType, CWSTupleType, CWSTypeAliasType, CWSVoidType, Placeholder } from "../ir/types";
 import { variantStruct } from "../rust-syntax";
 
-export interface ProjectSymbolTable {
-    file(name: string): FileSymbolTable | undefined;
-}
-
-export interface FileSymbolTable {
-    contract(name: string): ContractSymbolTable | undefined;
-}
-
 // LexicalSymbolTable is used to look up a symbol within a context of a specific contract.
 // Each block scope has its own LexicalSymbolTable, which may be nested.
-export interface ContractSymbolTable {
+export interface SymbolTable {
     // InstantiateStmt lookup
     instantiate(): CWSInstantiateFnType | undefined;
     // ExecStmt lookup
@@ -37,6 +29,16 @@ export interface ContractSymbolTable {
     // $state, top level functions, and top level variables
     variable(name: string): CWSType | undefined;
 }
+
+export interface ProjectSymbolTable {
+    file(name: string): FileSymbolTable | undefined;
+}
+
+export interface FileSymbolTable {
+    contract(name: string): ContractSymbolTable | undefined;
+}
+
+
 
 export interface LexicalSymbolTable {
     contract: ContractSymbolTable;
@@ -211,7 +213,7 @@ export class Contract extends ContractDefn implements ContractSymbolTable, Lexic
         }
 
         if (defn instanceof UnitDefn) {
-            throw new Error("TODO");
+            
         }
     
         if (defn instanceof EnumDefn) {
@@ -311,7 +313,7 @@ export class BlockScope extends Block implements LexicalSymbolTable {
     }
 
     constructor(stmts: List<Stmt>, public contract: ContractSymbolTable, public parent: LexicalSymbolTable) {
-        super(stmts)
+        super(stmts.children)
     }
 
     evalStmt(stmt: Stmt) {
@@ -384,7 +386,7 @@ export class Fn extends FnDefn implements LexicalSymbolTable {
     }
 
     constructor(defn: FnDefn, public contract: ContractSymbolTable, public parent?: LexicalSymbolTable) {
-        super(defn.name, defn.fallible, null, defn.params, defn.returnTy, defn.body);
+        super(defn.name, defn.fallible, List.empty(), defn.params, defn.returnTy, defn.body);
 
         this.block = new BlockScope(defn.body, contract, this);
 
@@ -652,7 +654,7 @@ function evalType(scope: ContractSymbolTable, ty?: TypeExpr | null | undefined):
         if (!inner) {
             throw new Error("Invalid array type")
         }
-        return new CWSArrayType(inner, ty.size)
+        return new CWSArrayType(inner, parseInt(ty.size.value))
     }
 
     if (ty instanceof StructDefnTypeExpr) {
@@ -725,9 +727,9 @@ function evalEnum(scope: ContractSymbolTable, enm: EnumDefn) {
 // it evaluates to the type of the last statement.
 // TODO: additionally check any return statements
 function evalBlock(scope: LexicalSymbolTable, block: Block): CWSType {
-    let newScope = new BlockScope(block.stmts, scope.contract, scope)
-    block.stmts.forEach(stmt => newScope.evalStmt(stmt))
-    return evalExpr(newScope, block.stmts.children[block.stmts.length - 1])
+    let newScope = new BlockScope(block, scope.contract, scope)
+    block.forEach(stmt => newScope.evalStmt(stmt))
+    return evalExpr(newScope, block.children[block.length - 1])
 }
 
 function evalFn(scope: LexicalSymbolTable, defn: FnDefn): CWSFnType {

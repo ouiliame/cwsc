@@ -1,7 +1,18 @@
 import { ParserRuleContext } from 'antlr4ts';
+import type { SymbolTable } from './symbol-table';
 
 export abstract class AST {
   public $ctx: ParserRuleContext | null = null;
+  protected _symbols: SymbolTable | null = null;
+
+  public set symbols(value: SymbolTable | null) {
+    // TODO: adjust symbol parents
+    this._symbols = value;
+  }
+
+  public get symbols(): SymbolTable {
+    return (this._symbols ?? this.$parent?.symbols)!
+  }
 
   constructor(public $parent: AST | null = null) {}
 

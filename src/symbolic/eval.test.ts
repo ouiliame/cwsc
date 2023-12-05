@@ -42,7 +42,7 @@ test('contract type evaluation', () => {
 
     //console.log(table.variable('$state'))
     //console.log(table.error('MyError'))
-    console.log(table.variable('myFunction'))
+    console.log(table.variable('myFunction')!.resolve())
     //console.log(table.instantiate())
     //console.log(table.exec('#myExec'))
     //console.log(table.query('#myQuery'))

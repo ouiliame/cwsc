@@ -49,6 +49,7 @@
     "antlr": "bun run antlr-lexer && bun run antlr-parser",
     "format": "prettier --check ./src/**/*.ts",
     "format:fix": "prettier --write ./src/**/*.ts",
+    "build:json-schema": "ts-node ./src/generate-cwsproject-json-schema.ts",
     "build": "shx rm -rf dist && tsc --module commonjs && webpack --mode production",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "lint": "eslint ./src/**/*.ts",
@@ -61,7 +62,8 @@
   "files": [
     "bin",
     "dist",
-    "src"
+    "src",
+    "cwsproject.schema.json"
   ],
   "prettier": {
     "printWidth": 80,

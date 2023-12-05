@@ -5,8 +5,11 @@ import { Pipeline, PipelineStage } from './pipelines';
 import * as AST from './ast';
 
 import * as fs from 'fs';
+import * as path from 'path';
 import { Diagnostic } from 'vscode-languageserver';
 import { readFile } from './util/filesystem';
+import { TextView } from './util/position';
+import { SymbolicEvalVisitor } from './symbolic/eval-visitor';
 
 export interface BuildContext {
   sourceFiles: {
@@ -40,7 +43,14 @@ export class CWScriptCompiler {
     // read each file's contents and parse into AST
     for (let sourceFile of sourceFiles) {
       const text = await readFile(sourceFile);
+      const textView = new TextView(text);
       const { ast, diagnostics } = CWScriptParser.parse(text, sourceFile);
+      if (!ast) {
+        continue; 
+      }
+      const evalVisitor = new SymbolicEvalVisitor(textView, sourceFile);
+      const { contracts } = evalVisitor.visitSourceFile(ast);
+      console.dir(contracts);
       ctx.sourceFiles[sourceFile] = {
         text,
         ast,
@@ -75,10 +85,8 @@ async function main() {
   const project = await CWScriptProject.fromProjectRoot('examples/counter');
   const compiler = new CWScriptCompiler(project);
   const ctx = await compiler.build();
-  const counterFile =
-    '/Users/william/cwscript/cwsc-v1/examples/counter/src/Counter.cws';
+  const counterFile = path.resolve('examples/counter/src/Counter.cws');
   const { ast, diagnostics } = ctx.sourceFiles[counterFile];
-  console.dir(diagnostics);
 }
 
 main();

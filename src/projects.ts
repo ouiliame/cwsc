@@ -154,7 +154,3 @@ export class CWScriptProject {
 
   public build() {}
 }
-import { zodToJsonSchema } from 'zod-to-json-schema';
-console.log(
-  JSON.stringify(zodToJsonSchema(CWScriptProjectConfigSchema), null, 2)
-);
