@@ -578,6 +578,9 @@ export class ASTBuilderVisitor
   }
 
   visitParamList(ctx: P.ParamListContext): AST.List<AST.Param> {
+    if (!ctx) {
+      return AST.List.empty<AST.Param>();
+    }
     return new AST.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 

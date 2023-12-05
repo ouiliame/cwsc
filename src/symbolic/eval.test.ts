@@ -10,13 +10,15 @@ test('contract type evaluation', () => {
     }
 
     fn myFunction() {}
+    
     error MyError()
 
-    #instantiate() {}
+    instantiate() {}
 
-    exec #myExec() {}
+    exec myExec() {}
 
-    query #myQuery() {}
+    query myQuery() {}
+
 }`, null
     )
     const ast = parser.parse()
@@ -24,6 +26,6 @@ test('contract type evaluation', () => {
     if (!(defn instanceof ContractDefn)) {
         throw new Error('Expected ContractDefn')
     }
-    console.log(defn)
+    console.log(defn.body.stmts.children)
     // let table = new Contract(defn)
 })
