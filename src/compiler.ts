@@ -3,13 +3,9 @@ import { CWScriptProject } from './projects';
 import { Pipeline, PipelineStage } from './pipelines';
 
 import * as AST from './ast';
-
-import * as fs from 'fs';
 import * as path from 'path';
 import { Diagnostic } from 'vscode-languageserver';
 import { readFile } from './util/filesystem';
-import { TextView } from './util/position';
-import { SymbolicEvalVisitor } from './symbolic/eval-visitor';
 import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
 
 export interface BuildContext {

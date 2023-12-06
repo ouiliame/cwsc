@@ -1,10 +1,9 @@
 import toml from '@iarna/toml';
-import * as fs from 'fs';
 import * as path from 'path';
 import { formatRust } from './format';
-import { writeFile } from 'src/util/filesystem';
+import { writeFile } from '../util/filesystem';
 
-const DEFAULT_CARGO_TOML: CargoToml = {
+export const DEFAULT_CARGO_TOML: CargoToml = {
   dependencies: {
     'cosmwasm-schema': '1.5.0',
     'cw-storage-plus': '1.1.0',
@@ -60,7 +59,7 @@ const DEFAULT_CARGO_TOML: CargoToml = {
   },
 };
 
-const DOTCARGO_CONFIG = toml.stringify({
+export const DOTCARGO_CONFIG = toml.stringify({
   alias: {
     schema: 'run --bin schema',
     'unit-test': 'test --lib',

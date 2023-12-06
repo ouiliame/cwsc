@@ -1,36 +1,16 @@
-import { A } from "./TestImport.cws"
-import { A } from "./TestImport.cws"
+contract KitchenSink {
+  state {
+    a: Int;
+    b: String;
+  }
 
-// let a = 3;
-// let a: Ty = 3;
-// let [a, b] = 3;
-// let {a, b} = 3;
+  error ErrA();
+  error ErrB(a: Int, b: String);
 
-// const a: List[A] = 3;
+  #instantiate(a: Int, b: String) {}
+  exec #execA() {}
+  exec #execB(a: Int, b: String) {}
 
-// a -= 5;
-// a.item[item][item] = 5;
-
-// return None;
-// exec! None;
-// instantiate! None;
-// fail! None;
-// emit None;
-
-// for [a, b] in expr {
-  // None;
-// }
-
-let a = 5;
-
-a + b == 5
-
-a + b * 5
-a * b + 5
-a * b + 5 == 5
-
-if a + b == 5 {
-  a
-} else {
-  b
+  query #queryA() {}
+  query #queryB(a: Int, b: String) {}
 }
