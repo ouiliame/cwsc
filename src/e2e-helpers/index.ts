@@ -14,6 +14,7 @@ import {
   refExpr,
   tryExpr,
 } from '../rust';
+import { snakeToPascal } from '../util/strings';
 
 export const entryPoint = (fn: FunctionDefn) =>
   ann(`#[cfg_attr(not(feature = "library"), entry_point)]`, fn);
@@ -53,13 +54,14 @@ export function buildInstantiateEntrypoint(instDefn: AST.InstantiateDefn) {
 
 export function buildExecEntrypoint(execDefns: AST.ExecDefn[]) {
   const arms = execDefns.map((x) => {
-    const name = x.name.value.substring(1);
+    const name = snakeToPascal(x.name.value.substring(1));
+    const msgName = snakeToPascal(x.name.value.substring(1));
     const params = x.params.map((p) => p.name.value);
     const call = fnCallExpr(`exec_${name}_impl`, [
       identExpr('ctx'),
       ...params.map((p) => identExpr(`msg.${p}`)),
     ]);
-    return arm(`ExecuteMsg::${name} { ${params.join(', ')} }`, call);
+    return arm(`ExecuteMsg::${msgName} { ${params.join(', ')} }`, call);
   });
 
   return entryPoint(
@@ -92,13 +94,14 @@ export function buildExecEntrypoint(execDefns: AST.ExecDefn[]) {
 export function buildQueryEntrypoint(queryDefns: AST.QueryDefn[]) {
   const arms = queryDefns.map((x) => {
     const name = x.name.value.substring(1);
+    const msgName = snakeToPascal(name);
     const params = x.params.map((p) => p.name.value);
     let call = fnCallExpr(`query_${name}_impl`, [
       identExpr('ctx'),
       ...params.map((p) => identExpr(`msg.${p}`)),
     ]);
     call = fnCallExpr('to_json_binary', [tryExpr(refExpr(call))]);
-    return arm(`QueryMsg::${name} { ${params.join(', ')} }`, call);
+    return arm(`QueryMsg::${msgName} { ${params.join(', ')} }`, call);
   });
 
   return entryPoint(
@@ -123,5 +126,43 @@ export function buildQueryEntrypoint(queryDefns: AST.QueryDefn[]) {
         matchExpr(identExpr('msg'), arms),
       ]
     )
+  );
+}
+
+export function buildInstantiateImplFn(instDefn: AST.InstantiateDefn) {
+  const params = instDefn.params.map((p) =>
+    fnParam(p.name.value, p.ty!.$ctx!.text)
+  );
+  return fnDefn(
+    'instantiate_impl',
+    [fnParam('ctx', 'InstantiateCtx'), ...params],
+    'Result<Response, ContractError>',
+    [fnCallExpr('Ok', [fnCallExpr('Response::new', [])])]
+  );
+}
+
+export function buildExecImplFn(execDefn: AST.ExecDefn) {
+  const name = execDefn.name.value.substring(1);
+  const params = execDefn.params.map((p) =>
+    fnParam(p.name.value, p.ty!.$ctx!.text)
+  );
+  return fnDefn(
+    `exec_${name}_impl`,
+    [fnParam('ctx', 'ExecuteCtx'), ...params],
+    'Result<Response, ContractError>',
+    [fnCallExpr('Ok', [fnCallExpr('Response::new', [])])]
+  );
+}
+
+export function buildQueryImplFn(queryDefn: AST.QueryDefn) {
+  const name = queryDefn.name.value.substring(1);
+  const params = queryDefn.params.map((p) =>
+    fnParam(p.name.value, p.ty!.$ctx!.text)
+  );
+  return fnDefn(
+    `query_${name}_impl`,
+    [fnParam('ctx', 'QueryCtx'), ...params],
+    'StdResult<Binary>',
+    [fnCallExpr('Ok', [fnCallExpr('to_binary', [identExpr('msg')])])]
   );
 }

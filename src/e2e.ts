@@ -8,8 +8,11 @@ import {
   buildInstantiateEntrypoint,
   buildExecEntrypoint,
   buildQueryEntrypoint,
+  buildInstantiateImplFn,
+  buildExecImplFn,
+  buildQueryImplFn,
 } from './e2e-helpers';
-import { pascalToSnake } from './util/strings';
+import { pascalToSnake, snakeToPascal } from './util/strings';
 import { Pipeline, PipelineStage } from './pipelines';
 import { readFile } from './util/filesystem';
 import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
@@ -142,7 +145,7 @@ function buildMsgMod(contract: AST.ContractDefn): rs.ModuleDefn {
 
   const execVariants: rs.EnumVariantStruct[] = [];
   contract.descendantsOfType(AST.ExecDefn).forEach((x) => {
-    const name = x.name.value.substring(1);
+    const name = snakeToPascal(x.name.value.substring(1));
     const fields = x.params.map((f) =>
       rs.structField(f.name.value, f.ty!.$ctx!.text)
     );
@@ -156,7 +159,7 @@ function buildMsgMod(contract: AST.ContractDefn): rs.ModuleDefn {
 
   const queryVariants: rs.EnumVariantStruct[] = [];
   contract.descendantsOfType(AST.QueryDefn).forEach((x) => {
-    const name = x.name.value.substring(1);
+    const name = snakeToPascal(x.name.value.substring(1));
     const fields = x.params.map((f) =>
       rs.structField(f.name.value, f.ty!.$ctx!.text)
     );
@@ -186,16 +189,39 @@ function buildContractMod(contract: AST.ContractDefn): rs.ModuleDefn {
   return rs.mod('contract', items);
 }
 
+function buildImplMod(contract: AST.ContractDefn): rs.ModuleDefn {
+  const items: rs.RustSyntax[] = [
+    rs.use('super::cws::*'),
+    rs.use('super::error::*'),
+    rs.use('super::msg::*'),
+    rs.use('super::state::*'),
+  ];
+
+  const instDefn = contract.descendantsOfType(AST.InstantiateDefn)[0];
+  const execDefns = contract.descendantsOfType(AST.ExecDefn);
+  const queryDefns = contract.descendantsOfType(AST.QueryDefn);
+
+  const instImplFn = buildInstantiateImplFn(instDefn);
+  const execImplFns = execDefns.map((x) => buildExecImplFn(x));
+  const queryImplFns = queryDefns.map((x) => buildQueryImplFn(x));
+
+  items.push(instImplFn, ...execImplFns, ...queryImplFns);
+
+  return rs.mod('implementation', items);
+}
+
 function buildContract(crate: RustCrate, contract: AST.ContractDefn) {
   const stateMod = buildStateMod(contract);
   const errorMod = buildErrorMod(contract);
   const msgMod = buildMsgMod(contract);
   const contractMod = buildContractMod(contract);
+  const implMod = buildImplMod(contract);
   const mod = rs.mod(pascalToSnake(contract.name.value), [
     stateMod,
     errorMod,
     msgMod,
     contractMod,
+    implMod,
   ]);
   crate.setFile('src/lib.rs', mod.render());
 }

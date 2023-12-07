@@ -29,16 +29,16 @@ pub mod kitchen_sink {
     }
     #[cw_serde]
     pub enum ExecuteMsg {
-      execA {},
-      execB {
+      ExecA {},
+      ExecB {
         a: Int,
         b: String,
       },
     }
     #[cw_serde]
     pub enum QueryMsg {
-      queryA {},
-      queryB {
+      QueryA {},
+      QueryB {
         a: Int,
         b: String,
       },
@@ -76,8 +76,8 @@ pub mod kitchen_sink {
         info: info,
       };
       match msg {
-        ExecuteMsg::execA {} => exec_execA_impl(ctx),
-        ExecuteMsg::execB { a, b } => exec_execB_impl(ctx, msg.a, msg.b),
+        ExecuteMsg::ExecA {} => exec_ExecA_impl(ctx),
+        ExecuteMsg::ExecB { a, b } => exec_ExecB_impl(ctx, msg.a, msg.b),
       }
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
@@ -87,10 +87,45 @@ pub mod kitchen_sink {
         env: env,
       };
       match msg {
-        QueryMsg::queryA {} => to_json_binary(&query_queryA_impl(ctx)?),
-        QueryMsg::queryB { a, b } =>
-          to_json_binary(&query_queryB_impl(ctx, msg.a, msg.b)?),
+        QueryMsg::QueryA {} => to_json_binary(&query_query_a_impl(ctx)?),
+        QueryMsg::QueryB { a, b } =>
+          to_json_binary(&query_query_b_impl(ctx, msg.a, msg.b)?),
       }
+    }
+  }
+  pub mod implementation {
+    use super::cws::*;
+    use super::error::*;
+    use super::msg::*;
+    use super::state::*;
+    pub fn instantiate_impl(
+      ctx: InstantiateCtx,
+      a: Int,
+      b: String
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn exec_exec_a_impl(
+      ctx: ExecuteCtx
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn exec_exec_b_impl(
+      ctx: ExecuteCtx,
+      a: Int,
+      b: String
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn query_query_a_impl(ctx: QueryCtx) -> StdResult<Binary> {
+      Ok(to_binary(msg))
+    }
+    pub fn query_query_b_impl(
+      ctx: QueryCtx,
+      a: Int,
+      b: String
+    ) -> StdResult<Binary> {
+      Ok(to_binary(msg))
     }
   }
 }

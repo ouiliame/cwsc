@@ -8,9 +8,9 @@ contract KitchenSink {
   error ErrB(a: Int, b: String);
 
   #instantiate(a: Int, b: String) {}
-  exec #execA() {}
-  exec #execB(a: Int, b: String) {}
+  exec #exec_a() {}
+  exec #exec_b(a: Int, b: String) {}
 
-  query #queryA() {}
-  query #queryB(a: Int, b: String) {}
+  query #query_a() {}
+  query #query_b(a: Int, b: String) {}
 }
