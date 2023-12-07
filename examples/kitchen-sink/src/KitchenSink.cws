@@ -27,9 +27,14 @@ contract KitchenSink {
   }
   struct StructC()
   struct StructD(a: Int, b: String)
+  struct StructE[%T, %U] {
+    a: %T,
+    b: %U
+  }
 
-  tuple TupA[];
-  tuple TupB[Int, String];
+  tuple TupA([]);
+  tuple TupB([Int, String]);
+  tuple TupC[%T]([%T, Int, %T]);
 
   unit UnitA;
   unit UnitB;
@@ -44,9 +49,18 @@ contract KitchenSink {
     #StructVariantB { a: Int, b: String },
     #StructVariantC(),
     #StructVariantD(a: Int, b: String),
-    #TupleVariantA[],
-    #TupleVariantB[Int, String],
+    #TupleVariantA([]),
+    #TupleVariantB([Int, String]),
     #UnitVariantA,
     #UnitVariantB
   }
+
+  fn fn_a() {}
+  fn fn_b(a: Int, b: String) {}
+  fn fn_c!() {}
+  fn fn_d!(a: Int, b: String) {}
+  fn fn_e[%T]() {}
+  fn fn_f[%T](x: %T) {}
+  fn fn_g![%T]() {}
+  fn fn_h![%T](x: %T) {}
 }

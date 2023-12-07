@@ -156,8 +156,13 @@ pub mod kitchen_sink {
       pub a: TODO,
       pub b: TODO,
     }
+    pub struct StructE {
+      pub a: TODO,
+      pub b: TODO,
+    }
     pub struct TupA();
     pub struct TupB(pub TODO, pub TODO);
+    pub struct TupC(pub TODO, pub TODO, pub TODO);
     pub struct UnitA;
     pub struct UnitB;
     pub struct InlineB {
@@ -221,5 +226,15 @@ pub mod kitchen_sink {
         b: TODO,
       },
     }
+  }
+  pub mod functions {
+    pub fn fn_a() -> TODO {}
+    pub fn fn_b() -> TODO {}
+    pub fn fn_c() -> TODO {}
+    pub fn fn_d() -> TODO {}
+    pub fn fn_e() -> TODO {}
+    pub fn fn_f() -> TODO {}
+    pub fn fn_g() -> TODO {}
+    pub fn fn_h() -> TODO {}
   }
 }

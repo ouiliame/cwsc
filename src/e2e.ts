@@ -329,6 +329,16 @@ function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
   return rs.mod('types', items);
 }
 
+function buildFunctionsMod(contract: AST.ContractDefn): rs.ModuleDefn {
+  const items: rs.RustSyntax[] = [];
+  const fnDefns = contract.descendantsOfType(AST.FnDefn);
+  fnDefns.forEach((f) => {
+    const func = rs.fnDefn(f.name.value, [], 'TODO', []);
+    items.push(func);
+  });
+  return rs.mod('functions', items);
+}
+
 function buildContract(crate: RustCrate, contract: AST.ContractDefn) {
   const stateMod = buildStateMod(contract);
   const errorMod = buildErrorMod(contract);
@@ -336,6 +346,7 @@ function buildContract(crate: RustCrate, contract: AST.ContractDefn) {
   const contractMod = buildContractMod(contract);
   const implMod = buildImplMod(contract);
   const typesMod = buildTypesMod(contract);
+  const functionsMod = buildFunctionsMod(contract);
 
   const mod = rs.mod(pascalToSnake(contract.name.value), [
     stateMod,
@@ -344,6 +355,7 @@ function buildContract(crate: RustCrate, contract: AST.ContractDefn) {
     contractMod,
     implMod,
     typesMod,
+    functionsMod,
   ]);
   crate.setFile('src/lib.rs', mod.render());
 }

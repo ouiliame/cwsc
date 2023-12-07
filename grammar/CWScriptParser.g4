@@ -119,9 +119,9 @@ structDefn:
 	) SEMI? # StructDefnParen;
 
 tupleDefn:
-	TUPLE (name = ident) (typeParams = brackTypeParamList)? (
+	TUPLE (name = ident) (typeParams = brackTypeParamList)? LPAREN (
 		elements = brackTypeExprList
-	) SEMI?;
+	) RPAREN SEMI?;
 
 unitDefn:
 	UNIT (typeParams = brackTypeParamList)? (name = ident) SEMI?;
@@ -134,10 +134,10 @@ enumDefn:
 enumVariantDefnList: (enumVariantDefn (COMMA enumVariantDefn)*);
 
 enumVariantDefn:
-	(name = ident) (fields = braceParamList)		# EnumVariantStructDefnBrace
-	| (name = ident) (fields = parenParamList)		# EnumVariantStructDefnParen
-	| (name = ident) (elements = brackTypeExprList)	# EnumVariantTupleDefn
-	| (name = ident)								# EnumVariantUnitDefn;
+	(name = ident) (fields = braceParamList)						# EnumVariantStructDefnBrace
+	| (name = ident) (fields = parenParamList)						# EnumVariantStructDefnParen
+	| (name = ident) LPAREN (elements = brackTypeExprList) RPAREN	# EnumVariantTupleDefn
+	| (name = ident)												# EnumVariantUnitDefn;
 
 typeAliasDefn:
 	TYPE (name = ident) (typeParams = brackTypeParamList)? EQ (
