@@ -2,7 +2,7 @@ contract KitchenSink {
   state {
     a: Int;
     b: String;
-    c: struct Inline {}
+    c: struct InlineA {}
   }
 
   error ErrA();
@@ -33,6 +33,11 @@ contract KitchenSink {
 
   unit UnitA;
   unit UnitB;
+
+  type TypeAliasA = None;
+  type TypeAliasB[%T] = struct InlineB {
+    a: %T
+  };
 
   enum EnumA {
     #StructVariantA {},

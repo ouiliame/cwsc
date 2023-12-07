@@ -487,7 +487,7 @@ export class CWScriptParser extends Parser {
 			this.state = 163;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				this.state = 162;
 				_localctx._items = this.identList();
@@ -600,6 +600,7 @@ export class CWScriptParser extends Parser {
 			case CWScriptParser.STATE:
 			case CWScriptParser.IF:
 			case CWScriptParser.ELSE:
+			case CWScriptParser.NONE:
 			case CWScriptParser.AND:
 			case CWScriptParser.OR:
 			case CWScriptParser.TRUE:
@@ -644,7 +645,7 @@ export class CWScriptParser extends Parser {
 				this.state = 186;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 					{
 					this.state = 185;
 					(_localctx as TupleBindingContext)._names = this.identList();
@@ -664,7 +665,7 @@ export class CWScriptParser extends Parser {
 				this.state = 191;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 					{
 					this.state = 190;
 					(_localctx as StructBindingContext)._names = this.identList();
@@ -1641,7 +1642,7 @@ export class CWScriptParser extends Parser {
 			this.state = 346;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				this.state = 345;
 				_localctx._variants = this.enumVariantDefnList();
@@ -2252,7 +2253,7 @@ export class CWScriptParser extends Parser {
 			this.state = 457;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				{
 				this.state = 454;
@@ -3671,6 +3672,7 @@ export class CWScriptParser extends Parser {
 			case CWScriptParser.STATE:
 			case CWScriptParser.IF:
 			case CWScriptParser.ELSE:
+			case CWScriptParser.NONE:
 			case CWScriptParser.AND:
 			case CWScriptParser.OR:
 			case CWScriptParser.TRUE:
@@ -3735,7 +3737,7 @@ export class CWScriptParser extends Parser {
 			this.state = 682;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || ((((_la - 87)) & ~0x1F) === 0 && ((1 << (_la - 87)) & ((1 << (CWScriptParser.HashIdent - 87)) | (1 << (CWScriptParser.Ident - 87)) | (1 << (CWScriptParser.TypeVar - 87)))) !== 0)) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || ((((_la - 87)) & ~0x1F) === 0 && ((1 << (_la - 87)) & ((1 << (CWScriptParser.HashIdent - 87)) | (1 << (CWScriptParser.Ident - 87)) | (1 << (CWScriptParser.TypeVar - 87)))) !== 0)) {
 				{
 				this.state = 681;
 				_localctx._ty = this.typeExpr(0);
@@ -3931,7 +3933,7 @@ export class CWScriptParser extends Parser {
 			this.state = 714;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				this.state = 706;
 				this.param();
@@ -3986,7 +3988,7 @@ export class CWScriptParser extends Parser {
 			this.state = 727;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				this.state = 719;
 				this.param();
@@ -4052,7 +4054,7 @@ export class CWScriptParser extends Parser {
 			this.state = 743;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				this.state = 735;
 				this.param();
@@ -4160,7 +4162,7 @@ export class CWScriptParser extends Parser {
 			this.state = 769;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || ((((_la - 87)) & ~0x1F) === 0 && ((1 << (_la - 87)) & ((1 << (CWScriptParser.HashIdent - 87)) | (1 << (CWScriptParser.Ident - 87)) | (1 << (CWScriptParser.TypeVar - 87)))) !== 0)) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)) | (1 << (CWScriptParser.LPAREN - 32)) | (1 << (CWScriptParser.LBRACK - 32)))) !== 0) || ((((_la - 87)) & ~0x1F) === 0 && ((1 << (_la - 87)) & ((1 << (CWScriptParser.HashIdent - 87)) | (1 << (CWScriptParser.Ident - 87)) | (1 << (CWScriptParser.TypeVar - 87)))) !== 0)) {
 				{
 				this.state = 761;
 				this.typeExpr(0);
@@ -4215,7 +4217,7 @@ export class CWScriptParser extends Parser {
 			this.state = 782;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0) || _la === CWScriptParser.HashIdent || _la === CWScriptParser.Ident) {
 				{
 				this.state = 774;
 				this.field();
@@ -4365,7 +4367,7 @@ export class CWScriptParser extends Parser {
 			{
 			this.state = 806;
 			_la = this._input.LA(1);
-			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0))) {
+			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CWScriptParser.CONTRACT) | (1 << CWScriptParser.INTERFACE) | (1 << CWScriptParser.IMPORT) | (1 << CWScriptParser.IMPLEMENTS) | (1 << CWScriptParser.EXTENDS) | (1 << CWScriptParser.ERROR) | (1 << CWScriptParser.EVENT) | (1 << CWScriptParser.INSTANTIATE) | (1 << CWScriptParser.EXEC) | (1 << CWScriptParser.QUERY) | (1 << CWScriptParser.REPLY) | (1 << CWScriptParser.FOR) | (1 << CWScriptParser.IN) | (1 << CWScriptParser.FROM) | (1 << CWScriptParser.STATE) | (1 << CWScriptParser.IF) | (1 << CWScriptParser.ELSE) | (1 << CWScriptParser.NONE) | (1 << CWScriptParser.AND))) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (CWScriptParser.OR - 32)) | (1 << (CWScriptParser.TRUE - 32)) | (1 << (CWScriptParser.FALSE - 32)) | (1 << (CWScriptParser.FN - 32)) | (1 << (CWScriptParser.LET - 32)) | (1 << (CWScriptParser.STRUCT - 32)) | (1 << (CWScriptParser.TUPLE - 32)) | (1 << (CWScriptParser.UNIT - 32)) | (1 << (CWScriptParser.ENUM - 32)) | (1 << (CWScriptParser.TYPE - 32)) | (1 << (CWScriptParser.EMIT - 32)))) !== 0))) {
 			this._errHandler.recoverInline(this);
 			} else {
 				if (this._input.LA(1) === Token.EOF) {
@@ -4547,66 +4549,66 @@ export class CWScriptParser extends Parser {
 		"B\x02D\x02F\x02H\x02J\x02L\x02N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02" +
 		"^\x02`\x02b\x02d\x02f\x02h\x02j\x02l\x02n\x02p\x02r\x02t\x02v\x02x\x02" +
 		"z\x02|\x02~\x02\x80\x02\x82\x02\x02\b\b\x02GGKKMMOOQQSS\x05\x02NNPPRR" +
-		"\x04\x02JJLL\x03\x02TW\x03\x02HI\x07\x02\x04\n\x11\x19\x1D\x1D!&*/\x02" +
-		"\u038E\x02\x87\x03\x02\x02\x02\x04\xA0\x03\x02\x02\x02\x06\xA2\x03\x02" +
-		"\x02\x02\b\xAD\x03\x02\x02\x02\n\xC4\x03\x02\x02\x02\f\xC6\x03\x02\x02" +
-		"\x02\x0E\xD2\x03\x02\x02\x02\x10\xD8\x03\x02\x02\x02\x12\xE0\x03\x02\x02" +
-		"\x02\x14\xE9\x03\x02\x02\x02\x16\xEE\x03\x02\x02\x02\x18\xF3\x03\x02\x02" +
-		"\x02\x1A\xF9\x03\x02\x02\x02\x1C\xFE\x03\x02\x02\x02\x1E\u0103\x03\x02" +
-		"\x02\x02 \u0116\x03\x02\x02\x02\"\u0118\x03\x02\x02\x02$\u0126\x03\x02" +
-		"\x02\x02&\u0142\x03\x02\x02\x02(\u0144\x03\x02\x02\x02*\u014D\x03\x02" +
-		"\x02\x02,\u0155\x03\x02\x02\x02.\u0162\x03\x02\x02\x020\u0174\x03\x02" +
-		"\x02\x022\u0176\x03\x02\x02\x024\u0180\x03\x02\x02\x026\u0191\x03\x02" +
-		"\x02\x028\u019E\x03\x02\x02\x02:\u01AC\x03\x02\x02\x02<\u01BA\x03\x02" +
-		"\x02\x02>\u01C0\x03\x02\x02\x02@\u01C6\x03\x02\x02\x02B\u01D4\x03\x02" +
-		"\x02\x02D\u01D6\x03\x02\x02\x02F\u01DC\x03\x02\x02\x02H\u01F3\x03\x02" +
-		"\x02\x02J\u0238\x03\x02\x02\x02L\u0242\x03\x02\x02\x02N\u0251\x03\x02" +
-		"\x02\x02P\u0256\x03\x02\x02\x02R\u025F\x03\x02\x02\x02T\u0262\x03\x02" +
-		"\x02\x02V\u0274\x03\x02\x02\x02X\u0276\x03\x02\x02\x02Z\u0278\x03\x02" +
-		"\x02\x02\\\u027A\x03\x02\x02\x02^\u027C\x03\x02\x02\x02`\u027E\x03\x02" +
-		"\x02\x02b\u0291\x03\x02\x02\x02d\u029F\x03\x02\x02\x02f\u02A4\x03\x02" +
-		"\x02\x02h\u02A6\x03\x02\x02\x02j\u02AE\x03\x02\x02\x02l\u02B3\x03\x02" +
-		"\x02\x02n\u02B9\x03\x02\x02\x02p\u02BB\x03\x02\x02\x02r\u02C3\x03\x02" +
-		"\x02\x02t\u02D0\x03\x02\x02\x02v\u02E0\x03\x02\x02\x02x\u02ED\x03\x02" +
-		"\x02\x02z\u02FA\x03\x02\x02\x02|\u0307\x03\x02\x02\x02~\u0317\x03\x02" +
-		"\x02\x02\x80\u031F\x03\x02\x02\x02\x82\u0328\x03\x02\x02\x02\x84\x86\x05" +
-		"\x04\x03\x02\x85\x84\x03\x02\x02\x02\x86\x89\x03\x02\x02\x02\x87\x85\x03" +
-		"\x02\x02\x02\x87\x88\x03\x02\x02\x02\x88\x8A\x03\x02\x02\x02\x89\x87\x03" +
-		"\x02\x02\x02\x8A\x8B\x07\x02\x02\x03\x8B\x03\x03\x02\x02\x02\x8C\xA1\x05" +
-		"\x06\x04\x02\x8D\xA1\x05\b\x05\x02\x8E\xA1\x05\f\x07\x02\x8F\xA1\x05\x0E" +
-		"\b\x02\x90\xA1\x05\x10\t\x02\x91\xA1\x05\x12\n\x02\x92\xA1\x05J&\x02\x93" +
-		"\xA1\x05L\'\x02\x94\xA1\x05\x18\r\x02\x95\xA1\x05\x1A\x0E\x02\x96\xA1" +
-		"\x05\x1C\x0F\x02\x97\xA1\x05\x1E\x10\x02\x98\xA1\x05\x16\f\x02\x99\xA1" +
-		"\x05\x14\v\x02\x9A\xA1\x05 \x11\x02\x9B\x9D\x05H%\x02\x9C\x9E\x07=\x02" +
-		"\x02\x9D\x9C\x03\x02\x02\x02\x9D\x9E\x03\x02\x02\x02\x9E\xA1\x03\x02\x02" +
-		"\x02\x9F\xA1\x05b2\x02\xA0\x8C\x03\x02\x02\x02\xA0\x8D\x03\x02\x02\x02" +
-		"\xA0\x8E\x03\x02\x02\x02\xA0\x8F\x03\x02\x02\x02\xA0\x90\x03\x02\x02\x02" +
-		"\xA0\x91\x03\x02\x02\x02\xA0\x92\x03\x02\x02\x02\xA0\x93\x03\x02\x02\x02" +
-		"\xA0\x94\x03\x02\x02\x02\xA0\x95\x03\x02\x02\x02\xA0\x96\x03\x02\x02\x02" +
-		"\xA0\x97\x03\x02\x02\x02\xA0\x98\x03\x02\x02\x02\xA0\x99\x03\x02\x02\x02" +
-		"\xA0\x9A\x03\x02\x02\x02\xA0\x9B\x03\x02\x02\x02\xA0\x9F\x03\x02\x02\x02" +
-		"\xA1\x05\x03\x02\x02\x02\xA2\xA3\x07\x06\x02\x02\xA3\xA5\x076\x02\x02" +
-		"\xA4\xA6\x05p9\x02\xA5\xA4\x03\x02\x02\x02\xA5\xA6\x03\x02\x02\x02\xA6" +
-		"\xA7\x03\x02\x02\x02\xA7\xA8\x077\x02\x02\xA8\xA9\x07\x17\x02\x02\xA9" +
-		"\xAB\x05X-\x02\xAA\xAC\x07=\x02\x02\xAB\xAA\x03\x02\x02\x02\xAB\xAC\x03" +
-		"\x02\x02\x02\xAC\x07\x03\x02\x02\x02\xAD\xAE\x07&\x02\x02\xAE\xAF\x05" +
-		"\n\x06\x02\xAF\xB0\x07G\x02\x02\xB0\xB1\x05H%\x02\xB1\xB3\x03\x02\x02" +
-		"\x02\xB2\xB4\x07=\x02\x02\xB3\xB2\x03\x02\x02\x02\xB3\xB4\x03\x02\x02" +
-		"\x02\xB4\t\x03\x02\x02\x02\xB5\xB8\x05f4\x02\xB6\xB7\x07>\x02\x02\xB7" +
-		"\xB9\x05b2\x02\xB8\xB6\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02\xB9\xC5" +
-		"\x03\x02\x02\x02\xBA\xBC\x074\x02\x02\xBB\xBD\x05p9\x02\xBC\xBB\x03\x02" +
-		"\x02\x02\xBC\xBD\x03\x02\x02\x02\xBD\xBE\x03\x02\x02\x02\xBE\xC5\x075" +
-		"\x02\x02\xBF\xC1\x076\x02\x02\xC0\xC2\x05p9\x02\xC1\xC0\x03\x02\x02\x02" +
-		"\xC1\xC2\x03\x02\x02\x02\xC2\xC3\x03\x02\x02\x02\xC3\xC5\x077\x02\x02" +
-		"\xC4\xB5\x03\x02\x02\x02\xC4\xBA\x03\x02\x02\x02\xC4\xBF\x03\x02\x02\x02" +
-		"\xC5\v\x03\x02\x02\x02\xC6\xC7\x07\'\x02\x02\xC7\xCA\x05f4\x02\xC8\xC9" +
-		"\x07>\x02\x02\xC9\xCB\x05b2\x02\xCA\xC8\x03\x02\x02\x02\xCA\xCB\x03\x02" +
-		"\x02\x02\xCB\xCC\x03\x02\x02\x02\xCC\xCD\x07G\x02\x02\xCD\xCE\x05H%\x02" +
-		"\xCE\xD0\x03\x02\x02\x02\xCF\xD1\x07=\x02\x02\xD0\xCF\x03\x02\x02\x02" +
-		"\xD0\xD1\x03\x02\x02\x02\xD1\r\x03\x02\x02\x02\xD2\xD3\x05f4\x02\xD3\xD4" +
-		"\t\x02\x02\x02\xD4\xD6\x05H%\x02\xD5\xD7\x07=\x02\x02\xD6\xD5\x03\x02" +
-		"\x02\x02\xD6\xD7\x03\x02\x02\x02\xD7\x0F\x03\x02\x02\x02\xD8\xD9\x05H" +
-		"%\x02\xD9\xDA\x078\x02\x02\xDA\xDB\x05f4\x02\xDB\xDC\t\x02\x02\x02\xDC" +
+		"\x04\x02JJLL\x03\x02TW\x03\x02HI\b\x02\x04\n\x11\x19\x1D\x1D\x1F\x1F!" +
+		"&*/\x02\u038E\x02\x87\x03\x02\x02\x02\x04\xA0\x03\x02\x02\x02\x06\xA2" +
+		"\x03\x02\x02\x02\b\xAD\x03\x02\x02\x02\n\xC4\x03\x02\x02\x02\f\xC6\x03" +
+		"\x02\x02\x02\x0E\xD2\x03\x02\x02\x02\x10\xD8\x03\x02\x02\x02\x12\xE0\x03" +
+		"\x02\x02\x02\x14\xE9\x03\x02\x02\x02\x16\xEE\x03\x02\x02\x02\x18\xF3\x03" +
+		"\x02\x02\x02\x1A\xF9\x03\x02\x02\x02\x1C\xFE\x03\x02\x02\x02\x1E\u0103" +
+		"\x03\x02\x02\x02 \u0116\x03\x02\x02\x02\"\u0118\x03\x02\x02\x02$\u0126" +
+		"\x03\x02\x02\x02&\u0142\x03\x02\x02\x02(\u0144\x03\x02\x02\x02*\u014D" +
+		"\x03\x02\x02\x02,\u0155\x03\x02\x02\x02.\u0162\x03\x02\x02\x020\u0174" +
+		"\x03\x02\x02\x022\u0176\x03\x02\x02\x024\u0180\x03\x02\x02\x026\u0191" +
+		"\x03\x02\x02\x028\u019E\x03\x02\x02\x02:\u01AC\x03\x02\x02\x02<\u01BA" +
+		"\x03\x02\x02\x02>\u01C0\x03\x02\x02\x02@\u01C6\x03\x02\x02\x02B\u01D4" +
+		"\x03\x02\x02\x02D\u01D6\x03\x02\x02\x02F\u01DC\x03\x02\x02\x02H\u01F3" +
+		"\x03\x02\x02\x02J\u0238\x03\x02\x02\x02L\u0242\x03\x02\x02\x02N\u0251" +
+		"\x03\x02\x02\x02P\u0256\x03\x02\x02\x02R\u025F\x03\x02\x02\x02T\u0262" +
+		"\x03\x02\x02\x02V\u0274\x03\x02\x02\x02X\u0276\x03\x02\x02\x02Z\u0278" +
+		"\x03\x02\x02\x02\\\u027A\x03\x02\x02\x02^\u027C\x03\x02\x02\x02`\u027E" +
+		"\x03\x02\x02\x02b\u0291\x03\x02\x02\x02d\u029F\x03\x02\x02\x02f\u02A4" +
+		"\x03\x02\x02\x02h\u02A6\x03\x02\x02\x02j\u02AE\x03\x02\x02\x02l\u02B3" +
+		"\x03\x02\x02\x02n\u02B9\x03\x02\x02\x02p\u02BB\x03\x02\x02\x02r\u02C3" +
+		"\x03\x02\x02\x02t\u02D0\x03\x02\x02\x02v\u02E0\x03\x02\x02\x02x\u02ED" +
+		"\x03\x02\x02\x02z\u02FA\x03\x02\x02\x02|\u0307\x03\x02\x02\x02~\u0317" +
+		"\x03\x02\x02\x02\x80\u031F\x03\x02\x02\x02\x82\u0328\x03\x02\x02\x02\x84" +
+		"\x86\x05\x04\x03\x02\x85\x84\x03\x02\x02\x02\x86\x89\x03\x02\x02\x02\x87" +
+		"\x85\x03\x02\x02\x02\x87\x88\x03\x02\x02\x02\x88\x8A\x03\x02\x02\x02\x89" +
+		"\x87\x03\x02\x02\x02\x8A\x8B\x07\x02\x02\x03\x8B\x03\x03\x02\x02\x02\x8C" +
+		"\xA1\x05\x06\x04\x02\x8D\xA1\x05\b\x05\x02\x8E\xA1\x05\f\x07\x02\x8F\xA1" +
+		"\x05\x0E\b\x02\x90\xA1\x05\x10\t\x02\x91\xA1\x05\x12\n\x02\x92\xA1\x05" +
+		"J&\x02\x93\xA1\x05L\'\x02\x94\xA1\x05\x18\r\x02\x95\xA1\x05\x1A\x0E\x02" +
+		"\x96\xA1\x05\x1C\x0F\x02\x97\xA1\x05\x1E\x10\x02\x98\xA1\x05\x16\f\x02" +
+		"\x99\xA1\x05\x14\v\x02\x9A\xA1\x05 \x11\x02\x9B\x9D\x05H%\x02\x9C\x9E" +
+		"\x07=\x02\x02\x9D\x9C\x03\x02\x02\x02\x9D\x9E\x03\x02\x02\x02\x9E\xA1" +
+		"\x03\x02\x02\x02\x9F\xA1\x05b2\x02\xA0\x8C\x03\x02\x02\x02\xA0\x8D\x03" +
+		"\x02\x02\x02\xA0\x8E\x03\x02\x02\x02\xA0\x8F\x03\x02\x02\x02\xA0\x90\x03" +
+		"\x02\x02\x02\xA0\x91\x03\x02\x02\x02\xA0\x92\x03\x02\x02\x02\xA0\x93\x03" +
+		"\x02\x02\x02\xA0\x94\x03\x02\x02\x02\xA0\x95\x03\x02\x02\x02\xA0\x96\x03" +
+		"\x02\x02\x02\xA0\x97\x03\x02\x02\x02\xA0\x98\x03\x02\x02\x02\xA0\x99\x03" +
+		"\x02\x02\x02\xA0\x9A\x03\x02\x02\x02\xA0\x9B\x03\x02\x02\x02\xA0\x9F\x03" +
+		"\x02\x02\x02\xA1\x05\x03\x02\x02\x02\xA2\xA3\x07\x06\x02\x02\xA3\xA5\x07" +
+		"6\x02\x02\xA4\xA6\x05p9\x02\xA5\xA4\x03\x02\x02\x02\xA5\xA6\x03\x02\x02" +
+		"\x02\xA6\xA7\x03\x02\x02\x02\xA7\xA8\x077\x02\x02\xA8\xA9\x07\x17\x02" +
+		"\x02\xA9\xAB\x05X-\x02\xAA\xAC\x07=\x02\x02\xAB\xAA\x03\x02\x02\x02\xAB" +
+		"\xAC\x03\x02\x02\x02\xAC\x07\x03\x02\x02\x02\xAD\xAE\x07&\x02\x02\xAE" +
+		"\xAF\x05\n\x06\x02\xAF\xB0\x07G\x02\x02\xB0\xB1\x05H%\x02\xB1\xB3\x03" +
+		"\x02\x02\x02\xB2\xB4\x07=\x02\x02\xB3\xB2\x03\x02\x02\x02\xB3\xB4\x03" +
+		"\x02\x02\x02\xB4\t\x03\x02\x02\x02\xB5\xB8\x05f4\x02\xB6\xB7\x07>\x02" +
+		"\x02\xB7\xB9\x05b2\x02\xB8\xB6\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02" +
+		"\xB9\xC5\x03\x02\x02\x02\xBA\xBC\x074\x02\x02\xBB\xBD\x05p9\x02\xBC\xBB" +
+		"\x03\x02\x02\x02\xBC\xBD\x03\x02\x02\x02\xBD\xBE\x03\x02\x02\x02\xBE\xC5" +
+		"\x075\x02\x02\xBF\xC1\x076\x02\x02\xC0\xC2\x05p9\x02\xC1\xC0\x03\x02\x02" +
+		"\x02\xC1\xC2\x03\x02\x02\x02\xC2\xC3\x03\x02\x02\x02\xC3\xC5\x077\x02" +
+		"\x02\xC4\xB5\x03\x02\x02\x02\xC4\xBA\x03\x02\x02\x02\xC4\xBF\x03\x02\x02" +
+		"\x02\xC5\v\x03\x02\x02\x02\xC6\xC7\x07\'\x02\x02\xC7\xCA\x05f4\x02\xC8" +
+		"\xC9\x07>\x02\x02\xC9\xCB\x05b2\x02\xCA\xC8\x03\x02\x02\x02\xCA\xCB\x03" +
+		"\x02\x02\x02\xCB\xCC\x03\x02\x02\x02\xCC\xCD\x07G\x02\x02\xCD\xCE\x05" +
+		"H%\x02\xCE\xD0\x03\x02\x02\x02\xCF\xD1\x07=\x02\x02\xD0\xCF\x03\x02\x02" +
+		"\x02\xD0\xD1\x03\x02\x02\x02\xD1\r\x03\x02\x02\x02\xD2\xD3\x05f4\x02\xD3" +
+		"\xD4\t\x02\x02\x02\xD4\xD6\x05H%\x02\xD5\xD7\x07=\x02\x02\xD6\xD5\x03" +
+		"\x02\x02\x02\xD6\xD7\x03\x02\x02\x02\xD7\x0F\x03\x02\x02\x02\xD8\xD9\x05" +
+		"H%\x02\xD9\xDA\x078\x02\x02\xDA\xDB\x05f4\x02\xDB\xDC\t\x02\x02\x02\xDC" +
 		"\xDE\x05H%\x02\xDD\xDF\x07=\x02\x02\xDE\xDD\x03\x02\x02\x02\xDE\xDF\x03" +
 		"\x02\x02\x02\xDF\x11\x03\x02\x02\x02\xE0\xE1\x05H%\x02\xE1\xE2\x074\x02" +
 		"\x02\xE2\xE3\x05H%\x02\xE3\xE4\x075\x02\x02\xE4\xE5\t\x02\x02\x02\xE5" +
@@ -4724,29 +4726,29 @@ export class CWScriptParser extends Parser {
 		"\x02\u01DD\u01DE\x074\x02\x02\u01DE\u01DF\x05b2\x02\u01DF\u01E0\x075\x02" +
 		"\x02\u01E0\u01E1\x07>\x02\x02\u01E1\u01E3\x05b2\x02\u01E2\u01E4\x07=\x02" +
 		"\x02\u01E3\u01E2\x03\x02\x02\x02\u01E3\u01E4\x03\x02\x02\x02\u01E4G\x03" +
-		"\x02\x02\x02\u01E5\u01E6";
+		"\x02\x02\x02";
 	private static readonly _serializedATNSegment1: string =
-		"\b%\x01\x02\u01E6\u01E7\x07\x0E\x02\x02\u01E7\u01F4\x05H%\x11\u01E8\u01F4" +
-		"\x05J&\x02\u01E9\u01F4\x05L\'\x02\u01EA\u01F4\x05P)\x02\u01EB\u01F4\x05" +
-		"R*\x02\u01EC\u01F4\x05T+\x02\u01ED\u01F4\x05V,\x02\u01EE\u01F4\x05f4\x02" +
-		"\u01EF\u01F0\x072\x02\x02\u01F0\u01F1\x05H%\x02\u01F1\u01F2\x073\x02\x02" +
-		"\u01F2\u01F4\x03\x02\x02\x02\u01F3\u01E5\x03\x02\x02\x02\u01F3\u01E8\x03" +
-		"\x02\x02\x02\u01F3\u01E9\x03\x02\x02\x02\u01F3\u01EA\x03\x02\x02\x02\u01F3" +
-		"\u01EB\x03\x02\x02\x02\u01F3\u01EC\x03\x02\x02\x02\u01F3\u01ED\x03\x02" +
-		"\x02\x02\u01F3\u01EE\x03\x02\x02\x02\u01F3\u01EF\x03\x02\x02\x02\u01F4" +
-		"\u0235\x03\x02\x02\x02\u01F5\u01F6\f\x14\x02\x02\u01F6\u01F7\t\x03\x02" +
-		"\x02\u01F7\u0234\x05H%\x15\u01F8\u01F9\f\x13\x02\x02\u01F9\u01FA\t\x04" +
-		"\x02\x02\u01FA\u0234\x05H%\x14\u01FB\u01FC\f\x12\x02\x02\u01FC\u01FD\t" +
-		"\x05\x02\x02\u01FD\u0234\x05H%\x13\u01FE\u01FF\f\x10\x02\x02\u01FF\u0200" +
-		"\x07:\x02\x02\u0200\u0234\x05H%\x11\u0201\u0202\f\x0F\x02\x02\u0202\u0203" +
-		"\x07\x16\x02\x02\u0203\u0234\x05H%\x10\u0204\u0205\f\r\x02\x02\u0205\u0206" +
-		"\t\x06\x02\x02\u0206\u0234\x05H%\x0E\u0207\u0208\f\f\x02\x02\u0208\u0209" +
-		"\x07!\x02\x02\u0209\u0234\x05H%\r\u020A\u020B\f\v\x02\x02\u020B\u020C" +
-		"\x07\"\x02\x02\u020C\u0234\x05H%\f\u020D\u020E\f\x19\x02\x02\u020E\u020F" +
-		"\x078\x02\x02\u020F\u0234\x05f4\x02\u0210\u0212\f\x18\x02\x02\u0211\u0213" +
-		"\x07<\x02\x02\u0212\u0211\x03\x02\x02\x02\u0212\u0213\x03\x02\x02\x02" +
-		"\u0213\u0215\x03\x02\x02\x02\u0214\u0216\x05z>\x02\u0215\u0214\x03\x02" +
-		"\x02\x02\u0215\u0216\x03\x02\x02\x02\u0216\u0217\x03\x02\x02\x02\u0217" +
+		"\u01E5\u01E6\b%\x01\x02\u01E6\u01E7\x07\x0E\x02\x02\u01E7\u01F4\x05H%" +
+		"\x11\u01E8\u01F4\x05J&\x02\u01E9\u01F4\x05L\'\x02\u01EA\u01F4\x05P)\x02" +
+		"\u01EB\u01F4\x05R*\x02\u01EC\u01F4\x05T+\x02\u01ED\u01F4\x05V,\x02\u01EE" +
+		"\u01F4\x05f4\x02\u01EF\u01F0\x072\x02\x02\u01F0\u01F1\x05H%\x02\u01F1" +
+		"\u01F2\x073\x02\x02\u01F2\u01F4\x03\x02\x02\x02\u01F3\u01E5\x03\x02\x02" +
+		"\x02\u01F3\u01E8\x03\x02\x02\x02\u01F3\u01E9\x03\x02\x02\x02\u01F3\u01EA" +
+		"\x03\x02\x02\x02\u01F3\u01EB\x03\x02\x02\x02\u01F3\u01EC\x03\x02\x02\x02" +
+		"\u01F3\u01ED\x03\x02\x02\x02\u01F3\u01EE\x03\x02\x02\x02\u01F3\u01EF\x03" +
+		"\x02\x02\x02\u01F4\u0235\x03\x02\x02\x02\u01F5\u01F6\f\x14\x02\x02\u01F6" +
+		"\u01F7\t\x03\x02\x02\u01F7\u0234\x05H%\x15\u01F8\u01F9\f\x13\x02\x02\u01F9" +
+		"\u01FA\t\x04\x02\x02\u01FA\u0234\x05H%\x14\u01FB\u01FC\f\x12\x02\x02\u01FC" +
+		"\u01FD\t\x05\x02\x02\u01FD\u0234\x05H%\x13\u01FE\u01FF\f\x10\x02\x02\u01FF" +
+		"\u0200\x07:\x02\x02\u0200\u0234\x05H%\x11\u0201\u0202\f\x0F\x02\x02\u0202" +
+		"\u0203\x07\x16\x02\x02\u0203\u0234\x05H%\x10\u0204\u0205\f\r\x02\x02\u0205" +
+		"\u0206\t\x06\x02\x02\u0206\u0234\x05H%\x0E\u0207\u0208\f\f\x02\x02\u0208" +
+		"\u0209\x07!\x02\x02\u0209\u0234\x05H%\r\u020A\u020B\f\v\x02\x02\u020B" +
+		"\u020C\x07\"\x02\x02\u020C\u0234\x05H%\f\u020D\u020E\f\x19\x02\x02\u020E" +
+		"\u020F\x078\x02\x02\u020F\u0234\x05f4\x02\u0210\u0212\f\x18\x02\x02\u0211" +
+		"\u0213\x07<\x02\x02\u0212\u0211\x03\x02\x02\x02\u0212\u0213\x03\x02\x02" +
+		"\x02\u0213\u0215\x03\x02\x02\x02\u0214\u0216\x05z>\x02\u0215\u0214\x03" +
+		"\x02\x02\x02\u0215\u0216\x03\x02\x02\x02\u0216\u0217\x03\x02\x02\x02\u0217" +
 		"\u0220\x072\x02\x02\u0218\u021D\x05n8\x02\u0219\u021A\x079\x02\x02\u021A" +
 		"\u021C\x05n8\x02\u021B\u0219\x03\x02\x02\x02\u021C\u021F\x03\x02\x02\x02" +
 		"\u021D\u021B\x03\x02\x02\x02\u021D\u021E\x03\x02\x02\x02\u021E\u0221\x03" +
@@ -8969,6 +8971,7 @@ export class ReservedKeywordContext extends ParserRuleContext {
 	public EVENT(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EVENT, 0); }
 	public INSTANTIATE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.INSTANTIATE, 0); }
 	public EXEC(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.EXEC, 0); }
+	public NONE(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.NONE, 0); }
 	public QUERY(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.QUERY, 0); }
 	public REPLY(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.REPLY, 0); }
 	public FOR(): TerminalNode | undefined { return this.tryGetToken(CWScriptParser.FOR, 0); }

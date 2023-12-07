@@ -74,6 +74,14 @@ export class EnumDefn implements RustSyntax {
   }
 }
 
+export class TypeAliasDefn implements RustSyntax {
+  constructor(public name: string, public ty: string) {}
+
+  public render(): string {
+    return `pub type ${this.name} = ${this.ty};`;
+  }
+}
+
 export class StructDefn implements RustSyntax {
   constructor(public name: string, public fields: StructField[]) {}
 
@@ -190,6 +198,10 @@ export function konst(name: string, ty: string, value: RustSyntax): ConstStmt {
 
 export function enumDefn(name: string, variants: EnumVariant[]): EnumDefn {
   return new EnumDefn(name, variants);
+}
+
+export function typeAliasDefn(name: string, ty: string): TypeAliasDefn {
+  return new TypeAliasDefn(name, ty);
 }
 
 export function variantStruct(

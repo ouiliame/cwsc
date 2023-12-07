@@ -145,37 +145,42 @@ pub mod kitchen_sink {
     }
   }
   pub mod types {
-    pub struct Inline {}
+    pub struct InlineA {}
     pub struct StructA {}
     pub struct StructB {
-      pub a: T,
-      pub b: T,
+      pub a: TODO,
+      pub b: TODO,
     }
     pub struct StructC {}
     pub struct StructD {
-      pub a: T,
-      pub b: T,
+      pub a: TODO,
+      pub b: TODO,
     }
     pub struct TupA();
-    pub struct TupB(pub T, pub T);
+    pub struct TupB(pub TODO, pub TODO);
     pub struct UnitA;
     pub struct UnitB;
+    pub struct InlineB {
+      pub a: TODO,
+    }
     pub enum EnumA {
       StructVariantA {},
       StructVariantB {
-        a: T,
-        b: T,
+        a: TODO,
+        b: TODO,
       },
       StructVariantC {},
       StructVariantD {
-        a: T,
-        b: T,
+        a: TODO,
+        b: TODO,
       },
       TupleVariantA(),
-      TupleVariantB(T, T),
+      TupleVariantB(TODO, TODO),
       UnitVariantA,
       UnitVariantB,
     }
+    pub type TypeAliasA = TODO;
+    pub type TypeAliasB = TODO;
     #[cw_serde]
     pub struct InstantiateMsg {
       pub a: TODO,

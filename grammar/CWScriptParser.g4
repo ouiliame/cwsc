@@ -293,6 +293,7 @@ reservedKeyword:
 	| EVENT
 	| INSTANTIATE
 	| EXEC
+	| NONE
 	| QUERY
 	| REPLY
 	| FOR

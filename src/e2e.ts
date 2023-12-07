@@ -217,14 +217,14 @@ function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
       items.push(
         rs.structDefn(
           t.name.value,
-          t.fields.map((f) => rs.structField(f.name.value, 'T', true))
+          t.fields.map((f) => rs.structField(f.name.value, 'TODO', true))
         )
       );
     } else if (t instanceof AST.TupleDefn) {
       items.push(
         rs.tupleStructDefn(
           t.name.value,
-          t.elements.map((x) => 'T')
+          t.elements.map((x) => 'TODO')
         )
       );
     } else if (t instanceof AST.UnitDefn) {
@@ -243,13 +243,13 @@ function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
           // struct variant
           if (x instanceof AST.EnumVariantStructDefn) {
             const fields = x.fields.map((f) =>
-              rs.structField(f.name.value, 'T', false)
+              rs.structField(f.name.value, 'TODO', false)
             );
             return rs.variantStruct(name, fields);
           }
           // tuple variant
           if (x instanceof AST.EnumVariantTupleDefn) {
-            const elements = x.elements.map((f) => rs.raw('T'));
+            const elements = x.elements.map((f) => rs.raw('TODO'));
             return rs.variantTuple(name, elements);
           }
           // unit variant
@@ -257,6 +257,14 @@ function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
         })
       )
     );
+  }
+
+  // type aliases
+  const aliases = contract.descendantsOfType(AST.TypeAliasDefn);
+  for (const a of aliases) {
+    const name = a.name.value;
+    const ty = 'TODO';
+    items.push(rs.typeAliasDefn(name, ty));
   }
 
   // msg - instantiate
