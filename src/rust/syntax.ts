@@ -94,6 +94,14 @@ export class TupleStructDefn implements RustSyntax {
   }
 }
 
+export class UnitStructDefn implements RustSyntax {
+  constructor(public name: string) {}
+
+  public render(): string {
+    return `pub struct ${this.name};`;
+  }
+}
+
 export type EnumVariant =
   | EnumVariantStruct
   | EnumVariantTuple
@@ -232,6 +240,10 @@ export function tupleStructDefn(
   fields: string[]
 ): TupleStructDefn {
   return new TupleStructDefn(name, fields);
+}
+
+export function unitStructDefn(name: string): UnitStructDefn {
+  return new UnitStructDefn(name);
 }
 
 export class StructExpr implements RustSyntax {

@@ -168,8 +168,7 @@ queryDefn:
 
 errorDefn: ERROR (name = ident) (params = parenParamList) SEMI?;
 
-eventDefn:
-	EVENT (name = ident) (params = parenParamList) RPAREN SEMI?;
+eventDefn: EVENT (name = ident) (params = parenParamList) SEMI?;
 
 stateBlockDefn:
 	STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;

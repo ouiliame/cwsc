@@ -227,6 +227,8 @@ function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
           t.elements.map((x) => 'T')
         )
       );
+    } else if (t instanceof AST.UnitDefn) {
+      items.push(rs.unitStructDefn(t.name.value));
     }
   }
 
@@ -256,6 +258,65 @@ function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
       )
     );
   }
+
+  // msg - instantiate
+  const instDefn = contract.descendantsOfType(AST.InstantiateDefn)[0];
+  const instMsg = rs.ann(
+    '#[cw_serde]',
+    rs.structDefn(
+      'InstantiateMsg',
+      instDefn.params.map((x) => rs.structField(x.name.value, 'TODO'))
+    )
+  );
+  items.push(instMsg);
+
+  // msg - exec
+  const execDefns = contract.descendantsOfType(AST.ExecDefn);
+  const execVariants = execDefns.map((x) => {
+    const name = snakeToPascal(x.name.value.substring(1));
+    const fields = x.params.map((f) => rs.structField(f.name.value, 'TODO'));
+    return rs.variantStruct(name, fields);
+  });
+  const execMsg = rs.ann(
+    '#[cw_serde]',
+    rs.enumDefn('ExecuteMsg', execVariants)
+  );
+  items.push(execMsg);
+
+  // msg - query
+  const queryDefns = contract.descendantsOfType(AST.QueryDefn);
+  const queryVariants = queryDefns.map((x) => {
+    const name = snakeToPascal(x.name.value.substring(1));
+    const fields = x.params.map((f) => rs.structField(f.name.value, 'TODO'));
+    return rs.variantStruct(name, fields);
+  });
+  const queryMsg = rs.ann(
+    '#[cw_serde]',
+    rs.enumDefn('QueryMsg', queryVariants)
+  );
+  items.push(queryMsg);
+
+  // TODO: response types - query
+
+  // errors - enum
+  const errorDefns = contract.descendantsOfType(AST.ErrorDefn);
+  const errorVariants = errorDefns.map((x) => {
+    const name = snakeToPascal(x.name.value);
+    const fields = x.fields.map((f) => rs.structField(f.name.value, 'TODO'));
+    return rs.variantStruct(name, fields);
+  });
+  const errorEnum = rs.enumDefn('ContractError', errorVariants);
+  items.push(errorEnum);
+
+  // events - enum
+  const eventDefns = contract.descendantsOfType(AST.EventDefn);
+  const eventVariants = eventDefns.map((x) => {
+    const name = snakeToPascal(x.name.value);
+    const fields = x.fields.map((f) => rs.structField(f.name.value, 'TODO'));
+    return rs.variantStruct(name, fields);
+  });
+  const eventEnum = rs.enumDefn('ContractEvent', eventVariants);
+  items.push(eventEnum);
 
   return rs.mod('types', items);
 }

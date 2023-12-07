@@ -158,6 +158,8 @@ pub mod kitchen_sink {
     }
     pub struct TupA();
     pub struct TupB(pub T, pub T);
+    pub struct UnitA;
+    pub struct UnitB;
     pub enum EnumA {
       StructVariantA {},
       StructVariantB {
@@ -173,6 +175,46 @@ pub mod kitchen_sink {
       TupleVariantB(T, T),
       UnitVariantA,
       UnitVariantB,
+    }
+    #[cw_serde]
+    pub struct InstantiateMsg {
+      pub a: TODO,
+      pub b: TODO,
+    }
+    #[cw_serde]
+    pub enum ExecuteMsg {
+      ExecA {},
+      ExecB {
+        a: TODO,
+        b: TODO,
+      },
+    }
+    #[cw_serde]
+    pub enum QueryMsg {
+      QueryA {},
+      QueryB {
+        a: TODO,
+        b: TODO,
+      },
+      Bob {
+        a: TODO,
+        b: TODO,
+        c: TODO,
+      },
+    }
+    pub enum ContractError {
+      ErrA {},
+      ErrB {
+        a: TODO,
+        b: TODO,
+      },
+    }
+    pub enum ContractEvent {
+      EventA {},
+      EventB {
+        a: TODO,
+        b: TODO,
+      },
     }
   }
 }

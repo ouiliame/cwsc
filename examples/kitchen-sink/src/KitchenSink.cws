@@ -8,6 +8,9 @@ contract KitchenSink {
   error ErrA();
   error ErrB(a: Int, b: String);
 
+  event EventA();
+  event EventB(a: Int, b: String);
+
   #instantiate(a: Int, b: String) {}
   exec #exec_a() {}
   exec #exec_b(a: Int, b: String) {}
@@ -27,6 +30,9 @@ contract KitchenSink {
 
   tuple TupA[];
   tuple TupB[Int, String];
+
+  unit UnitA;
+  unit UnitB;
 
   enum EnumA {
     #StructVariantA {},
