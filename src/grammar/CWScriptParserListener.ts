@@ -7,6 +7,8 @@ import { StructDefnBraceContext } from "./CWScriptParser";
 import { StructDefnParenContext } from "./CWScriptParser";
 import { EnumVariantStructDefnBraceContext } from "./CWScriptParser";
 import { EnumVariantStructDefnParenContext } from "./CWScriptParser";
+import { EnumVariantTupleDefnContext } from "./CWScriptParser";
+import { EnumVariantUnitDefnContext } from "./CWScriptParser";
 import { DotExprContext } from "./CWScriptParser";
 import { CallExprContext } from "./CWScriptParser";
 import { IndexExprContext } from "./CWScriptParser";
@@ -68,9 +70,6 @@ import { UnitDefnContext } from "./CWScriptParser";
 import { EnumDefnContext } from "./CWScriptParser";
 import { EnumVariantDefnListContext } from "./CWScriptParser";
 import { EnumVariantDefnContext } from "./CWScriptParser";
-import { EnumVariantStructDefnContext } from "./CWScriptParser";
-import { EnumVariantTupleDefnContext } from "./CWScriptParser";
-import { EnumVariantUnitDefnContext } from "./CWScriptParser";
 import { TypeAliasDefnContext } from "./CWScriptParser";
 import { FnDefnContext } from "./CWScriptParser";
 import { InstantiateDefnContext } from "./CWScriptParser";
@@ -147,29 +146,55 @@ export interface CWScriptParserListener extends ParseTreeListener {
 
 	/**
 	 * Enter a parse tree produced by the `EnumVariantStructDefnBrace`
-	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 */
 	enterEnumVariantStructDefnBrace?: (ctx: EnumVariantStructDefnBraceContext) => void;
 	/**
 	 * Exit a parse tree produced by the `EnumVariantStructDefnBrace`
-	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 */
 	exitEnumVariantStructDefnBrace?: (ctx: EnumVariantStructDefnBraceContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `EnumVariantStructDefnParen`
-	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 */
 	enterEnumVariantStructDefnParen?: (ctx: EnumVariantStructDefnParenContext) => void;
 	/**
 	 * Exit a parse tree produced by the `EnumVariantStructDefnParen`
-	 * labeled alternative in `CWScriptParser.enumVariantStructDefn`.
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
 	 * @param ctx the parse tree
 	 */
 	exitEnumVariantStructDefnParen?: (ctx: EnumVariantStructDefnParenContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `EnumVariantTupleDefn`
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
+	 * @param ctx the parse tree
+	 */
+	enterEnumVariantTupleDefn?: (ctx: EnumVariantTupleDefnContext) => void;
+	/**
+	 * Exit a parse tree produced by the `EnumVariantTupleDefn`
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
+	 * @param ctx the parse tree
+	 */
+	exitEnumVariantTupleDefn?: (ctx: EnumVariantTupleDefnContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `EnumVariantUnitDefn`
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
+	 * @param ctx the parse tree
+	 */
+	enterEnumVariantUnitDefn?: (ctx: EnumVariantUnitDefnContext) => void;
+	/**
+	 * Exit a parse tree produced by the `EnumVariantUnitDefn`
+	 * labeled alternative in `CWScriptParser.enumVariantDefn`.
+	 * @param ctx the parse tree
+	 */
+	exitEnumVariantUnitDefn?: (ctx: EnumVariantUnitDefnContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `DotExpr`
@@ -915,39 +940,6 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitEnumVariantDefn?: (ctx: EnumVariantDefnContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.enumVariantStructDefn`.
-	 * @param ctx the parse tree
-	 */
-	enterEnumVariantStructDefn?: (ctx: EnumVariantStructDefnContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.enumVariantStructDefn`.
-	 * @param ctx the parse tree
-	 */
-	exitEnumVariantStructDefn?: (ctx: EnumVariantStructDefnContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.enumVariantTupleDefn`.
-	 * @param ctx the parse tree
-	 */
-	enterEnumVariantTupleDefn?: (ctx: EnumVariantTupleDefnContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.enumVariantTupleDefn`.
-	 * @param ctx the parse tree
-	 */
-	exitEnumVariantTupleDefn?: (ctx: EnumVariantTupleDefnContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `CWScriptParser.enumVariantUnitDefn`.
-	 * @param ctx the parse tree
-	 */
-	enterEnumVariantUnitDefn?: (ctx: EnumVariantUnitDefnContext) => void;
-	/**
-	 * Exit a parse tree produced by `CWScriptParser.enumVariantUnitDefn`.
-	 * @param ctx the parse tree
-	 */
-	exitEnumVariantUnitDefn?: (ctx: EnumVariantUnitDefnContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.typeAliasDefn`.

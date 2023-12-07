@@ -134,19 +134,10 @@ enumDefn:
 enumVariantDefnList: (enumVariantDefn (COMMA enumVariantDefn)*);
 
 enumVariantDefn:
-	enumVariantStructDefn
-	| enumVariantTupleDefn
-	| enumVariantUnitDefn;
-
-enumVariantStructDefn:
-	(name = ident) (fields = braceParamList)	# EnumVariantStructDefnBrace
-	| (name = ident) (fields = parenParamList)	# EnumVariantStructDefnParen;
-
-enumVariantTupleDefn: (name = ident) (
-		elements = brackTypeExprList
-	);
-
-enumVariantUnitDefn: (name = ident);
+	(name = ident) (fields = braceParamList)		# EnumVariantStructDefnBrace
+	| (name = ident) (fields = parenParamList)		# EnumVariantStructDefnParen
+	| (name = ident) (elements = brackTypeExprList)	# EnumVariantTupleDefn
+	| (name = ident)								# EnumVariantUnitDefn;
 
 typeAliasDefn:
 	TYPE (name = ident) (typeParams = brackTypeParamList)? EQ (

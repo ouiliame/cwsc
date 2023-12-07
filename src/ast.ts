@@ -729,7 +729,7 @@ export class EnumVariantStructDefn extends EnumVariantDefn {
 }
 
 export class EnumVariantTupleDefn extends EnumVariantDefn {
-  constructor(public name: Ident, public fields: List<TypeExpr>) {
+  constructor(public name: Ident, public elements: List<TypeExpr>) {
     super();
   }
 }

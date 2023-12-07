@@ -11,7 +11,7 @@ import {
   buildInstantiateImplFn,
   buildExecImplFn,
   buildQueryImplFn,
-} from './e2e-helpers';
+} from './e2e-helpers/builders';
 import { pascalToSnake, snakeToPascal } from './util/strings';
 import { Pipeline, PipelineStage } from './pipelines';
 import { readFile } from './util/filesystem';
@@ -79,7 +79,7 @@ function buildStateMod(contract: AST.ContractDefn): rs.ModuleDefn {
   // get state field defns
   contract.descendantsOfType(AST.StateItemDefn).forEach((x) => {
     const name = x.name.value;
-    const ty = `Item<${x.ty.$ctx!.text}>`;
+    const ty = `Item<Todo>`;
     const k = rs.konst(name.toUpperCase(), ty, rs.raw(`Item::new("${name}")`));
     items.push(k);
   });
@@ -100,9 +100,7 @@ function buildErrorMod(contract: AST.ContractDefn): rs.ModuleDefn {
 
   const contractErrors = contract.descendantsOfType(AST.ErrorDefn).map((x) => {
     const name = x.name.value;
-    const fields = x.fields.map((f) =>
-      rs.structField(f.name.value, f.ty!.$ctx!.text)
-    );
+    const fields = x.fields.map((f) => rs.structField(f.name.value, 'TODO'));
     return rs.ann(`#[error("${name}")]`, rs.variantStruct(name, fields));
   });
 
@@ -131,9 +129,7 @@ function buildMsgMod(contract: AST.ContractDefn): rs.ModuleDefn {
       '#[cw_serde]',
       rs.structDefn(
         'InstantiateMsg',
-        instDefn.params.map((x) =>
-          rs.structField(x.name.value, x.ty!.$ctx!.text)
-        )
+        instDefn.params.map((x) => rs.structField(x.name.value, 'TODO'))
       )
     );
     items.push(instMsg);
@@ -146,9 +142,7 @@ function buildMsgMod(contract: AST.ContractDefn): rs.ModuleDefn {
   const execVariants: rs.EnumVariantStruct[] = [];
   contract.descendantsOfType(AST.ExecDefn).forEach((x) => {
     const name = snakeToPascal(x.name.value.substring(1));
-    const fields = x.params.map((f) =>
-      rs.structField(f.name.value, f.ty!.$ctx!.text)
-    );
+    const fields = x.params.map((f) => rs.structField(f.name.value, 'TODO'));
     execVariants.push(rs.variantStruct(name, fields));
   });
   const execMsg = rs.ann(
@@ -160,9 +154,7 @@ function buildMsgMod(contract: AST.ContractDefn): rs.ModuleDefn {
   const queryVariants: rs.EnumVariantStruct[] = [];
   contract.descendantsOfType(AST.QueryDefn).forEach((x) => {
     const name = snakeToPascal(x.name.value.substring(1));
-    const fields = x.params.map((f) =>
-      rs.structField(f.name.value, f.ty!.$ctx!.text)
-    );
+    const fields = x.params.map((f) => rs.structField(f.name.value, 'TODO'));
     queryVariants.push(rs.variantStruct(name, fields));
   });
   const queryMsg = rs.ann(
@@ -210,18 +202,79 @@ function buildImplMod(contract: AST.ContractDefn): rs.ModuleDefn {
   return rs.mod('implementation', items);
 }
 
+function buildTypesMod(contract: AST.ContractDefn): rs.ModuleDefn {
+  const items: rs.RustSyntax[] = [];
+  // structs, tuples, units
+  const stuDefns = contract.descendants.filter(
+    (x) =>
+      x instanceof AST.StructDefn ||
+      x instanceof AST.TupleDefn ||
+      x instanceof AST.UnitDefn
+  );
+
+  for (const t of stuDefns) {
+    if (t instanceof AST.StructDefn) {
+      items.push(
+        rs.structDefn(
+          t.name.value,
+          t.fields.map((f) => rs.structField(f.name.value, 'T', true))
+        )
+      );
+    } else if (t instanceof AST.TupleDefn) {
+      items.push(
+        rs.tupleStructDefn(
+          t.name.value,
+          t.elements.map((x) => 'T')
+        )
+      );
+    }
+  }
+
+  // enums
+  const enums = contract.descendantsOfType(AST.EnumDefn);
+  for (const e of enums) {
+    items.push(
+      rs.enumDefn(
+        e.name.value,
+        e.variants.map((x) => {
+          const name = x.name.value.substring(1);
+          // struct variant
+          if (x instanceof AST.EnumVariantStructDefn) {
+            const fields = x.fields.map((f) =>
+              rs.structField(f.name.value, 'T', false)
+            );
+            return rs.variantStruct(name, fields);
+          }
+          // tuple variant
+          if (x instanceof AST.EnumVariantTupleDefn) {
+            const elements = x.elements.map((f) => rs.raw('T'));
+            return rs.variantTuple(name, elements);
+          }
+          // unit variant
+          return rs.variantUnit(name);
+        })
+      )
+    );
+  }
+
+  return rs.mod('types', items);
+}
+
 function buildContract(crate: RustCrate, contract: AST.ContractDefn) {
   const stateMod = buildStateMod(contract);
   const errorMod = buildErrorMod(contract);
   const msgMod = buildMsgMod(contract);
   const contractMod = buildContractMod(contract);
   const implMod = buildImplMod(contract);
+  const typesMod = buildTypesMod(contract);
+
   const mod = rs.mod(pascalToSnake(contract.name.value), [
     stateMod,
     errorMod,
     msgMod,
     contractMod,
     implMod,
+    typesMod,
   ]);
   crate.setFile('src/lib.rs', mod.render());
 }

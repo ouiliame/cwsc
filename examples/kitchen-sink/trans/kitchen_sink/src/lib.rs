@@ -1,3 +1,4 @@
+mod cws;
 pub mod counter {
     pub mod state {
         use cw_storage_plus::Item;
@@ -41,25 +42,9 @@ pub mod counter {
         #[cw_serde]
         pub struct CWSQueryResponse<T>(pub T);
     }
-    pub mod cws {
-        use cosmwasm_std::*;
-        pub struct InstantiateCtx<'a> {
-            pub deps: DepsMut<'a>,
-            pub env: Env,
-            pub info: MessageInfo,
-        }
-        pub struct ExecuteCtx<'a> {
-            pub deps: DepsMut<'a>,
-            pub env: Env,
-            pub info: MessageInfo,
-        }
-        pub struct QueryCtx<'a> {
-            pub deps: Deps<'a>,
-            pub env: Env,
-        }
-    }
+
     pub mod implementation {
-        use super::cws::*;
+        use crate::cws::*;
         use super::error::*;
         use super::msg::*;
         use super::state::*;
@@ -116,7 +101,7 @@ pub mod counter {
         }
     }
     pub mod contract {
-        use super::cws::*;
+        use crate::cws::*;
         use super::error::*;
         use super::implementation::*;
         use super::msg::*;

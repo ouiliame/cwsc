@@ -2,6 +2,7 @@ contract KitchenSink {
   state {
     a: Int;
     b: String;
+    c: struct Inline {}
   }
 
   error ErrA();
@@ -13,4 +14,28 @@ contract KitchenSink {
 
   query #query_a() {}
   query #query_b(a: Int, b: String) {}
+  query #bob(a: String, b: String, c: String) {
+  }
+
+  struct StructA {}
+  struct StructB {
+    a: Int,
+    b: String
+  }
+  struct StructC()
+  struct StructD(a: Int, b: String)
+
+  tuple TupA[];
+  tuple TupB[Int, String];
+
+  enum EnumA {
+    #StructVariantA {},
+    #StructVariantB { a: Int, b: String },
+    #StructVariantC(),
+    #StructVariantD(a: Int, b: String),
+    #TupleVariantA[],
+    #TupleVariantB[Int, String],
+    #UnitVariantA,
+    #UnitVariantB
+  }
 }

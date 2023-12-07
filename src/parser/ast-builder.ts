@@ -285,6 +285,13 @@ export class ASTBuilderVisitor
     return new AST.EnumVariantTupleDefn(name, elements).$(ctx);
   }
 
+  visitEnumVariantUnitDefn(
+    ctx: P.EnumVariantUnitDefnContext
+  ): AST.EnumVariantUnitDefn {
+    const name = this.visitIdent(ctx._name);
+    return new AST.EnumVariantUnitDefn(name).$(ctx);
+  }
+
   visitTypeAliasDefn(ctx: P.TypeAliasDefnContext): AST.TypeAliasDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams

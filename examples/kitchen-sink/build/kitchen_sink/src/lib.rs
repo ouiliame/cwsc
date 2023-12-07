@@ -3,8 +3,9 @@ pub mod kitchen_sink {
     use schemars::JsonSchema;
     use serde::{ Serialize, Deserialize };
     use cw_storage_plus::{ Item, Map };
-    pub const A: Item<Int> = Item::new("a");
-    pub const B: Item<String> = Item::new("b");
+    pub const A: Item<Todo> = Item::new("a");
+    pub const B: Item<Todo> = Item::new("b");
+    pub const C: Item<Todo> = Item::new("c");
   }
   pub mod error {
     use cosmwasm_std::StdError;
@@ -14,8 +15,8 @@ pub mod kitchen_sink {
       #[error("StdError")] StdError(#[from] StdError),
       #[error("ErrA")] ErrA {},
       #[error("ErrB")] ErrB {
-        a: Int,
-        b: String,
+        a: TODO,
+        b: TODO,
       },
     }
   }
@@ -24,23 +25,28 @@ pub mod kitchen_sink {
     use cosmwasm_std::*;
     #[cw_serde]
     pub struct InstantiateMsg {
-      pub a: Int,
-      pub b: String,
+      pub a: TODO,
+      pub b: TODO,
     }
     #[cw_serde]
     pub enum ExecuteMsg {
       ExecA {},
       ExecB {
-        a: Int,
-        b: String,
+        a: TODO,
+        b: TODO,
       },
     }
     #[cw_serde]
     pub enum QueryMsg {
       QueryA {},
       QueryB {
-        a: Int,
-        b: String,
+        a: TODO,
+        b: TODO,
+      },
+      Bob {
+        a: TODO,
+        b: TODO,
+        c: TODO,
       },
     }
   }
@@ -90,6 +96,8 @@ pub mod kitchen_sink {
         QueryMsg::QueryA {} => to_json_binary(&query_query_a_impl(ctx)?),
         QueryMsg::QueryB { a, b } =>
           to_json_binary(&query_query_b_impl(ctx, msg.a, msg.b)?),
+        QueryMsg::Bob { a, b, c } =>
+          to_json_binary(&query_bob_impl(ctx, msg.a, msg.b, msg.c)?),
       }
     }
   }
@@ -126,6 +134,45 @@ pub mod kitchen_sink {
       b: String
     ) -> StdResult<Binary> {
       Ok(to_binary(msg))
+    }
+    pub fn query_bob_impl(
+      ctx: QueryCtx,
+      a: String,
+      b: String,
+      c: String
+    ) -> StdResult<Binary> {
+      Ok(to_binary(msg))
+    }
+  }
+  pub mod types {
+    pub struct Inline {}
+    pub struct StructA {}
+    pub struct StructB {
+      pub a: T,
+      pub b: T,
+    }
+    pub struct StructC {}
+    pub struct StructD {
+      pub a: T,
+      pub b: T,
+    }
+    pub struct TupA();
+    pub struct TupB(pub T, pub T);
+    pub enum EnumA {
+      StructVariantA {},
+      StructVariantB {
+        a: T,
+        b: T,
+      },
+      StructVariantC {},
+      StructVariantD {
+        a: T,
+        b: T,
+      },
+      TupleVariantA(),
+      TupleVariantB(T, T),
+      UnitVariantA,
+      UnitVariantB,
     }
   }
 }
