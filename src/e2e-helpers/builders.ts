@@ -1,4 +1,4 @@
-import * as AST from '../ast';
+import * as Ast from '../ast';
 import {
   ann,
   fnDefn,
@@ -19,7 +19,7 @@ import { snakeToPascal } from '../util/strings';
 export const entryPoint = (fn: FunctionDefn) =>
   ann(`#[cfg_attr(not(feature = "library"), entry_point)]`, fn);
 
-export function buildInstantiateEntrypoint(instDefn: AST.InstantiateDefn) {
+export function buildInstantiateEntrypoint(instDefn: Ast.InstantiateDefn) {
   const instantiateImplCall = fnCallExpr('instantiate_impl', [
     identExpr('ctx'),
     ...instDefn.params.map((x) => identExpr(`msg.${x.name.value}`)),
@@ -52,7 +52,7 @@ export function buildInstantiateEntrypoint(instDefn: AST.InstantiateDefn) {
   );
 }
 
-export function buildExecEntrypoint(execDefns: AST.ExecDefn[]) {
+export function buildExecEntrypoint(execDefns: Ast.ExecDefn[]) {
   const arms = execDefns.map((x) => {
     const name = snakeToPascal(x.name.value.substring(1));
     const msgName = snakeToPascal(x.name.value.substring(1));
@@ -91,7 +91,7 @@ export function buildExecEntrypoint(execDefns: AST.ExecDefn[]) {
   );
 }
 
-export function buildQueryEntrypoint(queryDefns: AST.QueryDefn[]) {
+export function buildQueryEntrypoint(queryDefns: Ast.QueryDefn[]) {
   const arms = queryDefns.map((x) => {
     const name = x.name.value.substring(1);
     const msgName = snakeToPascal(name);
@@ -129,10 +129,8 @@ export function buildQueryEntrypoint(queryDefns: AST.QueryDefn[]) {
   );
 }
 
-export function buildInstantiateImplFn(instDefn: AST.InstantiateDefn) {
-  const params = instDefn.params.map((p) =>
-    fnParam(p.name.value, p.ty!.$ctx!.text)
-  );
+export function buildInstantiateImplFn(instDefn: Ast.InstantiateDefn) {
+  const params = instDefn.params.map((p) => fnParam(p.name.value, 'TODO'));
   return fnDefn(
     'instantiate_impl',
     [fnParam('ctx', 'InstantiateCtx'), ...params],
@@ -141,11 +139,9 @@ export function buildInstantiateImplFn(instDefn: AST.InstantiateDefn) {
   );
 }
 
-export function buildExecImplFn(execDefn: AST.ExecDefn) {
+export function buildExecImplFn(execDefn: Ast.ExecDefn) {
   const name = execDefn.name.value.substring(1);
-  const params = execDefn.params.map((p) =>
-    fnParam(p.name.value, p.ty!.$ctx!.text)
-  );
+  const params = execDefn.params.map((p) => fnParam(p.name.value, 'TODO'));
   return fnDefn(
     `exec_${name}_impl`,
     [fnParam('ctx', 'ExecuteCtx'), ...params],
@@ -154,11 +150,9 @@ export function buildExecImplFn(execDefn: AST.ExecDefn) {
   );
 }
 
-export function buildQueryImplFn(queryDefn: AST.QueryDefn) {
+export function buildQueryImplFn(queryDefn: Ast.QueryDefn) {
   const name = queryDefn.name.value.substring(1);
-  const params = queryDefn.params.map((p) =>
-    fnParam(p.name.value, p.ty!.$ctx!.text)
-  );
+  const params = queryDefn.params.map((p) => fnParam(p.name.value, 'TODO'));
   return fnDefn(
     `query_${name}_impl`,
     [fnParam('ctx', 'QueryCtx'), ...params],

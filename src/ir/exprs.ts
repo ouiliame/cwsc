@@ -5,10 +5,7 @@ import * as Value from './values';
 import type { Op } from '../ast';
 
 export class Dot extends CWSExpr {
-  constructor(
-    public expr: CWSExpr | CWSValue,
-    public memberName: string
-  ) {
+  constructor(public expr: CWSExpr | CWSValue, public memberName: string) {
     super();
   }
 
@@ -45,7 +42,7 @@ export class Call extends CWSExpr {
   ) {
     super();
   }
-/*
+  /*
   public eval(symbols: SymbolTable) {
     const fn = this.fn.eval(symbols);
     if (fn instanceof Value.Fn) {
@@ -70,10 +67,7 @@ export class Call extends CWSExpr {
 }
 
 export class As extends CWSExpr {
-  constructor(
-    public expr: CWSExpr,
-    public ty: CWSType
-  ) {
+  constructor(public expr: CWSExpr, public ty: CWSType) {
     super();
   }
 
@@ -84,10 +78,7 @@ export class As extends CWSExpr {
 }
 
 export class In extends CWSExpr {
-  constructor(
-    public lhs: CWSExpr,
-    public rhs: CWSExpr
-  ) {
+  constructor(public lhs: CWSExpr, public rhs: CWSExpr) {
     super();
   }
 
@@ -128,10 +119,7 @@ export class TryCatchElse extends CWSExpr {
 }
 
 export class CatchClause {
-  constructor(
-    public matchErr: CWSType,
-    public body: IR[]
-  ) {}
+  constructor(public matchErr: CWSType, public body: IR[]) {}
 }
 
 export class Exists extends CWSExpr {
@@ -153,11 +141,7 @@ export class Exists extends CWSExpr {
 }
 
 export class BinOp extends CWSExpr {
-  constructor(
-    public lhs: CWSExpr,
-    public op: Op,
-    public rhs: CWSExpr
-  ) {
+  constructor(public lhs: CWSExpr, public op: Op, public rhs: CWSExpr) {
     super();
   }
 
@@ -184,10 +168,7 @@ export class Not extends CWSExpr {
 }
 
 export class And extends CWSExpr {
-  constructor(
-    public lhs: CWSExpr,
-    public rhs: CWSExpr
-  ) {
+  constructor(public lhs: CWSExpr, public rhs: CWSExpr) {
     super();
   }
 
@@ -202,10 +183,7 @@ export class And extends CWSExpr {
 }
 
 export class Or extends CWSExpr {
-  constructor(
-    public lhs: CWSExpr,
-    public rhs: CWSExpr
-  ) {
+  constructor(public lhs: CWSExpr, public rhs: CWSExpr) {
     super();
   }
 
@@ -253,10 +231,7 @@ export class Fail extends CWSExpr {
 }
 
 export class Tuple extends CWSExpr {
-  constructor(
-    public tupleTy: CWSType,
-    public elements: CWSExpr[] = []
-  ) {
+  constructor(public tupleTy: CWSType, public elements: CWSExpr[] = []) {
     super();
   }
 

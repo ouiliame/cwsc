@@ -2,7 +2,7 @@ import { CWScriptParser } from './parser';
 import { CWScriptProject } from './projects';
 import { Pipeline, PipelineStage } from './pipelines';
 
-import * as AST from './ast';
+import * as Ast from './ast';
 import * as path from 'path';
 import { Diagnostic } from 'vscode-languageserver';
 import { readFile } from './util/filesystem';
@@ -12,7 +12,7 @@ export interface BuildContext {
   sourceFiles: {
     [k: string]: {
       text?: string;
-      ast?: AST.SourceFile;
+      ast?: Ast.SourceFile;
       diagnostics: Diagnostic[];
     };
   };
@@ -37,7 +37,7 @@ export class CWScriptCompiler {
     // gather source files
     const sourceFiles = await this.project.getSourceFiles();
 
-    // read each file's contents and parse into AST
+    // read each file's contents and parse into Ast
     for (let sourceFile of sourceFiles) {
       const text = await readFile(sourceFile);
       const { ast, diagnostics } = CWScriptParser.parse(text, sourceFile);

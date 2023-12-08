@@ -1,4 +1,4 @@
-import type * as AST from './ast';
+import type * as Ast from './ast';
 import type * as IR from './ir';
 
 export enum SymbolKind {
@@ -20,109 +20,108 @@ export enum SymbolKind {
 export interface VariableEntry {
   kind: SymbolKind.Variable;
   name: string;
-  defn: AST.AST;
+  defn: Ast.Ast;
   ty: IR.CWSType;
 }
 
 export interface FunctionEntry {
   kind: SymbolKind.Function;
   name: string;
-  defn: AST.FnDefn;
+  defn: Ast.FnDefn;
   ty: IR.CWSType;
 }
 
 export interface ContractEntry {
   kind: SymbolKind.Contract;
   name: string;
-  defn: AST.ContractDefn;
+  defn: Ast.ContractDefn;
   ty: IR.CWSType;
 }
 
 export interface InterfaceEntry {
   kind: SymbolKind.Interface;
   name: string;
-  defn: AST.InterfaceDefn;
+  defn: Ast.InterfaceDefn;
   ty: IR.CWSType;
 }
 
 export interface StructEntry {
   kind: SymbolKind.Struct;
   name: string;
-  defn: AST.StructDefn;
+  defn: Ast.StructDefn;
   ty: IR.CWSType;
 }
 
 export interface TupleEntry {
   kind: SymbolKind.Tuple;
   name: string;
-  defn: AST.TupleDefn;
+  defn: Ast.TupleDefn;
   ty: IR.CWSType;
 }
 
 export interface UnitEntry {
   kind: SymbolKind.Unit;
   name: string;
-  defn: AST.UnitDefn;
+  defn: Ast.UnitDefn;
   ty: IR.CWSType;
 }
 
 export interface EnumEntry {
   kind: SymbolKind.Enum;
   name: string;
-  defn: AST.EnumDefn;
+  defn: Ast.EnumDefn;
   ty: IR.CWSType;
 }
 
 export interface EnumVariantStructEntry {
   kind: SymbolKind.EnumVariantStruct;
   name: string;
-  defn: AST.EnumVariantStructDefn;
+  defn: Ast.EnumVariantStructDefn;
   ty: IR.CWSType;
 }
 
 export interface EnumVariantTupleEntry {
   kind: SymbolKind.EnumVariantTuple;
   name: string;
-  defn: AST.EnumVariantTupleDefn;
+  defn: Ast.EnumVariantTupleDefn;
   ty: IR.CWSType;
 }
 
 export interface EnumVariantUnitEntry {
   kind: SymbolKind.EnumVariantUnit;
   name: string;
-  defn: AST.EnumVariantUnitDefn;
+  defn: Ast.EnumVariantUnitDefn;
   ty: IR.CWSType;
 }
 
 export interface TypeAliasEntry {
   kind: SymbolKind.TypeAlias;
   name: string;
-  defn: AST.TypeAliasDefn;
+  defn: Ast.TypeAliasDefn;
   ty: IR.CWSType;
 }
 
 export interface ParamEntry {
   kind: SymbolKind.Param;
   name: string;
-  defn: AST.Param;
+  defn: Ast.Param;
   ty: IR.CWSType;
 }
 
 /*
   - asts get parsed
-  - eval-visitor walks AST and builds symbol table, attached to each AST node
-    - conversion of AST to semantic IR
+  - eval-visitor walks Ast and builds symbol table, attached to each Ast node
+    - conversion of Ast to semantic IR
     - type checking
     - building hierarchical symbol table
-  - now we have AST + symbol table
+  - now we have Ast + symbol table
   - codegen:
     - for each source file, get contracts from symbol table
     - for each contract, create an AIR contract model
       - create AIR 
 */
 
-
-export type SymbolEntry = 
+export type SymbolEntry =
   | VariableEntry
   | FunctionEntry
   | ContractEntry
@@ -166,43 +165,63 @@ export class SymbolTable {
   }
 
   get variables(): VariableEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Variable) as VariableEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Variable
+    ) as VariableEntry[];
   }
 
   get functions(): FunctionEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Function) as FunctionEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Function
+    ) as FunctionEntry[];
   }
 
   get contracts(): ContractEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Contract) as ContractEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Contract
+    ) as ContractEntry[];
   }
 
   get interfaces(): InterfaceEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Interface) as InterfaceEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Interface
+    ) as InterfaceEntry[];
   }
 
   get structs(): StructEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Struct) as StructEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Struct
+    ) as StructEntry[];
   }
 
   get tuples(): TupleEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Tuple) as TupleEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Tuple
+    ) as TupleEntry[];
   }
 
   get units(): UnitEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Unit) as UnitEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Unit
+    ) as UnitEntry[];
   }
 
   get enums(): EnumEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Enum) as EnumEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Enum
+    ) as EnumEntry[];
   }
 
   get typeAliases(): TypeAliasEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.TypeAlias) as TypeAliasEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.TypeAlias
+    ) as TypeAliasEntry[];
   }
 
   get params(): ParamEntry[] {
-    return this.symbols.filter(s => s.kind === SymbolKind.Param) as ParamEntry[];
+    return this.symbols.filter(
+      (s) => s.kind === SymbolKind.Param
+    ) as ParamEntry[];
   }
 
   addVariable(name: string): void {

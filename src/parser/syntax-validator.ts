@@ -1,4 +1,4 @@
-import * as AST from '../ast';
+import * as Ast from '../ast';
 import type { Diagnostic } from 'vscode-languageserver';
 import { isSnakeCase, isPascalCase, isCapitalSnake } from '../util/strings';
 
@@ -36,12 +36,17 @@ const RESERVED_KEYWORDS = [
   'unit',
 ];
 
-export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
+export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
   public readonly SOURCE = 'cwscript/parser/syntax-validator';
   // SKIP: SourceFile
 
-  visitImportStmt(node: AST.ImportStmt): Diagnostic[] {
+  visitImportStmt(node: Ast.ImportStmt): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
+
+    node.descendantsOfType(Ast.Ident).map((x) => {
+      x;
+    });
+
     if (!node.items || node.items.length === 0) {
       diagnostics.push(
         this.makeError(node, 'Import statement must import at least one item')
@@ -51,7 +56,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
   }
 
   // SKIP: LetStmt
-  visitIdentBinding(node: AST.IdentBinding): Diagnostic[] {
+  visitIdentBinding(node: Ast.IdentBinding): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     // check that variables use snake_case
     if (node.name.value[0] === '#') {
@@ -68,7 +73,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitTupleBinding(node: AST.TupleBinding): Diagnostic[] {
+  visitTupleBinding(node: Ast.TupleBinding): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     if (!node.names || node.names.length === 0) {
       diagnostics.push(
@@ -85,7 +90,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitStructBinding(node: AST.StructBinding): Diagnostic[] {
+  visitStructBinding(node: Ast.StructBinding): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     if (!node.names || node.names.length === 0) {
       diagnostics.push(
@@ -102,7 +107,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitConstStmt(node: AST.ConstStmt): Diagnostic[] {
+  visitConstStmt(node: Ast.ConstStmt): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     if (!isCapitalSnake(node.name.value)) {
       diagnostics.push(
@@ -124,7 +129,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
   // SKIP: InstantiateStmt
   // SKIP: EmitStmt
 
-  visitContractDefn(node: AST.ContractDefn): Diagnostic[] {
+  visitContractDefn(node: Ast.ContractDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -134,7 +139,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitInterfaceDefn(node: AST.InterfaceDefn): Diagnostic[] {
+  visitInterfaceDefn(node: Ast.InterfaceDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -144,7 +149,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitStructDefn(node: AST.StructDefn): Diagnostic[] {
+  visitStructDefn(node: Ast.StructDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -154,7 +159,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitTupleDefn(node: AST.TupleDefn): Diagnostic[] {
+  visitTupleDefn(node: Ast.TupleDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -164,7 +169,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitUnitDefn(node: AST.UnitDefn): Diagnostic[] {
+  visitUnitDefn(node: Ast.UnitDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -174,7 +179,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitEnumDefn(node: AST.EnumDefn): Diagnostic[] {
+  visitEnumDefn(node: Ast.EnumDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.name.value)) {
       diagnostics.push(
@@ -189,7 +194,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitEnumVariantStructDefn(node: AST.EnumVariantStructDefn): Diagnostic[] {
+  visitEnumVariantStructDefn(node: Ast.EnumVariantStructDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
 
     if (node.name.value[0] !== '#') {
@@ -205,7 +210,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitEnumVariantTupleDefn(node: AST.EnumVariantTupleDefn): Diagnostic[] {
+  visitEnumVariantTupleDefn(node: Ast.EnumVariantTupleDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
 
     if (!node.name.isHashIdent) {
@@ -222,7 +227,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitEnumVariantUnitDefn(node: AST.EnumVariantUnitDefn): Diagnostic[] {
+  visitEnumVariantUnitDefn(node: Ast.EnumVariantUnitDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
 
     if (!node.name.isHashIdent) {
@@ -239,7 +244,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitTypeAliasDefn(node: AST.TypeAliasDefn): Diagnostic[] {
+  visitTypeAliasDefn(node: Ast.TypeAliasDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -260,7 +265,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitFnDefn(node: AST.FnDefn): Diagnostic[] {
+  visitFnDefn(node: Ast.FnDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -283,7 +288,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitInstantiateDefn(node: AST.InstantiateDefn): Diagnostic[] {
+  visitInstantiateDefn(node: Ast.InstantiateDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.returnTy) {
       diagnostics.push(
@@ -293,7 +298,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitExecDefn(node: AST.ExecDefn): Diagnostic[] {
+  visitExecDefn(node: Ast.ExecDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.returnTy) {
       diagnostics.push(
@@ -313,7 +318,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitQueryDefn(node: AST.QueryDefn): Diagnostic[] {
+  visitQueryDefn(node: Ast.QueryDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!node.name.isHashIdent) {
       diagnostics.push(
@@ -328,7 +333,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitErrorDefn(node: AST.ErrorDefn): Diagnostic[] {
+  visitErrorDefn(node: Ast.ErrorDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -348,7 +353,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitEventDefn(node: AST.EventDefn): Diagnostic[] {
+  visitEventDefn(node: Ast.EventDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -368,7 +373,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitStateItemDefn(node: AST.StateItemDefn): Diagnostic[] {
+  visitStateItemDefn(node: Ast.StateItemDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -388,7 +393,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitStateMapDefn(node: AST.StateMapDefn): Diagnostic[] {
+  visitStateMapDefn(node: Ast.StateMapDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -410,7 +415,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
 
   // SKIP: DotExpr
 
-  public visitCallExpr(node: AST.CallExpr): Diagnostic[] {
+  public visitCallExpr(node: Ast.CallExpr): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     // argument list - named arguments must come after positional arguments
     if (node.args) {
@@ -453,7 +458,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
 
   // SKIP: GroupedTypeExpr
   // SKIP: ParameterizedTypeExpr
-  visitMemberTypeExpr(node: AST.MemberTypeExpr): Diagnostic[] {
+  visitMemberTypeExpr(node: Ast.MemberTypeExpr): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     return diagnostics;
   }
@@ -462,9 +467,9 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
   // SKIP: TupleDefnTypeExpr
   // SKIP: UnitDefnTypeExpr
   // SKIP: EnumDefnTypeExpr
-  visitOptionTypeExpr(node: AST.OptionTypeExpr): Diagnostic[] {
+  visitOptionTypeExpr(node: Ast.OptionTypeExpr): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
-    if (node.ty instanceof AST.OptionTypeExpr) {
+    if (node.ty instanceof Ast.OptionTypeExpr) {
       diagnostics.push(this.makeWarning(node, 'Redundant optional type'));
     }
     return diagnostics;
@@ -472,7 +477,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
   // SKIP: TypeVarExpr
   // SKIP: IdentTypeExpr
 
-  visitTypeVar(node: AST.TypeVar): Diagnostic[] {
+  visitTypeVar(node: Ast.TypeVar): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (!isPascalCase(node.value)) {
       diagnostics.push(
@@ -482,7 +487,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitIdent(node: AST.Ident): Diagnostic[] {
+  visitIdent(node: Ast.Ident): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     // warn if using reserved keyword
     if (node.value in RESERVED_KEYWORDS) {
@@ -493,7 +498,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitParam(node: AST.Param): Diagnostic[] {
+  visitParam(node: Ast.Param): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
       diagnostics.push(
@@ -516,7 +521,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     return diagnostics;
   }
 
-  visitParamList(node: AST.List<AST.Param>): Diagnostic[] {
+  visitParamList(node: Ast.List<Ast.Param>): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     // make sure all optional parameters are at the end
     let seenOptional = false;
@@ -531,7 +536,7 @@ export class SyntaxValidatorVisitor extends AST.ASTValidatorVisitor {
     });
     // warn about double optional parameters
     node.forEach((param) => {
-      if (param.optional && param.ty instanceof AST.OptionTypeExpr) {
+      if (param.optional && param.ty instanceof Ast.OptionTypeExpr) {
         diagnostics.push(
           this.makeWarning(param, 'Redundant optional parameter')
         );

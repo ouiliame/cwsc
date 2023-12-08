@@ -48,6 +48,11 @@ pub mod kitchen_sink {
         b: TODO,
         c: TODO,
       },
+      Dan {
+        a: TODO,
+        b: TODO,
+        c: TODO,
+      },
     }
   }
   pub mod contract {
@@ -98,6 +103,8 @@ pub mod kitchen_sink {
           to_json_binary(&query_query_b_impl(ctx, msg.a, msg.b)?),
         QueryMsg::Bob { a, b, c } =>
           to_json_binary(&query_bob_impl(ctx, msg.a, msg.b, msg.c)?),
+        QueryMsg::Dan { a, b, c } =>
+          to_json_binary(&query_dan_impl(ctx, msg.a, msg.b, msg.c)?),
       }
     }
   }
@@ -108,8 +115,8 @@ pub mod kitchen_sink {
     use super::state::*;
     pub fn instantiate_impl(
       ctx: InstantiateCtx,
-      a: Int,
-      b: String
+      a: TODO,
+      b: TODO
     ) -> Result<Response, ContractError> {
       Ok(Response::new())
     }
@@ -120,8 +127,8 @@ pub mod kitchen_sink {
     }
     pub fn exec_exec_b_impl(
       ctx: ExecuteCtx,
-      a: Int,
-      b: String
+      a: TODO,
+      b: TODO
     ) -> Result<Response, ContractError> {
       Ok(Response::new())
     }
@@ -130,22 +137,31 @@ pub mod kitchen_sink {
     }
     pub fn query_query_b_impl(
       ctx: QueryCtx,
-      a: Int,
-      b: String
+      a: TODO,
+      b: TODO
     ) -> StdResult<Binary> {
       Ok(to_binary(msg))
     }
     pub fn query_bob_impl(
       ctx: QueryCtx,
-      a: String,
-      b: String,
-      c: String
+      a: TODO,
+      b: TODO,
+      c: TODO
+    ) -> StdResult<Binary> {
+      Ok(to_binary(msg))
+    }
+    pub fn query_dan_impl(
+      ctx: QueryCtx,
+      a: TODO,
+      b: TODO,
+      c: TODO
     ) -> StdResult<Binary> {
       Ok(to_binary(msg))
     }
   }
   pub mod types {
     pub struct InlineA {}
+    pub struct InlineC {}
     pub struct StructA {}
     pub struct StructB {
       pub a: TODO,
@@ -207,6 +223,11 @@ pub mod kitchen_sink {
         b: TODO,
       },
       Bob {
+        a: TODO,
+        b: TODO,
+        c: TODO,
+      },
+      Dan {
         a: TODO,
         b: TODO,
         c: TODO,

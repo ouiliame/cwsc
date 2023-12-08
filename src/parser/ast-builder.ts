@@ -1,6 +1,6 @@
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import * as AST from '../ast';
+import * as Ast from '../ast';
 import * as P from '../grammar/CWScriptParser';
 import { CWScriptParserVisitor as ANTLRCWScriptParserVisitor } from '../grammar/CWScriptParserVisitor';
 import { ParserRuleContext } from 'antlr4ts';
@@ -8,675 +8,680 @@ import { ParserRuleContext } from 'antlr4ts';
 function assignOpFromText(text: string) {
   switch (text) {
     case '=':
-      return AST.AssignOp.EQ;
+      return Ast.AssignOp.EQ;
     case '+=':
-      return AST.AssignOp.PLUS_EQ;
+      return Ast.AssignOp.PLUS_EQ;
     case '-=':
-      return AST.AssignOp.MINUS_EQ;
+      return Ast.AssignOp.MINUS_EQ;
     case '*=':
-      return AST.AssignOp.MUL_EQ;
+      return Ast.AssignOp.MUL_EQ;
     case '/=':
-      return AST.AssignOp.DIV_EQ;
+      return Ast.AssignOp.DIV_EQ;
 
     default:
       throw new Error(`Invalid assign operator: ${text}`);
   }
 }
 
-export class ASTBuilderVisitor
-  extends AbstractParseTreeVisitor<AST.AST>
-  implements ANTLRCWScriptParserVisitor<AST.AST>
+export class AstBuilderVisitor
+  extends AbstractParseTreeVisitor<Ast.AstNode>
+  implements ANTLRCWScriptParserVisitor<Ast.AstNode>
 {
-  protected defaultResult(): AST.AST {
-    return AST.EMPTY;
+  protected defaultResult(): Ast.AstNode {
+    return Ast.EMPTY;
   }
 
-  visitSourceFile(ctx: P.SourceFileContext): AST.SourceFile {
-    const stmts = ctx._stmts.map((s) => this.stmt(s));
-    return new AST.SourceFile(stmts).$(ctx);
+  visitSourceFile(ctx: P.SourceFileContext): Ast.SourceFile {
+    const stmts = new Ast.List<Ast.Stmt>(ctx._stmts.map((s) => this.stmt(s))).$(
+      ctx
+    );
+    return new Ast.SourceFile(stmts).$(ctx);
   }
 
-  expr<T extends ParserRuleContext>(ctx: T): AST.Expr {
+  expr<T extends ParserRuleContext>(ctx: T): Ast.Expr {
     let res = this.visit(ctx);
-    if (!res.isExpr()) {
-      throw new Error(`Expected expression, got ${res.constructor.name}`);
-    }
-    return res;
+    // if (!res.isExpr()) {
+    //   throw new Error(`Expected expression, got ${res.constructor.name}`);
+    // }
+    return res as Ast.Expr;
   }
 
-  typeExpr<T extends ParserRuleContext>(ctx: T): AST.TypeExpr {
+  typeExpr<T extends ParserRuleContext>(ctx: T): Ast.TypeExpr {
     let res = this.visit(ctx);
-    if (!res.isTypeExpr()) {
-      throw new Error(`Expected type expression, got ${res.constructor.name}`);
-    }
-    return res;
+    // if (!res.isTypeExpr()) {
+    //   throw new Error(`Expected type expression, got ${res.constructor.name}`);
+    // }
+    return res as Ast.TypeExpr;
   }
 
-  stmt<T extends ParserRuleContext>(ctx: T): AST.Stmt {
+  stmt<T extends ParserRuleContext>(ctx: T): Ast.Stmt {
     let res = this.visit(ctx);
-    if (!res.isStmt()) {
-      throw new Error(`Expected statement, got ${res.constructor.name}`);
-    }
-    return res;
+    // if (!res.isStmt()) {
+    //   throw new Error(`Expected statement, got ${res.constructor.name}`);
+    // }
+    return res as Ast.Stmt;
   }
 
   //#region Statements
-  visitImportStmt(ctx: P.ImportStmtContext): AST.ImportStmt {
+  visitImportStmt(ctx: P.ImportStmtContext): Ast.ImportStmt {
     const items = ctx._items
       ? this.visitIdentList(ctx._items)
-      : AST.List.empty<AST.Ident>().$(ctx);
+      : Ast.List.empty<Ast.Ident>().$(ctx);
     const src = this.visitStringLit(ctx._src);
-    return new AST.ImportStmt(items, src).$(ctx);
+    return new Ast.ImportStmt(items, src).$(ctx);
   }
 
-  visitLetStmt(ctx: P.LetStmtContext): AST.LetStmt {
+  visitLetStmt(ctx: P.LetStmtContext): Ast.LetStmt {
     const binding = this.visit(
       ctx._binding as P.Binding_Context
-    ) as AST.Binding;
+    ) as Ast.Binding;
     const value = this.expr(ctx._value);
-    return new AST.LetStmt(binding, value).$(ctx);
+    return new Ast.LetStmt(binding, value).$(ctx);
   }
 
-  visitConstStmt(ctx: P.ConstStmtContext): AST.ConstStmt {
+  visitConstStmt(ctx: P.ConstStmtContext): Ast.ConstStmt {
     const name = this.visitIdent(ctx._name);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.visit(ctx._value) as AST.Expr;
-    return new AST.ConstStmt(name, ty, value).$(ctx);
+    const value = this.visit(ctx._value) as Ast.Expr;
+    return new Ast.ConstStmt(name, ty, value).$(ctx);
   }
 
-  visitAssignStmt(ctx: P.AssignStmtContext): AST.AssignStmt {
+  visitAssignStmt(ctx: P.AssignStmtContext): Ast.AssignStmt {
     const name = this.visitIdent(ctx._name);
     const op = ctx._assignOp.text ?? '=';
     const value = this.expr(ctx._value);
-    return new AST.AssignStmt(name, assignOpFromText(op), value).$(ctx);
+    return new Ast.AssignStmt(name, assignOpFromText(op), value).$(ctx);
   }
 
-  visitMemberAssignStmt(ctx: P.MemberAssignStmtContext): AST.MemberAssignStmt {
-    const obj = this.visit(ctx._obj) as AST.Expr;
+  visitMemberAssignStmt(ctx: P.MemberAssignStmtContext): Ast.MemberAssignStmt {
+    const obj = this.visit(ctx._obj) as Ast.Expr;
     const name = this.visitIdent(ctx._memberName);
     const op = ctx._assignOp.text ?? '=';
     const value = this.expr(ctx._value);
-    return new AST.MemberAssignStmt(obj, name, assignOpFromText(op), value).$(
+    return new Ast.MemberAssignStmt(obj, name, assignOpFromText(op), value).$(
       ctx
     );
   }
 
-  visitIndexAssignStmt(ctx: P.IndexAssignStmtContext): AST.IndexAssignStmt {
+  visitIndexAssignStmt(ctx: P.IndexAssignStmtContext): Ast.IndexAssignStmt {
     const obj = this.expr(ctx._obj);
     const index = this.expr(ctx._index);
     const op = ctx._assignOp.text ?? '=';
     const value = this.expr(ctx._value);
-    return new AST.IndexAssignStmt(obj, index, assignOpFromText(op), value).$(
+    return new Ast.IndexAssignStmt(obj, index, assignOpFromText(op), value).$(
       ctx
     );
   }
 
-  visitReturnStmt(ctx: P.ReturnStmtContext): AST.ReturnStmt {
+  visitReturnStmt(ctx: P.ReturnStmtContext): Ast.ReturnStmt {
     const value = this.expr(ctx._value);
-    return new AST.ReturnStmt(value).$(ctx);
+    return new Ast.ReturnStmt(value).$(ctx);
   }
 
-  visitFailStmt(ctx: P.FailStmtContext): AST.FailStmt {
+  visitFailStmt(ctx: P.FailStmtContext): Ast.FailStmt {
     const value = this.expr(ctx._value);
-    return new AST.FailStmt(value).$(ctx);
+    return new Ast.FailStmt(value).$(ctx);
   }
 
-  visitForStmt(ctx: P.ForStmtContext): AST.ForStmt {
-    const binding = this.visit(ctx._binding) as AST.Binding;
+  visitForStmt(ctx: P.ForStmtContext): Ast.ForStmt {
+    const binding = this.visit(ctx._binding) as Ast.Binding;
     const iter = this.expr(ctx._iter);
     const body = this.visitBlock(ctx._body);
-    return new AST.ForStmt(binding, iter, body).$(ctx);
+    return new Ast.ForStmt(binding, iter, body).$(ctx);
   }
 
-  visitExecStmt(ctx: P.ExecStmtContext): AST.ExecStmt {
+  visitExecStmt(ctx: P.ExecStmtContext): Ast.ExecStmt {
     const value = this.expr(ctx._value);
-    return new AST.ExecStmt(value).$(ctx);
+    return new Ast.ExecStmt(value).$(ctx);
   }
 
-  visitInstantiateStmt(ctx: P.InstantiateStmtContext): AST.InstantiateStmt {
+  visitInstantiateStmt(ctx: P.InstantiateStmtContext): Ast.InstantiateStmt {
     const value = this.expr(ctx._value);
-    return new AST.InstantiateStmt(value).$(ctx);
+    return new Ast.InstantiateStmt(value).$(ctx);
   }
 
-  visitEmitStmt(ctx: P.EmitStmtContext): AST.EmitStmt {
+  visitEmitStmt(ctx: P.EmitStmtContext): Ast.EmitStmt {
     const value = this.expr(ctx._value);
-    return new AST.EmitStmt(value).$(ctx);
+    return new Ast.EmitStmt(value).$(ctx);
   }
   //#endregion Statements
 
-  visitIdentBinding(ctx: P.IdentBindingContext): AST.IdentBinding {
-    return new AST.IdentBinding(
+  visitIdentBinding(ctx: P.IdentBindingContext): Ast.IdentBinding {
+    return new Ast.IdentBinding(
       this.visitIdent(ctx._name),
       ctx._ty ? this.typeExpr(ctx._ty) : null
     ).$(ctx);
   }
 
-  visitTupleBinding(ctx: P.TupleBindingContext): AST.TupleBinding {
+  visitTupleBinding(ctx: P.TupleBindingContext): Ast.TupleBinding {
     const names = this.visitIdentList(ctx._names);
-    return new AST.TupleBinding(names).$(ctx);
+    return new Ast.TupleBinding(names).$(ctx);
   }
 
-  visitStructBinding(ctx: P.StructBindingContext): AST.StructBinding {
+  visitStructBinding(ctx: P.StructBindingContext): Ast.StructBinding {
     const names = this.visitIdentList(ctx._names);
-    return new AST.StructBinding(names).$(ctx);
+    return new Ast.StructBinding(names).$(ctx);
   }
 
-  visitIfExpr_(ctx: P.IfExpr_Context): AST.IfExpr {
+  visitIfExpr_(ctx: P.IfExpr_Context): Ast.IfExpr {
     const pred = this.expr(ctx._pred);
     const thenBody = this.visitBlock(ctx._thenBody);
     const elseBody = ctx._elseBody ? this.visitBlock(ctx._elseBody) : null;
-    return new AST.IfExpr(pred, thenBody, elseBody).$(ctx);
+    return new Ast.IfExpr(pred, thenBody, elseBody).$(ctx);
   }
 
   visitTryCatchElseExpr_(
     ctx: P.TryCatchElseExpr_Context
-  ): AST.TryCatchElseExpr {
+  ): Ast.TryCatchElseExpr {
     const body = this.visitBlock(ctx._body);
     const catchClauses = ctx._catchClauses
-      ? new AST.List(ctx._catchClauses.map((s) => this.visitCatchClause(s))).$(
+      ? new Ast.List(ctx._catchClauses.map((s) => this.visitCatchClause(s))).$(
           ctx
         )
-      : AST.List.empty<AST.CatchClause>().$(ctx);
+      : Ast.List.empty<Ast.CatchClause>().$(ctx);
     const elseBody = ctx._elseBody ? this.visitBlock(ctx._elseBody) : null;
-    return new AST.TryCatchElseExpr(body, catchClauses, elseBody).$(ctx);
+    return new Ast.TryCatchElseExpr(body, catchClauses, elseBody).$(ctx);
   }
 
-  visitCatchClause(ctx: P.CatchClauseContext): AST.CatchClause {
+  visitCatchClause(ctx: P.CatchClauseContext): Ast.CatchClause {
     const ty = this.typeExpr(ctx._ty);
     const body = this.visitBlock(ctx._body);
-    return new AST.CatchClause(ty, body).$(ctx);
+    return new Ast.CatchClause(ty, body).$(ctx);
   }
 
   //#region Definitions
-  visitContractDefn(ctx: P.ContractDefnContext): AST.ContractDefn {
+  visitContractDefn(ctx: P.ContractDefnContext): Ast.ContractDefn {
     const name = this.visitIdent(ctx._name);
     const base = ctx._base ? this.typeExpr(ctx._base) : null;
     const interfaces = ctx._interfaces
       ? this.visitTypeExprList(ctx._interfaces)
-      : AST.List.empty<AST.TypeExpr>().$(ctx);
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     const body = this.visitBlock(ctx._body);
-    return new AST.ContractDefn(name, base, interfaces, body).$(ctx);
+    return new Ast.ContractDefn(name, base, interfaces, body).$(ctx);
   }
 
-  visitInterfaceDefn(ctx: P.InterfaceDefnContext): AST.InterfaceDefn {
+  visitInterfaceDefn(ctx: P.InterfaceDefnContext): Ast.InterfaceDefn {
     const name = this.visitIdent(ctx._name);
     const extend = ctx._baseInterfaces
       ? this.visitTypeExprList(ctx._baseInterfaces)
-      : AST.List.empty<AST.TypeExpr>().$(ctx);
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     const body = this.visitBlock(ctx._body);
-    return new AST.InterfaceDefn(name, extend, body).$(ctx);
+    return new Ast.InterfaceDefn(name, extend, body).$(ctx);
   }
 
-  visitStructDefnBrace(ctx: P.StructDefnBraceContext): AST.StructDefn {
+  visitStructDefnBrace(ctx: P.StructDefnBraceContext): Ast.StructDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const fields = this.visitBraceParamList(ctx._fields);
-    return new AST.StructDefn(name, typeParams, fields).$(ctx);
+    return new Ast.StructDefn(name, typeParams, fields).$(ctx);
   }
 
-  visitStructDefnParen(ctx: P.StructDefnParenContext): AST.StructDefn {
+  visitStructDefnParen(ctx: P.StructDefnParenContext): Ast.StructDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const fields = this.visitParenParamList(ctx._fields);
-    return new AST.StructDefn(name, typeParams, fields).$(ctx);
+    return new Ast.StructDefn(name, typeParams, fields).$(ctx);
   }
 
-  visitTupleDefn(ctx: P.TupleDefnContext): AST.TupleDefn {
+  visitTupleDefn(ctx: P.TupleDefnContext): Ast.TupleDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const elements = this.visitBrackTypeExprList(ctx._elements);
-    return new AST.TupleDefn(name, typeParams, elements).$(ctx);
+    return new Ast.TupleDefn(name, typeParams, elements).$(ctx);
   }
 
-  visitUnitDefn(ctx: P.UnitDefnContext): AST.UnitDefn {
+  visitUnitDefn(ctx: P.UnitDefnContext): Ast.UnitDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
-    return new AST.UnitDefn(name, typeParams).$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
+    return new Ast.UnitDefn(name, typeParams).$(ctx);
   }
 
-  visitEnumDefn(ctx: P.EnumDefnContext): AST.EnumDefn {
+  visitEnumDefn(ctx: P.EnumDefnContext): Ast.EnumDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const variants = ctx._variants
       ? this.visitEnumVariantDefnList(ctx._variants)
-      : AST.List.empty<AST.EnumVariantDefn>().$(ctx);
-    return new AST.EnumDefn(name, typeParams, variants).$(ctx);
+      : Ast.List.empty<Ast.EnumVariantDefn>().$(ctx);
+    return new Ast.EnumDefn(name, typeParams, variants).$(ctx);
   }
 
   visitEnumVariantDefnList(
     ctx: P.EnumVariantDefnListContext
-  ): AST.List<AST.EnumVariantDefn> {
-    return new AST.List(
-      ctx.enumVariantDefn().map((v) => this.visit(v) as AST.EnumVariantDefn)
+  ): Ast.List<Ast.EnumVariantDefn> {
+    return new Ast.List(
+      ctx.enumVariantDefn().map((v) => this.visit(v) as Ast.EnumVariantDefn)
     ).$(ctx);
   }
 
   visitEnumVariantStructDefnBrace(
     ctx: P.EnumVariantStructDefnBraceContext
-  ): AST.EnumVariantStructDefn {
+  ): Ast.EnumVariantStructDefn {
     const name = this.visitIdent(ctx._name);
     const fields = this.visitBraceParamList(ctx._fields);
-    return new AST.EnumVariantStructDefn(name, fields).$(ctx);
+    return new Ast.EnumVariantStructDefn(name, fields).$(ctx);
   }
 
   visitEnumVariantStructDefnParen(
     ctx: P.EnumVariantStructDefnParenContext
-  ): AST.EnumVariantStructDefn {
+  ): Ast.EnumVariantStructDefn {
     const name = this.visitIdent(ctx._name);
     const fields = this.visitParenParamList(ctx._fields);
-    return new AST.EnumVariantStructDefn(name, fields).$(ctx);
+    return new Ast.EnumVariantStructDefn(name, fields).$(ctx);
   }
 
   visitEnumVariantTupleDefn(
     ctx: P.EnumVariantTupleDefnContext
-  ): AST.EnumVariantTupleDefn {
+  ): Ast.EnumVariantTupleDefn {
     const name = this.visitIdent(ctx._name);
     const elements = this.visitBrackTypeExprList(ctx._elements);
-    return new AST.EnumVariantTupleDefn(name, elements).$(ctx);
+    return new Ast.EnumVariantTupleDefn(name, elements).$(ctx);
   }
 
   visitEnumVariantUnitDefn(
     ctx: P.EnumVariantUnitDefnContext
-  ): AST.EnumVariantUnitDefn {
+  ): Ast.EnumVariantUnitDefn {
     const name = this.visitIdent(ctx._name);
-    return new AST.EnumVariantUnitDefn(name).$(ctx);
+    return new Ast.EnumVariantUnitDefn(name).$(ctx);
   }
 
-  visitTypeAliasDefn(ctx: P.TypeAliasDefnContext): AST.TypeAliasDefn {
+  visitTypeAliasDefn(ctx: P.TypeAliasDefnContext): Ast.TypeAliasDefn {
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const ty = this.typeExpr(ctx._ty);
-    return new AST.TypeAliasDefn(name, typeParams, ty).$(ctx);
+    return new Ast.TypeAliasDefn(name, typeParams, ty).$(ctx);
   }
 
-  visitFnDefn(ctx: P.FnDefnContext): AST.FnDefn {
+  visitFnDefn(ctx: P.FnDefnContext): Ast.FnDefn {
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
-      : AST.List.empty<AST.TypeVar>().$(ctx);
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.FnDefn(name, fallible, typeParams, params, returnTy, body).$(
+    return new Ast.FnDefn(name, fallible, typeParams, params, returnTy, body).$(
       ctx
     );
   }
 
-  visitInstantiateDefn(ctx: P.InstantiateDefnContext): AST.InstantiateDefn {
+  visitInstantiateDefn(ctx: P.InstantiateDefnContext): Ast.InstantiateDefn {
     const fallible = ctx._fallible ? true : false;
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.InstantiateDefn(fallible, params, returnTy, body).$(ctx);
+    return new Ast.InstantiateDefn(fallible, params, returnTy, body).$(ctx);
   }
 
-  visitExecDefn(ctx: P.ExecDefnContext): AST.ExecDefn {
-    const name = this.visitIdent(ctx._name);
-    const fallible = ctx._fallible ? true : false;
-    const params = this.visitParenParamList(ctx._params);
-    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
-    return new AST.ExecDefn(name, fallible, params, returnTy, body).$(ctx);
-  }
-
-  visitQueryDefn(ctx: P.QueryDefnContext): AST.QueryDefn {
+  visitExecDefn(ctx: P.ExecDefnContext): Ast.ExecDefn {
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.QueryDefn(name, fallible, params, returnTy, body).$(ctx);
+    return new Ast.ExecDefn(name, fallible, params, returnTy, body).$(ctx);
   }
 
-  visitErrorDefn(ctx: P.ErrorDefnContext): AST.ErrorDefn {
+  visitQueryDefn(ctx: P.QueryDefnContext): Ast.QueryDefn {
+    const name = this.visitIdent(ctx._name);
+    const fallible = ctx._fallible ? true : false;
+    const params = this.visitParenParamList(ctx._params);
+    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
+    const body = this.visitBlock(ctx._body);
+    return new Ast.QueryDefn(name, fallible, params, returnTy, body).$(ctx);
+  }
+
+  visitErrorDefn(ctx: P.ErrorDefnContext): Ast.ErrorDefn {
     const name = this.visitIdent(ctx._name);
     const params = this.visitParenParamList(ctx._params);
-    return new AST.ErrorDefn(name, params).$(ctx);
+    return new Ast.ErrorDefn(name, params).$(ctx);
   }
 
-  visitEventDefn(ctx: P.EventDefnContext): AST.EventDefn {
+  visitEventDefn(ctx: P.EventDefnContext): Ast.EventDefn {
     const name = this.visitIdent(ctx._name);
     const params = this.visitParenParamList(ctx._params);
-    return new AST.EventDefn(name, params).$(ctx);
+    return new Ast.EventDefn(name, params).$(ctx);
   }
 
-  visitStateBlockDefn(ctx: P.StateBlockDefnContext): AST.StateBlockDefn {
+  visitStateBlockDefn(ctx: P.StateBlockDefnContext): Ast.StateBlockDefn {
     const stateFields = ctx._stateFields.map((f) => this.visitStateDefn(f));
-    return new AST.StateBlockDefn(new AST.List(stateFields).$(ctx)).$(ctx);
+    return new Ast.StateBlockDefn(new Ast.List(stateFields).$(ctx)).$(ctx);
   }
 
   visitStateDefn(
     ctx: P.StateDefnContext
-  ): AST.StateItemDefn | AST.StateMapDefn {
+  ): Ast.StateItemDefn | Ast.StateMapDefn {
     let defn = ctx.stateItemDefn() ?? ctx.stateMapDefn();
-    return this.visit(defn!) as AST.StateItemDefn | AST.StateMapDefn;
+    return this.visit(defn!) as Ast.StateItemDefn | Ast.StateMapDefn;
   }
 
-  visitStateItemDefn(ctx: P.StateItemDefnContext): AST.StateItemDefn {
+  visitStateItemDefn(ctx: P.StateItemDefnContext): Ast.StateItemDefn {
     const name = this.visitIdent(ctx._name);
     const ty = this.typeExpr(ctx._ty);
-    return new AST.StateItemDefn(name, ty).$(ctx);
+    return new Ast.StateItemDefn(name, ty).$(ctx);
   }
 
-  visitStateMapDefn(ctx: P.StateMapDefnContext): AST.StateMapDefn {
+  visitStateMapDefn(ctx: P.StateMapDefnContext): Ast.StateMapDefn {
     const name = this.visitIdent(ctx._name);
     const indexTy = this.typeExpr(ctx._indexTy);
     const ty = this.typeExpr(ctx._ty);
-    return new AST.StateMapDefn(name, indexTy, ty).$(ctx);
+    return new Ast.StateMapDefn(name, indexTy, ty).$(ctx);
   }
 
   //#endregion Definitions
 
   //#region Expressions
-  visitDotExpr(ctx: P.DotExprContext): AST.DotExpr {
+  visitDotExpr(ctx: P.DotExprContext): Ast.DotExpr {
     const obj = this.expr(ctx.expr());
     const memberName = this.visitIdent(ctx._memberName);
-    return new AST.DotExpr(obj, memberName).$(ctx);
+    return new Ast.DotExpr(obj, memberName).$(ctx);
   }
 
-  visitCallExpr(ctx: P.CallExprContext): AST.CallExpr {
+  visitCallExpr(ctx: P.CallExprContext): Ast.CallExpr {
     const fn = this.expr(ctx.expr());
     const fallible = ctx._fallible ? true : false;
     const typeArgs = ctx._typeArgs
       ? this.visitBrackTypeExprList(ctx._typeArgs)
-      : AST.List.empty<AST.TypeExpr>().$(ctx);
-    const args = new AST.List(ctx._args.map((a) => this.visitArg(a))).$(ctx);
-    return new AST.CallExpr(fn, fallible, typeArgs, args).$(ctx);
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
+    const args = new Ast.List(ctx._args.map((a) => this.visitArg(a))).$(ctx);
+    return new Ast.CallExpr(fn, fallible, typeArgs, args).$(ctx);
   }
 
-  visitIndexExpr(ctx: P.IndexExprContext): AST.IndexExpr {
+  visitIndexExpr(ctx: P.IndexExprContext): Ast.IndexExpr {
     const [obj, index] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.IndexExpr(obj, index).$(ctx);
+    return new Ast.IndexExpr(obj, index).$(ctx);
   }
 
-  visitAsExpr(ctx: P.AsExprContext): AST.AsExpr {
+  visitAsExpr(ctx: P.AsExprContext): Ast.AsExpr {
     const obj = this.expr(ctx.expr());
     const ty = this.typeExpr(ctx._ty);
-    return new AST.AsExpr(obj, ty).$(ctx);
+    return new Ast.AsExpr(obj, ty).$(ctx);
   }
 
-  visitExistsExpr(ctx: P.ExistsExprContext): AST.ExistsExpr {
+  visitExistsExpr(ctx: P.ExistsExprContext): Ast.ExistsExpr {
     const expr = this.expr(ctx.expr());
-    return new AST.ExistsExpr(expr).$(ctx);
+    return new Ast.ExistsExpr(expr).$(ctx);
   }
 
-  visitMulExpr(ctx: P.MulExprContext): AST.BinOpExpr {
+  visitMulExpr(ctx: P.MulExprContext): Ast.BinOpExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.BinOpExpr(lhs, ctx._op.text! as AST.Op, rhs).$(ctx);
+    return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
-  visitAddExpr(ctx: P.AddExprContext): AST.BinOpExpr {
+  visitAddExpr(ctx: P.AddExprContext): Ast.BinOpExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.BinOpExpr(lhs, ctx._op.text! as AST.Op, rhs).$(ctx);
+    return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
-  visitCompExpr(ctx: P.CompExprContext): AST.BinOpExpr {
+  visitCompExpr(ctx: P.CompExprContext): Ast.BinOpExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.BinOpExpr(lhs, ctx._op.text! as AST.Op, rhs).$(ctx);
+    return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
-  visitQueryExpr(ctx: P.QueryExprContext): AST.QueryExpr {
+  visitQueryExpr(ctx: P.QueryExprContext): Ast.QueryExpr {
     const expr = this.expr(ctx.expr());
-    return new AST.QueryExpr(expr).$(ctx);
+    return new Ast.QueryExpr(expr).$(ctx);
   }
 
-  visitShortTryExpr(ctx: P.ShortTryExprContext): AST.ShortTryExpr {
+  visitShortTryExpr(ctx: P.ShortTryExprContext): Ast.ShortTryExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.ShortTryExpr(lhs, rhs).$(ctx);
+    return new Ast.ShortTryExpr(lhs, rhs).$(ctx);
   }
 
-  visitIsExpr(ctx: P.IsExprContext): AST.IsExpr {
+  visitIsExpr(ctx: P.IsExprContext): Ast.IsExpr {
     const [lhs, rhs] = [this.expr(ctx.expr()), this.typeExpr(ctx._ty)];
     const negative = ctx._negative ? true : false;
-    return new AST.IsExpr(negative, lhs, rhs).$(ctx);
+    return new Ast.IsExpr(negative, lhs, rhs).$(ctx);
   }
 
-  visitInExpr(ctx: P.InExprContext): AST.InExpr {
+  visitInExpr(ctx: P.InExprContext): Ast.InExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.InExpr(lhs, rhs).$(ctx);
+    return new Ast.InExpr(lhs, rhs).$(ctx);
   }
 
-  visitEqExpr(ctx: P.EqExprContext): AST.BinOpExpr {
+  visitEqExpr(ctx: P.EqExprContext): Ast.BinOpExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.BinOpExpr(lhs, ctx._op.text! as AST.Op, rhs).$(ctx);
+    return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
-  visitAndExpr(ctx: P.AndExprContext): AST.AndExpr {
+  visitAndExpr(ctx: P.AndExprContext): Ast.AndExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.AndExpr(lhs, rhs).$(ctx);
+    return new Ast.AndExpr(lhs, rhs).$(ctx);
   }
 
-  visitOrExpr(ctx: P.OrExprContext): AST.OrExpr {
+  visitOrExpr(ctx: P.OrExprContext): Ast.OrExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new AST.OrExpr(lhs, rhs).$(ctx);
+    return new Ast.OrExpr(lhs, rhs).$(ctx);
   }
 
-  visitIfExpr(ctx: P.IfExprContext): AST.IfExpr {
+  visitIfExpr(ctx: P.IfExprContext): Ast.IfExpr {
     return this.visitIfExpr_(ctx.ifExpr_()).$(ctx);
   }
 
-  visitTryCatchElseExpr(ctx: P.TryCatchElseExprContext): AST.TryCatchElseExpr {
+  visitTryCatchElseExpr(ctx: P.TryCatchElseExprContext): Ast.TryCatchElseExpr {
     return this.visitTryCatchElseExpr_(ctx.tryCatchElseExpr_()).$(ctx);
   }
 
-  visitClosureExpr(ctx: P.ClosureExprContext): AST.ClosureExpr {
+  visitClosureExpr(ctx: P.ClosureExprContext): Ast.ClosureExpr {
     return this.visitClosureExpr_(ctx.closureExpr_()).$(ctx);
   }
 
-  visitClosureExpr_(ctx: P.ClosureExpr_Context): AST.ClosureExpr {
+  visitClosureExpr_(ctx: P.ClosureExpr_Context): Ast.ClosureExpr {
     const fallible = ctx._fallible ? true : false;
     const params = this.visitBarParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new AST.ClosureExpr(fallible, params, returnTy, body).$(ctx);
+    return new Ast.ClosureExpr(fallible, params, returnTy, body).$(ctx);
   }
 
-  visitStructExpr(ctx: P.StructExprContext): AST.StructExpr {
+  visitStructExpr(ctx: P.StructExprContext): Ast.StructExpr {
     return this.visitStructExpr_(ctx.structExpr_()).$(ctx);
   }
 
-  visitStructExpr_(ctx: P.StructExpr_Context): AST.StructExpr {
+  visitStructExpr_(ctx: P.StructExpr_Context): Ast.StructExpr {
     let ty = this.typeExpr(ctx._ty).$(ctx);
     let fields = this.visitBraceFieldList(ctx._fields);
-    return new AST.StructExpr(ty, fields).$(ctx);
+    return new Ast.StructExpr(ty, fields).$(ctx);
   }
 
-  visitTupleExpr(ctx: P.TupleExprContext): AST.TupleExpr {
+  visitTupleExpr(ctx: P.TupleExprContext): Ast.TupleExpr {
     return this.visitTupleExpr_(ctx.tupleExpr_()).$(ctx);
   }
 
-  visitTupleExpr_(ctx: P.TupleExpr_Context): AST.TupleExpr {
-    let elements = new AST.List(ctx._elements.map((e) => this.expr(e))).$(ctx);
-    return new AST.TupleExpr(elements).$(ctx);
+  visitTupleExpr_(ctx: P.TupleExpr_Context): Ast.TupleExpr {
+    let elements = new Ast.List(ctx._elements.map((e) => this.expr(e))).$(ctx);
+    return new Ast.TupleExpr(elements).$(ctx);
   }
 
-  visitLiteralExpr(ctx: P.LiteralExprContext): AST.Literal<any> {
-    return this.visit(ctx.literal()).$(ctx) as AST.Literal<any>;
+  visitLiteralExpr(ctx: P.LiteralExprContext): Ast.Literal {
+    return this.visit(ctx.literal()).$(ctx) as Ast.Literal;
   }
 
-  visitIdentExpr(ctx: P.IdentExprContext): AST.IdentExpr {
+  visitIdentExpr(ctx: P.IdentExprContext): Ast.IdentExpr {
     const ident = this.visitIdent(ctx.ident());
-    return new AST.IdentExpr(ident).$(ctx);
+    return new Ast.IdentExpr(ident).$(ctx);
   }
 
-  visitGroupedExpr(ctx: P.GroupedExprContext): AST.GroupedExpr {
-    return new AST.GroupedExpr(this.expr(ctx.expr())).$(ctx);
+  visitGroupedExpr(ctx: P.GroupedExprContext): Ast.GroupedExpr {
+    return new Ast.GroupedExpr(this.expr(ctx.expr())).$(ctx);
   }
 
   //#endregion Expressions
 
   //#region Literals
-  visitStringLit(ctx: P.StringLitContext): AST.StringLit {
-    return new AST.StringLit(ctx.text!).$(ctx);
+  visitStringLit(ctx: P.StringLitContext): Ast.StringLit {
+    return new Ast.StringLit(ctx.text!).$(ctx);
   }
 
-  visitIntLit(ctx: P.IntLitContext): AST.IntLit {
-    return new AST.IntLit(ctx.text!).$(ctx);
+  visitIntLit(ctx: P.IntLitContext): Ast.IntLit {
+    return new Ast.IntLit(ctx.text!).$(ctx);
   }
 
-  visitDecLit(ctx: P.DecLitContext): AST.DecLit {
-    return new AST.DecLit(ctx.text!).$(ctx);
+  visitDecLit(ctx: P.DecLitContext): Ast.DecLit {
+    return new Ast.DecLit(ctx.text!).$(ctx);
   }
 
-  visitBoolLit(ctx: P.BoolLitContext): AST.BoolLit {
-    return new AST.BoolLit(ctx.text! === 'true').$(ctx);
+  visitBoolLit(ctx: P.BoolLitContext): Ast.BoolLit {
+    return new Ast.BoolLit(ctx.text! === 'true').$(ctx);
   }
 
-  visitNoneLit(ctx: P.NoneLitContext): AST.NoneLit {
-    return new AST.NoneLit().$(ctx);
+  visitNoneLit(ctx: P.NoneLitContext): Ast.NoneLit {
+    return new Ast.NoneLit().$(ctx);
   }
   //#endregion Literals
 
   //#region Type Expressions
-  visitGroupedTypeExpr(ctx: P.GroupedTypeExprContext): AST.GroupedTypeExpr {
-    return new AST.GroupedTypeExpr(this.typeExpr(ctx.typeExpr())).$(ctx);
+  visitGroupedTypeExpr(ctx: P.GroupedTypeExprContext): Ast.GroupedTypeExpr {
+    return new Ast.GroupedTypeExpr(this.typeExpr(ctx.typeExpr())).$(ctx);
   }
 
   visitParameterizedTypeExpr(
     ctx: P.ParameterizedTypeExprContext
-  ): AST.ParamzdTypeExpr {
+  ): Ast.ParamzdTypeExpr {
     const ty = this.typeExpr(ctx.typeExpr());
     const typeArgs = this.visitTypeExprList(ctx._typeArgs);
-    return new AST.ParamzdTypeExpr(ty, typeArgs).$(ctx);
+    return new Ast.ParamzdTypeExpr(ty, typeArgs).$(ctx);
   }
 
-  visitMemberTypeExpr(ctx: P.MemberTypeExprContext): AST.MemberTypeExpr {
+  visitMemberTypeExpr(ctx: P.MemberTypeExprContext): Ast.MemberTypeExpr {
     const ty = this.typeExpr(ctx.typeExpr());
     const memberName = this.visitIdent(ctx._memberName);
-    return new AST.MemberTypeExpr(ty, memberName).$(ctx);
+    return new Ast.MemberTypeExpr(ty, memberName).$(ctx);
   }
 
-  visitArrayTypeExpr(ctx: P.ArrayTypeExprContext): AST.ArrayTypeExpr {
+  visitArrayTypeExpr(ctx: P.ArrayTypeExprContext): Ast.ArrayTypeExpr {
     const ty = this.typeExpr(ctx._ty);
-    return new AST.ArrayTypeExpr(ty, this.visitIntLit(ctx._size)).$(ctx);
+    return new Ast.ArrayTypeExpr(ty, this.visitIntLit(ctx._size)).$(ctx);
   }
 
   visitStructDefnTypeExpr(
     ctx: P.StructDefnTypeExprContext
-  ): AST.StructDefnTypeExpr {
-    const ty = this.typeExpr(ctx.structDefn()) as AST.StructDefn;
-    return new AST.StructDefnTypeExpr(ty).$(ctx);
+  ): Ast.StructDefnTypeExpr {
+    const ty = this.typeExpr(ctx.structDefn()) as any as Ast.StructDefn;
+    return new Ast.StructDefnTypeExpr(ty).$(ctx);
   }
 
   visitTupleDefnTypeExpr(
     ctx: P.TupleDefnTypeExprContext
-  ): AST.TupleDefnTypeExpr {
+  ): Ast.TupleDefnTypeExpr {
     const ty = this.visitTupleDefn(ctx.tupleDefn());
-    return new AST.TupleDefnTypeExpr(ty).$(ctx);
+    return new Ast.TupleDefnTypeExpr(ty).$(ctx);
   }
 
-  visitUnitDefnTypeExpr(ctx: P.UnitDefnTypeExprContext): AST.UnitDefnTypeExpr {
+  visitUnitDefnTypeExpr(ctx: P.UnitDefnTypeExprContext): Ast.UnitDefnTypeExpr {
     const ty = this.visitUnitDefn(ctx.unitDefn());
-    return new AST.UnitDefnTypeExpr(ty).$(ctx);
+    return new Ast.UnitDefnTypeExpr(ty).$(ctx);
   }
 
-  visitEnumDefnTypeExpr(ctx: P.EnumDefnTypeExprContext): AST.EnumDefnTypeExpr {
+  visitEnumDefnTypeExpr(ctx: P.EnumDefnTypeExprContext): Ast.EnumDefnTypeExpr {
     const ty = this.visitEnumDefn(ctx.enumDefn());
-    return new AST.EnumDefnTypeExpr(ty).$(ctx);
+    return new Ast.EnumDefnTypeExpr(ty).$(ctx);
   }
 
-  visitOptionTypeExpr(ctx: P.OptionTypeExprContext): AST.OptionTypeExpr {
+  visitOptionTypeExpr(ctx: P.OptionTypeExprContext): Ast.OptionTypeExpr {
     const ty = this.typeExpr(ctx.typeExpr());
-    return new AST.OptionTypeExpr(ty).$(ctx);
+    return new Ast.OptionTypeExpr(ty).$(ctx);
   }
 
-  visitIdentTypeExpr(ctx: P.IdentTypeExprContext): AST.IdentTypeExpr {
+  visitIdentTypeExpr(ctx: P.IdentTypeExprContext): Ast.IdentTypeExpr {
     const ident = this.visitIdent(ctx.ident());
-    return new AST.IdentTypeExpr(ident).$(ctx);
+    return new Ast.IdentTypeExpr(ident).$(ctx);
   }
 
-  visitTypeVarExpr(ctx: P.TypeVarExprContext): AST.TypeVarExpr {
+  visitTypeVarExpr(ctx: P.TypeVarExprContext): Ast.TypeVarExpr {
     const typeVar = this.visitTypeVar(ctx.typeVar());
-    return new AST.TypeVarExpr(typeVar).$(ctx);
+    return new Ast.TypeVarExpr(typeVar).$(ctx);
   }
 
-  visitTypeVar(ctx: P.TypeVarContext): AST.TypeVar {
-    return new AST.TypeVar(ctx.text!).$(ctx);
+  visitTypeVar(ctx: P.TypeVarContext): Ast.TypeVar {
+    return new Ast.TypeVar(ctx.text!).$(ctx);
   }
 
   // #endregion
 
   //#region Common
-  visitIdent(ctx: P.IdentContext): AST.Ident {
-    return new AST.Ident(ctx.text).$(ctx);
+  visitIdent(ctx: P.IdentContext): Ast.Ident {
+    return new Ast.Ident(ctx.text).$(ctx);
   }
 
-  visitParam(ctx: P.ParamContext): AST.Param {
+  visitParam(ctx: P.ParamContext): Ast.Param {
     const name = this.visitIdent(ctx._name);
     const optional = ctx._optional ? true : false;
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    return new AST.Param(name, optional, ty).$(ctx);
+    return new Ast.Param(name, optional, ty).$(ctx);
   }
 
-  visitField(ctx: P.FieldContext): AST.Field {
+  visitField(ctx: P.FieldContext): Ast.Field {
     const name = this.visitIdent(ctx._name);
     const value = ctx._value ? this.expr(ctx._value) : null;
-    return new AST.Field(name, value).$(ctx);
+    return new Ast.Field(name, value).$(ctx);
   }
 
-  visitArg(ctx: P.ArgContext): AST.Arg {
+  visitArg(ctx: P.ArgContext): Ast.Arg {
     const namedArg = ctx.namedArg();
     if (namedArg) {
       const name = this.visitIdent(namedArg._name);
       const value = this.expr(namedArg._value);
-      return new AST.Arg(name, value).$(ctx);
+      return new Ast.Arg(name, value).$(ctx);
     } else {
       const value = this.expr(ctx.expr()!);
-      return new AST.Arg(null, value).$(ctx);
+      return new Ast.Arg(null, value).$(ctx);
     }
   }
 
-  visitIdentList(ctx: P.IdentListContext): AST.List<AST.Ident> {
-    return new AST.List(ctx.ident().map((i) => this.visitIdent(i))).$(ctx);
+  visitIdentList(ctx: P.IdentListContext): Ast.List<Ast.Ident> {
+    return new Ast.List(ctx.ident().map((i) => this.visitIdent(i))).$(ctx);
   }
 
-  visitParenParamList(ctx: P.ParenParamListContext): AST.List<AST.Param> {
-    return new AST.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
+  visitParenParamList(ctx: P.ParenParamListContext): Ast.List<Ast.Param> {
+    return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 
-  visitBraceParamList(ctx: P.BraceParamListContext): AST.List<AST.Param> {
-    return new AST.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
+  visitBraceParamList(ctx: P.BraceParamListContext): Ast.List<Ast.Param> {
+    return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 
-  visitBarParamList(ctx: P.BarParamListContext): AST.List<AST.Param> {
-    return new AST.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
+  visitBarParamList(ctx: P.BarParamListContext): Ast.List<Ast.Param> {
+    return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 
   visitBrackTypeParamList(
     ctx: P.BrackTypeParamListContext
-  ): AST.List<AST.TypeVar> {
-    return new AST.List(ctx.typeVar().map((t) => this.visitTypeVar(t))).$(ctx);
+  ): Ast.List<Ast.TypeVar> {
+    return new Ast.List(ctx.typeVar().map((t) => this.visitTypeVar(t))).$(ctx);
   }
 
   visitBrackTypeExprList(
     ctx: P.BrackTypeExprListContext
-  ): AST.List<AST.TypeExpr> {
-    return new AST.List(ctx.typeExpr().map((t) => this.typeExpr(t))).$(ctx);
+  ): Ast.List<Ast.TypeExpr> {
+    return new Ast.List(ctx.typeExpr().map((t) => this.typeExpr(t))).$(ctx);
   }
 
-  visitBraceFieldList(ctx: P.BraceFieldListContext): AST.List<AST.Field> {
-    return new AST.List(ctx.field().map((f) => this.visitField(f))).$(ctx);
+  visitBraceFieldList(ctx: P.BraceFieldListContext): Ast.List<Ast.Field> {
+    return new Ast.List(ctx.field().map((f) => this.visitField(f))).$(ctx);
   }
 
-  visitTypeExprList(ctx: P.TypeExprListContext): AST.List<AST.TypeExpr> {
-    return new AST.List(ctx.typeExpr().map((t) => this.typeExpr(t))).$(ctx);
+  visitTypeExprList(ctx: P.TypeExprListContext): Ast.List<Ast.TypeExpr> {
+    return new Ast.List(ctx.typeExpr().map((t) => this.typeExpr(t))).$(ctx);
   }
 
-  visitBlock(ctx: P.BlockContext): AST.Block {
-    return new AST.Block(ctx._stmts.map((s) => this.stmt(s))).$(ctx);
+  visitBlock(ctx: P.BlockContext): Ast.Block {
+    const stmts = new Ast.List<Ast.Stmt>(ctx._stmts.map((s) => this.stmt(s))).$(
+      ctx
+    );
+    return new Ast.Block(stmts).$(ctx);
   }
 
   //#endregion Common

@@ -1,9 +1,9 @@
-import * as AST from './ast';
+import * as Ast from './ast';
 import * as IR from './ir';
 import { SymbolTable } from './symbolic/symbol-table';
 import { CWScriptProject } from './projects';
 
-export class ASTEvaluator extends AST.ASTVisitor<any> {
+export class AstEvaluator extends Ast.AstVisitor<any> {
   constructor(
     public project: CWScriptProject,
     public path: string,
@@ -25,11 +25,11 @@ export class ASTEvaluator extends AST.ASTVisitor<any> {
     return prevScope;
   }
 
-  visitSourceFile(node: AST.SourceFile) {
+  visitSourceFile(node: Ast.SourceFile) {
     this.visitChildren(node);
   }
 
-  visitImportStmt(node: AST.ImportStmt) {
+  visitImportStmt(node: Ast.ImportStmt) {
     node.items?.forEach((item) => {
       this.symbols.set(item.value, {
         type: 'import',
@@ -39,13 +39,13 @@ export class ASTEvaluator extends AST.ASTVisitor<any> {
     });
   }
 
-  visitContractDefn(node: AST.ContractDefn) {
+  visitContractDefn(node: Ast.ContractDefn) {
     this.pushScope();
     node.body.forEach((stmt) => this.visit(stmt));
     this.popScope();
   }
 
-  visitConstStmt(node: AST.ConstStmt) {
+  visitConstStmt(node: Ast.ConstStmt) {
     this.symbols.set(node.name.value, {
       type: 'const',
       ast: node,
@@ -53,13 +53,13 @@ export class ASTEvaluator extends AST.ASTVisitor<any> {
     });
   }
 
-  visitBinOpExpr(node: AST.BinOpExpr) {
+  visitBinOpExpr(node: Ast.BinOpExpr) {
     const lhs = this.visit(node.lhs);
     const rhs = this.visit(node.rhs);
     console.log('+', lhs, rhs);
   }
 
-  visitIdentExpr(node: AST.IdentExpr) {
+  visitIdentExpr(node: Ast.IdentExpr) {
     const symbol = this.symbols.get(node.ident.value);
     if (!symbol) {
       throw new Error(`Undefined symbol ${node.ident.value}`);
@@ -67,7 +67,7 @@ export class ASTEvaluator extends AST.ASTVisitor<any> {
     return symbol.value;
   }
 
-  visitIfExpr(node: AST.IfExpr) {
+  visitIfExpr(node: Ast.IfExpr) {
     const pred = this.visit(node.pred);
     if (pred.type !== 'bool') {
       throw new Error('Predicate must be a boolean');

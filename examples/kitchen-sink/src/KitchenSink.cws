@@ -19,6 +19,8 @@ contract KitchenSink {
   query #query_b(a: Int, b: String) {}
   query #bob(a: String, b: String, c: String) {
   }
+  query #dan(a: String, b: struct InlineC { }, c: String) {
+  }
 
   struct StructA {}
   struct StructB {

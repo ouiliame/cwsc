@@ -10,14 +10,14 @@ import {
 import { RecognitionException } from 'antlr4ts/RecognitionException';
 import path from 'path';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
-import * as AST from '../ast';
+import * as Ast from '../ast';
 import { CWScriptLexer as ANTLRCWScriptLexer } from '../grammar/CWScriptLexer';
 import {
   CWScriptParser as ANTLRCWScriptParser,
   SourceFileContext,
 } from '../grammar/CWScriptParser';
 import { TextView } from '../util/position';
-import { ASTBuilderVisitor } from './ast-builder';
+import { AstBuilderVisitor } from './ast-builder';
 import { SyntaxValidatorVisitor } from './syntax-validator';
 import { readFile } from '../util/filesystem';
 
@@ -45,7 +45,7 @@ export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
 }
 
 export interface ParseResult {
-  ast?: AST.SourceFile;
+  ast?: Ast.SourceFile;
   diagnostics: Diagnostic[];
 }
 
@@ -79,7 +79,7 @@ export class CWScriptParser {
    */
   public parse(): ParseResult {
     const { parseTree, diagnostics } = this.antlrParse();
-    const astBuilder = new ASTBuilderVisitor(this.sourceText);
+    const astBuilder = new AstBuilderVisitor(this.sourceText);
     const ast = astBuilder.visitSourceFile(parseTree);
     const syntaxValidator = new SyntaxValidatorVisitor(
       this.sourceText,

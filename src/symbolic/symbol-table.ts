@@ -1,9 +1,9 @@
-import * as AST from '../ast';
+import * as Ast from '../ast';
 import * as IR from '../ir';
 
 export interface SymbolTableEntry {
   type: string;
-  ast?: AST.AST;
+  ast?: Ast.Ast;
   value?: IR.CWSValue | IR.CWSExpr;
   ty?: IR.CWSType;
 }
@@ -33,46 +33,46 @@ export class SymbolTable {
     return this.symbols.get(name) || null;
   }
 
-  public static fromAST(node: AST.AST): SymbolTable {
+  public static fromAst(node: Ast.Ast): SymbolTable {
     let table = new SymbolTable();
-    node.descendants.forEach((node: AST.AST) => {
+    node.descendants.forEach((node: Ast.Ast) => {
       // find all declarations
-      if (node instanceof AST.TypeAliasDefn) {
+      if (node instanceof Ast.TypeAliasDefn) {
         table.set(node.name.value, {
           type: 'type',
           ast: node,
         });
       }
 
-      if (node instanceof AST.FnDefn) {
+      if (node instanceof Ast.FnDefn) {
         table.set(node.name.value, {
           type: 'function',
           ast: node,
         });
       }
 
-      if (node instanceof AST.ContractDefn) {
+      if (node instanceof Ast.ContractDefn) {
         table.set(node.name.value, {
           type: 'contract',
           ast: node,
         });
       }
 
-      if (node instanceof AST.InterfaceDefn) {
+      if (node instanceof Ast.InterfaceDefn) {
         table.set(node.name.value, {
           type: 'interface',
           ast: node,
         });
       }
 
-      if (node instanceof AST.EnumDefn) {
+      if (node instanceof Ast.EnumDefn) {
         table.set(node.name.value, {
           type: 'enum',
           ast: node,
         });
       }
 
-      if (node instanceof AST.StructDefn) {
+      if (node instanceof Ast.StructDefn) {
         if (node.name) {
           table.set(node.name.value, {
             type: 'struct',
@@ -81,42 +81,42 @@ export class SymbolTable {
         }
       }
 
-      if (node instanceof AST.ConstStmt) {
+      if (node instanceof Ast.ConstStmt) {
         table.set(node.name.value, {
           type: 'const',
           ast: node,
         });
       }
 
-      if (node instanceof AST.InstantiateDefn) {
+      if (node instanceof Ast.InstantiateDefn) {
         table.set('#instantiate', {
           type: 'instantiate',
           ast: node,
         });
       }
 
-      if (node instanceof AST.ExecDefn) {
+      if (node instanceof Ast.ExecDefn) {
         table.set('exec #' + node.name.value, {
           type: 'exec',
           ast: node,
         });
       }
 
-      if (node instanceof AST.QueryDefn) {
+      if (node instanceof Ast.QueryDefn) {
         table.set('query #' + node.name.value, {
           type: 'query',
           ast: node,
         });
       }
 
-      if (node instanceof AST.EventDefn) {
+      if (node instanceof Ast.EventDefn) {
         table.set(node.name!.value, {
           type: 'event',
           ast: node,
         });
       }
 
-      if (node instanceof AST.ErrorDefn) {
+      if (node instanceof Ast.ErrorDefn) {
         table.set(node.name!.value, {
           type: 'error',
           ast: node,
@@ -132,7 +132,7 @@ export interface SymbolIndexEntry {
   file: string;
   name: string;
   type: string;
-  ast: AST.AST;
+  ast: Ast.Ast;
 }
 
 export class SymbolIndex {
@@ -152,14 +152,14 @@ export class SymbolIndex {
     return this.entries.filter(filterFn);
   }
 
-  public static fromFile(file: string, ast: AST.SourceFile): SymbolIndex {
+  public static fromFile(file: string, ast: Ast.SourceFile): SymbolIndex {
     let res = new SymbolIndex();
-    ast.descendants.forEach((node: AST.AST) => {
+    ast.descendants.forEach((node: Ast.Ast) => {
       if ('name' in node) {
         let name: string;
         if (typeof node.name === 'string') {
           name = node.name;
-        } else if (node.name instanceof AST.Ident) {
+        } else if (node.name instanceof Ast.Ident) {
           name = node.name.value;
         } else {
           return;
