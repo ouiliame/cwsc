@@ -6,6 +6,7 @@ export class ModuleDefn implements RustSyntax {
   constructor(public name: string, public body: RustSyntax[]) {}
 
   public render(): string {
+    console.log(this.body);
     return `pub mod ${this.name} {
       ${this.body.map((statement) => statement.render()).join('\n')}
     }`;

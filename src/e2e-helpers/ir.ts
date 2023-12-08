@@ -95,11 +95,11 @@ export interface CgInstantiateMsg {
 }
 
 export interface CgExecMsg {
-  variants: CgStruct[];
+  variants: CgExecFn[];
 }
 
 export interface CgQueryMsg {
-  variants: CgStruct[];
+  variants: CgQueryFn[];
 }
 
 export class CgMsgMod {
@@ -121,16 +121,16 @@ export class CgMsgMod {
 
   public buildExecMsg(): rs.Annotated<rs.EnumDefn> {
     const execVariants = this.execMsg.variants.map((x) => {
-      const fields = x.fields.map((x) => rs.structField(x.name, 'TODO'));
-      return rs.variantStruct(x.name, fields);
+      const fields = x.params.map((x) => rs.structField(x.name, 'TODO'));
+      return rs.variantStruct(x.msgName, fields);
     });
     return rs.ann('#[cw_serde]', rs.enumDefn('ExecuteMsg', execVariants));
   }
 
   public buildQueryMsg(): rs.Annotated<rs.EnumDefn> {
     const queryVariants = this.queryMsg.variants.map((x) => {
-      const fields = x.fields.map((x) => rs.structField(x.name, 'TODO'));
-      return rs.variantStruct(x.name, fields);
+      const fields = x.params.map((x) => rs.structField(x.name, 'TODO'));
+      return rs.variantStruct(x.msgName, fields);
     });
     return rs.ann('#[cw_serde]', rs.enumDefn('QueryMsg', queryVariants));
   }
@@ -317,6 +317,7 @@ export class CgContractMod {
 
 export interface CgInstantiateImplFn {
   params: CgParam[];
+  body: rs.RustSyntax[];
 }
 
 export interface CgExecImplFn {
@@ -399,44 +400,44 @@ export class CgImplentationMod {
   }
 }
 
-interface CgTuple {
+export interface CgTuple {
   name: string;
   elements: string[];
 }
 
-interface CgEnumVariantStruct {
+export interface CgEnumVariantStruct {
   $type: 'struct';
   name: string;
   fields: CgParam[];
 }
 
-interface CgEnumVariantTuple {
+export interface CgEnumVariantTuple {
   $type: 'tuple';
   name: string;
   elements: string[];
 }
 
-interface CgEnumVariantUnit {
+export interface CgEnumVariantUnit {
   $type: 'unit';
   name: string;
 }
 
-interface CgTypeAlias {
+export interface CgTypeAlias {
   name: string;
   ty: string;
 }
 
-type CgEnumVariant =
+export type CgEnumVariant =
   | CgEnumVariantStruct
   | CgEnumVariantTuple
   | CgEnumVariantUnit;
 
-interface CgEnum {
+export interface CgEnum {
   name: string;
   variants: CgEnumVariant[];
 }
 
-interface CgUnit {
+export interface CgUnit {
   name: string;
 }
 
@@ -571,15 +572,15 @@ export class CgContractCrate {
     const crate = new RustCrate(cargoToml);
     crate.setFile('.cargo/config', DOTCARGO_CONFIG);
     const mod = rs.mod(this.rsModName, [
-      this.stateMod,
-      this.errorMod,
-      this.msgMod,
-      this.contractMod,
-      this.implMod,
-      this.typesMod,
-      this.functionsMod,
+      this.stateMod.build(),
+      this.errorMod.build(),
+      this.msgMod.build(),
+      this.contractMod.build(),
+      this.implMod.build(),
+      this.typesMod.build(),
     ]);
     const code = mod.render();
+    console.log(code);
     crate.setFile('src/lib.rs', code);
     return crate;
   }

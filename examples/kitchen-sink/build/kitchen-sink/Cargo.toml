@@ -27,7 +27,7 @@ library = [ ]
 crate-type = [ "cdylib", "rlib" ]
 
 [package]
-name = "kitchen_sink"
+name = "kitchen-sink"
 version = "0.0.1"
 edition = "2021"
 exclude = [ "contract.wasm", "hash.txt" ]

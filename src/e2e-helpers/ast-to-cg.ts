@@ -1,19 +1,28 @@
-import { pascalToSnake, snakeToPascal } from 'src/util/strings';
+import { pascalToSnake, snakeToPascal } from '../util/strings';
 import * as Ast from '../ast';
 import {
   CgContractCrate,
   CgContractMod,
+  CgEnum,
   CgErrorMod,
   CgExecEntrypoint,
+  CgExecImplFn,
+  CgExecMsg,
   CgImplentationMod,
   CgInstantiateEntrypoint,
+  CgInstantiateImplFn,
   CgMsgMod,
   CgQueryEntrypoint,
+  CgQueryImplFn,
+  CgQueryMsg,
   CgStateField,
   CgStateFieldItem,
   CgStateMod,
   CgStruct,
+  CgTuple,
+  CgTypeAlias,
   CgTypesMod,
+  CgUnit,
 } from './ir';
 
 export interface ContractNodes {
@@ -52,11 +61,11 @@ export function indexContractNodes(ast: Ast.ContractDefn): ContractNodes {
     } else if (x instanceof Ast.ErrorDefn) {
       contract.errorDefns.push(x);
     } else if (x instanceof Ast.InstantiateDefn) {
-      contract.instantiateFn = x;
+      contract.instantiateDefn = x;
     } else if (x instanceof Ast.ExecDefn) {
-      contract.execFns.push(x);
+      contract.execDefns.push(x);
     } else if (x instanceof Ast.QueryDefn) {
-      contract.queryFns.push(x);
+      contract.queryDefns.push(x);
     } else if (x instanceof Ast.StructDefn) {
       contract.structDefns.push(x);
     } else if (x instanceof Ast.TupleDefn) {
@@ -135,33 +144,36 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       ty: 'TODO',
     })),
   };
-  let execVariants: CgStruct[] = execDefns.map((x) => {
-    return {
-      name: x.name.value,
-      fields: x.params.map((y) => {
-        return {
-          name: y.name.value,
-          ty: 'TODO',
-        };
-      }),
-    };
-  });
-  let queryVariants: CgStruct[] = queryDefns.map((x) => {
-    return {
-      name: x.name.value,
-      fields: x.params.map((y) => {
-        return {
-          name: y.name.value,
-          ty: 'TODO',
-        };
-      }),
-    };
-  });
-  const msgMod = new CgMsgMod(
-    instantiateMsg,
-    { variants: execVariants },
-    { variants: queryVariants }
-  );
+  let execMsg: CgExecMsg = {
+    variants: execDefns.map((x) => {
+      return {
+        fnName: x.name.value.substring(1),
+        msgName: snakeToPascal(x.name.value.substring(1)),
+        params: x.params.map((y) => {
+          return {
+            name: y.name.value,
+            ty: 'TODO',
+          };
+        }),
+      };
+    }),
+  };
+  let queryMsg: CgQueryMsg = {
+    variants: queryDefns.map((x) => {
+      return {
+        fnName: x.name.value.substring(1),
+        msgName: snakeToPascal(x.name.value.substring(1)),
+        params: x.params.map((y) => {
+          return {
+            name: y.name.value,
+            ty: 'TODO',
+          };
+        }),
+        resType: 'TODO',
+      };
+    }),
+  };
+  const msgMod = new CgMsgMod(instantiateMsg, execMsg, queryMsg);
 
   // contract mod
   let instantiateEntrypoint: CgInstantiateEntrypoint = {
@@ -199,17 +211,152 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       };
     }),
   };
-  let contractMod = new CgContractMod(
+  const contractMod = new CgContractMod(
     instantiateEntrypoint,
     execEntrypoint,
     queryEntrypoint
   );
 
   // impl mod
-  let implMod = new CgImplentationMod();
+  const instantiateImplFn: CgInstantiateImplFn = {
+    params: instantiateDefn.params.map((x) => ({
+      name: x.name.value,
+      ty: 'TODO',
+    })),
+    body: [], // TODO: implement
+  };
+  const execImplFns: CgExecImplFn[] = execDefns.map((x) => {
+    return {
+      fnName: x.name.value.substring(1),
+      msgName: snakeToPascal(x.name.value.substring(1)),
+      params: x.params.map((y) => {
+        return {
+          name: y.name.value,
+          ty: 'TODO',
+        };
+      }),
+      body: [], // TODO: implement
+    };
+  });
+  const queryImplFns: CgQueryImplFn[] = queryDefns.map((x) => {
+    return {
+      fnName: x.name.value.substring(1),
+      msgName: snakeToPascal(x.name.value.substring(1)),
+      params: x.params.map((y) => {
+        return {
+          name: y.name.value,
+          ty: 'TODO',
+        };
+      }),
+      resType: 'TODO',
+      body: [], // TODO: implement
+    };
+  });
+  const implMod = new CgImplentationMod(
+    instantiateImplFn,
+    execImplFns,
+    queryImplFns
+  );
 
   // types mod
-  let typesMod = new CgTypesMod();
-
-  ast.descendantsOfType;
+  const structs: CgStruct[] = structDefns.map((x) => {
+    return {
+      name: x.name.value,
+      fields: x.fields.map((y) => {
+        return {
+          name: y.name.value,
+          ty: 'TODO',
+        };
+      }),
+    };
+  });
+  const tuples: CgTuple[] = tupleDefns.map((x) => {
+    return {
+      name: x.name.value,
+      elements: x.elements.map((y) => 'TODO'),
+    };
+  });
+  const units: CgUnit[] = unitDefns.map((x) => {
+    return {
+      name: x.name.value,
+    };
+  });
+  const enums: CgEnum[] = enumDefns.map((x) => {
+    const variants = x.variants.map((y) => {
+      if (y instanceof Ast.EnumVariantStructDefn) {
+        return {
+          $type: 'struct' as const,
+          name: y.name.value.substring(1),
+          fields: y.fields.map((z) => {
+            return {
+              name: z.name.value,
+              ty: 'TODO',
+            };
+          }),
+        };
+      } else if (y instanceof Ast.EnumVariantTupleDefn) {
+        return {
+          $type: 'tuple' as const,
+          name: y.name.value.substring(1),
+          elements: y.elements.map((z) => 'TODO'),
+        };
+      } else {
+        return {
+          $type: 'unit' as const,
+          name: y.name.value.substring(1),
+        };
+      }
+    });
+    return {
+      name: x.name.value,
+      variants,
+    };
+  });
+  const aliases: CgTypeAlias[] = typeAliasDefns.map((x) => {
+    return {
+      name: x.name.value,
+      ty: 'TODO',
+    };
+  });
+  const errors: CgStruct[] = errorDefns.map((x) => {
+    return {
+      name: x.name.value,
+      fields: x.fields.map((y) => {
+        return {
+          name: y.name.value,
+          ty: 'TODO',
+        };
+      }),
+    };
+  });
+  const events: CgStruct[] = eventDefns.map((x) => {
+    return {
+      name: x.name.value,
+      fields: x.fields.map((y) => {
+        return {
+          name: y.name.value,
+          ty: 'TODO',
+        };
+      }),
+    };
+  });
+  const typesMod = new CgTypesMod(
+    structs,
+    tuples,
+    units,
+    enums,
+    aliases,
+    errors,
+    events
+  );
+  return new CgContractCrate(
+    name,
+    stateMod,
+    errorMod,
+    msgMod,
+    contractMod,
+    implMod,
+    typesMod,
+    null
+  );
 }

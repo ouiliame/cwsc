@@ -6,10 +6,7 @@ export interface Render {
 }
 
 export class ModuleDefn implements Render {
-  constructor(
-    public name: string,
-    public body: Render[]
-  ) {}
+  constructor(public name: string, public body: Render[]) {}
 
   public render(): string {
     return `pub mod ${this.name} {
@@ -27,11 +24,7 @@ export class UseStmt implements Render {
 }
 
 export class ConstStmt implements Render {
-  constructor(
-    public name: string,
-    public ty: string,
-    public value: Render
-  ) {}
+  constructor(public name: string, public ty: string, public value: Render) {}
 
   public render(): string {
     return `pub const ${this.name}: ${this.ty} = ${this.value.render()};`;
@@ -39,10 +32,7 @@ export class ConstStmt implements Render {
 }
 
 export class EnumDefn implements Render {
-  constructor(
-    public name: string,
-    public variants: EnumVariant[]
-  ) {}
+  constructor(public name: string, public variants: EnumVariant[]) {}
 
   public render(): string {
     return `pub enum ${this.name} {
@@ -52,10 +42,7 @@ export class EnumDefn implements Render {
 }
 
 export class StructDefn implements Render {
-  constructor(
-    public name: string,
-    public fields: StructField[]
-  ) {}
+  constructor(public name: string, public fields: StructField[]) {}
 
   public render(): string {
     return `pub struct ${this.name} {
@@ -65,10 +52,7 @@ export class StructDefn implements Render {
 }
 
 export class TupleStructDefn implements Render {
-  constructor(
-    public name: string,
-    public fields: string[]
-  ) {}
+  constructor(public name: string, public fields: string[]) {}
 
   public render(): string {
     return `pub struct ${this.name}(${this.fields
@@ -84,10 +68,7 @@ export type EnumVariant =
   | Annotated<EnumVariant>;
 
 export class EnumVariantStruct implements Render {
-  constructor(
-    public name: string,
-    public fields: StructField[]
-  ) {
+  constructor(public name: string, public fields: StructField[]) {
     for (let field of fields) {
       field.pub = false;
     }
@@ -101,10 +82,7 @@ export class EnumVariantStruct implements Render {
 }
 
 export class EnumVariantTuple implements Render {
-  constructor(
-    public name: string,
-    public fields: Render[]
-  ) {}
+  constructor(public name: string, public fields: Render[]) {}
 
   public render(): string {
     return `${this.name}(${this.fields
@@ -134,10 +112,7 @@ export class StructField implements Render {
 }
 
 export class FunctionParam implements Render {
-  constructor(
-    public name: string,
-    public type: string
-  ) {}
+  constructor(public name: string, public type: string) {}
 
   public render(): string {
     return `${this.name}: ${this.type}`;
@@ -224,10 +199,7 @@ export function tupleStructDefn(
 }
 
 export class StructExpr implements Render {
-  constructor(
-    public ty: string,
-    public fields: StructFieldAssignment[]
-  ) {}
+  constructor(public ty: string, public fields: StructFieldAssignment[]) {}
 
   public render(): string {
     return `${this.ty} {
@@ -237,10 +209,7 @@ export class StructExpr implements Render {
 }
 
 export class TupleStructExpr implements Render {
-  constructor(
-    public ty: string,
-    public fields: Render[]
-  ) {}
+  constructor(public ty: string, public fields: Render[]) {}
 
   public render(): string {
     return `${this.ty}(${this.fields
@@ -250,10 +219,7 @@ export class TupleStructExpr implements Render {
 }
 
 export class StructFieldAssignment implements Render {
-  constructor(
-    public name: string,
-    public value: Render
-  ) {}
+  constructor(public name: string, public value: Render) {}
 
   public render(): string {
     return `${this.name}: ${this.value.render()}`;
@@ -289,10 +255,7 @@ export class EnumVariantTupleExpr implements Render {
 }
 
 export class EnumVariantUnitExpr implements Render {
-  constructor(
-    public enumTy: string,
-    public variantName: string
-  ) {}
+  constructor(public enumTy: string, public variantName: string) {}
 
   public render(): string {
     return `${this.enumTy}::${this.variantName}`;
@@ -369,11 +332,7 @@ export class TryExpr implements Render {
 }
 
 export class MethodCallExpr implements Render {
-  constructor(
-    public expr: Expr,
-    public name: string,
-    public args: Expr[]
-  ) {}
+  constructor(public expr: Expr, public name: string, public args: Expr[]) {}
 
   public render(): string {
     return `${this.expr.render()}.${this.name}(${this.args
@@ -383,10 +342,7 @@ export class MethodCallExpr implements Render {
 }
 
 export class FnCallExpr implements Render {
-  constructor(
-    public fn: string,
-    public args: Expr[]
-  ) {}
+  constructor(public fn: string, public args: Expr[]) {}
 
   public render(): string {
     return `${this.fn}(${this.args.map((a) => a.render()).join(', ')})`;
@@ -403,17 +359,13 @@ export class IfExpr {
   public render(): string {
     return `if ${this.condition.render()} { 
       ${this.consequent.render()}}${
-        this.alternative ? ` else { ${this.alternative.render()} }` : ''
-      }`;
+      this.alternative ? ` else { ${this.alternative.render()} }` : ''
+    }`;
   }
 }
 
 export class BinaryExpr {
-  constructor(
-    public left: Expr,
-    public operator: string,
-    public right: Expr
-  ) {}
+  constructor(public left: Expr, public operator: string, public right: Expr) {}
 
   public render(): string {
     return `${this.left.render()} ${this.operator} ${this.right.render()}`;
@@ -428,10 +380,7 @@ export class ReturnStmt {
   }
 }
 export class Annotated<T extends Render> implements Render {
-  constructor(
-    public annotation: string,
-    public target: T
-  ) {}
+  constructor(public annotation: string, public target: T) {}
 
   public render(): string {
     return `${this.annotation} ${this.target.render()}`;
@@ -439,10 +388,7 @@ export class Annotated<T extends Render> implements Render {
 }
 
 export class MatchExpr implements Render {
-  constructor(
-    public expr: Expr,
-    public arms: MatchArm[]
-  ) {}
+  constructor(public expr: Expr, public arms: MatchArm[]) {}
 
   public render(): string {
     return `match ${this.expr.render()} {
@@ -452,10 +398,7 @@ export class MatchExpr implements Render {
 }
 
 export class MatchArm implements Render {
-  constructor(
-    public pattern: string,
-    public expr: Expr
-  ) {}
+  constructor(public pattern: string, public expr: Expr) {}
 
   public render(): string {
     return `${this.pattern} => ${this.expr.render()}`;

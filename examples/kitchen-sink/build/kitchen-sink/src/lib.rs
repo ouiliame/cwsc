@@ -3,9 +3,9 @@ pub mod kitchen_sink {
     use schemars::JsonSchema;
     use serde::{ Serialize, Deserialize };
     use cw_storage_plus::{ Item, Map };
-    pub const A: Item<Todo> = Item::new("a");
-    pub const B: Item<Todo> = Item::new("b");
-    pub const C: Item<Todo> = Item::new("c");
+    pub const A: TODO = Item::new("a");
+    pub const B: TODO = Item::new("b");
+    pub const C: TODO = Item::new("c");
   }
   pub mod error {
     use cosmwasm_std::StdError;
@@ -76,7 +76,7 @@ pub mod kitchen_sink {
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
     pub fn execute(
-      deps: DepsMut,
+      deps: Deps,
       env: Env,
       info: MessageInfo,
       msg: ExecuteMsg
@@ -87,8 +87,8 @@ pub mod kitchen_sink {
         info: info,
       };
       match msg {
-        ExecuteMsg::ExecA {} => exec_ExecA_impl(ctx),
-        ExecuteMsg::ExecB { a, b } => exec_ExecB_impl(ctx, msg.a, msg.b),
+        ExecuteMsg::ExecA {} => exec_exec_a_impl(ctx),
+        ExecuteMsg::ExecB { a, b } => exec_exec_b_impl(ctx, msg.a, msg.b),
       }
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
@@ -176,14 +176,14 @@ pub mod kitchen_sink {
       pub a: TODO,
       pub b: TODO,
     }
+    pub struct InlineB {
+      pub a: TODO,
+    }
     pub struct TupA();
     pub struct TupB(pub TODO, pub TODO);
     pub struct TupC(pub TODO, pub TODO, pub TODO);
     pub struct UnitA;
     pub struct UnitB;
-    pub struct InlineB {
-      pub a: TODO,
-    }
     pub enum EnumA {
       StructVariantA {},
       StructVariantB {
@@ -200,40 +200,9 @@ pub mod kitchen_sink {
       UnitVariantA,
       UnitVariantB,
     }
-    pub type TypeAliasA = TODO;
-    pub type TypeAliasB = TODO;
-    #[cw_serde]
-    pub struct InstantiateMsg {
-      pub a: TODO,
-      pub b: TODO,
-    }
-    #[cw_serde]
-    pub enum ExecuteMsg {
-      ExecA {},
-      ExecB {
-        a: TODO,
-        b: TODO,
-      },
-    }
-    #[cw_serde]
-    pub enum QueryMsg {
-      QueryA {},
-      QueryB {
-        a: TODO,
-        b: TODO,
-      },
-      Bob {
-        a: TODO,
-        b: TODO,
-        c: TODO,
-      },
-      Dan {
-        a: TODO,
-        b: TODO,
-        c: TODO,
-      },
-    }
+    #[derive(Error, Debug)]
     pub enum ContractError {
+      #[error("StdError")] StdError(#[from] StdError),
       ErrA {},
       ErrB {
         a: TODO,
@@ -247,15 +216,7 @@ pub mod kitchen_sink {
         b: TODO,
       },
     }
-  }
-  pub mod functions {
-    pub fn fn_a() -> TODO {}
-    pub fn fn_b() -> TODO {}
-    pub fn fn_c() -> TODO {}
-    pub fn fn_d() -> TODO {}
-    pub fn fn_e() -> TODO {}
-    pub fn fn_f() -> TODO {}
-    pub fn fn_g() -> TODO {}
-    pub fn fn_h() -> TODO {}
+    pub type TypeAliasA = TODO;
+    pub type TypeAliasB = TODO;
   }
 }
