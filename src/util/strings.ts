@@ -24,3 +24,7 @@ export function pascalToSnake(s: string): string {
     .map((x) => x.toLowerCase())
     .join('_');
 }
+
+export function pascalToKebab(s: string): string {
+  return pascalToSnake(s).replace(/_/g, '-');
+}
