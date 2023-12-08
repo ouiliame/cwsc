@@ -1,18 +1,7 @@
 import * as Ast from './ast';
 import * as path from 'path';
-import * as rs from './rust';
 import { CWScriptParser } from './parser';
 import { CWScriptProject } from './projects';
-import { DEFAULT_CARGO_TOML, DOTCARGO_CONFIG, RustCrate } from './rust';
-import {
-  buildInstantiateEntrypoint,
-  buildExecEntrypoint,
-  buildQueryEntrypoint,
-  buildInstantiateImplFn,
-  buildExecImplFn,
-  buildQueryImplFn,
-} from './e2e-helpers/builders';
-import { pascalToSnake, snakeToPascal } from './util/strings';
 import { Pipeline, PipelineStage } from './pipelines';
 import { readFile } from './util/filesystem';
 import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
