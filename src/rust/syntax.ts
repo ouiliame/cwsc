@@ -403,7 +403,7 @@ export class MethodCallExpr implements RustSyntax {
 }
 
 export class FnCallExpr implements RustSyntax {
-  constructor(public fn: string, public args: Expr[]) {}
+  constructor(public fn: string, public args: RustSyntax[]) {}
 
   public render(): string {
     return `${this.fn}(${this.args.map((a) => a.render()).join(', ')})`;
@@ -574,7 +574,7 @@ export function methodCallExpr(
   return new MethodCallExpr(expr, name, args);
 }
 
-export function fnCallExpr(fn: string, args: Expr[]): FnCallExpr {
+export function fnCallExpr(fn: string, args: RustSyntax[]): FnCallExpr {
   return new FnCallExpr(fn, args);
 }
 

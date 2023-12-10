@@ -114,14 +114,14 @@ export class CgMsgMod {
       '#[cw_serde]',
       rs.structDefn(
         'InstantiateMsg',
-        this.instantiateMsg.params.map((x) => rs.structField(x.name, 'TODO'))
+        this.instantiateMsg.params.map((x) => rs.structField(x.name, x.ty))
       )
     );
   }
 
   public buildExecMsg(): rs.Annotated<rs.EnumDefn> {
     const execVariants = this.execMsg.variants.map((x) => {
-      const fields = x.params.map((x) => rs.structField(x.name, 'TODO'));
+      const fields = x.params.map((x) => rs.structField(x.name, x.ty));
       return rs.variantStruct(x.msgName, fields);
     });
     return rs.ann('#[cw_serde]', rs.enumDefn('ExecuteMsg', execVariants));
@@ -129,7 +129,7 @@ export class CgMsgMod {
 
   public buildQueryMsg(): rs.Annotated<rs.EnumDefn> {
     const queryVariants = this.queryMsg.variants.map((x) => {
-      const fields = x.params.map((x) => rs.structField(x.name, 'TODO'));
+      const fields = x.params.map((x) => rs.structField(x.name, x.ty));
       return rs.variantStruct(x.msgName, fields);
     });
     return rs.ann('#[cw_serde]', rs.enumDefn('QueryMsg', queryVariants));
@@ -372,10 +372,10 @@ export class CgImplentationMod {
       return rs.fnDefn(
         `query_${x.fnName}_impl`,
         [rs.fnParam('ctx', 'QueryCtx'), ...params],
-        'StdResult<Binary>',
+        `StdResult<CWSQueryResponse<${x.resType}>>`,
         [
           rs.fnCallExpr('Ok', [
-            rs.fnCallExpr('to_binary', [rs.identExpr('msg')]),
+            rs.fnCallExpr(`CWSQueryResponse`, [rs.raw(`String::from("TODO")`)]),
           ]),
         ]
       );
@@ -388,6 +388,7 @@ export class CgImplentationMod {
       rs.use('super::error::*'),
       rs.use('super::msg::*'),
       rs.use('super::state::*'),
+      rs.use('cosmwasm_std::*'),
     ];
 
     const instImplFn = this.buildInstantiateImplFn();
@@ -478,7 +479,7 @@ export class CgTypesMod {
         } else if (x.$type === 'tuple') {
           return rs.variantTuple(
             x.name,
-            x.elements.map((x) => rs.raw('TODO'))
+            x.elements.map((t) => rs.raw(t)) // TODO: fix
           );
         } else {
           return rs.variantUnit(x.name);
@@ -496,7 +497,7 @@ export class CgTypesMod {
 
     const contractErrors = this.errors.map((x) => {
       const fields = x.fields.map((x) => rs.structField(x.name, x.ty));
-      return rs.variantStruct(x.name, fields);
+      return rs.ann(`#[error("${x.name}")]`, rs.variantStruct(x.name, fields));
     });
 
     const errorEnum = rs.ann(
@@ -520,7 +521,11 @@ export class CgTypesMod {
   }
 
   public build(): rs.ModuleDefn {
-    const items: rs.RustSyntax[] = [];
+    const items: rs.RustSyntax[] = [
+      rs.use('cosmwasm_schema::cw_serde'),
+      rs.use('cosmwasm_std::*'),
+      rs.use('thiserror::Error'),
+    ];
     const structs = this.buildStructs();
     const tuples = this.buildTuples();
     const units = this.buildUnits();
@@ -540,6 +545,26 @@ export class CgTypesMod {
     return rs.mod('types', items);
   }
 }
+
+export const CWS_MOD = rs.mod('cws', [
+  rs.use('cosmwasm_schema::cw_serde'),
+  rs.use('cosmwasm_std::*'),
+  rs.structDefn("InstantiateCtx<'a>", [
+    rs.structField('deps', "DepsMut<'a>"),
+    rs.structField('env', 'Env'),
+    rs.structField('info', 'MessageInfo'),
+  ]),
+  rs.structDefn("ExecuteCtx<'a>", [
+    rs.structField('deps', "DepsMut<'a>"),
+    rs.structField('env', 'Env'),
+    rs.structField('info', 'MessageInfo'),
+  ]),
+  rs.structDefn("QueryCtx<'a>", [
+    rs.structField('deps', "Deps<'a>"),
+    rs.structField('env', 'Env'),
+  ]),
+  rs.ann('#[cw_serde]', rs.tupleStructDefn('CWSQueryResponse<T>', ['T'])),
+]);
 
 export class CgContractCrate {
   public constructor(
@@ -578,6 +603,7 @@ export class CgContractCrate {
       this.contractMod.build(),
       this.implMod.build(),
       this.typesMod.build(),
+      CWS_MOD, // TODO: runtime should be a separate crate
     ]);
     const code = mod.render();
     console.log(code);

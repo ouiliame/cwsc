@@ -15,15 +15,21 @@ import {
   CgQueryEntrypoint,
   CgQueryImplFn,
   CgQueryMsg,
-  CgStateField,
-  CgStateFieldItem,
   CgStateMod,
   CgStruct,
   CgTuple,
   CgTypeAlias,
   CgTypesMod,
   CgUnit,
-} from './ir';
+} from './cg';
+
+export const TYPE = (x?: any) => {
+  if (x) {
+    return `String /* ${x.$ctx!.text} */`;
+  } else {
+    return `String`;
+  }
+};
 
 export interface ContractNodes {
   stateDefns: (Ast.StateItemDefn | Ast.StateMapDefn)[];
@@ -107,14 +113,14 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       return {
         $type: 'item' as const,
         name: x.name.value,
-        ty: 'TODO',
+        ty: 'Item<String>', // TODO: fix type
       };
     } else {
       return {
         $type: 'map' as const,
         name: x.name.value,
-        idxTy: 'TODO',
-        ty: 'TODO',
+        idxTy: TYPE(),
+        ty: TYPE(),
       };
     }
   });
@@ -127,7 +133,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       fields: x.fields.map((y) => {
         return {
           name: y.name.value,
-          ty: 'TODO',
+          ty: TYPE(y.ty),
         };
       }),
     };
@@ -136,12 +142,12 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
 
   // msg mod
   if (!instantiateDefn) {
-    throw new Error('TODO');
+    throw new Error(TYPE());
   }
   let instantiateMsg = {
     params: instantiateDefn.params.map((x) => ({
       name: x.name.value,
-      ty: 'TODO',
+      ty: TYPE(x.ty),
     })),
   };
   let execMsg: CgExecMsg = {
@@ -152,7 +158,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
         params: x.params.map((y) => {
           return {
             name: y.name.value,
-            ty: 'TODO',
+            ty: TYPE(y.ty),
           };
         }),
       };
@@ -166,10 +172,10 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
         params: x.params.map((y) => {
           return {
             name: y.name.value,
-            ty: 'TODO',
+            ty: TYPE(y.ty),
           };
         }),
-        resType: 'TODO',
+        resType: TYPE(x.returnTy),
       };
     }),
   };
@@ -179,7 +185,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
   let instantiateEntrypoint: CgInstantiateEntrypoint = {
     params: instantiateDefn.params.map((x) => ({
       name: x.name.value,
-      ty: 'TODO',
+      ty: TYPE(x.ty),
     })),
   };
   let execEntrypoint: CgExecEntrypoint = {
@@ -190,7 +196,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
         params: x.params.map((y) => {
           return {
             name: y.name.value,
-            ty: 'TODO',
+            ty: TYPE(y.ty),
           };
         }),
       };
@@ -204,10 +210,10 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
         params: x.params.map((y) => {
           return {
             name: y.name.value,
-            ty: 'TODO',
+            ty: TYPE(y.ty),
           };
         }),
-        resType: 'TODO',
+        resType: TYPE(x.returnTy),
       };
     }),
   };
@@ -221,9 +227,9 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
   const instantiateImplFn: CgInstantiateImplFn = {
     params: instantiateDefn.params.map((x) => ({
       name: x.name.value,
-      ty: 'TODO',
+      ty: TYPE(x.ty),
     })),
-    body: [], // TODO: implement
+    body: [], // TYPE(): implement
   };
   const execImplFns: CgExecImplFn[] = execDefns.map((x) => {
     return {
@@ -232,10 +238,10 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       params: x.params.map((y) => {
         return {
           name: y.name.value,
-          ty: 'TODO',
+          ty: TYPE(y.ty),
         };
       }),
-      body: [], // TODO: implement
+      body: [], // TYPE(): implement
     };
   });
   const queryImplFns: CgQueryImplFn[] = queryDefns.map((x) => {
@@ -245,11 +251,11 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       params: x.params.map((y) => {
         return {
           name: y.name.value,
-          ty: 'TODO',
+          ty: TYPE(y.ty),
         };
       }),
-      resType: 'TODO',
-      body: [], // TODO: implement
+      resType: TYPE(x.returnTy),
+      body: [], // TYPE(): implement
     };
   });
   const implMod = new CgImplentationMod(
@@ -265,7 +271,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       fields: x.fields.map((y) => {
         return {
           name: y.name.value,
-          ty: 'TODO',
+          ty: TYPE(y.ty),
         };
       }),
     };
@@ -273,7 +279,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
   const tuples: CgTuple[] = tupleDefns.map((x) => {
     return {
       name: x.name.value,
-      elements: x.elements.map((y) => 'TODO'),
+      elements: x.elements.map((y) => TYPE(y)),
     };
   });
   const units: CgUnit[] = unitDefns.map((x) => {
@@ -290,7 +296,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
           fields: y.fields.map((z) => {
             return {
               name: z.name.value,
-              ty: 'TODO',
+              ty: TYPE(z.ty),
             };
           }),
         };
@@ -298,7 +304,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
         return {
           $type: 'tuple' as const,
           name: y.name.value.substring(1),
-          elements: y.elements.map((z) => 'TODO'),
+          elements: y.elements.map((z) => TYPE(z)),
         };
       } else {
         return {
@@ -315,7 +321,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
   const aliases: CgTypeAlias[] = typeAliasDefns.map((x) => {
     return {
       name: x.name.value,
-      ty: 'TODO',
+      ty: TYPE(x.ty),
     };
   });
   const errors: CgStruct[] = errorDefns.map((x) => {
@@ -324,7 +330,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       fields: x.fields.map((y) => {
         return {
           name: y.name.value,
-          ty: 'TODO',
+          ty: TYPE(y.ty),
         };
       }),
     };
@@ -335,7 +341,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       fields: x.fields.map((y) => {
         return {
           name: y.name.value,
-          ty: 'TODO',
+          ty: TYPE(y.ty),
         };
       }),
     };

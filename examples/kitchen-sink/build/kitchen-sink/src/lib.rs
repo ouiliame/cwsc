@@ -3,9 +3,9 @@ pub mod kitchen_sink {
     use schemars::JsonSchema;
     use serde::{ Serialize, Deserialize };
     use cw_storage_plus::{ Item, Map };
-    pub const A: TODO = Item::new("a");
-    pub const B: TODO = Item::new("b");
-    pub const C: TODO = Item::new("c");
+    pub const A: Item<String> = Item::new("a");
+    pub const B: Item<String> = Item::new("b");
+    pub const C: Item<String> = Item::new("c");
   }
   pub mod error {
     use cosmwasm_std::StdError;
@@ -15,8 +15,8 @@ pub mod kitchen_sink {
       #[error("StdError")] StdError(#[from] StdError),
       #[error("ErrA")] ErrA {},
       #[error("ErrB")] ErrB {
-        a: TODO,
-        b: TODO,
+        a: String /* Int */,
+        b: String /* String */,
       },
     }
   }
@@ -25,33 +25,33 @@ pub mod kitchen_sink {
     use cosmwasm_std::*;
     #[cw_serde]
     pub struct InstantiateMsg {
-      pub a: TODO,
-      pub b: TODO,
+      pub a: String /* Int */,
+      pub b: String /* String */,
     }
     #[cw_serde]
     pub enum ExecuteMsg {
       ExecA {},
       ExecB {
-        a: TODO,
-        b: TODO,
+        a: String /* Int */,
+        b: String /* String */,
       },
     }
     #[cw_serde]
     pub enum QueryMsg {
       QueryA {},
       QueryB {
-        a: TODO,
-        b: TODO,
+        a: String /* Int */,
+        b: String /* String */,
       },
       Bob {
-        a: TODO,
-        b: TODO,
-        c: TODO,
+        a: String /* String */,
+        b: String /* String */,
+        c: String /* String */,
       },
       Dan {
-        a: TODO,
-        b: TODO,
-        c: TODO,
+        a: String /* String */,
+        b: String /* structInlineC{} */,
+        c: String /* String */,
       },
     }
   }
@@ -113,10 +113,11 @@ pub mod kitchen_sink {
     use super::error::*;
     use super::msg::*;
     use super::state::*;
+    use cosmwasm_std::*;
     pub fn instantiate_impl(
       ctx: InstantiateCtx,
-      a: TODO,
-      b: TODO
+      a: String /* Int */,
+      b: String /* String */
     ) -> Result<Response, ContractError> {
       Ok(Response::new())
     }
@@ -127,96 +128,125 @@ pub mod kitchen_sink {
     }
     pub fn exec_exec_b_impl(
       ctx: ExecuteCtx,
-      a: TODO,
-      b: TODO
+      a: String /* Int */,
+      b: String /* String */
     ) -> Result<Response, ContractError> {
       Ok(Response::new())
     }
-    pub fn query_query_a_impl(ctx: QueryCtx) -> StdResult<Binary> {
-      Ok(to_binary(msg))
+    pub fn query_query_a_impl(
+      ctx: QueryCtx
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
     }
     pub fn query_query_b_impl(
       ctx: QueryCtx,
-      a: TODO,
-      b: TODO
-    ) -> StdResult<Binary> {
-      Ok(to_binary(msg))
+      a: String /* Int */,
+      b: String /* String */
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
     }
     pub fn query_bob_impl(
       ctx: QueryCtx,
-      a: TODO,
-      b: TODO,
-      c: TODO
-    ) -> StdResult<Binary> {
-      Ok(to_binary(msg))
+      a: String /* String */,
+      b: String /* String */,
+      c: String /* String */
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
     }
     pub fn query_dan_impl(
       ctx: QueryCtx,
-      a: TODO,
-      b: TODO,
-      c: TODO
-    ) -> StdResult<Binary> {
-      Ok(to_binary(msg))
+      a: String /* String */,
+      b: String /* structInlineC{} */,
+      c: String /* String */
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
     }
   }
   pub mod types {
+    use cosmwasm_schema::cw_serde;
+    use cosmwasm_std::*;
+    use thiserror::Error;
     pub struct InlineA {}
     pub struct InlineC {}
     pub struct StructA {}
     pub struct StructB {
-      pub a: TODO,
-      pub b: TODO,
+      pub a: String /* Int */,
+      pub b: String /* String */,
     }
     pub struct StructC {}
     pub struct StructD {
-      pub a: TODO,
-      pub b: TODO,
+      pub a: String /* Int */,
+      pub b: String /* String */,
     }
     pub struct StructE {
-      pub a: TODO,
-      pub b: TODO,
+      pub a: String /* %T */,
+      pub b: String /* %U */,
     }
     pub struct InlineB {
-      pub a: TODO,
+      pub a: String /* %T */,
     }
     pub struct TupA();
-    pub struct TupB(pub TODO, pub TODO);
-    pub struct TupC(pub TODO, pub TODO, pub TODO);
+    pub struct TupB(pub String /* Int */, pub String /* String */);
+    pub struct TupC(
+      pub String /* %T */,
+      pub String /* Int */,
+      pub String /* %T */,
+    );
     pub struct UnitA;
     pub struct UnitB;
     pub enum EnumA {
       StructVariantA {},
       StructVariantB {
-        a: TODO,
-        b: TODO,
+        a: String /* Int */,
+        b: String /* String */,
       },
       StructVariantC {},
       StructVariantD {
-        a: TODO,
-        b: TODO,
+        a: String /* Int */,
+        b: String /* String */,
       },
       TupleVariantA(),
-      TupleVariantB(TODO, TODO),
+      TupleVariantB(String /* Int */, String /* String */),
       UnitVariantA,
       UnitVariantB,
     }
     #[derive(Error, Debug)]
     pub enum ContractError {
       #[error("StdError")] StdError(#[from] StdError),
-      ErrA {},
-      ErrB {
-        a: TODO,
-        b: TODO,
+      #[error("ErrA")] ErrA {},
+      #[error("ErrB")] ErrB {
+        a: String /* Int */,
+        b: String /* String */,
       },
     }
     pub enum ContractEvent {
       EventA {},
       EventB {
-        a: TODO,
-        b: TODO,
+        a: String /* Int */,
+        b: String /* String */,
       },
     }
-    pub type TypeAliasA = TODO;
-    pub type TypeAliasB = TODO;
+    pub type TypeAliasA = String /* None */;
+    pub type TypeAliasB = String /* structInlineB{a:%T}; */;
+  }
+  pub mod cws {
+    use cosmwasm_schema::cw_serde;
+    use cosmwasm_std::*;
+    pub struct InstantiateCtx<'a> {
+      pub deps: DepsMut<'a>,
+      pub env: Env,
+      pub info: MessageInfo,
+    }
+    pub struct ExecuteCtx<'a> {
+      pub deps: DepsMut<'a>,
+      pub env: Env,
+      pub info: MessageInfo,
+    }
+    pub struct QueryCtx<'a> {
+      pub deps: Deps<'a>,
+      pub env: Env,
+    }
+    #[cw_serde]
+    pub struct CWSQueryResponse<T>(pub T);
   }
 }
