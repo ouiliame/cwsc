@@ -222,7 +222,7 @@ export class CgContractMod {
     const arms = this.execEntrypoint.variants.map((x) => {
       let call = rs.fnCallExpr(`exec_${x.fnName}_impl`, [
         rs.identExpr('ctx'),
-        ...x.params.map((p) => rs.identExpr(`msg.${p.name}`)),
+        ...x.params.map((p) => rs.identExpr(p.name)),
       ]);
       let paramNames = x.params.map((p) => p.name);
       return rs.arm(
@@ -235,7 +235,7 @@ export class CgContractMod {
       rs.fnDefn(
         'execute',
         [
-          rs.fnParam('deps', 'Deps'),
+          rs.fnParam('deps', 'DepsMut'),
           rs.fnParam('env', 'Env'),
           rs.fnParam('info', 'MessageInfo'),
           rs.fnParam('msg', 'ExecuteMsg'),
@@ -266,7 +266,7 @@ export class CgContractMod {
     const arms = this.queryEntrypoint.variants.map((x) => {
       let call = rs.fnCallExpr(`query_${x.fnName}_impl`, [
         rs.identExpr('ctx'),
-        ...x.params.map((p) => rs.identExpr(`msg.${p.name}`)),
+        ...x.params.map((p) => rs.identExpr(p.name)),
       ]);
       let paramNames = x.params.map((p) => p.name);
       call = rs.fnCallExpr('to_json_binary', [rs.tryExpr(rs.refExpr(call))]);
@@ -306,6 +306,7 @@ export class CgContractMod {
       rs.use('super::cws::*'),
       rs.use('super::error::*'),
       rs.use('super::msg::*'),
+      rs.use('super::implementation::*'),
       rs.use('cosmwasm_std::*'),
       this.buildInstantiateEntrypoint(),
       this.buildExecEntrypoint(),

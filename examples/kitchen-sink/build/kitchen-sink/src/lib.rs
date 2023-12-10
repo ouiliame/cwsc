@@ -59,6 +59,7 @@ pub mod kitchen_sink {
     use super::cws::*;
     use super::error::*;
     use super::msg::*;
+    use super::implementation::*;
     use cosmwasm_std::*;
     #[cfg_attr(not(feature = "library"), entry_point)]
     pub fn instantiate(
@@ -76,7 +77,7 @@ pub mod kitchen_sink {
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
     pub fn execute(
-      deps: Deps,
+      deps: DepsMut,
       env: Env,
       info: MessageInfo,
       msg: ExecuteMsg
@@ -88,7 +89,7 @@ pub mod kitchen_sink {
       };
       match msg {
         ExecuteMsg::ExecA {} => exec_exec_a_impl(ctx),
-        ExecuteMsg::ExecB { a, b } => exec_exec_b_impl(ctx, msg.a, msg.b),
+        ExecuteMsg::ExecB { a, b } => exec_exec_b_impl(ctx, a, b),
       }
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
@@ -100,11 +101,11 @@ pub mod kitchen_sink {
       match msg {
         QueryMsg::QueryA {} => to_json_binary(&query_query_a_impl(ctx)?),
         QueryMsg::QueryB { a, b } =>
-          to_json_binary(&query_query_b_impl(ctx, msg.a, msg.b)?),
+          to_json_binary(&query_query_b_impl(ctx, a, b)?),
         QueryMsg::Bob { a, b, c } =>
-          to_json_binary(&query_bob_impl(ctx, msg.a, msg.b, msg.c)?),
+          to_json_binary(&query_bob_impl(ctx, a, b, c)?),
         QueryMsg::Dan { a, b, c } =>
-          to_json_binary(&query_dan_impl(ctx, msg.a, msg.b, msg.c)?),
+          to_json_binary(&query_dan_impl(ctx, a, b, c)?),
       }
     }
   }
