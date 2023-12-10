@@ -351,7 +351,7 @@ export class LetStmt implements RustSyntax {
     public name: string,
     public mutable: boolean,
     public type: string,
-    public expr: Expr
+    public expr: RustSyntax
   ) {}
 
   public render(): string {
@@ -501,7 +501,7 @@ export function letStmt(
   name: string,
   mutable: boolean,
   type: string,
-  expr: Expr
+  expr: RustSyntax
 ): LetStmt {
   return new LetStmt(name, mutable, type, expr);
 }

@@ -58,10 +58,7 @@ export class CWSType extends IR {
     return true;
   }
 
-  constructor(
-    public name: string,
-    public supertypes: CWSType[] = []
-  ) {
+  constructor(public name: string, public supertypes: CWSType[] = []) {
     super();
   }
 
@@ -88,11 +85,11 @@ export abstract class CWSValue extends IR {
   public isType(): this is CWSType {
     return false;
   }
-  //abstract get ty(): CWSType;
+  abstract get ty(): CWSType;
   public eval(symbols: SymbolTable): CWSValue {
     return this;
   }
-/*
+  /*
   public get members(): (ValueMember | TypeMember)[] {
     return [
       {
@@ -102,7 +99,7 @@ export abstract class CWSValue extends IR {
     ];
   }
   */
-/*
+  /*
   public getMember(name: string): CWSValue | CWSType | CWSExpr | undefined {
     // if the member doesn't exist on this value, check the type
     const member = super.getMember(name);

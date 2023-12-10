@@ -14,7 +14,7 @@ contract KitchenSink {
   #instantiate(a: Int, b: String) {
     let var1 = true;
     let var2 = StructB(1, "");
-    const CONST1: String = "hello";
+    // const CONST1: String = "hello";
     var1 = false;
     var2.b = "b";
     $state.map_a["key"] = 0;

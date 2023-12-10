@@ -15,10 +15,7 @@ export class Stmt extends IR {
 }
 
 export class Import extends Stmt {
-  constructor(
-    public items: string[],
-    public src: string
-  ) {
+  constructor(public items: string[], public src: string) {
     super();
   }
 }
@@ -30,28 +27,19 @@ export class Return extends Stmt {
 }
 
 export class Exec extends Stmt {
-  constructor(
-    public expr: CWSExpr | CWSValue,
-    public options?: any
-  ) {
+  constructor(public expr: CWSExpr | CWSValue, public options?: any) {
     super();
   }
 }
 
 export class DelegateExec extends Stmt {
-  constructor(
-    public expr: CWSExpr | CWSValue,
-    public options?: any
-  ) {
+  constructor(public expr: CWSExpr | CWSValue, public options?: any) {
     super();
   }
 }
 
 export class Instantiate extends Stmt {
-  constructor(
-    public expr: CWSExpr | CWSValue,
-    public options?: any
-  ) {
+  constructor(public expr: CWSExpr | CWSValue, public options?: any) {
     super();
   }
 }
@@ -160,10 +148,7 @@ export class For extends Stmt {
 }
 
 export class While extends Stmt {
-  constructor(
-    public cond: CWSExpr | CWSValue,
-    public body: IR[]
-  ) {
+  constructor(public cond: CWSExpr | CWSValue, public body: IR[]) {
     super();
   }
 }

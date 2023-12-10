@@ -59,14 +59,14 @@ export class Fn extends CWSValue {
   ) {
     super();
   }
-/*
+
   public get ty(): Type.CWSFnType {
     return new Type.CWSFnType(
       this.fallible,
-      this.params.map((x) => x.ty),
+      this.params.map((x) => ({ name: x.name, ty: x.ty })),
       this.returnTy
     );
-  }*/
+  }
 
   public get isGeneric(): boolean {
     return this.typeParams.length > 0;
@@ -79,7 +79,7 @@ export class Fn extends CWSValue {
   public get fallible(): boolean {
     return this.name.endsWith('!');
   }
-/*
+  /*
   public call(
     symbols: SymbolTable,
     typeArgs: CWSType[],
@@ -153,10 +153,7 @@ export class InstantiateFn extends Fn {
     return new Type.CWSInstantiateFnType(this.params);
   }
 
-  constructor(
-    public params: Param[] = [],
-    public body: IR[] = []
-  ) {
+  constructor(public params: Param[] = [], public body: IR[] = []) {
     super('#instantiate', [], params, new Type.CWSMessageType());
   }
 }
@@ -207,10 +204,7 @@ export class Struct extends CWSValue {
 }
 
 export class Tuple extends CWSValue {
-  constructor(
-    public ty: CWSType,
-    public elements: CWSValue[] = []
-  ) {
+  constructor(public ty: CWSType, public elements: CWSValue[] = []) {
     super();
   }
 }
@@ -226,10 +220,7 @@ export class List extends CWSValue {
     return new Type.CWSListType(this.elementTy);
   }
 
-  constructor(
-    public elementTy: CWSType,
-    public elements: CWSValue[] = []
-  ) {
+  constructor(public elementTy: CWSType, public elements: CWSValue[] = []) {
     super();
   }
 }
