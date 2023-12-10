@@ -7,7 +7,7 @@ import { readFile } from './util/filesystem';
 import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
 
 import type { Diagnostic } from 'vscode-languageserver';
-import { contractAstToCg } from './e2e-helpers/ast-to-cg';
+import { contractAstToCg } from './e2e-helpers/contract-to-cg';
 
 export interface BuildContext {
   sourceFiles: {

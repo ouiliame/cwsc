@@ -11,7 +11,26 @@ contract KitchenSink {
   event EventA();
   event EventB(a: Int, b: String);
 
-  #instantiate(a: Int, b: String) {}
+  #instantiate(a: Int, b: String) {
+    let var1 = true;
+    let var2 = StructB(1, "");
+    const CONST1: String = "hello";
+    var1 = false;
+    var2.b = "b";
+    $state.map_a["key"] = 0;
+    if (var1) {
+      var2
+    } else {
+      "Will"
+    }
+    fail! None;
+    return None;
+
+    exec! $.#exec_a()
+    instantiate! $()
+    emit EventA();
+  }
+
   exec #exec_a() {}
   exec #exec_b(a: Int, b: String) {}
 

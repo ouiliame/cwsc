@@ -120,6 +120,42 @@ pub mod kitchen_sink {
       a: String /* Int */,
       b: String /* String */
     ) -> Result<Response, ContractError> {
+      /* TODO: Untranslated LetStmt 
+
+ */
+      /* TODO: Untranslated LetStmt 
+
+ */
+      /* TODO: Untranslated ConstStmt 
+
+ */
+      /* TODO: Untranslated AssignStmt 
+
+ */
+      /* TODO: Untranslated MemberAssignStmt 
+
+ */
+      /* TODO: Untranslated IndexAssignStmt 
+
+ */
+      /* TODO: Untranslated IfExpr 
+
+ */
+      /* TODO: Untranslated FailStmt 
+
+ */
+      /* TODO: Untranslated ReturnStmt 
+
+ */
+      /* TODO: Untranslated ExecStmt 
+
+ */
+      /* TODO: Untranslated InstantiateStmt 
+
+ */
+      /* TODO: Untranslated EmitStmt 
+
+ */
       Ok(Response::new())
     }
     pub fn exec_exec_a_impl(

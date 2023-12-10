@@ -318,14 +318,14 @@ export class CgContractMod {
 
 export interface CgInstantiateImplFn {
   params: CgParam[];
-  body: rs.RustSyntax[];
+  body: any[];
 }
 
 export interface CgExecImplFn {
   fnName: string;
   msgName: string;
   params: CgParam[];
-  body: rs.RustSyntax[];
+  body: any[];
 }
 
 export interface CgQueryImplFn {
@@ -333,7 +333,7 @@ export interface CgQueryImplFn {
   msgName: string;
   params: CgParam[];
   resType: string;
-  body: rs.RustSyntax[];
+  body: any[];
 }
 
 export class CgImplentationMod {
@@ -347,11 +347,12 @@ export class CgImplentationMod {
     const params = this.instantiateImplFn.params.map((x) =>
       rs.fnParam(x.name, x.ty)
     );
+    const body = this.instantiateImplFn.body.map((x) => rs.raw(x));
     return rs.fnDefn(
       'instantiate_impl',
       [rs.fnParam('ctx', 'InstantiateCtx'), ...params],
       'Result<Response, ContractError>',
-      [rs.fnCallExpr('Ok', [rs.fnCallExpr('Response::new', [])])]
+      [...body, rs.fnCallExpr('Ok', [rs.fnCallExpr('Response::new', [])])]
     );
   }
 

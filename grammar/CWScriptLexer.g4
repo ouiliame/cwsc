@@ -90,6 +90,9 @@ GT: '>';
 GT_EQ: '>=';
 POW: '**';
 
+// Bool
+BoolLiteral: TRUE | FALSE;
+
 // Identifiers
 HashIdent: '#' [_a-zA-Z$][_a-zA-Z0-9]*;
 Ident: [_a-zA-Z$][_a-zA-Z0-9]*;
@@ -105,9 +108,6 @@ fragment DoubleQuotedStringCharacter: ~["\r\n\\] | ('\\' .);
 IntLiteral: DecimalDigits;
 DecLiteral: (DecimalDigits? DOT DecimalDigits);
 fragment DecimalDigits: [0-9] ( '_'? [0-9])*;
-
-// Bool
-BoolLiteral: TRUE | FALSE;
 
 // Comments
 CWSPEC_LINE_COMMENT: ('///' .*? [\r\n])+;

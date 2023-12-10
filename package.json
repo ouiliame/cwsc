@@ -57,7 +57,7 @@
     "size": "size-limit",
     "analyze": "size-limit --why",
     "prepublishOnly": "yarn run build",
-    "e2e": "ts-node src/e2e.ts && cd examples/kitchen-sink/build/kitchen-sink && cargo wasm",
+    "e2e": "ts-node src/e2e.ts && cd examples/kitchen-sink/build/kitchen-sink",
     "test": "jest"
   },
   "files": [

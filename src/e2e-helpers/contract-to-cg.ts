@@ -23,6 +23,8 @@ import {
   CgUnit,
 } from './cg';
 
+import { blockToCg } from './block-to-cg';
+
 export const TYPE = (x?: any) => {
   if (x) {
     return `String /* ${x.$ctx!.text} */`;
@@ -229,7 +231,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
       name: x.name.value,
       ty: TYPE(x.ty),
     })),
-    body: [], // TYPE(): implement
+    body: blockToCg(instantiateDefn.body),
   };
   const execImplFns: CgExecImplFn[] = execDefns.map((x) => {
     return {
@@ -241,7 +243,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
           ty: TYPE(y.ty),
         };
       }),
-      body: [], // TYPE(): implement
+      body: blockToCg(x.body),
     };
   });
   const queryImplFns: CgQueryImplFn[] = queryDefns.map((x) => {
@@ -255,7 +257,7 @@ export function contractAstToCg(ast: Ast.ContractDefn): CgContractCrate {
         };
       }),
       resType: TYPE(x.returnTy),
-      body: [], // TYPE(): implement
+      body: blockToCg(x.body),
     };
   });
   const implMod = new CgImplentationMod(
