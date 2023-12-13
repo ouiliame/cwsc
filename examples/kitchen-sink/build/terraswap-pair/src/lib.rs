@@ -18,9 +18,7 @@ pub mod terraswap_pair {
     use cosmwasm_std::*;
     #[cw_serde]
     pub struct InstantiateMsg {
-      pub asset_info: String /* [AssetInfo;2] */,
-      pub token_code_id: String /* U64 */,
-      pub asset_decimals: String /* [U8;2] */,
+      pub name: String,
     }
     #[cw_serde]
     pub enum ExecuteMsg {}
@@ -45,12 +43,7 @@ pub mod terraswap_pair {
         env: env,
         info: info,
       };
-      instantiate_impl(
-        ctx,
-        msg.asset_info,
-        msg.token_code_id,
-        msg.asset_decimals
-      )
+      instantiate_impl(ctx, msg.name)
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
     pub fn execute(
@@ -85,11 +78,27 @@ pub mod terraswap_pair {
     use cosmwasm_std::*;
     pub fn instantiate_impl(
       ctx: InstantiateCtx,
-      asset_info: String /* [AssetInfo;2] */,
-      token_code_id: String /* U64 */,
-      asset_decimals: String /* [U8;2] */
+      name: String
     ) -> Result<Response, ContractError> {
-      /* TODO: Untranslated MemberAssignStmt 
+      /* TODO: Untranslated StringLit 
+
+ */
+      /* TODO: Untranslated AssignStmt 
+
+ */
+      /* TODO: Untranslated AssignStmt 
+
+ */
+      /* TODO: Untranslated AssignStmt 
+
+ */
+      /* TODO: Untranslated AssignStmt 
+
+ */
+      /* TODO: Untranslated AssignStmt 
+
+ */
+      /* TODO: Untranslated AssignStmt 
 
  */
       Ok(Response::new())
@@ -99,11 +108,30 @@ pub mod terraswap_pair {
     use cosmwasm_schema::cw_serde;
     use cosmwasm_std::*;
     use thiserror::Error;
+    pub struct PairInfo {
+      pub asset_infos: String /* [AssetInfo;2] */,
+      pub contract_addr: String /* String */,
+      pub liquidity_token: String /* String */,
+      pub asset_decimals: String /* [U8;2] */,
+    }
     #[derive(Error, Debug)]
     pub enum ContractError {
       #[error("StdError")] StdError(#[from] StdError),
     }
-    pub enum ContractEvent {}
+    pub enum ContractEvent {
+      ProvideLiquidity {
+        sender: String /* String */,
+        receiver: String /* String */,
+        assets: String /* [Asset;2] */,
+        share: String /* String */,
+        refund_assets: String /* [Asset;2] */,
+      },
+      WithdrawLiquidity {
+        sender: String /* String */,
+        withdrawn_share: String /* String */,
+        refund_assets: String /* [Asset;2] */,
+      },
+    }
   }
   pub mod cws {
     use cosmwasm_schema::cw_serde;

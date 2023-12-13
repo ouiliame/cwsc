@@ -561,8 +561,13 @@ export class AstBuilderVisitor
     return new Ast.MemberTypeExpr(ty, memberName).$(ctx);
   }
 
+  visitTupleTypeExpr(ctx: P.TupleTypeExprContext): Ast.TupleTypeExpr {
+    const elements = this.visitBrackTypeExprList(ctx._elements);
+    return new Ast.TupleTypeExpr(elements).$(ctx);
+  }
+
   visitArrayTypeExpr(ctx: P.ArrayTypeExprContext): Ast.ArrayTypeExpr {
-    const ty = this.typeExpr(ctx._ty);
+    const ty = this.typeExpr(ctx.typeExpr());
     return new Ast.ArrayTypeExpr(ty, this.visitIntLit(ctx._size)).$(ctx);
   }
 

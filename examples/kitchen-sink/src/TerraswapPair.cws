@@ -10,7 +10,12 @@ enum AssetInfo {
 
 contract TerraswapPair {
   state {
-    pair_info: PairInfo
+    pair_info: struct PairInfo {
+      asset_infos: [AssetInfo; 2],
+      contract_addr: String,
+      liquidity_token: String,
+      asset_decimals: [U8; 2],
+    }
   }
 
   event ProvideLiquidity(
@@ -21,7 +26,7 @@ contract TerraswapPair {
     refund_assets: [Asset; 2]
   );
 
-  WithdrawLiquidity(
+  event WithdrawLiquidity(
     sender: String,
     withdrawn_share: String,
     refund_assets: [Asset; 2]

@@ -35,6 +35,7 @@ import { GroupedExprContext } from "./CWScriptParser";
 import { GroupedTypeExprContext } from "./CWScriptParser";
 import { ParameterizedTypeExprContext } from "./CWScriptParser";
 import { MemberTypeExprContext } from "./CWScriptParser";
+import { TupleTypeExprContext } from "./CWScriptParser";
 import { ArrayTypeExprContext } from "./CWScriptParser";
 import { StructDefnTypeExprContext } from "./CWScriptParser";
 import { TupleDefnTypeExprContext } from "./CWScriptParser";
@@ -533,6 +534,19 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitMemberTypeExpr?: (ctx: MemberTypeExprContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `TupleTypeExpr`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 */
+	enterTupleTypeExpr?: (ctx: TupleTypeExprContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TupleTypeExpr`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 */
+	exitTupleTypeExpr?: (ctx: TupleTypeExprContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `ArrayTypeExpr`

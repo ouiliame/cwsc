@@ -246,17 +246,18 @@ noneLit: NONE;
 
 // TYPE EXPRESSIONS
 typeExpr:
-	LPAREN typeExpr RPAREN									# GroupedTypeExpr
-	| typeExpr (typeArgs = brackTypeExprList)				# ParameterizedTypeExpr
-	| typeExpr DOT (memberName = ident)						# MemberTypeExpr
-	| LBRACK (ty = typeExpr) SEMI (size = intLit) RBRACK	# ArrayTypeExpr
-	| structDefn											# StructDefnTypeExpr
-	| tupleDefn												# TupleDefnTypeExpr
-	| unitDefn												# UnitDefnTypeExpr
-	| enumDefn												# EnumDefnTypeExpr
-	| typeExpr QUEST										# OptionTypeExpr
-	| typeVar												# TypeVarExpr
-	| ident													# IdentTypeExpr;
+	LPAREN typeExpr RPAREN							# GroupedTypeExpr
+	| typeExpr (typeArgs = brackTypeExprList)		# ParameterizedTypeExpr
+	| typeExpr DOT (memberName = ident)				# MemberTypeExpr
+	| (elements = brackTypeExprList)				# TupleTypeExpr
+	| LBRACK typeExpr SEMI (size = intLit) RBRACK	# ArrayTypeExpr
+	| structDefn									# StructDefnTypeExpr
+	| tupleDefn										# TupleDefnTypeExpr
+	| unitDefn										# UnitDefnTypeExpr
+	| enumDefn										# EnumDefnTypeExpr
+	| typeExpr QUEST								# OptionTypeExpr
+	| typeVar										# TypeVarExpr
+	| ident											# IdentTypeExpr;
 
 typeVar: TypeVar;
 
@@ -265,9 +266,7 @@ typeVar: TypeVar;
 // COMMON ELEMENTS
 
 ident: HashIdent | Ident | reservedKeyword;
-param: (name = ident) (optional = QUEST)? COLON (
-		(ty = typeExpr)?
-	);
+param: (name = ident) (optional = QUEST)? (COLON (ty = typeExpr))?;
 field: (name = ident) (COLON (value = expr))?;
 namedArg: (name = ident) EQ (value = expr);
 arg: (expr | namedArg);

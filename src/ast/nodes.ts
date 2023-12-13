@@ -785,6 +785,14 @@ export class MemberTypeExpr extends AstNode<'MemberTypeExpr'> {
   }
 }
 
+export class TupleTypeExpr extends AstNode<'TupleTypeExpr'> {
+  public $kind: 'TupleTypeExpr' = 'TupleTypeExpr';
+
+  constructor(public elements: List<TypeExpr>) {
+    super();
+  }
+}
+
 export class ArrayTypeExpr extends AstNode<'ArrayTypeExpr'> {
   public $kind: 'ArrayTypeExpr' = 'ArrayTypeExpr';
 
