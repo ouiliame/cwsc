@@ -125,7 +125,7 @@ export abstract class AstValidatorVisitor extends AstVisitor<Diagnostic[]> {
     if (!node.$ctx) {
       throw new Error('Cannot get range for node without context');
     }
-    return this.sourceText.rangeOfNode(node.$ctx)!;
+    return this.sourceText.rangeOfNode(node)!;
   }
 
   collect(values: Diagnostic[][]): Diagnostic[] {

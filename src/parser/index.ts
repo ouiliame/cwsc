@@ -45,32 +45,30 @@ export class CWSSyntaxErrorListener implements ANTLRErrorListener<any> {
 }
 
 export interface ParseResult {
-  ast?: Ast.SourceFile;
+  sourceFile: Ast.SourceFile;
   diagnostics: Diagnostic[];
 }
 
 export class CWScriptParser {
-  public readonly sourceFile: string | null;
   constructor(
     public readonly sourceInput: string,
-    sourceFile: string | null = null
+    public file: string | null = null
   ) {
     this.sourceText = new TextView(sourceInput);
-    this.sourceFile = sourceFile ? path.resolve(sourceFile) : null;
   }
 
   public static parse(
     sourceInput: string,
-    sourceFile: string | null = null
+    file: string | null = null
   ): ParseResult {
-    const parser = new CWScriptParser(sourceInput, sourceFile);
+    const parser = new CWScriptParser(sourceInput, file);
     return parser.parse();
   }
 
-  public static async parseFile(sourceFile: string): Promise<ParseResult> {
+  public static async parseFile(file: string): Promise<ParseResult> {
     // read the file
-    let sourceInput = await readFile(sourceFile, 'utf8');
-    let parser = new CWScriptParser(sourceInput, sourceFile);
+    let sourceInput = await readFile(path.resolve(file), 'utf8');
+    let parser = new CWScriptParser(sourceInput, file);
     return parser.parse();
   }
 
@@ -79,14 +77,19 @@ export class CWScriptParser {
    */
   public parse(): ParseResult {
     const { parseTree, diagnostics } = this.antlrParse();
-    const astBuilder = new AstBuilderVisitor(this.sourceText);
+    const astBuilder = new AstBuilderVisitor();
     const ast = astBuilder.visitSourceFile(parseTree);
     const syntaxValidator = new SyntaxValidatorVisitor(
       this.sourceText,
-      this.sourceFile
+      this.file
     );
     diagnostics.push(...syntaxValidator.visit(ast));
-    return { ast, diagnostics };
+    const sourceFile = new Ast.SourceFile(
+      this.file ?? '',
+      this.sourceText,
+      ast
+    );
+    return { sourceFile, diagnostics };
   }
 
   protected antlrParse(): {

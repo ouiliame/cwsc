@@ -1,6 +1,7 @@
 import { ParserRuleContext } from 'antlr4ts';
 import { TerminalNode } from 'antlr4ts/tree/TerminalNode';
 import { LinesAndColumns } from 'lines-and-columns';
+import * as Ast from '../ast';
 
 export class TextView {
   lc: LinesAndColumns;
@@ -220,26 +221,15 @@ export class TextView {
     };
   }
 
-  public rangeOfNode(ctx: ParserRuleContext): Range | null {
-    let pos = getIx(ctx);
-    return this.range(pos.start, pos.end);
+  public rangeOfNode(node: Ast.AstNode): Range | null {
+    let pos = node.$indices;
+    return pos !== null ? this.range(pos.start, pos.end) : null;
   }
 
   public rangeOfToken(ctx: ParserRuleContext, token: string): Range | null {
     const node = (ctx as any)[token]() as TerminalNode;
     return this.range(node.symbol.startIndex, node.symbol.stopIndex + 1);
   }
-}
-
-export function getIx(ctx: ParserRuleContext): TextIndices {
-  let start = ctx.start.startIndex;
-  let end = ctx.stop?.stopIndex || ctx.start.stopIndex;
-  let length = end - start + 1;
-
-  return {
-    start,
-    end: start + length,
-  };
 }
 
 /**

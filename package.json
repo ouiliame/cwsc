@@ -2,8 +2,7 @@
   "name": "cwsc",
   "version": "1.0.0",
   "description": "Official CWScript compiler",
-  "main": "dist/index.js",
-  "source": "src/index.ts",
+  "main": "dist/bundle.js",
   "module": "dist/module.js",
   "type": "commonjs",
   "types": "dist/index.d.ts",
@@ -60,6 +59,7 @@
     "prepublishOnly": "yarn run build",
     "e2e": "ts-node src/e2e.ts",
     "e2e-build": "yarn run e2e && cd examples/kitchen-sink/build/kitchen-sink && cargo wasm",
+    "dev": "cd cws-devtool && yarn start",
     "test": "jest"
   },
   "files": [

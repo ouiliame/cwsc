@@ -9,7 +9,7 @@ export class SymbolTable<T = any> {
 }
 
 export class SymbolTableVisitor extends Ast.AstVisitor<SymbolTable> {
-  defaultVisit(node: Ast.Ast): SymbolTable {
+  defaultVisit(node: Ast.AstNode): SymbolTable {
     return this.collect(this.visitChildren(node));
   }
 

@@ -2,7 +2,6 @@ import * as Type from './types';
 import * as Value from './values';
 import * as Expr from './exprs';
 
-import { SymbolTable } from '../symbolic/symbol-table';
 export abstract class IR {
   public isType(): this is CWSType {
     return false;
@@ -27,9 +26,6 @@ export abstract class IR {
   public getIndex(index: CWSValue): CWSValue {
     throw new Error('Cannot index into non-indexable value');
   }
-
-  /** Function for resolving complex forms into simpler ones, validations, type inference. */
-  abstract eval(symbols: SymbolTable): CWSValue | CWSType | CWSExpr;
 }
 
 export interface Param {
@@ -62,10 +58,6 @@ export class CWSType extends IR {
     super();
   }
 
-  public eval(symbols: SymbolTable): CWSType {
-    return this;
-  }
-
   public isEqualTo(other: CWSType): boolean {
     return this.name === other.name;
   }
@@ -86,9 +78,7 @@ export abstract class CWSValue extends IR {
     return false;
   }
   abstract get ty(): CWSType;
-  public eval(symbols: SymbolTable): CWSValue {
-    return this;
-  }
+
   /*
   public get members(): (ValueMember | TypeMember)[] {
     return [
@@ -114,9 +104,5 @@ export abstract class CWSValue extends IR {
 export class CWSExpr extends IR {
   public isType(): this is CWSType {
     return false;
-  }
-
-  public eval(symbols: SymbolTable): CWSExpr | CWSValue | CWSType {
-    throw new Error('Not implemented');
   }
 }

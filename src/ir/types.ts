@@ -3,14 +3,9 @@ import * as Value from './values';
 import * as Expr from './exprs';
 import * as Stmt from './stmts';
 
-import { SymbolTable } from '../symbolic/symbol-table';
-
 // #region Types
 export class CWSTypeParam {
-  constructor(
-    public name: string,
-    public bound?: CWSType
-  ) {}
+  constructor(public name: string, public bound?: CWSType) {}
 }
 
 export class CWSTypeFn {
@@ -81,19 +76,13 @@ export class CWSOptionType<T extends CWSType = CWSType> extends CWSType {
 }
 
 export class CWSMapType extends CWSType {
-  constructor(
-    public keyTy: CWSType,
-    public valueTy: CWSType
-  ) {
+  constructor(public keyTy: CWSType, public valueTy: CWSType) {
     super(`Map[${keyTy.name}, ${valueTy.name}]`);
   }
 }
 
 export class CWSArrayType<T extends CWSType = CWSType> extends CWSType {
-  constructor(
-    public ty: T,
-    public size: number
-  ) {
+  constructor(public ty: T, public size: number) {
     super(`Array[${ty.name}, ${size.toFixed()}]`);
   }
 
@@ -115,10 +104,7 @@ export class CWSArrayType<T extends CWSType = CWSType> extends CWSType {
 }
 
 export class CWSStructType extends CWSType {
-  constructor(
-    public name: string,
-    public fields: Param[]
-  ) {
+  constructor(public name: string, public fields: Param[]) {
     super(name);
   }
 
@@ -196,19 +182,13 @@ export class CWSStructType extends CWSType {
 }
 
 export class CWSTupleType extends CWSType {
-  constructor(
-    public name: string,
-    public elementTys: CWSType[]
-  ) {
+  constructor(public name: string, public elementTys: CWSType[]) {
     super(name);
   }
 }
 
 export class CWSEnumType extends CWSType {
-  constructor(
-    public name: string,
-    public variants: CWSEnumVariant[]
-  ) {
+  constructor(public name: string, public variants: CWSEnumVariant[]) {
     super(name);
   }
 }
@@ -226,10 +206,7 @@ export class CWSErrorType extends CWSStructType {}
 export class CWSEventType extends CWSStructType {}
 
 export class CWSTypeAliasType extends CWSType {
-  constructor(
-    public name: string,
-    public value: CWSType
-  ) {
+  constructor(public name: string, public value: CWSType) {
     super(name);
   }
 }
@@ -237,29 +214,6 @@ export class CWSTypeAliasType extends CWSType {
 export class CWSTypePathType extends CWSType {
   constructor(public segments: string[]) {
     super(segments.join('.'));
-  }
-
-  public eval(symbols: SymbolTable): CWSType {
-    let initial = symbols.lookup(this.segments[0]);
-    if (!initial) {
-      throw new Error(`Type '${this.name}' not found`);
-    }
-    let result = initial.ty ?? initial.value;
-    if (result === undefined) {
-      throw new Error(`TODO: SHOULD NOT HAPPEN`);
-    } else {
-      for (let i = 1; i < this.segments.length; i++) {
-        result = result.getMember(this.segments[i]);
-        if (result === undefined) {
-          throw new Error(`Type '${this.name}' not found`);
-        }
-      }
-      if (result.isType()) {
-        return result;
-      } else {
-        throw new Error(`Type '${this.name}' not found`);
-      }
-    }
   }
 }
 
@@ -333,11 +287,7 @@ export class CWSContractResponseType extends CWSType {
 
 export class CWSInstantiateFnType extends CWSFnType {
   constructor(public params: Param[]) {
-    super(
-      true,
-      params,
-      new CWSContractResponseType()
-    );
+    super(true, params, new CWSContractResponseType());
   }
 
   public isEqualTo(other: CWSType): boolean {
@@ -374,15 +324,8 @@ export class CWSInstantiateFnType extends CWSFnType {
 }
 
 export class CWSExecFnType extends CWSFnType {
-  constructor(
-    public execName: string,
-    public params: Param[]
-  ) {
-    super(
-      true,
-      params,
-      new CWSContractResponseType()
-    );
+  constructor(public execName: string, public params: Param[]) {
+    super(true, params, new CWSContractResponseType());
   }
 
   public isEqualTo(other: CWSType): boolean {
@@ -422,15 +365,8 @@ export class CWSExecFnType extends CWSFnType {
 }
 
 export class CWSQueryFnType extends CWSFnType {
-  constructor(
-    public queryName: string,
-    public params: Param[]
-  ) {
-    super(
-      true,
-      params,
-      new CWSContractResponseType()
-    );
+  constructor(public queryName: string, public params: Param[]) {
+    super(true, params, new CWSContractResponseType());
   }
 
   public isEqualTo(other: CWSType): boolean {

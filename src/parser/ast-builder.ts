@@ -31,11 +31,8 @@ export class AstBuilderVisitor
     return Ast.EMPTY;
   }
 
-  visitSourceFile(ctx: P.SourceFileContext): Ast.SourceFile {
-    const stmts = new Ast.List<Ast.Stmt>(ctx._stmts.map((s) => this.stmt(s))).$(
-      ctx
-    );
-    return new Ast.SourceFile(stmts).$(ctx);
+  visitSourceFile(ctx: P.SourceFileContext): Ast.List<Ast.Stmt> {
+    return new Ast.List<Ast.Stmt>(ctx._stmts.map((s) => this.stmt(s))).$(ctx);
   }
 
   expr<T extends ParserRuleContext>(ctx: T): Ast.Expr {
@@ -113,20 +110,33 @@ export class AstBuilderVisitor
     );
   }
 
+  visitTryCatchElseStmt(ctx: P.TryCatchElseStmtContext): Ast.TryCatchElseStmt {
+    let tryCatchElseExpr = this.visitTryCatchElseExpr_(
+      ctx.tryCatchElseExpr_()
+    ).$(ctx);
+    const { body, catchClauses, elseBody } = tryCatchElseExpr;
+    return new Ast.TryCatchElseStmt(body, catchClauses, elseBody).$(ctx);
+  }
+
+  visitIfStmt(ctx: P.IfStmtContext): Ast.IfStmt {
+    const ifExpr = this.visitIfExpr_(ctx.ifExpr_());
+    return new Ast.IfStmt(ifExpr.pred, ifExpr.thenBody, ifExpr.elseBody).$(ctx);
+  }
+
   visitReturnStmt(ctx: P.ReturnStmtContext): Ast.ReturnStmt {
-    const value = this.expr(ctx._value);
-    return new Ast.ReturnStmt(value).$(ctx);
+    const returnExpr = this.visitReturnExpr_(ctx.returnExpr_());
+    return new Ast.ReturnStmt(returnExpr.value).$(ctx);
   }
 
   visitFailStmt(ctx: P.FailStmtContext): Ast.FailStmt {
-    const value = this.expr(ctx._value);
-    return new Ast.FailStmt(value).$(ctx);
+    const failExpr = this.visitFailExpr_(ctx.failExpr_());
+    return new Ast.FailStmt(failExpr.value).$(ctx);
   }
 
   visitForStmt(ctx: P.ForStmtContext): Ast.ForStmt {
     const binding = this.visit(ctx._binding) as Ast.Binding;
     const iter = this.expr(ctx._iter);
-    const body = this.visitBlock(ctx._body);
+    const body = this.visitBlockOrExpr(ctx._body);
     return new Ast.ForStmt(binding, iter, body).$(ctx);
   }
 
@@ -143,6 +153,12 @@ export class AstBuilderVisitor
   visitEmitStmt(ctx: P.EmitStmtContext): Ast.EmitStmt {
     const value = this.expr(ctx._value);
     return new Ast.EmitStmt(value).$(ctx);
+  }
+
+  visitExprStmt(ctx: P.ExprStmtContext): Ast.ExprStmt {
+    const expr = this.expr(ctx.expr());
+    const semi = ctx._semi ? true : false;
+    return new Ast.ExprStmt(expr, semi).$(ctx);
   }
   //#endregion Statements
 
@@ -163,10 +179,22 @@ export class AstBuilderVisitor
     return new Ast.StructBinding(names).$(ctx);
   }
 
+  visitReturnExpr_(ctx: P.ReturnExpr_Context): Ast.ReturnExpr {
+    const value = this.expr(ctx._value);
+    return new Ast.ReturnExpr(value).$(ctx);
+  }
+
+  visitFailExpr_(ctx: P.FailExpr_Context): Ast.FailExpr {
+    const value = this.expr(ctx._value);
+    return new Ast.FailExpr(value).$(ctx);
+  }
+
   visitIfExpr_(ctx: P.IfExpr_Context): Ast.IfExpr {
     const pred = this.expr(ctx._pred);
-    const thenBody = this.visitBlock(ctx._thenBody);
-    const elseBody = ctx._elseBody ? this.visitBlock(ctx._elseBody) : null;
+    const thenBody = this.visitBlockOrExpr(ctx._thenBody);
+    const elseBody = ctx._elseBody
+      ? this.visitBlockOrExpr(ctx._elseBody)
+      : null;
     return new Ast.IfExpr(pred, thenBody, elseBody).$(ctx);
   }
 
@@ -482,7 +510,7 @@ export class AstBuilderVisitor
     const fallible = ctx._fallible ? true : false;
     const params = this.visitBarParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.visitBlockOrExpr(ctx._body);
     return new Ast.ClosureExpr(fallible, params, returnTy, body).$(ctx);
   }
 
@@ -687,6 +715,21 @@ export class AstBuilderVisitor
       ctx
     );
     return new Ast.Block(stmts).$(ctx);
+  }
+
+  visitBlockOrExpr(ctx: P.BlockOrExprContext): Ast.Block {
+    let block = ctx.block();
+    let expr = ctx.expr();
+    if (block) {
+      return this.visitBlock(block);
+    } else if (expr) {
+      return new Ast.Block(
+        new Ast.List<Ast.Stmt>([
+          new Ast.ExprStmt(this.expr(expr), false).$(ctx),
+        ]).$(ctx)
+      ).$(ctx);
+    }
+    throw new Error('Unreachable');
   }
 
   //#endregion Common

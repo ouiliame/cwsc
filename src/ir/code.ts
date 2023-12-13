@@ -1,4 +1,3 @@
-import { SymbolTable } from '../symbolic/symbol-table';
 import { IR, CWSType, CWSValue, CWSExpr } from './ir-base';
 import * as Type from './types';
 import * as Value from './values';
@@ -10,10 +9,6 @@ export class SourceFile extends IR {
 
   public isType(): this is CWSType {
     return false;
-  }
-
-  eval(symbols: SymbolTable): CWSValue | CWSType {
-    return Value.NoneValue;
   }
 
   public get contracts(): Value.Contract[] {

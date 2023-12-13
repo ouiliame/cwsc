@@ -5,7 +5,6 @@ export class StaticAnalysisVisitor extends Ast.AstValidatorVisitor {
   public SOURCE = 'cwscript/semantics/static-analysis';
 
   visitFnDefn(node: Ast.FnDefn): Diagnostic[] {
-    console.log('visitFnDefn', node.name.value);
     return [];
   }
 }

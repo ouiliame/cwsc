@@ -3,14 +3,9 @@ import * as Value from './values';
 import * as Expr from './exprs';
 import * as Type from './types';
 
-import { SymbolTable } from '../symbolic/symbol-table';
-
 export class Stmt extends IR {
   public isType(): this is CWSType {
     return false;
-  }
-  public eval(symbols: SymbolTable): CWSValue {
-    return Value.NoneValue;
   }
 }
 

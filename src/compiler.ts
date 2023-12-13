@@ -12,7 +12,7 @@ export interface BuildContext {
   sourceFiles: {
     [k: string]: {
       text?: string;
-      ast?: Ast.SourceFile;
+      sourceFile?: Ast.SourceFile;
       diagnostics: Diagnostic[];
     };
   };
@@ -38,19 +38,19 @@ export class CWScriptCompiler {
     const sourceFiles = await this.project.getSourceFiles();
 
     // read each file's contents and parse into Ast
-    for (let sourceFile of sourceFiles) {
-      const text = await readFile(sourceFile);
-      const { ast, diagnostics } = CWScriptParser.parse(text, sourceFile);
-      if (!ast) {
+    for (let file of sourceFiles) {
+      const text = await readFile(file);
+      const { sourceFile, diagnostics } = CWScriptParser.parse(text, file);
+      if (!sourceFile) {
         continue;
       }
 
-      const staticAnalysisVisitor = new StaticAnalysisVisitor(text, sourceFile);
-      diagnostics.push(...staticAnalysisVisitor.visit(ast));
+      const staticAnalysisVisitor = new StaticAnalysisVisitor(text, file);
+      diagnostics.push(...staticAnalysisVisitor.visit(sourceFile.ast));
 
-      ctx.sourceFiles[sourceFile] = {
+      ctx.sourceFiles[file] = {
         text,
-        ast,
+        sourceFile,
         diagnostics,
       };
     }
@@ -83,7 +83,7 @@ async function main() {
   const compiler = new CWScriptCompiler(project);
   const ctx = await compiler.build();
   const counterFile = path.resolve('examples/counter/src/Counter.cws');
-  const { ast, diagnostics } = ctx.sourceFiles[counterFile];
+  const { sourceFile, diagnostics } = ctx.sourceFiles[counterFile];
   console.dir(diagnostics);
 }
 

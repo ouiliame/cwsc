@@ -30,6 +30,8 @@ import { ClosureExprContext } from "./CWScriptParser";
 import { StructExprContext } from "./CWScriptParser";
 import { TupleExprContext } from "./CWScriptParser";
 import { LiteralExprContext } from "./CWScriptParser";
+import { ReturnExprContext } from "./CWScriptParser";
+import { FailExprContext } from "./CWScriptParser";
 import { IdentExprContext } from "./CWScriptParser";
 import { GroupedExprContext } from "./CWScriptParser";
 import { GroupedTypeExprContext } from "./CWScriptParser";
@@ -48,6 +50,7 @@ import { IdentBindingContext } from "./CWScriptParser";
 import { TupleBindingContext } from "./CWScriptParser";
 import { StructBindingContext } from "./CWScriptParser";
 import { SourceFileContext } from "./CWScriptParser";
+import { CwspecContext } from "./CWScriptParser";
 import { StmtContext } from "./CWScriptParser";
 import { ImportStmtContext } from "./CWScriptParser";
 import { LetStmtContext } from "./CWScriptParser";
@@ -56,6 +59,8 @@ import { ConstStmtContext } from "./CWScriptParser";
 import { AssignStmtContext } from "./CWScriptParser";
 import { MemberAssignStmtContext } from "./CWScriptParser";
 import { IndexAssignStmtContext } from "./CWScriptParser";
+import { TryCatchElseStmtContext } from "./CWScriptParser";
+import { IfStmtContext } from "./CWScriptParser";
 import { ReturnStmtContext } from "./CWScriptParser";
 import { FailStmtContext } from "./CWScriptParser";
 import { ForStmtContext } from "./CWScriptParser";
@@ -82,6 +87,7 @@ import { StateBlockDefnContext } from "./CWScriptParser";
 import { StateDefnContext } from "./CWScriptParser";
 import { StateItemDefnContext } from "./CWScriptParser";
 import { StateMapDefnContext } from "./CWScriptParser";
+import { ExprStmtContext } from "./CWScriptParser";
 import { ExprContext } from "./CWScriptParser";
 import { IfExpr_Context } from "./CWScriptParser";
 import { TryCatchElseExpr_Context } from "./CWScriptParser";
@@ -89,6 +95,8 @@ import { CatchClauseContext } from "./CWScriptParser";
 import { ClosureExpr_Context } from "./CWScriptParser";
 import { StructExpr_Context } from "./CWScriptParser";
 import { TupleExpr_Context } from "./CWScriptParser";
+import { ReturnExpr_Context } from "./CWScriptParser";
+import { FailExpr_Context } from "./CWScriptParser";
 import { LiteralContext } from "./CWScriptParser";
 import { StringLitContext } from "./CWScriptParser";
 import { IntLitContext } from "./CWScriptParser";
@@ -111,6 +119,7 @@ import { BrackTypeExprListContext } from "./CWScriptParser";
 import { BraceFieldListContext } from "./CWScriptParser";
 import { TypeExprListContext } from "./CWScriptParser";
 import { BlockContext } from "./CWScriptParser";
+import { BlockOrExprContext } from "./CWScriptParser";
 import { ReservedKeywordContext } from "./CWScriptParser";
 
 
@@ -471,6 +480,32 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitLiteralExpr?: (ctx: LiteralExprContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `ReturnExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterReturnExpr?: (ctx: ReturnExprContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ReturnExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitReturnExpr?: (ctx: ReturnExprContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `FailExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterFailExpr?: (ctx: FailExprContext) => void;
+	/**
+	 * Exit a parse tree produced by the `FailExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitFailExpr?: (ctx: FailExprContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `IdentExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
@@ -703,6 +738,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitSourceFile?: (ctx: SourceFileContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `CWScriptParser.cwspec`.
+	 * @param ctx the parse tree
+	 */
+	enterCwspec?: (ctx: CwspecContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.cwspec`.
+	 * @param ctx the parse tree
+	 */
+	exitCwspec?: (ctx: CwspecContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `CWScriptParser.stmt`.
 	 * @param ctx the parse tree
 	 */
@@ -789,6 +835,28 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIndexAssignStmt?: (ctx: IndexAssignStmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.tryCatchElseStmt`.
+	 * @param ctx the parse tree
+	 */
+	enterTryCatchElseStmt?: (ctx: TryCatchElseStmtContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.tryCatchElseStmt`.
+	 * @param ctx the parse tree
+	 */
+	exitTryCatchElseStmt?: (ctx: TryCatchElseStmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.ifStmt`.
+	 * @param ctx the parse tree
+	 */
+	enterIfStmt?: (ctx: IfStmtContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.ifStmt`.
+	 * @param ctx the parse tree
+	 */
+	exitIfStmt?: (ctx: IfStmtContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.returnStmt`.
@@ -1077,6 +1145,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitStateMapDefn?: (ctx: StateMapDefnContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `CWScriptParser.exprStmt`.
+	 * @param ctx the parse tree
+	 */
+	enterExprStmt?: (ctx: ExprStmtContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.exprStmt`.
+	 * @param ctx the parse tree
+	 */
+	exitExprStmt?: (ctx: ExprStmtContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `CWScriptParser.expr`.
 	 * @param ctx the parse tree
 	 */
@@ -1152,6 +1231,28 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTupleExpr_?: (ctx: TupleExpr_Context) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.returnExpr_`.
+	 * @param ctx the parse tree
+	 */
+	enterReturnExpr_?: (ctx: ReturnExpr_Context) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.returnExpr_`.
+	 * @param ctx the parse tree
+	 */
+	exitReturnExpr_?: (ctx: ReturnExpr_Context) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.failExpr_`.
+	 * @param ctx the parse tree
+	 */
+	enterFailExpr_?: (ctx: FailExpr_Context) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.failExpr_`.
+	 * @param ctx the parse tree
+	 */
+	exitFailExpr_?: (ctx: FailExpr_Context) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.literal`.
@@ -1394,6 +1495,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitBlock?: (ctx: BlockContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.blockOrExpr`.
+	 * @param ctx the parse tree
+	 */
+	enterBlockOrExpr?: (ctx: BlockOrExprContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.blockOrExpr`.
+	 * @param ctx the parse tree
+	 */
+	exitBlockOrExpr?: (ctx: BlockOrExprContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.reservedKeyword`.

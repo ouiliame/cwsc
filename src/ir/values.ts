@@ -1,17 +1,13 @@
-import { SymbolTable } from '../symbolic/symbol-table';
 import {
   CWSType,
   CWSValue,
   CWSExpr,
   IR,
   Param,
-  Arg,
   ValueMember,
   TypeMember,
 } from './ir-base';
 import * as Type from './types';
-import * as Stmt from './stmts';
-import * as Expr from './exprs';
 
 export type StateItem = {
   item: {

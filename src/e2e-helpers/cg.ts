@@ -608,7 +608,6 @@ export class CgContractCrate {
       CWS_MOD, // TODO: runtime should be a separate crate
     ]);
     const code = mod.render();
-    console.log(code);
     crate.setFile('src/lib.rs', code);
     return crate;
   }

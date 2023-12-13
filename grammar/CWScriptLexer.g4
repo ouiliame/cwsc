@@ -94,8 +94,9 @@ POW: '**';
 BoolLiteral: TRUE | FALSE;
 
 // Identifiers
-HashIdent: '#' [_a-zA-Z$][_a-zA-Z0-9]*;
-Ident: [_a-zA-Z$][_a-zA-Z0-9]*;
+HashIdent: '#' [_a-zA-Z][_a-zA-Z0-9]*;
+DollarIdent: '$' [_a-zA-Z0-9]*;
+Ident: [_a-zA-Z][_a-zA-Z0-9]*;
 
 // TypeVar names
 TypeVar: '%' [_a-zA-Z][_a-zA-Z0-9]*;

@@ -14,7 +14,7 @@ export interface BuildContext {
   sourceFiles: {
     [k: string]: {
       text?: string;
-      ast?: Ast.SourceFile;
+      sourceFile?: Ast.SourceFile;
       diagnostics: Diagnostic[];
     };
   };
@@ -40,19 +40,22 @@ export class CWScriptCompiler {
     const sourceFiles = await this.project.getSourceFiles();
 
     // read each file's contents and parse into Ast
-    for (let sourceFile of sourceFiles) {
-      const text = await readFile(sourceFile);
-      const { ast, diagnostics } = CWScriptParser.parse(text, sourceFile);
-      if (!ast) {
+    for (let file of sourceFiles) {
+      const text = await readFile(file);
+      const { sourceFile, diagnostics } = CWScriptParser.parse(
+        text,
+        file.toString()
+      );
+      if (!sourceFile) {
         continue;
       }
 
-      const staticAnalysisVisitor = new StaticAnalysisVisitor(text, sourceFile);
-      diagnostics.push(...staticAnalysisVisitor.visit(ast));
+      const staticAnalysisVisitor = new StaticAnalysisVisitor(text, file);
+      diagnostics.push(...staticAnalysisVisitor.visit(sourceFile.ast));
 
-      ctx.sourceFiles[sourceFile] = {
+      ctx.sourceFiles[file] = {
         text,
-        ast,
+        sourceFile,
         diagnostics,
       };
     }
@@ -70,9 +73,11 @@ async function main() {
   const contractFile = path.resolve(
     'examples/kitchen-sink/src/TerraswapPair.cws'
   );
-  const { ast, diagnostics } = ctx.sourceFiles[contractFile];
+  const { sourceFile, diagnostics } = ctx.sourceFiles[contractFile];
   // get contract
-  let contract = ast!.descendantsOfType(Ast.ContractDefn)[0];
+  let contract = sourceFile!.ast.descendantsOfType(Ast.ContractDefn)[0];
+
+  console.dir(contract.json(), { depth: null });
 
   // make cg model
   let cg = contractAstToCg(contract);

@@ -1,4 +1,5 @@
-import { AstNode } from './abstract-node';
+import { AstNode, AstJsonNode, AstJsonNodeList } from './abstract-node';
+import type { TextView } from '../util/position';
 export class List<T extends AstNode> extends AstNode<'List'> {
   public $kind: 'List' = 'List';
 
@@ -14,10 +15,9 @@ export class List<T extends AstNode> extends AstNode<'List'> {
     return this.$children;
   }
 
-  public toJSON(): any {
+  public json(): AstJsonNodeList {
     return {
-      $type: this.constructor.name,
-      $children: this.$children.map((x, key) => ({ key, value: x.toJSON() })),
+      $list: this.$children.map((x) => x.json() as AstJsonNode),
     };
   }
 
@@ -59,14 +59,6 @@ export class Empty extends AstNode<'Empty'> {
 }
 export const EMPTY = new Empty();
 
-export class SourceFile extends AstNode<'SourceFile'> {
-  public $kind: 'SourceFile' = 'SourceFile';
-
-  constructor(public stmts: List<Stmt>) {
-    super();
-  }
-}
-
 //#region Statements
 export type Stmt =
   | ImportStmt
@@ -79,9 +71,11 @@ export type Stmt =
   | ForStmt
   | ExecStmt
   | InstantiateStmt
+  | ExprStmt
   | EmitStmt
   | FailStmt
   | ReturnStmt;
+
 export class ImportStmt extends AstNode<'ImportStmt'> {
   public $kind: 'ImportStmt' = 'ImportStmt';
 
@@ -220,6 +214,14 @@ export class EmitStmt extends AstNode<'EmitStmt'> {
   public $kind: 'EmitStmt' = 'EmitStmt';
 
   constructor(public value: Expr) {
+    super();
+  }
+}
+
+export class ExprStmt extends AstNode<'ExprStmt'> {
+  public $kind: 'ExprStmt' = 'ExprStmt';
+
+  constructor(public value: Expr, public semi: boolean) {
     super();
   }
 }
@@ -475,10 +477,30 @@ export class QueryNowExpr extends AstNode<'QueryNowExpr'> {
   }
 }
 
+export class TryCatchElseStmt extends AstNode<'TryCatchElseStmt'> {
+  public $kind: 'TryCatchElseStmt' = 'TryCatchElseStmt';
+
+  constructor(
+    public body: Block,
+    public catchClauses: List<CatchClause>,
+    public elseBody: Block | null
+  ) {
+    super();
+  }
+}
+
 export class FailExpr extends AstNode<'FailExpr'> {
   public $kind: 'FailExpr' = 'FailExpr';
 
-  constructor(public expr: Expr) {
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+export class ReturnExpr extends AstNode<'ReturnExpr'> {
+  public $kind: 'ReturnExpr' = 'ReturnExpr';
+
+  constructor(public value: Expr) {
     super();
   }
 }
