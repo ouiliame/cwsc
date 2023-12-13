@@ -14,6 +14,7 @@ import { CallExprContext } from "./CWScriptParser";
 import { IndexExprContext } from "./CWScriptParser";
 import { AsExprContext } from "./CWScriptParser";
 import { ExistsExprContext } from "./CWScriptParser";
+import { NotExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
 import { AddExprContext } from "./CWScriptParser";
 import { CompExprContext } from "./CWScriptParser";
@@ -80,7 +81,9 @@ import { TypeAliasDefnContext } from "./CWScriptParser";
 import { FnDefnContext } from "./CWScriptParser";
 import { InstantiateDefnContext } from "./CWScriptParser";
 import { ExecDefnContext } from "./CWScriptParser";
+import { ExecTupleDefnContext } from "./CWScriptParser";
 import { QueryDefnContext } from "./CWScriptParser";
+import { QueryTupleDefnContext } from "./CWScriptParser";
 import { ErrorDefnContext } from "./CWScriptParser";
 import { EventDefnContext } from "./CWScriptParser";
 import { StateBlockDefnContext } from "./CWScriptParser";
@@ -112,6 +115,7 @@ import { NamedArgContext } from "./CWScriptParser";
 import { ArgContext } from "./CWScriptParser";
 import { IdentListContext } from "./CWScriptParser";
 import { ParenParamListContext } from "./CWScriptParser";
+import { TupleParamListContext } from "./CWScriptParser";
 import { BraceParamListContext } from "./CWScriptParser";
 import { BarParamListContext } from "./CWScriptParser";
 import { BrackTypeParamListContext } from "./CWScriptParser";
@@ -270,6 +274,19 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitExistsExpr?: (ctx: ExistsExprContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `NotExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterNotExpr?: (ctx: NotExprContext) => void;
+	/**
+	 * Exit a parse tree produced by the `NotExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitNotExpr?: (ctx: NotExprContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `MulExpr`
@@ -1068,6 +1085,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitExecDefn?: (ctx: ExecDefnContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `CWScriptParser.execTupleDefn`.
+	 * @param ctx the parse tree
+	 */
+	enterExecTupleDefn?: (ctx: ExecTupleDefnContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.execTupleDefn`.
+	 * @param ctx the parse tree
+	 */
+	exitExecTupleDefn?: (ctx: ExecTupleDefnContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `CWScriptParser.queryDefn`.
 	 * @param ctx the parse tree
 	 */
@@ -1077,6 +1105,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitQueryDefn?: (ctx: QueryDefnContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.queryTupleDefn`.
+	 * @param ctx the parse tree
+	 */
+	enterQueryTupleDefn?: (ctx: QueryTupleDefnContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.queryTupleDefn`.
+	 * @param ctx the parse tree
+	 */
+	exitQueryTupleDefn?: (ctx: QueryTupleDefnContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.errorDefn`.
@@ -1418,6 +1457,17 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitParenParamList?: (ctx: ParenParamListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CWScriptParser.tupleParamList`.
+	 * @param ctx the parse tree
+	 */
+	enterTupleParamList?: (ctx: TupleParamListContext) => void;
+	/**
+	 * Exit a parse tree produced by `CWScriptParser.tupleParamList`.
+	 * @param ctx the parse tree
+	 */
+	exitTupleParamList?: (ctx: TupleParamListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.braceParamList`.

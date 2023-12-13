@@ -407,7 +407,7 @@ export class IsExpr extends AstNode<'IsExpr'> {
 export class InExpr extends AstNode<'InExpr'> {
   public $kind: 'InExpr' = 'InExpr';
 
-  constructor(public lhs: Expr, public rhs: Expr) {
+  constructor(public negative: boolean, public lhs: Expr, public rhs: Expr) {
     super();
   }
 }
@@ -705,6 +705,7 @@ export class ExecDefn extends AstNode<'ExecDefn'> {
   constructor(
     public name: Ident,
     public fallible: boolean,
+    public isTuple: boolean,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
@@ -719,6 +720,7 @@ export class QueryDefn extends AstNode<'QueryDefn'> {
   constructor(
     public name: Ident,
     public fallible: boolean,
+    public isTuple: boolean,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block

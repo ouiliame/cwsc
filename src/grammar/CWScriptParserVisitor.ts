@@ -14,6 +14,7 @@ import { CallExprContext } from "./CWScriptParser";
 import { IndexExprContext } from "./CWScriptParser";
 import { AsExprContext } from "./CWScriptParser";
 import { ExistsExprContext } from "./CWScriptParser";
+import { NotExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
 import { AddExprContext } from "./CWScriptParser";
 import { CompExprContext } from "./CWScriptParser";
@@ -80,7 +81,9 @@ import { TypeAliasDefnContext } from "./CWScriptParser";
 import { FnDefnContext } from "./CWScriptParser";
 import { InstantiateDefnContext } from "./CWScriptParser";
 import { ExecDefnContext } from "./CWScriptParser";
+import { ExecTupleDefnContext } from "./CWScriptParser";
 import { QueryDefnContext } from "./CWScriptParser";
+import { QueryTupleDefnContext } from "./CWScriptParser";
 import { ErrorDefnContext } from "./CWScriptParser";
 import { EventDefnContext } from "./CWScriptParser";
 import { StateBlockDefnContext } from "./CWScriptParser";
@@ -112,6 +115,7 @@ import { NamedArgContext } from "./CWScriptParser";
 import { ArgContext } from "./CWScriptParser";
 import { IdentListContext } from "./CWScriptParser";
 import { ParenParamListContext } from "./CWScriptParser";
+import { TupleParamListContext } from "./CWScriptParser";
 import { BraceParamListContext } from "./CWScriptParser";
 import { BarParamListContext } from "./CWScriptParser";
 import { BrackTypeParamListContext } from "./CWScriptParser";
@@ -218,6 +222,14 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitExistsExpr?: (ctx: ExistsExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `NotExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitNotExpr?: (ctx: NotExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `MulExpr`
@@ -717,11 +729,25 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitExecDefn?: (ctx: ExecDefnContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `CWScriptParser.execTupleDefn`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExecTupleDefn?: (ctx: ExecTupleDefnContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `CWScriptParser.queryDefn`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitQueryDefn?: (ctx: QueryDefnContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.queryTupleDefn`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitQueryTupleDefn?: (ctx: QueryTupleDefnContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.errorDefn`.
@@ -939,6 +965,13 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitParenParamList?: (ctx: ParenParamListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.tupleParamList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTupleParamList?: (ctx: TupleParamListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.braceParamList`.

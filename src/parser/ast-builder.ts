@@ -136,7 +136,7 @@ export class AstBuilderVisitor
   visitForStmt(ctx: P.ForStmtContext): Ast.ForStmt {
     const binding = this.visit(ctx._binding) as Ast.Binding;
     const iter = this.expr(ctx._iter);
-    const body = this.visitBlockOrExpr(ctx._body);
+    const body = this.visitBlock(ctx._body);
     return new Ast.ForStmt(binding, iter, body).$(ctx);
   }
 
@@ -359,7 +359,20 @@ export class AstBuilderVisitor
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.ExecDefn(name, fallible, params, returnTy, body).$(ctx);
+    return new Ast.ExecDefn(name, fallible, false, params, returnTy, body).$(
+      ctx
+    );
+  }
+
+  visitExecTupleDefn(ctx: P.ExecTupleDefnContext): Ast.ExecDefn {
+    const name = this.visitIdent(ctx._name);
+    const fallible = ctx._fallible ? true : false;
+    const params = this.visitTupleParamList(ctx._params);
+    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
+    const body = this.visitBlock(ctx._body);
+    return new Ast.ExecDefn(name, fallible, true, params, returnTy, body).$(
+      ctx
+    );
   }
 
   visitQueryDefn(ctx: P.QueryDefnContext): Ast.QueryDefn {
@@ -368,7 +381,20 @@ export class AstBuilderVisitor
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.QueryDefn(name, fallible, params, returnTy, body).$(ctx);
+    return new Ast.QueryDefn(name, fallible, false, params, returnTy, body).$(
+      ctx
+    );
+  }
+
+  visitQueryTupleDefn(ctx: P.QueryTupleDefnContext): Ast.QueryDefn {
+    const name = this.visitIdent(ctx._name);
+    const fallible = ctx._fallible ? true : false;
+    const params = this.visitTupleParamList(ctx._params);
+    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
+    const body = this.visitBlock(ctx._body);
+    return new Ast.QueryDefn(name, fallible, true, params, returnTy, body).$(
+      ctx
+    );
   }
 
   visitErrorDefn(ctx: P.ErrorDefnContext): Ast.ErrorDefn {
@@ -476,12 +502,18 @@ export class AstBuilderVisitor
 
   visitInExpr(ctx: P.InExprContext): Ast.InExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
-    return new Ast.InExpr(lhs, rhs).$(ctx);
+    const negative = ctx._negative ? true : false;
+    return new Ast.InExpr(negative, lhs, rhs).$(ctx);
   }
 
   visitEqExpr(ctx: P.EqExprContext): Ast.BinOpExpr {
     const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
     return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
+  }
+
+  visitNotExpr(ctx: P.NotExprContext): Ast.NotExpr {
+    const expr = this.expr(ctx.expr());
+    return new Ast.NotExpr(expr).$(ctx);
   }
 
   visitAndExpr(ctx: P.AndExprContext): Ast.AndExpr {
@@ -679,6 +711,10 @@ export class AstBuilderVisitor
   }
 
   visitParenParamList(ctx: P.ParenParamListContext): Ast.List<Ast.Param> {
+    return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
+  }
+
+  visitTupleParamList(ctx: P.TupleParamListContext): Ast.List<Ast.Param> {
     return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 

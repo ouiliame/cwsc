@@ -83,7 +83,7 @@ returnStmt: returnExpr_ SEMI?;
 failStmt: failExpr_ SEMI?;
 
 forStmt:
-	FOR (binding = binding_) IN (iter = expr) body = blockOrExpr;
+	FOR (binding = binding_) IN (iter = expr) body = block SEMI?;
 
 execStmt: EXEC_NOW value = expr SEMI?;
 instantiateStmt: INSTANTIATE_NOW value = expr SEMI?;
@@ -103,7 +103,9 @@ defn:
 	| fnDefn
 	| instantiateDefn
 	| execDefn
+	| execTupleDefn
 	| queryDefn
+	| queryTupleDefn
 	| errorDefn
 	| eventDefn
 	| stateBlockDefn;
@@ -173,9 +175,19 @@ execDefn:
 		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
+execTupleDefn:
+	(spec = cwspec)? EXEC (name = ident) (fallible = BANG)? (
+		params = tupleParamList
+	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+
 queryDefn:
 	(spec = cwspec)? QUERY (name = ident) (fallible = BANG)? (
 		params = parenParamList
+	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+
+queryTupleDefn:
+	(spec = cwspec)? QUERY (name = ident) (fallible = BANG)? (
+		params = tupleParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 errorDefn: (spec = cwspec)? ERROR (name = ident) (
@@ -215,12 +227,13 @@ expr:
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
 	| expr AS (ty = typeExpr)						# AsExpr
 	| expr QUEST									# ExistsExpr
+	| NOT expr										# NotExpr
 	| expr (op = (MUL | DIV | MOD)) expr			# MulExpr
 	| expr (op = (PLUS | MINUS)) expr				# AddExpr
 	| expr (op = (LT | GT | LT_EQ | GT_EQ)) expr	# CompExpr
 	| QUERY_NOW expr								# QueryExpr
 	| expr D_QUEST expr								# ShortTryExpr
-	| expr IN expr									# InExpr
+	| expr (negative = NOT)? IN expr				# InExpr
 	| expr IS (negative = NOT)? (ty = typeExpr)		# IsExpr
 	| expr (op = (EQ_EQ | NEQ)) expr				# EqExpr
 	| expr AND expr									# AndExpr
@@ -303,6 +316,8 @@ arg: (expr | namedArg);
 
 identList: (ident (COMMA ident)*);
 parenParamList: LPAREN (param (COMMA param)*)? RPAREN;
+tupleParamList:
+	LPAREN LBRACK (param (COMMA param)*)? RBRACK RPAREN;
 braceParamList: LBRACE (param (COMMA param)*)? COMMA? RBRACE;
 barParamList: BAR (param (COMMA param)*)? BAR;
 brackTypeParamList: LBRACK (typeVar (COMMA typeVar)*)? RBRACK;
