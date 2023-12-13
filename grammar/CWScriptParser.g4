@@ -227,6 +227,7 @@ expr:
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
 	| expr AS (ty = typeExpr)						# AsExpr
 	| expr QUEST									# ExistsExpr
+	| BANG expr										# NotExpr
 	| NOT expr										# NotExpr
 	| expr (op = (MUL | DIV | MOD)) expr			# MulExpr
 	| expr (op = (PLUS | MINUS)) expr				# AddExpr

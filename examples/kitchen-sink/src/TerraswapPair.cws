@@ -201,7 +201,7 @@ contract TerraswapPair {
         }
       }
 
-      if !authorized {
+      if not authorized {
         fail! Unauthorized();
       }
 
@@ -262,7 +262,7 @@ contract TerraswapPair {
       let deposit0 = U128!(deposits[0]);
       let deposit1 = U128!(deposits[1]);
       let share = U256!(
-        Dec.ratio(deposit 0 * deposit1, U256(1)).sqrt() * U256(1)
+        Dec.ratio(deposit[0] * deposit1, U256(1)).sqrt() * U256(1)
       )
       exec! Cw20(liquidity_token).#mint(recipient=$env.contract.address, amount=MINIMUM_LIQUIDITY_AMOUNT);
       share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail! MinimumLiquidityAmountError(MINIMUM_LIQUIDITY_AMOUNT, share);
