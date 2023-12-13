@@ -1,5 +1,6 @@
 import { AstNode, AstJsonNode, AstJsonNodeList } from './abstract-node';
 import type { TextView } from '../util/position';
+import { Doc } from 'prettier';
 export class List<T extends AstNode> extends AstNode<'List'> {
   public $kind: 'List' = 'List';
 

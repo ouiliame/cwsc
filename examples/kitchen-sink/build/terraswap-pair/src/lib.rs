@@ -18,12 +18,46 @@ pub mod terraswap_pair {
     use cosmwasm_std::*;
     #[cw_serde]
     pub struct InstantiateMsg {
-      pub name: String,
+      pub asset_info: String /* [AssetInfo;2] */,
+      pub token_code_id: String /* U64 */,
+      pub asset_decimals: String /* [U8;2] */,
     }
     #[cw_serde]
-    pub enum ExecuteMsg {}
+    pub enum ExecuteMsg {
+      Receive {
+        msg: String /* Cw20ReceiveMsg */,
+      },
+      ProvideLiquidity {
+        assets: String /* [Asset;2] */,
+        receiver: String /* String */,
+        deadline: String /* U64 */,
+        slippage_tolerance: String /* Dec */,
+      },
+      Swap {
+        offer_asset: String /* Asset */,
+        belief_price: String /* Dec */,
+        max_spread: String /* Dec */,
+        to: String /* Addr */,
+        deadline: String /* U64 */,
+      },
+      WithdrawLiquidity {
+        sender: String /* Addr */,
+        amount: String /* U128 */,
+        min_assets: String /* [Asset;2]? */,
+        deadline: String /* U64 */,
+      },
+    }
     #[cw_serde]
-    pub enum QueryMsg {}
+    pub enum QueryMsg {
+      Pair {},
+      Pool {},
+      Simulation {
+        offer_asset: String /* Asset */,
+      },
+      ReverseSimulation {
+        ask_asset: String /* Asset */,
+      },
+    }
   }
   pub mod contract {
     use super::cws::*;
@@ -43,7 +77,12 @@ pub mod terraswap_pair {
         env: env,
         info: info,
       };
-      instantiate_impl(ctx, msg.name)
+      instantiate_impl(
+        ctx,
+        msg.asset_info,
+        msg.token_code_id,
+        msg.asset_decimals
+      )
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
     pub fn execute(
@@ -58,6 +97,48 @@ pub mod terraswap_pair {
         info: info,
       };
       match msg {
+        ExecuteMsg::Receive { msg } => exec_receive_impl(ctx, msg),
+        ExecuteMsg::ProvideLiquidity {
+          assets,
+          receiver,
+          deadline,
+          slippage_tolerance,
+        } =>
+          exec_provide_liquidity_impl(
+            ctx,
+            assets,
+            receiver,
+            deadline,
+            slippage_tolerance
+          ),
+        ExecuteMsg::Swap {
+          offer_asset,
+          belief_price,
+          max_spread,
+          to,
+          deadline,
+        } =>
+          exec_swap_impl(
+            ctx,
+            offer_asset,
+            belief_price,
+            max_spread,
+            to,
+            deadline
+          ),
+        ExecuteMsg::WithdrawLiquidity {
+          sender,
+          amount,
+          min_assets,
+          deadline,
+        } =>
+          exec_withdraw_liquidity_impl(
+            ctx,
+            sender,
+            amount,
+            min_assets,
+            deadline
+          ),
       }
     }
     #[cfg_attr(not(feature = "library"), entry_point)]
@@ -67,6 +148,12 @@ pub mod terraswap_pair {
         env: env,
       };
       match msg {
+        QueryMsg::Pair {} => to_json_binary(&query_pair_impl(ctx)?),
+        QueryMsg::Pool {} => to_json_binary(&query_pool_impl(ctx)?),
+        QueryMsg::Simulation { offer_asset } =>
+          to_json_binary(&query_simulation_impl(ctx, offer_asset)?),
+        QueryMsg::ReverseSimulation { ask_asset } =>
+          to_json_binary(&query_reverse_simulation_impl(ctx, ask_asset)?),
       }
     }
   }
@@ -78,33 +165,73 @@ pub mod terraswap_pair {
     use cosmwasm_std::*;
     pub fn instantiate_impl(
       ctx: InstantiateCtx,
-      name: String
+      asset_info: String /* [AssetInfo;2] */,
+      token_code_id: String /* U64 */,
+      asset_decimals: String /* [U8;2] */
     ) -> Result<Response, ContractError> {
-      /* TODO: Untranslated StringLit 
+      /* TODO: Untranslated MemberAssignStmt 
 
  */
-      /* TODO: Untranslated AssignStmt 
-
- */
-      /* TODO: Untranslated AssignStmt 
-
- */
-      /* TODO: Untranslated AssignStmt 
-
- */
-      /* TODO: Untranslated AssignStmt 
-
- */
-      /* TODO: Untranslated AssignStmt 
-
- */
-      /* TODO: Untranslated AssignStmt 
-
- */
-      /* TODO: Untranslated Empty 
+      /* TODO: Untranslated ExecStmt 
 
  */
       Ok(Response::new())
+    }
+    pub fn exec_receive_impl(
+      ctx: ExecuteCtx,
+      msg: String /* Cw20ReceiveMsg */
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn exec_provide_liquidity_impl(
+      ctx: ExecuteCtx,
+      assets: String /* [Asset;2] */,
+      receiver: String /* String */,
+      deadline: String /* U64 */,
+      slippage_tolerance: String /* Dec */
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn exec_swap_impl(
+      ctx: ExecuteCtx,
+      offer_asset: String /* Asset */,
+      belief_price: String /* Dec */,
+      max_spread: String /* Dec */,
+      to: String /* Addr */,
+      deadline: String /* U64 */
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn exec_withdraw_liquidity_impl(
+      ctx: ExecuteCtx,
+      sender: String /* Addr */,
+      amount: String /* U128 */,
+      min_assets: String /* [Asset;2]? */,
+      deadline: String /* U64 */
+    ) -> Result<Response, ContractError> {
+      Ok(Response::new())
+    }
+    pub fn query_pair_impl(
+      ctx: QueryCtx
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
+    }
+    pub fn query_pool_impl(
+      ctx: QueryCtx
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
+    }
+    pub fn query_simulation_impl(
+      ctx: QueryCtx,
+      offer_asset: String /* Asset */
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
+    }
+    pub fn query_reverse_simulation_impl(
+      ctx: QueryCtx,
+      ask_asset: String /* Asset */
+    ) -> StdResult<CWSQueryResponse<String>> {
+      Ok(CWSQueryResponse(String::from("TODO")))
     }
   }
   pub mod types {
