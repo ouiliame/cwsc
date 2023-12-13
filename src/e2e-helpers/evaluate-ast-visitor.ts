@@ -99,11 +99,6 @@ export class EvaluateAstVisitor extends Ast.AstVisitor<Ir.IR> {
     const value = this.visit(node.value);
     this.ctx.set(obj.toString() + '[' + index.toString() + ']', value);
   }
-
-  visitIfStmt(node: Ast.IfStmt): Ir.Stmt.If {
-    return new Ir.Stmt.If();
-  }
-
   visitContractDefn(node: Ast.ContractDefn) {
     const name = node.name.value;
     this.ctx.set(name, this.visitBlock(node.body));

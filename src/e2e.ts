@@ -8,6 +8,7 @@ import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
 
 import type { Diagnostic } from 'vscode-languageserver';
 import { contractAstToCg } from './e2e-helpers/contract-to-cg';
+import { CfgVisitor } from './e2e-helpers/control-flow-graph';
 
 export interface BuildContext {
   sourceFiles: {
@@ -67,11 +68,12 @@ async function main() {
   const compiler = new CWScriptCompiler(project);
   const ctx = await compiler.build();
   const contractFile = path.resolve(
-    'examples/kitchen-sink/src/KitchenSink.cws'
+    'examples/kitchen-sink/src/TerraswapPair.cws'
   );
   const { ast, diagnostics } = ctx.sourceFiles[contractFile];
   // get contract
   let contract = ast!.descendantsOfType(Ast.ContractDefn)[0];
+
   // make cg model
   let cg = contractAstToCg(contract);
   // make rust crate
