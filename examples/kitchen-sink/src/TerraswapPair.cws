@@ -1,3 +1,13 @@
+struct Asset {
+  info: AssetInfo,
+  amount: U128
+}
+
+enum AssetInfo {
+  #Token(contract_addr: String),
+  #NativeToken(denom: String)
+}
+
 contract TerraswapPair {
   state {
     pair_info: PairInfo
@@ -8,6 +18,12 @@ contract TerraswapPair {
     receiver: String,
     assets: [Asset; 2],
     share: String,
+    refund_assets: [Asset; 2]
+  );
+
+  WithdrawLiquidity(
+    sender: String,
+    withdrawn_share: String,
     refund_assets: [Asset; 2]
   );
 
@@ -61,6 +77,94 @@ contract TerraswapPair {
       return res.amount.amount;
     } else {
       return 0;
+    }
+  }
+
+  fn compute_offer_amount!(offer_pool: U128, ask_pool: U128, ask_amount: U128) -> [U128, U128, U128] {
+    let commission_rate = Dec.permille(COMMISSION_RATE);
+
+    let cp = offer_pool * ask_pool;
+    let one_minus_commission = Dec.one() - commission_rate;
+    let inv_one_minus_commission = Dec.one() / one_minus_commission;
+    let before_commission_deduction = ask_amount * inv_one_minus_commission;
+    if before_commission_deduction * one_minus_commission != ask_amount {
+      before_commission_deduction += U256(1);
+    }
+
+    let after_ask_pool = ask_pool - before_commission_deduction;
+    let after_offer_pool = U256(1).multiply_ratio(cp, after_ask_pool);
+
+    if after_offer_pool * (ask_pool - before_commission_deduction) != cp {
+      after_offer_pool += U256(1);
+    }
+
+    let offer_amount = after_offer_pool - offer_pool;
+    let before_spread_deduction = offer_amount * Dec.ratio(ask_pool, offer_pool);
+
+    let spread_amount = if before_spread_deduction > before_commission_deduction {
+      before_commission_deduction - before_commission_deduction
+    } else {
+      U256(0)
+    };
+
+    let commission_amount = before_commission_deduction - ask_amount;
+    return [U256!(offer_amount), U256!(spread_amount), U256!(commission_amount)];
+  }
+
+  fn assert_max_spread!(
+    belief_price: Dec?,
+    max_spread: Dec?,
+    offer_asset: Asset,
+    return_asset: U128,
+    spread_amount: U128,
+    offer_decimal: U8,
+    return_decimal: U8
+  ) {
+    let [offer_amount, return_amount, spread_amount] = if offer_decimal > return_decimal {
+      let diff_decimal = U64(10).pow(offer_decimal - return_decimal);
+      [offer_asset.amount, return_asset.amount * U128!(diff_decimal), spread_amount * U128!(diff_decimal)]
+    } else if offer_decimal < return_decimal {
+      let diff_decimal = U64(10).pow(return_decimal - offer_decimal);
+      [offer_asset.amount * U128!(diff_decimal), return_asset.amount, spread_amount]
+    } else if offer_decimal == return_decimal {
+      [offer_asset.amount, return_asset.amount, spread_amount]
+    };
+
+    if max_spread? and belief_price? {
+      let expected_return = offer_amount * (Dec.one() / belief_price);
+      let spread_amount = if expected_return > return_amount {
+        expected_return - return_amount
+      } else {
+        U256.zero()
+      };
+      if return_amount < expected_return and Dec.ratio(spread_amount, expected_return) > max_spread {
+        fail! MaxSpreadAssertion();
+      }
+    } else if max_spread? {
+      if Dec.ratio(spread_amount, return_amount + spread_amount) > max_spread {
+        fail! MaxSpreadAssertion();
+      }
+    }
+  }
+
+  fn assert_deadline!(blocktime: U64, deadline?: U64) {
+    if deadline? {
+      fail! ExpiredDeadline();
+    }
+  }
+
+  fn assert_minimum_assets!(assets: List[Asset], min_assets?: [Asset; 2]) {
+    if min_assets? {
+      for min_asset in min_assets {
+        let asset = assets.find(|asset| asset.info == min_asset.info);
+        if asset? {
+          if asset.amount < min_asset.amount {
+            fail! MinAmountAssertion(min_asset=min_asset, asset=asset);
+          }
+        } else {
+          fail! MinAmountAssetion(min_asset=min_asset, asset=Asset(info=min_asset.info, amount=0));
+        }
+      }
     }
   }
 
@@ -154,7 +258,7 @@ contract TerraswapPair {
       let deposit0 = U128!(deposits[0]);
       let deposit1 = U128!(deposits[1]);
       let share = U256!(
-        Dec256.ratio!(deposit 0 * deposit1, U256(1)).sqrt() * U256(1)
+        Dec.ratio(deposit 0 * deposit1, U256(1)).sqrt() * U256(1)
       )
       exec! Cw20(liquidity_token).#mint(recipient=$env.contract.address, amount=MINIMUM_LIQUIDITY_AMOUNT);
       share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail! MinimumLiquidityAmountError(MINIMUM_LIQUIDITY_AMOUNT, share);
@@ -198,7 +302,7 @@ contract TerraswapPair {
           owner=$info.sender,
           recipient=$env.contract.address,
           amount=desired_amount
-        ); 
+        );
       }
     }
 
@@ -213,15 +317,16 @@ contract TerraswapPair {
     let ask_pool = U256!(ask_pool);
     let offer_amount = U256!(offer_amount);
     
-    let commission_rate = Dec256!(COMMISSION_RATE);
-    let cp = offer_pool.mul!(ask_pool);
-    let return_amount = (
-      Dec256.ratio!(ask_pool, 1) - Dec256.ratio!(cp, offer_pool + offer_amount) * U256(1)
-    );
+    let commission_rate = Dec.permille(COMMISSION_RATE);
+    let return_amount = (ask_pool * offer_amount) / (offer_pool + offer_amount);
     let spread_amount = (
-      offer_amount * Dec256.ratio!(ask_pool, offer_pool) - return_amount
+      (offer_amount * Dec.ratio!(ask_pool, offer_pool)) - return_amount
     );
     let commission_amount = return_amount * commission_rate;
+    if return_amount != (commission_amount * (Dec.one() / commission_rate)) {
+      commission_amount += U256(128);
+    }
+    // commission will be returned to the pool
     return_amount -= commission_amount;
     return [U128!(return_amount), U128!(spread_amount), U128!(commission_amount)];
   }
@@ -275,6 +380,29 @@ contract TerraswapPair {
       }
     }
     emit Swap(sender, receiver, offer_asset.info, ask_pool.info, offer_amount, spread_amount, commission_amount);
+  }
+
+  exec #withdraw_liquidity(
+    sender: Addr,
+    amount: U128,
+    min_assets: [Asset; 2]?,
+    deadline: U64
+  ) {
+    $.assert_deadline!($env.block.time.seconds(), deadline)?;
+    
+    let { pair_info } = $state;
+    let liquidity_addr = Addr.humanize!(pair_info.liquidity_token);
+    
+    let pools = $.query_pools!($env.contract.address);
+    let { total_share } = $.query_token_info!(liquidity_addr);
+
+    let share_ratio = Dec.ratio(amount, total_share);
+    let refund_assets = pool.map(|a| Asset(info=a.info, amount=a.amount * share_ratio));
+    
+    $.assert_minimum_assets!(refund_assets, min_assets);
+    // TODO: exec refund_assets[0].clone().into_msg(sender.clone())?
+    exec! Cw20(pair_info.liquidity_token).#burn(amount);
+    emit WithdrawLiquidity(sender=sender, withdrawn_share=amount, refund_assets);
   }
 
   query #pair() {
