@@ -47,7 +47,7 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
       x;
     });
 
-    if (!node.items || node.items.length === 0) {
+    if (node.bindings.length === 0) {
       diagnostics.push(
         this.makeError(node, 'Import statement must import at least one item')
       );
@@ -55,8 +55,7 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
     return diagnostics;
   }
 
-  // SKIP: LetStmt
-  visitIdentBinding(node: Ast.IdentBinding): Diagnostic[] {
+  visitLetIdentStmt(node: Ast.LetIdentStmt): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     // check that variables use snake_case
     if (node.name.value[0] === '#') {
@@ -73,7 +72,7 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
     return diagnostics;
   }
 
-  visitTupleBinding(node: Ast.TupleBinding): Diagnostic[] {
+  visitLetTupleStmt(node: Ast.LetTupleStmt): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     if (!node.names || node.names.length === 0) {
       diagnostics.push(
@@ -90,17 +89,17 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
     return diagnostics;
   }
 
-  visitStructBinding(node: Ast.StructBinding): Diagnostic[] {
+  visitLetStructStmt(node: Ast.LetStructStmt): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
-    if (!node.names || node.names.length === 0) {
+    if (node.bindings.length === 0) {
       diagnostics.push(
         this.makeError(node, 'Struct binding must have at least one name')
       );
     }
-    node.names.forEach((name) => {
-      if (!isSnakeCase(name.value)) {
+    node.bindings.forEach((binding) => {
+      if (binding.alias && !isSnakeCase(binding.alias.value)) {
         diagnostics.push(
-          this.makeWarning(name, 'Variable names should be snake_case')
+          this.makeWarning(binding.alias, 'Variable names should be snake_case')
         );
       }
     });

@@ -1,6 +1,7 @@
 import { AstNode, AstJsonNode, AstJsonNodeList } from './abstract-node';
 import type { TextView } from '../util/position';
 import { Doc } from 'prettier';
+import { LetIdentStmtContext } from 'src/grammar/CWScriptParser';
 export class List<T extends AstNode> extends AstNode<'List'> {
   public $kind: 'List' = 'List';
 
@@ -63,13 +64,17 @@ export const EMPTY = new Empty();
 //#region Statements
 export type Stmt =
   | ImportStmt
-  | LetStmt
+  | LetIdentStmt
+  | LetTupleStmt
+  | LetStructStmt
   | ConstStmt
   | AssignStmt
   | MemberAssignStmt
   | IndexAssignStmt
   | IfStmt
-  | ForStmt
+  | ForIdentStmt
+  | ForTupleStmt
+  | ForStructStmt
   | ExecStmt
   | InstantiateStmt
   | ExprStmt
@@ -80,42 +85,61 @@ export type Stmt =
 export class ImportStmt extends AstNode<'ImportStmt'> {
   public $kind: 'ImportStmt' = 'ImportStmt';
 
-  constructor(public items: List<Ident>, public src: StringLit) {
-    super();
-  }
-}
-export class LetStmt extends AstNode<'LetStmt'> {
-  public $kind: 'LetStmt' = 'LetStmt';
-
-  constructor(public binding: Binding, public value: Expr) {
+  constructor(public bindings: List<Binding>, public src: StringLit) {
     super();
   }
 }
 
-export class IdentBinding extends AstNode<'IdentBinding'> {
-  public $kind: 'IdentBinding' = 'IdentBinding';
+export class ExportStmt extends AstNode<'ExportStmt'> {
+  public $kind: 'ExportStmt' = 'ExportStmt';
 
-  constructor(public name: Ident, public ty: TypeExpr | null) {
+  constructor(public fields: List<Field>) {
     super();
   }
 }
 
-export class TupleBinding extends AstNode<'TupleBinding'> {
-  public $kind: 'TupleBinding' = 'TupleBinding';
+export class Binding extends AstNode<'Binding'> {
+  public $kind: 'Binding' = 'Binding';
 
-  constructor(public names: List<Ident>) {
+  constructor(public name: Ident, public alias: Ident | null) {
+    super();
+  }
+}
+export class LetIdentStmt extends AstNode<'LetIdentStmt'> {
+  public $kind: 'LetIdentStmt' = 'LetIdentStmt';
+
+  constructor(
+    public name: Ident,
+    public ty: TypeExpr | null,
+    public value: Expr
+  ) {
     super();
   }
 }
 
-export class StructBinding extends AstNode<'StructBinding'> {
-  public $kind: 'StructBinding' = 'StructBinding';
-  constructor(public names: List<Ident>) {
+export class LetTupleStmt extends AstNode<'LetTupleStmt'> {
+  public $kind: 'LetTupleStmt' = 'LetTupleStmt';
+
+  constructor(
+    public names: List<Ident>,
+    public ty: TypeExpr | null,
+    public value: Expr
+  ) {
     super();
   }
 }
 
-export type Binding = IdentBinding | TupleBinding | StructBinding;
+export class LetStructStmt extends AstNode<'LetStructStmt'> {
+  public $kind: 'LetStructStmt' = 'LetStructStmt';
+
+  constructor(
+    public bindings: List<Binding>,
+    public ty: TypeExpr | null,
+    public value: Expr
+  ) {
+    super();
+  }
+}
 
 export class ConstStmt extends AstNode<'ConstStmt'> {
   public $kind: 'ConstStmt' = 'ConstStmt';
@@ -187,10 +211,34 @@ export class IfStmt extends AstNode<'IfStmt'> {
   }
 }
 
-export class ForStmt extends AstNode<'ForStmt'> {
-  public $kind: 'ForStmt' = 'ForStmt';
+export class ForIdentStmt extends AstNode<'ForIdentStmt'> {
+  public $kind: 'ForIdentStmt' = 'ForIdentStmt';
 
-  constructor(public binding: Binding, public iter: Expr, public body: Block) {
+  constructor(public name: Ident, public iter: Expr, public body: Block) {
+    super();
+  }
+}
+
+export class ForTupleStmt extends AstNode<'ForTupleStmt'> {
+  public $kind: 'ForTupleStmt' = 'ForTupleStmt';
+
+  constructor(
+    public names: List<Ident>,
+    public iter: Expr,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+export class ForStructStmt extends AstNode<'ForStructStmt'> {
+  public $kind: 'ForStructStmt' = 'ForStructStmt';
+
+  constructor(
+    public bindings: List<Binding>,
+    public iter: Expr,
+    public body: Block
+  ) {
     super();
   }
 }
@@ -251,7 +299,6 @@ export type Expr =
   | StructExpr
   | GroupedExpr
   | DotExpr
-  | AsExpr
   | IndexExpr
   | CallExpr
   | ExistsExpr
@@ -303,14 +350,6 @@ export class DotExpr extends AstNode<'DotExpr'> {
   public $kind: 'DotExpr' = 'DotExpr';
 
   constructor(public obj: Expr, public memberName: Ident) {
-    super();
-  }
-}
-
-export class AsExpr extends AstNode<'AsExpr'> {
-  public $kind: 'AsExpr' = 'AsExpr';
-
-  constructor(public expr: Expr, public ty: TypeExpr) {
     super();
   }
 }
@@ -445,8 +484,8 @@ export class ClosureExpr extends AstNode<'ClosureExpr'> {
   public $kind: 'ClosureExpr' = 'ClosureExpr';
 
   constructor(
-    public fallible: boolean,
     public params: List<Param>,
+    public fallible: boolean,
     public returnTy: TypeExpr | null,
     public body: Block
   ) {
@@ -938,9 +977,11 @@ export class NoneLit extends AstNode<'NoneLit'> {
 //#region Common
 export class Ident extends AstNode<'Ident'> {
   public $kind: 'Ident' = 'Ident';
+  public value: string;
 
-  constructor(public value: string) {
+  constructor(value: string) {
     super();
+    this.value = value;
   }
 
   public get isHashIdent(): boolean {
@@ -949,6 +990,10 @@ export class Ident extends AstNode<'Ident'> {
 
   public get isDollarIdent(): boolean {
     return this.value.startsWith('$');
+  }
+
+  public get isEscapedIdent(): boolean {
+    return this.value.startsWith('`') && this.value.endsWith('`');
   }
 }
 

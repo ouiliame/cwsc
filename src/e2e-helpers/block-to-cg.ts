@@ -32,14 +32,18 @@ export class CgBlockVisitor extends Ast.AstVisitor<any> {
     return node.stmts.map((x) => this.visit(x));
   }
 
-  visitLetStmt(node: Ast.LetStmt) {
-    if (node.binding.$kind === 'IdentBinding') {
-      const name = node.binding.name.value;
-      const value = this.visit(node.value);
-      cgLetMut(name, null, value);
-    }
+  visitLetIdentStmt(node: Ast.LetIdentStmt) {
+    const name = node.name.value;
+    const value = this.visit(node.value);
+    cgLetMut(name, null, value);
     // TODO: handle other kinds of bindings
     return this.defaultVisit(node);
+  }
+
+  visitLetTupleStmt(node: Ast.LetTupleStmt) {
+    const names = node.names.map((x) => x.value);
+    const value = this.visit(node.value);
+    return cgLetMut(`(${names.join(', ')})`, null, value);
   }
 
   visitCallExpr(node: Ast.CallExpr) {

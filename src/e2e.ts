@@ -76,9 +76,6 @@ async function main() {
   const { sourceFile, diagnostics } = ctx.sourceFiles[contractFile];
   // get contract
   let contract = sourceFile!.ast.descendantsOfType(Ast.ContractDefn)[0];
-  let cwsfmtVisitor = new CwsfmtVisitor();
-  let formatted = cwsfmtVisitor.visitContractDefn(contract);
-  console.log(formatted.toString());
 
   // make cg model
   let cg = contractAstToCg(contract);

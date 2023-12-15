@@ -11,6 +11,7 @@ cwspec: CWSPEC_LINE_COMMENT | CWSPEC_BLOCK_COMMENT;
 // STATEMENTS
 stmt:
 	importStmt
+	| exportStmt
 	| defn
 	| letStmt
 	| constStmt
@@ -28,23 +29,31 @@ stmt:
 	| exprStmt;
 
 importStmt:
-	IMPORT LBRACE (items = identList)? RBRACE FROM (
-		src = stringLit
-	) SEMI?;
+	IMPORT (bindings = braceBindingList) FROM (src = stringLit) SEMI?;
 
-letStmt: (spec = cwspec)? LET (binding = binding_) (
+exportStmt: EXPORT (fields = braceFieldList) SEMI?;
+
+binding: (name = ident) (AS (alias = ident))?;
+bindingList: (binding (COMMA binding)*);
+brackIdentList: LBRACK (ident (COMMA ident)*)? RBRACK;
+braceBindingList:
+	LBRACE (binding (COMMA binding)*)? COMMA? RBRACE;
+
+letStmt:
+	(spec = cwspec)? LET (name = ident) (COLON ty = typeExpr)? (
 		EQ value = expr
-	) SEMI?;
-
-binding_:
-	(name = ident) (COLON ty = typeExpr)?	# IdentBinding
-	| LBRACK (names = identList)? RBRACK	# TupleBinding
-	| LBRACE (names = identList)? RBRACE	# StructBinding;
+	) SEMI? # LetIdentStmt
+	| (spec = cwspec)? LET (names = brackIdentList) (
+		COLON ty = typeExpr
+	)? (EQ value = expr) SEMI? # LetTupleStmt
+	| (spec = cwspec)? LET (bindings = braceBindingList) (
+		COLON ty = typeExpr
+	)? (EQ value = expr) SEMI? # LetStructStmt;
 
 constStmt:
-	(spec = cwspec)? CONST (name = ident) (COLON ty = typeExpr)? (
-		EQ value = expr
-	) SEMI?;
+	(spec = cwspec)? (export = EXPORT)? CONST (name = ident) (
+		COLON ty = typeExpr
+	)? (EQ value = expr) SEMI?;
 
 assignStmt:
 	(name = ident) assignOp = (
@@ -83,7 +92,9 @@ returnStmt: returnExpr_ SEMI?;
 failStmt: failExpr_ SEMI?;
 
 forStmt:
-	FOR (binding = binding_) IN (iter = expr) body = block SEMI?;
+	FOR (name = ident) IN (iter = expr) body = block SEMI?					# ForIdentStmt
+	| FOR (names = brackIdentList) (iter = expr) body = block SEMI?			# ForTupleStmt
+	| FOR (bindings = braceBindingList) (iter = expr) body = block SEMI?	# ForStructStmt;
 
 execStmt: EXEC_NOW value = expr SEMI?;
 instantiateStmt: INSTANTIATE_NOW value = expr SEMI?;
@@ -108,20 +119,21 @@ defn:
 	| queryTupleDefn
 	| errorDefn
 	| eventDefn
-	| stateBlockDefn;
+	| stateBlockDefn
+	| implDefn;
 
 contractDefn:
-	(spec = cwspec)? CONTRACT (name = ident) (
+	(spec = cwspec)? (export = EXPORT)? CONTRACT (name = ident) (
 		EXTENDS (base = typeExpr)
 	)? (IMPLEMENTS (interfaces = typeExprList))? (body = block) SEMI?;
 
 interfaceDefn:
-	(spec = cwspec)? INTERFACE (name = ident) (
+	(spec = cwspec)? (export = EXPORT)? INTERFACE (name = ident) (
 		EXTENDS (baseInterfaces = typeExprList)
 	)? (body = block) SEMI?;
 
 structDefn:
-	(spec = cwspec)? STRUCT (name = ident) (
+	(spec = cwspec)? (export = EXPORT)? STRUCT (name = ident) (
 		typeParams = brackTypeParamList
 	)? (fields = braceParamList) SEMI? # StructDefnBrace
 	| (spec = cwspec)? STRUCT (name = ident) (
@@ -129,17 +141,17 @@ structDefn:
 	)? (fields = parenParamList) SEMI? # StructDefnParen;
 
 tupleDefn:
-	(spec = cwspec)? TUPLE (name = ident) (
+	(spec = cwspec)? (export = EXPORT)? TUPLE (name = ident) (
 		typeParams = brackTypeParamList
 	)? LPAREN (elements = brackTypeExprList) RPAREN SEMI?;
 
 unitDefn:
-	(spec = cwspec)? UNIT (typeParams = brackTypeParamList)? (
-		name = ident
-	) SEMI?;
+	(spec = cwspec)? (export = EXPORT)? UNIT (
+		typeParams = brackTypeParamList
+	)? (name = ident) SEMI?;
 
 enumDefn:
-	(spec = cwspec)? ENUM (name = ident) (
+	(spec = cwspec)? (export = EXPORT)? ENUM (name = ident) (
 		typeParams = brackTypeParamList
 	)? LBRACE (variants = enumVariantDefnList)? RBRACE SEMI?;
 
@@ -154,16 +166,16 @@ enumVariantDefn:
 	| (spec = cwspec)? (name = ident)	# EnumVariantUnitDefn;
 
 typeAliasDefn:
-	(spec = cwspec)? TYPE (name = ident) (
+	(spec = cwspec)? (export = EXPORT)? TYPE (name = ident) (
 		typeParams = brackTypeParamList
 	)? EQ (ty = typeExpr) SEMI?;
 
 fnDefn:
-	(spec = cwspec)? FN (name = ident) (fallible = BANG)? (
-		typeParams = brackTypeParamList
-	)? (params = parenParamList) (ARROW (returnTy = typeExpr))? (
-		body = block
-	) SEMI?;
+	(spec = cwspec)? (export = EXPORT)? FN (name = ident) (
+		fallible = BANG
+	)? (typeParams = brackTypeParamList)? (
+		params = parenParamList
+	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 instantiateDefn:
 	(spec = cwspec)? H_INSTANTIATE (fallible = BANG)? (
@@ -190,13 +202,13 @@ queryTupleDefn:
 		params = tupleParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
-errorDefn: (spec = cwspec)? ERROR (name = ident) (
-		params = parenParamList
-	) SEMI?;
+errorDefn: (spec = cwspec)? (export = EXPORT)? ERROR (
+		name = ident
+	) (params = parenParamList) SEMI?;
 
-eventDefn: (spec = cwspec)? EVENT (name = ident) (
-		params = parenParamList
-	) SEMI?;
+eventDefn: (spec = cwspec)? (export = EXPORT)? EVENT (
+		name = ident
+	) (params = parenParamList) SEMI?;
 
 stateBlockDefn:
 	STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;
@@ -212,6 +224,11 @@ stateMapDefn:
 		ty = typeExpr
 	) SEMI?;
 
+implDefn:
+	(spec = cwspec)? IMPL (name = ident) (
+		typeParams = brackTypeParamList
+	) (body = block) SEMI?;
+
 // Expression Statement
 exprStmt: expr (semi = SEMI)?;
 
@@ -225,9 +242,7 @@ expr:
 		(args += arg) (COMMA args += arg)*
 	)? RPAREN										# CallExpr
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
-	| expr AS (ty = typeExpr)						# AsExpr
 	| expr QUEST									# ExistsExpr
-	| BANG expr										# NotExpr
 	| NOT expr										# NotExpr
 	| expr (op = (MUL | DIV | MOD)) expr			# MulExpr
 	| expr (op = (PLUS | MINUS)) expr				# AddExpr
@@ -236,12 +251,13 @@ expr:
 	| expr D_QUEST expr								# ShortTryExpr
 	| expr (negative = NOT)? IN expr				# InExpr
 	| expr IS (negative = NOT)? (ty = typeExpr)		# IsExpr
-	| expr (op = (EQ_EQ | NEQ)) expr				# EqExpr
+	| expr (op = (D_EQ | NEQ)) expr					# EqExpr
 	| expr AND expr									# AndExpr
 	| expr OR expr									# OrExpr
 	| ifExpr_										# IfExpr
 	| tryCatchElseExpr_								# TryCatchElseExpr
-	| closureExpr_									# ClosureExpr
+	| blockClosureExpr								# ClosureExpr
+	| exprClosureExpr								# ClosureExpr
 	| structExpr_									# StructExpr
 	| tupleExpr_									# TupleExpr
 	| literal										# LiteralExpr
@@ -262,10 +278,23 @@ tryCatchElseExpr_:
 
 catchClause: CATCH (ty = typeExpr) (body = block);
 
-closureExpr_:
-	(fallible = BANG)? (params = barParamList) (
+/*
+ Unlike Rust, CWS closures have params outside braces.
+ 
+ Rust: { |x, y| -> Ty stmt* }
+ 
+ CWS (block style): |x, y|! -> Ty { stmt* }
+ 
+ CWS (expr style): |x: Ty, y?: Ty|! expr
+ */
+blockClosureExpr:
+	(params = barsParamList) (fallible = BANG)? (
 		ARROW (returnTy = typeExpr)
-	)? (body = blockOrExpr);
+	)? (body = block);
+
+// can't do return type
+exprClosureExpr:
+	(params = barsParamList) (fallible = BANG)? (body = exprStmt);
 
 structExpr_: (ty = typeExpr) (fields = braceFieldList);
 tupleExpr_:
@@ -301,13 +330,18 @@ typeExpr:
 	| typeVar										# TypeVarExpr
 	| ident											# IdentTypeExpr;
 
-typeVar: (spec = cwspec)? TypeVar;
+typeVar: (spec = cwspec)? PercentIdent;
 
 // END TYPE EXPRESSIONS
 
 // COMMON ELEMENTS
 
-ident: HashIdent | DollarIdent | Ident | reservedKeyword;
+ident:
+	HashIdent
+	| DollarIdent
+	| Ident
+	| EscapedIdent
+	| keywordIdent;
 param: (spec = cwspec)? (name = ident) (optional = QUEST)? (
 		COLON (ty = typeExpr)
 	)?;
@@ -317,10 +351,10 @@ arg: (expr | namedArg);
 
 identList: (ident (COMMA ident)*);
 parenParamList: LPAREN (param (COMMA param)*)? RPAREN;
+barsParamList: BAR (param (COMMA param)*)? BAR;
 tupleParamList:
 	LPAREN LBRACK (param (COMMA param)*)? RBRACK RPAREN;
 braceParamList: LBRACE (param (COMMA param)*)? COMMA? RBRACE;
-barParamList: BAR (param (COMMA param)*)? BAR;
 brackTypeParamList: LBRACK (typeVar (COMMA typeVar)*)? RBRACK;
 brackTypeExprList: LBRACK (typeExpr (COMMA typeExpr)*)? RBRACK;
 braceFieldList: LBRACE (field (COMMA field)*)? COMMA? RBRACE;
@@ -329,19 +363,22 @@ typeExprList: (typeExpr (COMMA typeExpr)*);
 block: LBRACE (stmts += stmt)* RBRACE;
 blockOrExpr: block | expr;
 
-reservedKeyword:
+// Keywords which may be used as identifiers
+keywordIdent:
 	CONTRACT
 	| INTERFACE
 	| IMPORT
+	| EXPORT
 	| IMPLEMENTS
+	| IMPL
 	| EXTENDS
 	| ERROR
 	| EVENT
 	| H_INSTANTIATE
 	| INSTANTIATE
 	| EXEC
-	| NONE
 	| QUERY
+	| NONE
 	| REPLY
 	| FOR
 	| IN
@@ -355,11 +392,11 @@ reservedKeyword:
 	| TRUE
 	| FALSE
 	| LET
+	| CONST
 	| STRUCT
 	| TUPLE
 	| UNIT
 	| ENUM
-	| TYPE
-	| EMIT;
+	| TYPE;
 
 // END COMMON ELEMENTS

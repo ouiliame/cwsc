@@ -1,11 +1,12 @@
 lexer grammar CWScriptLexer;
 
 // KEYWORDS
-DEBUG: 'debug!';
 CONTRACT: 'contract';
 INTERFACE: 'interface';
 IMPORT: 'import';
+EXPORT: 'export';
 IMPLEMENTS: 'implements';
+IMPL: 'impl';
 EXTENDS: 'extends';
 ERROR: 'error';
 EVENT: 'event';
@@ -30,7 +31,6 @@ CATCH: 'catch';
 ELSE: 'else';
 NOT: 'not';
 NONE: 'None';
-MUT: 'mut';
 AND: 'and';
 OR: 'or';
 TRUE: 'true';
@@ -45,17 +45,17 @@ TUPLE: 'tuple';
 UNIT: 'unit';
 ENUM: 'enum';
 TYPE: 'type';
-EMIT: 'emit';
+EMIT: 'emit!';
 AS: 'as';
 
 // PUNCTUATION
-TILDE: '~';
 LPAREN: '(';
 RPAREN: ')';
 LBRACK: '[';
 RBRACK: ']';
 LBRACE: '{';
 RBRACE: '}';
+BAR: '|';
 DOT: '.';
 COMMA: ',';
 D_QUEST: '??';
@@ -63,31 +63,31 @@ QUEST: '?';
 BANG: '!';
 SEMI: ';';
 COLON: ':';
-D_COLON: '::';
 AT: '@';
 AMP: '&';
 ARROW: '->';
 FAT_ARROW: '=>';
-BAR: '|';
 S_QUOTE: '\'';
 D_QUOTE: '"';
+F_DQUOTE: 'f"';
+BACKTICK: '`';
 EQ: '='; // OPS
-EQ_EQ: '==';
+D_EQ: '==';
 NEQ: '!=';
-PLUS: '+';
 PLUS_EQ: '+=';
-MINUS: '-';
+PLUS: '+';
 MINUS_EQ: '-=';
-MUL: '*';
+MINUS: '-';
 MUL_EQ: '*=';
-DIV: '/';
+MUL: '*';
 DIV_EQ: '/=';
-MOD: '%';
+DIV: '/';
 MOD_EQ: '%=';
-LT: '<';
+MOD: '%';
 LT_EQ: '<=';
-GT: '>';
+LT: '<';
 GT_EQ: '>=';
+GT: '>';
 POW: '**';
 
 // Bool
@@ -96,18 +96,22 @@ BoolLiteral: TRUE | FALSE;
 // Identifiers
 HashIdent: '#' [_a-zA-Z][_a-zA-Z0-9]*;
 DollarIdent: '$' [_a-zA-Z0-9]*;
+PercentIdent: '%' [_a-zA-Z][_a-zA-Z0-9]*;
+EscapedIdent: '`' [^`]+ '`';
 Ident: [_a-zA-Z][_a-zA-Z0-9]*;
 
-// TypeVar names
-TypeVar: '%' [_a-zA-Z][_a-zA-Z0-9]*;
-
 // Strings
-StringLiteral: D_QUOTE DoubleQuotedStringCharacter* D_QUOTE;
+StringLiteral: DoubleQuotedString | SingleQuotedString;
+DoubleQuotedString:
+	(D_QUOTE | F_DQUOTE) DoubleQuotedStringCharacter* D_QUOTE;
+SingleQuotedString:
+	S_QUOTE SingleQuotedStringCharacter* S_QUOTE;
 fragment DoubleQuotedStringCharacter: ~["\r\n\\] | ('\\' .);
+fragment SingleQuotedStringCharacter: ~['\r\n\\] | ('\\' .);
 
 // Numbers
+DecLiteral: (DecimalDigits DOT DecimalDigits);
 IntLiteral: DecimalDigits;
-DecLiteral: (DecimalDigits? DOT DecimalDigits);
 fragment DecimalDigits: [0-9] ( '_'? [0-9])*;
 
 // Comments

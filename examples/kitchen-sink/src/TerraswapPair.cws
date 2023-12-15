@@ -1,14 +1,14 @@
-struct Asset {
+export struct Asset {
   info: AssetInfo,
   amount: U128
 }
 
-enum AssetInfo {
+export enum AssetInfo {
   #Token(contract_addr: String),
   #NativeToken(denom: String)
 }
 
-contract TerraswapPair {
+export contract TerraswapPair {
   state {
     pair_info: struct PairInfo {
       asset_infos: [AssetInfo; 2],

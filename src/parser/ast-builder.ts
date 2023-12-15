@@ -60,20 +60,49 @@ export class AstBuilderVisitor
   }
 
   //#region Statements
-  visitImportStmt(ctx: P.ImportStmtContext): Ast.ImportStmt {
-    const items = ctx._items
-      ? this.visitIdentList(ctx._items)
-      : Ast.List.empty<Ast.Ident>().$(ctx);
-    const src = this.visitStringLit(ctx._src);
-    return new Ast.ImportStmt(items, src).$(ctx);
+  visitBinding(ctx: P.BindingContext): Ast.Binding {
+    const name = this.visitIdent(ctx._name);
+    const alias = ctx._alias ? this.visitIdent(ctx._alias) : null;
+    return new Ast.Binding(name, alias).$(ctx);
   }
 
-  visitLetStmt(ctx: P.LetStmtContext): Ast.LetStmt {
-    const binding = this.visit(
-      ctx._binding as P.Binding_Context
-    ) as Ast.Binding;
+  visitBraceBindingList(ctx: P.BraceBindingListContext): Ast.List<Ast.Binding> {
+    return new Ast.List(ctx.binding().map((b) => this.visitBinding(b))).$(ctx);
+  }
+
+  visitBrackIdentList(ctx: P.BrackIdentListContext): Ast.List<Ast.Ident> {
+    return new Ast.List(ctx.ident().map((i) => this.visitIdent(i))).$(ctx);
+  }
+
+  visitImportStmt(ctx: P.ImportStmtContext): Ast.ImportStmt {
+    const bindings = this.visitBraceBindingList(ctx._bindings);
+    const src = this.visitStringLit(ctx._src);
+    return new Ast.ImportStmt(bindings, src).$(ctx);
+  }
+  visitExportStmt(ctx: P.ExportStmtContext): Ast.ExportStmt {
+    const fields = this.visitBraceFieldList(ctx._fields);
+    return new Ast.ExportStmt(fields).$(ctx);
+  }
+
+  visitLetIdentStmt(ctx: P.LetIdentStmtContext): Ast.LetIdentStmt {
+    const name = this.visitIdent(ctx._name);
+    const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
     const value = this.expr(ctx._value);
-    return new Ast.LetStmt(binding, value).$(ctx);
+    return new Ast.LetIdentStmt(name, ty, value).$(ctx);
+  }
+
+  visitLetTupleStmt(ctx: P.LetTupleStmtContext): Ast.LetTupleStmt {
+    const names = this.visitBrackIdentList(ctx._names);
+    const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
+    const value = this.expr(ctx._value);
+    return new Ast.LetTupleStmt(names, ty, value).$(ctx);
+  }
+
+  visitLetStructStmt(ctx: P.LetStructStmtContext): Ast.LetStructStmt {
+    const bindings = this.visitBraceBindingList(ctx._bindings);
+    const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
+    const value = this.expr(ctx._value);
+    return new Ast.LetStructStmt(bindings, ty, value).$(ctx);
   }
 
   visitConstStmt(ctx: P.ConstStmtContext): Ast.ConstStmt {
@@ -133,11 +162,25 @@ export class AstBuilderVisitor
     return new Ast.FailStmt(failExpr.value).$(ctx);
   }
 
-  visitForStmt(ctx: P.ForStmtContext): Ast.ForStmt {
-    const binding = this.visit(ctx._binding) as Ast.Binding;
+  visitForIdentStmt(ctx: P.ForIdentStmtContext): Ast.ForIdentStmt {
+    const name = this.visitIdent(ctx._name);
     const iter = this.expr(ctx._iter);
     const body = this.visitBlock(ctx._body);
-    return new Ast.ForStmt(binding, iter, body).$(ctx);
+    return new Ast.ForIdentStmt(name, iter, body).$(ctx);
+  }
+
+  visitForTupleStmt(ctx: P.ForTupleStmtContext): Ast.ForTupleStmt {
+    const names = this.visitIdentList(ctx._names);
+    const iter = this.expr(ctx._iter);
+    const body = this.visitBlock(ctx._body);
+    return new Ast.ForTupleStmt(names, iter, body).$(ctx);
+  }
+
+  visitForStructStmt(ctx: P.ForStructStmtContext): Ast.ForStructStmt {
+    const bindings = this.visitBraceBindingList(ctx._bindings);
+    const iter = this.expr(ctx._iter);
+    const body = this.visitBlock(ctx._body);
+    return new Ast.ForStructStmt(bindings, iter, body).$(ctx);
   }
 
   visitExecStmt(ctx: P.ExecStmtContext): Ast.ExecStmt {
@@ -161,23 +204,6 @@ export class AstBuilderVisitor
     return new Ast.ExprStmt(expr, semi).$(ctx);
   }
   //#endregion Statements
-
-  visitIdentBinding(ctx: P.IdentBindingContext): Ast.IdentBinding {
-    return new Ast.IdentBinding(
-      this.visitIdent(ctx._name),
-      ctx._ty ? this.typeExpr(ctx._ty) : null
-    ).$(ctx);
-  }
-
-  visitTupleBinding(ctx: P.TupleBindingContext): Ast.TupleBinding {
-    const names = this.visitIdentList(ctx._names);
-    return new Ast.TupleBinding(names).$(ctx);
-  }
-
-  visitStructBinding(ctx: P.StructBindingContext): Ast.StructBinding {
-    const names = this.visitIdentList(ctx._names);
-    return new Ast.StructBinding(names).$(ctx);
-  }
 
   visitReturnExpr_(ctx: P.ReturnExpr_Context): Ast.ReturnExpr {
     const value = this.expr(ctx._value);
@@ -458,12 +484,6 @@ export class AstBuilderVisitor
     return new Ast.IndexExpr(obj, index).$(ctx);
   }
 
-  visitAsExpr(ctx: P.AsExprContext): Ast.AsExpr {
-    const obj = this.expr(ctx.expr());
-    const ty = this.typeExpr(ctx._ty);
-    return new Ast.AsExpr(obj, ty).$(ctx);
-  }
-
   visitExistsExpr(ctx: P.ExistsExprContext): Ast.ExistsExpr {
     const expr = this.expr(ctx.expr());
     return new Ast.ExistsExpr(expr).$(ctx);
@@ -534,16 +554,24 @@ export class AstBuilderVisitor
     return this.visitTryCatchElseExpr_(ctx.tryCatchElseExpr_()).$(ctx);
   }
 
-  visitClosureExpr(ctx: P.ClosureExprContext): Ast.ClosureExpr {
-    return this.visitClosureExpr_(ctx.closureExpr_()).$(ctx);
+  visitBlockClosureExpr(ctx: P.BlockClosureExprContext): Ast.ClosureExpr {
+    const params = this.visitBarsParamList(ctx._params);
+    const fallible = ctx._fallible ? true : false;
+    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
+    const body = this.visitBlock(ctx._body);
+    return new Ast.ClosureExpr(params, fallible, returnTy, body).$(ctx);
   }
 
-  visitClosureExpr_(ctx: P.ClosureExpr_Context): Ast.ClosureExpr {
+  visitExprClosureExpr(ctx: P.ExprClosureExprContext): Ast.ClosureExpr {
+    const params = this.visitBarsParamList(ctx._params);
     const fallible = ctx._fallible ? true : false;
-    const params = this.visitBarParamList(ctx._params);
-    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlockOrExpr(ctx._body);
-    return new Ast.ClosureExpr(fallible, params, returnTy, body).$(ctx);
+    const exprStmt = this.visitExprStmt(ctx._body);
+    return new Ast.ClosureExpr(
+      params,
+      fallible,
+      null,
+      new Ast.Block(new Ast.List([exprStmt]).$(ctx._body)).$(ctx._body)
+    ).$(ctx);
   }
 
   visitStructExpr(ctx: P.StructExprContext): Ast.StructExpr {
@@ -722,7 +750,7 @@ export class AstBuilderVisitor
     return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 
-  visitBarParamList(ctx: P.BarParamListContext): Ast.List<Ast.Param> {
+  visitBarsParamList(ctx: P.BarsParamListContext): Ast.List<Ast.Param> {
     return new Ast.List(ctx.param().map((p) => this.visitParam(p))).$(ctx);
   }
 

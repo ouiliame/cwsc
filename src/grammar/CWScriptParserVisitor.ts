@@ -3,8 +3,14 @@
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
+import { LetIdentStmtContext } from "./CWScriptParser";
+import { LetTupleStmtContext } from "./CWScriptParser";
+import { LetStructStmtContext } from "./CWScriptParser";
 import { StructDefnBraceContext } from "./CWScriptParser";
 import { StructDefnParenContext } from "./CWScriptParser";
+import { ForIdentStmtContext } from "./CWScriptParser";
+import { ForTupleStmtContext } from "./CWScriptParser";
+import { ForStructStmtContext } from "./CWScriptParser";
 import { EnumVariantStructDefnBraceContext } from "./CWScriptParser";
 import { EnumVariantStructDefnParenContext } from "./CWScriptParser";
 import { EnumVariantTupleDefnContext } from "./CWScriptParser";
@@ -12,7 +18,6 @@ import { EnumVariantUnitDefnContext } from "./CWScriptParser";
 import { DotExprContext } from "./CWScriptParser";
 import { CallExprContext } from "./CWScriptParser";
 import { IndexExprContext } from "./CWScriptParser";
-import { AsExprContext } from "./CWScriptParser";
 import { ExistsExprContext } from "./CWScriptParser";
 import { NotExprContext } from "./CWScriptParser";
 import { MulExprContext } from "./CWScriptParser";
@@ -47,15 +52,16 @@ import { EnumDefnTypeExprContext } from "./CWScriptParser";
 import { OptionTypeExprContext } from "./CWScriptParser";
 import { TypeVarExprContext } from "./CWScriptParser";
 import { IdentTypeExprContext } from "./CWScriptParser";
-import { IdentBindingContext } from "./CWScriptParser";
-import { TupleBindingContext } from "./CWScriptParser";
-import { StructBindingContext } from "./CWScriptParser";
 import { SourceFileContext } from "./CWScriptParser";
 import { CwspecContext } from "./CWScriptParser";
 import { StmtContext } from "./CWScriptParser";
 import { ImportStmtContext } from "./CWScriptParser";
+import { ExportStmtContext } from "./CWScriptParser";
+import { BindingContext } from "./CWScriptParser";
+import { BindingListContext } from "./CWScriptParser";
+import { BrackIdentListContext } from "./CWScriptParser";
+import { BraceBindingListContext } from "./CWScriptParser";
 import { LetStmtContext } from "./CWScriptParser";
-import { Binding_Context } from "./CWScriptParser";
 import { ConstStmtContext } from "./CWScriptParser";
 import { AssignStmtContext } from "./CWScriptParser";
 import { MemberAssignStmtContext } from "./CWScriptParser";
@@ -90,12 +96,14 @@ import { StateBlockDefnContext } from "./CWScriptParser";
 import { StateDefnContext } from "./CWScriptParser";
 import { StateItemDefnContext } from "./CWScriptParser";
 import { StateMapDefnContext } from "./CWScriptParser";
+import { ImplDefnContext } from "./CWScriptParser";
 import { ExprStmtContext } from "./CWScriptParser";
 import { ExprContext } from "./CWScriptParser";
 import { IfExpr_Context } from "./CWScriptParser";
 import { TryCatchElseExpr_Context } from "./CWScriptParser";
 import { CatchClauseContext } from "./CWScriptParser";
-import { ClosureExpr_Context } from "./CWScriptParser";
+import { BlockClosureExprContext } from "./CWScriptParser";
+import { ExprClosureExprContext } from "./CWScriptParser";
 import { StructExpr_Context } from "./CWScriptParser";
 import { TupleExpr_Context } from "./CWScriptParser";
 import { ReturnExpr_Context } from "./CWScriptParser";
@@ -115,16 +123,16 @@ import { NamedArgContext } from "./CWScriptParser";
 import { ArgContext } from "./CWScriptParser";
 import { IdentListContext } from "./CWScriptParser";
 import { ParenParamListContext } from "./CWScriptParser";
+import { BarsParamListContext } from "./CWScriptParser";
 import { TupleParamListContext } from "./CWScriptParser";
 import { BraceParamListContext } from "./CWScriptParser";
-import { BarParamListContext } from "./CWScriptParser";
 import { BrackTypeParamListContext } from "./CWScriptParser";
 import { BrackTypeExprListContext } from "./CWScriptParser";
 import { BraceFieldListContext } from "./CWScriptParser";
 import { TypeExprListContext } from "./CWScriptParser";
 import { BlockContext } from "./CWScriptParser";
 import { BlockOrExprContext } from "./CWScriptParser";
-import { ReservedKeywordContext } from "./CWScriptParser";
+import { KeywordIdentContext } from "./CWScriptParser";
 
 
 /**
@@ -135,6 +143,30 @@ import { ReservedKeywordContext } from "./CWScriptParser";
  * operations with no return type.
  */
 export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> {
+	/**
+	 * Visit a parse tree produced by the `LetIdentStmt`
+	 * labeled alternative in `CWScriptParser.letStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLetIdentStmt?: (ctx: LetIdentStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `LetTupleStmt`
+	 * labeled alternative in `CWScriptParser.letStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLetTupleStmt?: (ctx: LetTupleStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `LetStructStmt`
+	 * labeled alternative in `CWScriptParser.letStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLetStructStmt?: (ctx: LetStructStmtContext) => Result;
+
 	/**
 	 * Visit a parse tree produced by the `StructDefnBrace`
 	 * labeled alternative in `CWScriptParser.structDefn`.
@@ -150,6 +182,30 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitStructDefnParen?: (ctx: StructDefnParenContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ForIdentStmt`
+	 * labeled alternative in `CWScriptParser.forStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForIdentStmt?: (ctx: ForIdentStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ForTupleStmt`
+	 * labeled alternative in `CWScriptParser.forStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForTupleStmt?: (ctx: ForTupleStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ForStructStmt`
+	 * labeled alternative in `CWScriptParser.forStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForStructStmt?: (ctx: ForStructStmtContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `EnumVariantStructDefnBrace`
@@ -206,14 +262,6 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitIndexExpr?: (ctx: IndexExprContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `AsExpr`
-	 * labeled alternative in `CWScriptParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitAsExpr?: (ctx: AsExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `ExistsExpr`
@@ -488,30 +536,6 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitIdentTypeExpr?: (ctx: IdentTypeExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `IdentBinding`
-	 * labeled alternative in `CWScriptParser.binding_`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIdentBinding?: (ctx: IdentBindingContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `TupleBinding`
-	 * labeled alternative in `CWScriptParser.binding_`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTupleBinding?: (ctx: TupleBindingContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `StructBinding`
-	 * labeled alternative in `CWScriptParser.binding_`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStructBinding?: (ctx: StructBindingContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `CWScriptParser.sourceFile`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -540,18 +564,46 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitImportStmt?: (ctx: ImportStmtContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `CWScriptParser.exportStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExportStmt?: (ctx: ExportStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.binding`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBinding?: (ctx: BindingContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.bindingList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBindingList?: (ctx: BindingListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.brackIdentList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBrackIdentList?: (ctx: BrackIdentListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.braceBindingList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBraceBindingList?: (ctx: BraceBindingListContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `CWScriptParser.letStmt`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitLetStmt?: (ctx: LetStmtContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.binding_`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBinding_?: (ctx: Binding_Context) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.constStmt`.
@@ -792,6 +844,13 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitStateMapDefn?: (ctx: StateMapDefnContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `CWScriptParser.implDefn`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitImplDefn?: (ctx: ImplDefnContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `CWScriptParser.exprStmt`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -827,11 +886,18 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitCatchClause?: (ctx: CatchClauseContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.closureExpr_`.
+	 * Visit a parse tree produced by `CWScriptParser.blockClosureExpr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitClosureExpr_?: (ctx: ClosureExpr_Context) => Result;
+	visitBlockClosureExpr?: (ctx: BlockClosureExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.exprClosureExpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExprClosureExpr?: (ctx: ExprClosureExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.structExpr_`.
@@ -967,6 +1033,13 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitParenParamList?: (ctx: ParenParamListContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `CWScriptParser.barsParamList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBarsParamList?: (ctx: BarsParamListContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `CWScriptParser.tupleParamList`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -979,13 +1052,6 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitBraceParamList?: (ctx: BraceParamListContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `CWScriptParser.barParamList`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBarParamList?: (ctx: BarParamListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.brackTypeParamList`.
@@ -1030,10 +1096,10 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitBlockOrExpr?: (ctx: BlockOrExprContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.reservedKeyword`.
+	 * Visit a parse tree produced by `CWScriptParser.keywordIdent`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitReservedKeyword?: (ctx: ReservedKeywordContext) => Result;
+	visitKeywordIdent?: (ctx: KeywordIdentContext) => Result;
 }
 
