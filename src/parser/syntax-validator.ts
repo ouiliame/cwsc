@@ -106,7 +106,7 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
     return diagnostics;
   }
 
-  visitConstStmt(node: Ast.ConstStmt): Diagnostic[] {
+  visitConstIdentStmt(node: Ast.ConstIdentStmt): Diagnostic[] {
     const diagnostics = this.defaultVisit(node);
     if (!isCapitalSnake(node.name.value)) {
       diagnostics.push(

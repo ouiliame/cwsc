@@ -6,7 +6,7 @@ options {
 
 sourceFile: (stmts += stmt)* EOF;
 
-cwspec: CWSPEC_LINE_COMMENT | CWSPEC_BLOCK_COMMENT;
+docComment: (DOC_LINE_COMMENT | DOC_BLOCK_COMMENT);
 
 // STATEMENTS
 stmt:
@@ -40,20 +40,26 @@ braceBindingList:
 	LBRACE (binding (COMMA binding)*)? COMMA? RBRACE;
 
 letStmt:
-	(spec = cwspec)? LET (name = ident) (COLON ty = typeExpr)? (
+	(doc = docComment)? LET (name = ident) (COLON ty = typeExpr)? (
 		EQ value = expr
 	) SEMI? # LetIdentStmt
-	| (spec = cwspec)? LET (names = brackIdentList) (
+	| (doc = docComment)? LET (names = brackIdentList) (
 		COLON ty = typeExpr
 	)? (EQ value = expr) SEMI? # LetTupleStmt
-	| (spec = cwspec)? LET (bindings = braceBindingList) (
+	| (doc = docComment)? LET (bindings = braceBindingList) (
 		COLON ty = typeExpr
 	)? (EQ value = expr) SEMI? # LetStructStmt;
 
 constStmt:
-	(spec = cwspec)? (export = EXPORT)? CONST (name = ident) (
+	(doc = docComment)? (exported = EXPORT)? CONST (name = ident) (
 		COLON ty = typeExpr
-	)? (EQ value = expr) SEMI?;
+	)? (EQ value = expr) SEMI? # ConstIdentStmt
+	| (doc = docComment)? (exported = EXPORT)? CONST (
+		names = brackIdentList
+	) (COLON ty = typeExpr)? (EQ value = expr) SEMI? # ConstTupleStmt
+	| (doc = docComment)? (exported = EXPORT)? CONST (
+		bindings = braceBindingList
+	) (COLON ty = typeExpr)? (EQ value = expr) SEMI? # ConstStructStmt;
 
 assignStmt:
 	(name = ident) assignOp = (
@@ -123,109 +129,117 @@ defn:
 	| implDefn;
 
 contractDefn:
-	(spec = cwspec)? (export = EXPORT)? CONTRACT (name = ident) (
-		EXTENDS (base = typeExpr)
-	)? (IMPLEMENTS (interfaces = typeExprList))? (body = block) SEMI?;
-
-interfaceDefn:
-	(spec = cwspec)? (export = EXPORT)? INTERFACE (name = ident) (
-		EXTENDS (baseInterfaces = typeExprList)
+	(doc = docComment)? (exported = EXPORT)? CONTRACT (
+		name = ident
+	) (EXTENDS (base = typeExpr))? (
+		IMPLEMENTS (interfaces = typeExprList)
 	)? (body = block) SEMI?;
 
+interfaceDefn:
+	(doc = docComment)? (exported = EXPORT)? INTERFACE (
+		name = ident
+	) (EXTENDS (baseInterfaces = typeExprList))? (body = block) SEMI?;
+
 structDefn:
-	(spec = cwspec)? (export = EXPORT)? STRUCT (name = ident) (
-		typeParams = brackTypeParamList
-	)? (fields = braceParamList) SEMI? # StructDefnBrace
-	| (spec = cwspec)? STRUCT (name = ident) (
-		typeParams = brackTypeParamList
-	)? (fields = parenParamList) SEMI? # StructDefnParen;
+	(doc = docComment)? (exported = EXPORT)? STRUCT (
+		name = ident
+	) (typeParams = brackTypeParamList)? (
+		fields = braceParamList
+	) SEMI? # StructDefnBrace
+	| (doc = docComment)? (exported = EXPORT)? STRUCT (
+		name = ident
+	) (typeParams = brackTypeParamList)? (
+		fields = parenParamList
+	) SEMI? # StructDefnParen;
 
 tupleDefn:
-	(spec = cwspec)? (export = EXPORT)? TUPLE (name = ident) (
+	(doc = docComment)? (exported = EXPORT)? TUPLE (name = ident) (
 		typeParams = brackTypeParamList
 	)? LPAREN (elements = brackTypeExprList) RPAREN SEMI?;
 
 unitDefn:
-	(spec = cwspec)? (export = EXPORT)? UNIT (
+	(doc = docComment)? (exported = EXPORT)? UNIT (
 		typeParams = brackTypeParamList
 	)? (name = ident) SEMI?;
 
 enumDefn:
-	(spec = cwspec)? (export = EXPORT)? ENUM (name = ident) (
+	(doc = docComment)? (exported = EXPORT)? ENUM (name = ident) (
 		typeParams = brackTypeParamList
 	)? LBRACE (variants = enumVariantDefnList)? RBRACE SEMI?;
 
 enumVariantDefnList: (enumVariantDefn (COMMA enumVariantDefn)*);
 
 enumVariantDefn:
-	(spec = cwspec)? (name = ident) (fields = braceParamList)	# EnumVariantStructDefnBrace
-	| (spec = cwspec)? (name = ident) (fields = parenParamList)	# EnumVariantStructDefnParen
-	| (spec = cwspec)? (name = ident) LPAREN (
+	(doc = docComment)? (name = ident) (fields = braceParamList) # EnumVariantStructDefnBrace
+	| (doc = docComment)? (name = ident) (
+		fields = parenParamList
+	) # EnumVariantStructDefnParen
+	| (doc = docComment)? (name = ident) LPAREN (
 		elements = brackTypeExprList
-	) RPAREN							# EnumVariantTupleDefn
-	| (spec = cwspec)? (name = ident)	# EnumVariantUnitDefn;
+	) RPAREN								# EnumVariantTupleDefn
+	| (doc = docComment)? (name = ident)	# EnumVariantUnitDefn;
 
 typeAliasDefn:
-	(spec = cwspec)? (export = EXPORT)? TYPE (name = ident) (
+	(doc = docComment)? (exported = EXPORT)? TYPE (name = ident) (
 		typeParams = brackTypeParamList
 	)? EQ (ty = typeExpr) SEMI?;
 
 fnDefn:
-	(spec = cwspec)? (export = EXPORT)? FN (name = ident) (
+	(doc = docComment)? (exported = EXPORT)? FN (name = ident) (
 		fallible = BANG
 	)? (typeParams = brackTypeParamList)? (
 		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 instantiateDefn:
-	(spec = cwspec)? H_INSTANTIATE (fallible = BANG)? (
+	(doc = docComment)? H_INSTANTIATE (fallible = BANG)? (
 		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 execDefn:
-	(spec = cwspec)? EXEC (name = ident) (fallible = BANG)? (
+	(doc = docComment)? EXEC (name = ident) (fallible = BANG)? (
 		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 execTupleDefn:
-	(spec = cwspec)? EXEC (name = ident) (fallible = BANG)? (
+	(doc = docComment)? EXEC (name = ident) (fallible = BANG)? (
 		params = tupleParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 queryDefn:
-	(spec = cwspec)? QUERY (name = ident) (fallible = BANG)? (
+	(doc = docComment)? QUERY (name = ident) (fallible = BANG)? (
 		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 queryTupleDefn:
-	(spec = cwspec)? QUERY (name = ident) (fallible = BANG)? (
+	(doc = docComment)? QUERY (name = ident) (fallible = BANG)? (
 		params = tupleParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
-errorDefn: (spec = cwspec)? (export = EXPORT)? ERROR (
+errorDefn: (doc = docComment)? (exported = EXPORT)? ERROR (
 		name = ident
 	) (params = parenParamList) SEMI?;
 
-eventDefn: (spec = cwspec)? (export = EXPORT)? EVENT (
+eventDefn: (doc = docComment)? (exported = EXPORT)? EVENT (
 		name = ident
 	) (params = parenParamList) SEMI?;
 
 stateBlockDefn:
-	STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;
+	(doc = docComment)? STATE LBRACE (stateFields += stateDefn)* RBRACE SEMI?;
 
 stateDefn: stateItemDefn | stateMapDefn;
 
-stateItemDefn: (spec = cwspec)? (name = ident) COLON (
+stateItemDefn: (doc = docComment)? (name = ident) COLON (
 		ty = typeExpr
 	) SEMI?;
 
 stateMapDefn:
-	(spec = cwspec)? (name = ident) LBRACK (indexTy = typeExpr) RBRACK COLON (
-		ty = typeExpr
-	) SEMI?;
+	(doc = docComment)? (name = ident) LBRACK (
+		indexTy = typeExpr
+	) RBRACK COLON (ty = typeExpr) SEMI?;
 
 implDefn:
-	(spec = cwspec)? IMPL (name = ident) (
+	(doc = docComment)? IMPL (name = ident) (
 		typeParams = brackTypeParamList
 	) (body = block) SEMI?;
 
@@ -330,7 +344,7 @@ typeExpr:
 	| typeVar										# TypeVarExpr
 	| ident											# IdentTypeExpr;
 
-typeVar: (spec = cwspec)? PercentIdent;
+typeVar: (doc = docComment)? PercentIdent;
 
 // END TYPE EXPRESSIONS
 
@@ -342,7 +356,7 @@ ident:
 	| Ident
 	| EscapedIdent
 	| keywordIdent;
-param: (spec = cwspec)? (name = ident) (optional = QUEST)? (
+param: (doc = docComment)? (name = ident) (optional = QUEST)? (
 		COLON (ty = typeExpr)
 	)?;
 field: (name = ident) (COLON (value = expr))?;

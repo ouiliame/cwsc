@@ -30,7 +30,7 @@ public class CWScriptLexer extends Lexer {
 		MOD=81, LT_EQ=82, LT=83, GT_EQ=84, GT=85, POW=86, BoolLiteral=87, HashIdent=88, 
 		DollarIdent=89, PercentIdent=90, EscapedIdent=91, Ident=92, StringLiteral=93, 
 		DoubleQuotedString=94, SingleQuotedString=95, DecLiteral=96, IntLiteral=97, 
-		CWSPEC_LINE_COMMENT=98, CWSPEC_BLOCK_COMMENT=99, LINE_COMMENT=100, BLOCK_COMMENT=101, 
+		DOC_LINE_COMMENT=98, DOC_BLOCK_COMMENT=99, LINE_COMMENT=100, BLOCK_COMMENT=101, 
 		WS=102;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -56,7 +56,7 @@ public class CWScriptLexer extends Lexer {
 			"DollarIdent", "PercentIdent", "EscapedIdent", "Ident", "StringLiteral", 
 			"DoubleQuotedString", "SingleQuotedString", "DoubleQuotedStringCharacter", 
 			"SingleQuotedStringCharacter", "DecLiteral", "IntLiteral", "DecimalDigits", 
-			"CWSPEC_LINE_COMMENT", "CWSPEC_BLOCK_COMMENT", "LINE_COMMENT", "BLOCK_COMMENT", 
+			"DOC_LINE_COMMENT", "DOC_BLOCK_COMMENT", "LINE_COMMENT", "BLOCK_COMMENT", 
 			"WS"
 		};
 	}
@@ -94,7 +94,7 @@ public class CWScriptLexer extends Lexer {
 			"DIV_EQ", "DIV", "MOD_EQ", "MOD", "LT_EQ", "LT", "GT_EQ", "GT", "POW", 
 			"BoolLiteral", "HashIdent", "DollarIdent", "PercentIdent", "EscapedIdent", 
 			"Ident", "StringLiteral", "DoubleQuotedString", "SingleQuotedString", 
-			"DecLiteral", "IntLiteral", "CWSPEC_LINE_COMMENT", "CWSPEC_BLOCK_COMMENT", 
+			"DecLiteral", "IntLiteral", "DOC_LINE_COMMENT", "DOC_BLOCK_COMMENT", 
 			"LINE_COMMENT", "BLOCK_COMMENT", "WS"
 		};
 	}

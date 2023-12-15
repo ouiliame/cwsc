@@ -115,8 +115,8 @@ IntLiteral: DecimalDigits;
 fragment DecimalDigits: [0-9] ( '_'? [0-9])*;
 
 // Comments
-CWSPEC_LINE_COMMENT: ('///' .*? [\r\n])+;
-CWSPEC_BLOCK_COMMENT: '/**' .*? '*/';
+DOC_LINE_COMMENT: ('///' .*? [\r\n])+;
+DOC_BLOCK_COMMENT: '/**' .*? '*/';
 
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN);
 BLOCK_COMMENT: '/*' .*? '*/' -> channel(HIDDEN);

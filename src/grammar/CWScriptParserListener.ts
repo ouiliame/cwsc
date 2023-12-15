@@ -3,6 +3,9 @@
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
+import { ConstIdentStmtContext } from "./CWScriptParser";
+import { ConstTupleStmtContext } from "./CWScriptParser";
+import { ConstStructStmtContext } from "./CWScriptParser";
 import { LetIdentStmtContext } from "./CWScriptParser";
 import { LetTupleStmtContext } from "./CWScriptParser";
 import { LetStructStmtContext } from "./CWScriptParser";
@@ -53,7 +56,7 @@ import { OptionTypeExprContext } from "./CWScriptParser";
 import { TypeVarExprContext } from "./CWScriptParser";
 import { IdentTypeExprContext } from "./CWScriptParser";
 import { SourceFileContext } from "./CWScriptParser";
-import { CwspecContext } from "./CWScriptParser";
+import { DocCommentContext } from "./CWScriptParser";
 import { StmtContext } from "./CWScriptParser";
 import { ImportStmtContext } from "./CWScriptParser";
 import { ExportStmtContext } from "./CWScriptParser";
@@ -140,6 +143,45 @@ import { KeywordIdentContext } from "./CWScriptParser";
  * `CWScriptParser`.
  */
 export interface CWScriptParserListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by the `ConstIdentStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 */
+	enterConstIdentStmt?: (ctx: ConstIdentStmtContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ConstIdentStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 */
+	exitConstIdentStmt?: (ctx: ConstIdentStmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `ConstTupleStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 */
+	enterConstTupleStmt?: (ctx: ConstTupleStmtContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ConstTupleStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 */
+	exitConstTupleStmt?: (ctx: ConstTupleStmtContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `ConstStructStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 */
+	enterConstStructStmt?: (ctx: ConstStructStmtContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ConstStructStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 */
+	exitConstStructStmt?: (ctx: ConstStructStmtContext) => void;
+
 	/**
 	 * Enter a parse tree produced by the `LetIdentStmt`
 	 * labeled alternative in `CWScriptParser.letStmt`.
@@ -789,15 +831,15 @@ export interface CWScriptParserListener extends ParseTreeListener {
 	exitSourceFile?: (ctx: SourceFileContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `CWScriptParser.cwspec`.
+	 * Enter a parse tree produced by `CWScriptParser.docComment`.
 	 * @param ctx the parse tree
 	 */
-	enterCwspec?: (ctx: CwspecContext) => void;
+	enterDocComment?: (ctx: DocCommentContext) => void;
 	/**
-	 * Exit a parse tree produced by `CWScriptParser.cwspec`.
+	 * Exit a parse tree produced by `CWScriptParser.docComment`.
 	 * @param ctx the parse tree
 	 */
-	exitCwspec?: (ctx: CwspecContext) => void;
+	exitDocComment?: (ctx: DocCommentContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CWScriptParser.stmt`.

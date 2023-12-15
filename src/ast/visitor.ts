@@ -122,7 +122,7 @@ export abstract class AstValidatorVisitor extends AstVisitor<Diagnostic[]> {
   }
 
   rangeOfNode(node: AstNode): Range {
-    if (!node.$ctx) {
+    if (!node.$antlrParseRuleCtx) {
       throw new Error('Cannot get range for node without context');
     }
     return this.sourceText.rangeOfNode(node)!;

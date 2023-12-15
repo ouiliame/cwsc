@@ -31,8 +31,13 @@ export class AstBuilderVisitor
     return Ast.EMPTY;
   }
 
-  visitSourceFile(ctx: P.SourceFileContext): Ast.List<Ast.Stmt> {
-    return new Ast.List<Ast.Stmt>(ctx._stmts.map((s) => this.stmt(s))).$(ctx);
+  visitSourceFile(ctx: P.SourceFileContext): Ast.SourceFile {
+    const stmts = new Ast.List(ctx._stmts.map((s) => this.stmt(s))).$(ctx);
+    return new Ast.SourceFile(stmts).$(ctx);
+  }
+
+  visitDocComment(ctx: P.DocCommentContext): Ast.DocComment {
+    return new Ast.DocComment(ctx.text!).$(ctx);
   }
 
   expr<T extends ParserRuleContext>(ctx: T): Ast.Expr {
@@ -105,11 +110,31 @@ export class AstBuilderVisitor
     return new Ast.LetStructStmt(bindings, ty, value).$(ctx);
   }
 
-  visitConstStmt(ctx: P.ConstStmtContext): Ast.ConstStmt {
+  visitConstIdentStmt(ctx: P.ConstIdentStmtContext): Ast.ConstIdentStmt {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
     const value = this.visit(ctx._value) as Ast.Expr;
-    return new Ast.ConstStmt(name, ty, value).$(ctx);
+    return new Ast.ConstIdentStmt(doc, exported, name, ty, value).$(ctx);
+  }
+
+  visitConstTupleStmt(ctx: P.ConstTupleStmtContext): Ast.ConstTupleStmt {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
+    const names = this.visitBrackIdentList(ctx._names);
+    const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
+    const value = this.visit(ctx._value) as Ast.Expr;
+    return new Ast.ConstTupleStmt(doc, exported, names, ty, value).$(ctx);
+  }
+
+  visitConstStructStmt(ctx: P.ConstStructStmtContext): Ast.ConstStructStmt {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
+    const bindings = this.visitBraceBindingList(ctx._bindings);
+    const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
+    const value = this.visit(ctx._value) as Ast.Expr;
+    return new Ast.ConstStructStmt(doc, exported, bindings, ty, value).$(ctx);
   }
 
   visitAssignStmt(ctx: P.AssignStmtContext): Ast.AssignStmt {
@@ -245,60 +270,76 @@ export class AstBuilderVisitor
 
   //#region Definitions
   visitContractDefn(ctx: P.ContractDefnContext): Ast.ContractDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const base = ctx._base ? this.typeExpr(ctx._base) : null;
     const interfaces = ctx._interfaces
       ? this.visitTypeExprList(ctx._interfaces)
       : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     const body = this.visitBlock(ctx._body);
-    return new Ast.ContractDefn(name, base, interfaces, body).$(ctx);
+    return new Ast.ContractDefn(doc, exported, name, base, interfaces, body).$(
+      ctx
+    );
   }
 
   visitInterfaceDefn(ctx: P.InterfaceDefnContext): Ast.InterfaceDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const extend = ctx._baseInterfaces
       ? this.visitTypeExprList(ctx._baseInterfaces)
       : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     const body = this.visitBlock(ctx._body);
-    return new Ast.InterfaceDefn(name, extend, body).$(ctx);
+    return new Ast.InterfaceDefn(doc, exported, name, extend, body).$(ctx);
   }
 
   visitStructDefnBrace(ctx: P.StructDefnBraceContext): Ast.StructDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const fields = this.visitBraceParamList(ctx._fields);
-    return new Ast.StructDefn(name, typeParams, fields).$(ctx);
+    return new Ast.StructDefn(doc, exported, name, typeParams, fields).$(ctx);
   }
 
   visitStructDefnParen(ctx: P.StructDefnParenContext): Ast.StructDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const fields = this.visitParenParamList(ctx._fields);
-    return new Ast.StructDefn(name, typeParams, fields).$(ctx);
+    return new Ast.StructDefn(doc, exported, name, typeParams, fields).$(ctx);
   }
 
   visitTupleDefn(ctx: P.TupleDefnContext): Ast.TupleDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const elements = this.visitBrackTypeExprList(ctx._elements);
-    return new Ast.TupleDefn(name, typeParams, elements).$(ctx);
+    return new Ast.TupleDefn(doc, exported, name, typeParams, elements).$(ctx);
   }
 
   visitUnitDefn(ctx: P.UnitDefnContext): Ast.UnitDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
-    return new Ast.UnitDefn(name, typeParams).$(ctx);
+    return new Ast.UnitDefn(doc, exported, name, typeParams).$(ctx);
   }
 
   visitEnumDefn(ctx: P.EnumDefnContext): Ast.EnumDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
@@ -306,7 +347,7 @@ export class AstBuilderVisitor
     const variants = ctx._variants
       ? this.visitEnumVariantDefnList(ctx._variants)
       : Ast.List.empty<Ast.EnumVariantDefn>().$(ctx);
-    return new Ast.EnumDefn(name, typeParams, variants).$(ctx);
+    return new Ast.EnumDefn(doc, exported, name, typeParams, variants).$(ctx);
   }
 
   visitEnumVariantDefnList(
@@ -320,44 +361,52 @@ export class AstBuilderVisitor
   visitEnumVariantStructDefnBrace(
     ctx: P.EnumVariantStructDefnBraceContext
   ): Ast.EnumVariantStructDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const fields = this.visitBraceParamList(ctx._fields);
-    return new Ast.EnumVariantStructDefn(name, fields).$(ctx);
+    return new Ast.EnumVariantStructDefn(doc, name, fields).$(ctx);
   }
 
   visitEnumVariantStructDefnParen(
     ctx: P.EnumVariantStructDefnParenContext
   ): Ast.EnumVariantStructDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const fields = this.visitParenParamList(ctx._fields);
-    return new Ast.EnumVariantStructDefn(name, fields).$(ctx);
+    return new Ast.EnumVariantStructDefn(doc, name, fields).$(ctx);
   }
 
   visitEnumVariantTupleDefn(
     ctx: P.EnumVariantTupleDefnContext
   ): Ast.EnumVariantTupleDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const elements = this.visitBrackTypeExprList(ctx._elements);
-    return new Ast.EnumVariantTupleDefn(name, elements).$(ctx);
+    return new Ast.EnumVariantTupleDefn(doc, name, elements).$(ctx);
   }
 
   visitEnumVariantUnitDefn(
     ctx: P.EnumVariantUnitDefnContext
   ): Ast.EnumVariantUnitDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
-    return new Ast.EnumVariantUnitDefn(name).$(ctx);
+    return new Ast.EnumVariantUnitDefn(doc, name).$(ctx);
   }
 
   visitTypeAliasDefn(ctx: P.TypeAliasDefnContext): Ast.TypeAliasDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
     const ty = this.typeExpr(ctx._ty);
-    return new Ast.TypeAliasDefn(name, typeParams, ty).$(ctx);
+    return new Ast.TypeAliasDefn(doc, exported, name, typeParams, ty).$(ctx);
   }
 
   visitFnDefn(ctx: P.FnDefnContext): Ast.FnDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const typeParams = ctx._typeParams
@@ -366,78 +415,121 @@ export class AstBuilderVisitor
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.FnDefn(name, fallible, typeParams, params, returnTy, body).$(
-      ctx
-    );
+    return new Ast.FnDefn(
+      doc,
+      exported,
+      name,
+      fallible,
+      typeParams,
+      params,
+      returnTy,
+      body
+    ).$(ctx);
   }
 
   visitInstantiateDefn(ctx: P.InstantiateDefnContext): Ast.InstantiateDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const fallible = ctx._fallible ? true : false;
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.InstantiateDefn(fallible, params, returnTy, body).$(ctx);
+    return new Ast.InstantiateDefn(doc, fallible, params, returnTy, body).$(
+      ctx
+    );
   }
 
   visitExecDefn(ctx: P.ExecDefnContext): Ast.ExecDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.ExecDefn(name, fallible, false, params, returnTy, body).$(
-      ctx
-    );
+    return new Ast.ExecDefn(
+      doc,
+      name,
+      fallible,
+      false,
+      params,
+      returnTy,
+      body
+    ).$(ctx);
   }
 
   visitExecTupleDefn(ctx: P.ExecTupleDefnContext): Ast.ExecDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const params = this.visitTupleParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.ExecDefn(name, fallible, true, params, returnTy, body).$(
-      ctx
-    );
+    return new Ast.ExecDefn(
+      doc,
+      name,
+      fallible,
+      true,
+      params,
+      returnTy,
+      body
+    ).$(ctx);
   }
 
   visitQueryDefn(ctx: P.QueryDefnContext): Ast.QueryDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const params = this.visitParenParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.QueryDefn(name, fallible, false, params, returnTy, body).$(
-      ctx
-    );
+    return new Ast.QueryDefn(
+      doc,
+      name,
+      fallible,
+      false,
+      params,
+      returnTy,
+      body
+    ).$(ctx);
   }
 
   visitQueryTupleDefn(ctx: P.QueryTupleDefnContext): Ast.QueryDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const fallible = ctx._fallible ? true : false;
     const params = this.visitTupleParamList(ctx._params);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
     const body = this.visitBlock(ctx._body);
-    return new Ast.QueryDefn(name, fallible, true, params, returnTy, body).$(
-      ctx
-    );
+    return new Ast.QueryDefn(
+      doc,
+      name,
+      fallible,
+      true,
+      params,
+      returnTy,
+      body
+    ).$(ctx);
   }
 
   visitErrorDefn(ctx: P.ErrorDefnContext): Ast.ErrorDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const params = this.visitParenParamList(ctx._params);
-    return new Ast.ErrorDefn(name, params).$(ctx);
+    return new Ast.ErrorDefn(doc, exported, name, params).$(ctx);
   }
 
   visitEventDefn(ctx: P.EventDefnContext): Ast.EventDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const exported = ctx._exported ? true : false;
     const name = this.visitIdent(ctx._name);
     const params = this.visitParenParamList(ctx._params);
-    return new Ast.EventDefn(name, params).$(ctx);
+    return new Ast.EventDefn(doc, exported, name, params).$(ctx);
   }
 
   visitStateBlockDefn(ctx: P.StateBlockDefnContext): Ast.StateBlockDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const stateFields = ctx._stateFields.map((f) => this.visitStateDefn(f));
-    return new Ast.StateBlockDefn(new Ast.List(stateFields).$(ctx)).$(ctx);
+    return new Ast.StateBlockDefn(doc, new Ast.List(stateFields).$(ctx)).$(ctx);
   }
 
   visitStateDefn(
@@ -448,16 +540,18 @@ export class AstBuilderVisitor
   }
 
   visitStateItemDefn(ctx: P.StateItemDefnContext): Ast.StateItemDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const ty = this.typeExpr(ctx._ty);
-    return new Ast.StateItemDefn(name, ty).$(ctx);
+    return new Ast.StateItemDefn(doc, name, ty).$(ctx);
   }
 
   visitStateMapDefn(ctx: P.StateMapDefnContext): Ast.StateMapDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const name = this.visitIdent(ctx._name);
     const indexTy = this.typeExpr(ctx._indexTy);
     const ty = this.typeExpr(ctx._ty);
-    return new Ast.StateMapDefn(name, indexTy, ty).$(ctx);
+    return new Ast.StateMapDefn(doc, name, indexTy, ty).$(ctx);
   }
 
   //#endregion Definitions

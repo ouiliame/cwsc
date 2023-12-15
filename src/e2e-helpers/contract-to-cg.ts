@@ -27,7 +27,7 @@ import { blockToCg } from './block-to-cg';
 
 export const TYPE = (x?: any) => {
   if (x) {
-    return `String /* ${x.$ctx!.text} */`;
+    return `String /* ${x.$antlrParseRuleCtx!.text} */`;
   } else {
     return `String`;
   }

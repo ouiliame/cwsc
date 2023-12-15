@@ -1,4 +1,4 @@
-import { AstNode, AstJsonNode, AstJsonNodeList } from './abstract-node';
+import { AstNode } from './abstract-node';
 import type { TextView } from '../util/position';
 import { Doc } from 'prettier';
 import { LetIdentStmtContext } from 'src/grammar/CWScriptParser';
@@ -15,12 +15,6 @@ export class List<T extends AstNode> extends AstNode<'List'> {
 
   public get children(): T[] {
     return this.$children;
-  }
-
-  public json(): AstJsonNodeList {
-    return {
-      $list: this.$children.map((x) => x.json() as AstJsonNode),
-    };
   }
 
   protected setParentForChildren(): void {
@@ -67,7 +61,9 @@ export type Stmt =
   | LetIdentStmt
   | LetTupleStmt
   | LetStructStmt
-  | ConstStmt
+  | ConstIdentStmt
+  | ConstTupleStmt
+  | ConstStructStmt
   | AssignStmt
   | MemberAssignStmt
   | IndexAssignStmt
@@ -81,6 +77,22 @@ export type Stmt =
   | EmitStmt
   | FailStmt
   | ReturnStmt;
+
+export class SourceFile extends AstNode<'SourceFile'> {
+  public $kind: 'SourceFile' = 'SourceFile';
+
+  constructor(public stmts: List<Stmt>) {
+    super();
+  }
+}
+
+export class DocComment extends AstNode<'DocComment'> {
+  public $kind: 'DocComment' = 'DocComment';
+
+  constructor(public text: string) {
+    super();
+  }
+}
 
 export class ImportStmt extends AstNode<'ImportStmt'> {
   public $kind: 'ImportStmt' = 'ImportStmt';
@@ -141,10 +153,38 @@ export class LetStructStmt extends AstNode<'LetStructStmt'> {
   }
 }
 
-export class ConstStmt extends AstNode<'ConstStmt'> {
-  public $kind: 'ConstStmt' = 'ConstStmt';
+export class ConstIdentStmt extends AstNode<'ConstIdentStmt'> {
+  public $kind: 'ConstIdentStmt' = 'ConstIdentStmt';
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
+    public ty: TypeExpr | null,
+    public value: Expr
+  ) {
+    super();
+  }
+}
+
+export class ConstTupleStmt extends AstNode<'ConstIdentStmt'> {
+  public $kind: 'ConstIdentStmt' = 'ConstIdentStmt';
+  constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
+    public names: List<Ident>,
+    public ty: TypeExpr | null,
+    public value: Expr
+  ) {
+    super();
+  }
+}
+
+export class ConstStructStmt extends AstNode<'ConstIdentStmt'> {
+  public $kind: 'ConstIdentStmt' = 'ConstIdentStmt';
+  constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
+    public bindings: List<Binding>,
     public ty: TypeExpr | null,
     public value: Expr
   ) {
@@ -586,6 +626,8 @@ export class ContractDefn extends AstNode<'ContractDefn'> {
   public $kind: 'ContractDefn' = 'ContractDefn';
 
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public base: TypeExpr | null,
     public interfaces: List<TypeExpr>,
@@ -602,6 +644,8 @@ export class InterfaceDefn extends AstNode<'InterfaceDefn'> {
     return true;
   }
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public baseInterfaces: List<TypeExpr>,
     public body: Block
@@ -618,6 +662,8 @@ export class StructDefn extends AstNode<'StructDefn'> {
   }
 
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public typeParams: List<TypeVar>,
     public fields: List<Param>
@@ -633,6 +679,8 @@ export class TupleDefn extends AstNode<'TupleDefn'> {
     return true;
   }
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public typeParams: List<TypeVar>,
     public elements: List<TypeExpr>
@@ -647,7 +695,12 @@ export class UnitDefn extends AstNode<'UnitDefn'> {
   public isTypeExpr(): this is TypeExpr {
     return true;
   }
-  constructor(public name: Ident, public typeParams: List<TypeVar>) {
+  constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
+    public name: Ident,
+    public typeParams: List<TypeVar>
+  ) {
     super();
   }
 }
@@ -659,6 +712,8 @@ export class EnumDefn extends AstNode<'EnumDefn'> {
     return true;
   }
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public typeParams: List<TypeVar>,
     public variants: List<EnumVariantDefn>
@@ -676,21 +731,29 @@ export abstract class EnumVariantDefn<
 export class EnumVariantStructDefn extends EnumVariantDefn<'EnumVariantStructDefn'> {
   public $kind: 'EnumVariantStructDefn' = 'EnumVariantStructDefn';
 
-  constructor(public name: Ident, public fields: List<Param>) {
+  constructor(
+    public doc: DocComment | null,
+    public name: Ident,
+    public fields: List<Param>
+  ) {
     super();
   }
 }
 
 export class EnumVariantTupleDefn extends EnumVariantDefn<'EnumVariantTupleDefn'> {
   public $kind: 'EnumVariantTupleDefn' = 'EnumVariantTupleDefn';
-  constructor(public name: Ident, public elements: List<TypeExpr>) {
+  constructor(
+    public doc: DocComment | null,
+    public name: Ident,
+    public elements: List<TypeExpr>
+  ) {
     super();
   }
 }
 
 export class EnumVariantUnitDefn extends EnumVariantDefn<'EnumVariantUnitDefn'> {
   public $kind: 'EnumVariantUnitDefn' = 'EnumVariantUnitDefn';
-  constructor(public name: Ident) {
+  constructor(public doc: DocComment | null, public name: Ident) {
     super();
   }
 }
@@ -703,6 +766,8 @@ export class TypeAliasDefn extends AstNode<'TypeAliasDefn'> {
   }
 
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public typeParams: List<TypeVar>,
     public ty: TypeExpr
@@ -715,6 +780,8 @@ export class FnDefn extends AstNode<'FnDefn'> {
   public $kind: 'FnDefn' = 'FnDefn';
 
   constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
     public name: Ident,
     public fallible: boolean,
     public typeParams: List<TypeVar>,
@@ -730,6 +797,7 @@ export class InstantiateDefn extends AstNode<'InstantiateDefn'> {
   public $kind: 'InstantiateDefn' = 'InstantiateDefn';
 
   constructor(
+    public doc: DocComment | null,
     public fallible: boolean,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
@@ -743,6 +811,7 @@ export class ExecDefn extends AstNode<'ExecDefn'> {
   public $kind: 'ExecDefn' = 'ExecDefn';
 
   constructor(
+    public doc: DocComment | null,
     public name: Ident,
     public fallible: boolean,
     public isTuple: boolean,
@@ -758,6 +827,7 @@ export class QueryDefn extends AstNode<'QueryDefn'> {
   public $kind: 'QueryDefn' = 'QueryDefn';
 
   constructor(
+    public doc: DocComment | null,
     public name: Ident,
     public fallible: boolean,
     public isTuple: boolean,
@@ -771,14 +841,24 @@ export class QueryDefn extends AstNode<'QueryDefn'> {
 
 export class ErrorDefn extends AstNode<'ErrorDefn'> {
   public $kind: 'ErrorDefn' = 'ErrorDefn';
-  constructor(public name: Ident, public fields: List<Param>) {
+  constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
+    public name: Ident,
+    public fields: List<Param>
+  ) {
     super();
   }
 }
 
 export class EventDefn extends AstNode<'EventDefn'> {
   public $kind: 'EventDefn' = 'EventDefn';
-  constructor(public name: Ident, public fields: List<Param>) {
+  constructor(
+    public doc: DocComment | null,
+    public exported: boolean,
+    public name: Ident,
+    public fields: List<Param>
+  ) {
     super();
   }
 }
@@ -786,14 +866,21 @@ export class EventDefn extends AstNode<'EventDefn'> {
 export class StateBlockDefn extends AstNode<'StateBlockDefn'> {
   public $kind: 'StateBlockDefn' = 'StateBlockDefn';
 
-  constructor(public stateFields: List<StateItemDefn | StateMapDefn>) {
+  constructor(
+    public doc: DocComment | null,
+    public stateFields: List<StateItemDefn | StateMapDefn>
+  ) {
     super();
   }
 }
 
 export class StateItemDefn extends AstNode<'StateItemDefn'> {
   public $kind: 'StateItemDefn' = 'StateItemDefn';
-  constructor(public name: Ident, public ty: TypeExpr) {
+  constructor(
+    public doc: DocComment | null,
+    public name: Ident,
+    public ty: TypeExpr
+  ) {
     super();
   }
 }
@@ -801,6 +888,7 @@ export class StateItemDefn extends AstNode<'StateItemDefn'> {
 export class StateMapDefn extends AstNode<'StateMapDefn'> {
   public $kind: 'StateMapDefn' = 'StateMapDefn';
   constructor(
+    public doc: DocComment | null,
     public name: Ident,
     public indexTy: TypeExpr,
     public ty: TypeExpr
@@ -940,6 +1028,10 @@ export class StringLit extends AstNode<'StringLit'> {
 
   constructor(public value: string) {
     super();
+  }
+
+  public get isFormatString(): boolean {
+    return this.value.startsWith('f"') && this.value.endsWith('"');
   }
 }
 export class IntLit extends AstNode<'IntLit'> {

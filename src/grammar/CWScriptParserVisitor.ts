@@ -3,6 +3,9 @@
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
+import { ConstIdentStmtContext } from "./CWScriptParser";
+import { ConstTupleStmtContext } from "./CWScriptParser";
+import { ConstStructStmtContext } from "./CWScriptParser";
 import { LetIdentStmtContext } from "./CWScriptParser";
 import { LetTupleStmtContext } from "./CWScriptParser";
 import { LetStructStmtContext } from "./CWScriptParser";
@@ -53,7 +56,7 @@ import { OptionTypeExprContext } from "./CWScriptParser";
 import { TypeVarExprContext } from "./CWScriptParser";
 import { IdentTypeExprContext } from "./CWScriptParser";
 import { SourceFileContext } from "./CWScriptParser";
-import { CwspecContext } from "./CWScriptParser";
+import { DocCommentContext } from "./CWScriptParser";
 import { StmtContext } from "./CWScriptParser";
 import { ImportStmtContext } from "./CWScriptParser";
 import { ExportStmtContext } from "./CWScriptParser";
@@ -143,6 +146,30 @@ import { KeywordIdentContext } from "./CWScriptParser";
  * operations with no return type.
  */
 export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> {
+	/**
+	 * Visit a parse tree produced by the `ConstIdentStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConstIdentStmt?: (ctx: ConstIdentStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ConstTupleStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConstTupleStmt?: (ctx: ConstTupleStmtContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ConstStructStmt`
+	 * labeled alternative in `CWScriptParser.constStmt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConstStructStmt?: (ctx: ConstStructStmtContext) => Result;
+
 	/**
 	 * Visit a parse tree produced by the `LetIdentStmt`
 	 * labeled alternative in `CWScriptParser.letStmt`.
@@ -543,11 +570,11 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitSourceFile?: (ctx: SourceFileContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `CWScriptParser.cwspec`.
+	 * Visit a parse tree produced by `CWScriptParser.docComment`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitCwspec?: (ctx: CwspecContext) => Result;
+	visitDocComment?: (ctx: DocCommentContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.stmt`.

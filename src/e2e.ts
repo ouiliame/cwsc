@@ -1,6 +1,6 @@
 import * as Ast from './ast';
 import * as path from 'path';
-import { CWScriptParser } from './parser';
+import { CWScriptParser, CWScriptParseResult } from './parser';
 import { CWScriptProject } from './projects';
 import { Pipeline, PipelineStage } from './pipelines';
 import { readFile } from './util/filesystem';
@@ -14,7 +14,7 @@ export interface BuildContext {
   sourceFiles: {
     [k: string]: {
       text?: string;
-      sourceFile?: Ast.SourceFile;
+      parseResult?: CWScriptParseResult;
       diagnostics: Diagnostic[];
     };
   };
@@ -42,20 +42,18 @@ export class CWScriptCompiler {
     // read each file's contents and parse into Ast
     for (let file of sourceFiles) {
       const text = await readFile(file);
-      const { sourceFile, diagnostics } = CWScriptParser.parse(
-        text,
-        file.toString()
-      );
-      if (!sourceFile) {
+      const parseResult = CWScriptParser.parse(text, file.toString());
+      if (!parseResult.ast) {
         continue;
       }
+      const { diagnostics, ast } = parseResult;
 
       const staticAnalysisVisitor = new StaticAnalysisVisitor(text, file);
-      diagnostics.push(...staticAnalysisVisitor.visit(sourceFile.ast));
+      diagnostics.push(...staticAnalysisVisitor.visit(ast));
 
       ctx.sourceFiles[file] = {
         text,
-        sourceFile,
+        parseResult,
         diagnostics,
       };
     }
@@ -73,9 +71,9 @@ async function main() {
   const contractFile = path.resolve(
     'examples/kitchen-sink/src/TerraswapPair.cws'
   );
-  const { sourceFile, diagnostics } = ctx.sourceFiles[contractFile];
+  const { parseResult, diagnostics } = ctx.sourceFiles[contractFile];
   // get contract
-  let contract = sourceFile!.ast.descendantsOfType(Ast.ContractDefn)[0];
+  let contract = parseResult!.ast.descendantsOfType(Ast.ContractDefn)[0];
 
   // make cg model
   let cg = contractAstToCg(contract);

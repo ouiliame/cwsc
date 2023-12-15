@@ -59,8 +59,8 @@ export default function stateReducer(state: AppState, action: AppAction) {
       console.log('parse', action);
       // get text
       const parser = new CWScriptParser(state.sourceText, 'playground.cws');
-      const { sourceFile, diagnostics } = parser.parse();
-      return { ...state, astJson: sourceFile?.ast.json() };
+      const res = parser.parse();
+      return { ...state, astJson: res.astToJson() };
     default:
       return state;
   }

@@ -113,8 +113,8 @@ export class CWScriptLexer extends Lexer {
 	public static readonly SingleQuotedString = 95;
 	public static readonly DecLiteral = 96;
 	public static readonly IntLiteral = 97;
-	public static readonly CWSPEC_LINE_COMMENT = 98;
-	public static readonly CWSPEC_BLOCK_COMMENT = 99;
+	public static readonly DOC_LINE_COMMENT = 98;
+	public static readonly DOC_BLOCK_COMMENT = 99;
 	public static readonly LINE_COMMENT = 100;
 	public static readonly BLOCK_COMMENT = 101;
 	public static readonly WS = 102;
@@ -143,7 +143,7 @@ export class CWScriptLexer extends Lexer {
 		"LT_EQ", "LT", "GT_EQ", "GT", "POW", "BoolLiteral", "HashIdent", "DollarIdent", 
 		"PercentIdent", "EscapedIdent", "Ident", "StringLiteral", "DoubleQuotedString", 
 		"SingleQuotedString", "DoubleQuotedStringCharacter", "SingleQuotedStringCharacter", 
-		"DecLiteral", "IntLiteral", "DecimalDigits", "CWSPEC_LINE_COMMENT", "CWSPEC_BLOCK_COMMENT", 
+		"DecLiteral", "IntLiteral", "DecimalDigits", "DOC_LINE_COMMENT", "DOC_BLOCK_COMMENT", 
 		"LINE_COMMENT", "BLOCK_COMMENT", "WS",
 	];
 
@@ -174,7 +174,7 @@ export class CWScriptLexer extends Lexer {
 		"DIV", "MOD_EQ", "MOD", "LT_EQ", "LT", "GT_EQ", "GT", "POW", "BoolLiteral", 
 		"HashIdent", "DollarIdent", "PercentIdent", "EscapedIdent", "Ident", "StringLiteral", 
 		"DoubleQuotedString", "SingleQuotedString", "DecLiteral", "IntLiteral", 
-		"CWSPEC_LINE_COMMENT", "CWSPEC_BLOCK_COMMENT", "LINE_COMMENT", "BLOCK_COMMENT", 
+		"DOC_LINE_COMMENT", "DOC_BLOCK_COMMENT", "LINE_COMMENT", "BLOCK_COMMENT", 
 		"WS",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(CWScriptLexer._LITERAL_NAMES, CWScriptLexer._SYMBOLIC_NAMES, []);

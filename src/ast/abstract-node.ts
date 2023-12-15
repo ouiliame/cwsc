@@ -1,23 +1,15 @@
 import { ParserRuleContext } from 'antlr4ts';
 import type { Range } from 'vscode-languageserver';
-import { SourceFile } from './source-file';
 import { TextIndices } from '../util/position';
 
-export type AstJson = AstJsonNode | AstJsonNodeList;
-export interface AstJsonNode {
+export type AstJson = {
   $kind: string;
   $range?: Range;
   $indices?: TextIndices;
   $fields: {
     [key: string]: AstJson | string | number | boolean | null;
   };
-}
-
-export interface AstJsonNodeList {
-  $list: AstJsonNode[];
-  $indices?: TextIndices;
-  $range?: Range;
-}
+};
 
 function getIndices(ctx: ParserRuleContext): TextIndices {
   let start = ctx.start.startIndex;
@@ -33,21 +25,13 @@ function getIndices(ctx: ParserRuleContext): TextIndices {
 export abstract class AstNode<K extends string = string> {
   abstract readonly $kind: K;
 
-  public $ctx: ParserRuleContext | null = null;
-  public $sourceFile: SourceFile | null = null;
+  public $antlrParseRuleCtx: ParserRuleContext | null = null;
 
   public get $indices(): TextIndices | null {
-    if (!this.$ctx) {
+    if (!this.$antlrParseRuleCtx) {
       return null;
     }
-    return getIndices(this.$ctx);
-  }
-
-  public get $range(): Range | null {
-    if (!this.$ctx) {
-      return null;
-    }
-    return this.$sourceFile?.rangeOfNode(this) ?? null;
+    return getIndices(this.$antlrParseRuleCtx);
   }
 
   constructor(public $parent: AstNode | null = null) {}
@@ -61,7 +45,7 @@ export abstract class AstNode<K extends string = string> {
   }
 
   public $(ctx: ParserRuleContext): this {
-    this.$ctx = ctx;
+    this.$antlrParseRuleCtx = ctx;
     this.setParentForChildren();
     return this;
   }
@@ -70,7 +54,9 @@ export abstract class AstNode<K extends string = string> {
     return Object.entries(this)
       .filter(
         ([key, value]) =>
-          AstNode.isNode(value) && key !== '$parent' && key !== '$ctx'
+          AstNode.isNode(value) &&
+          key !== '$parent' &&
+          key !== '$antlrParseRuleCtx'
       )
       .map(([_, value]) => value);
   }
@@ -103,8 +89,8 @@ export abstract class AstNode<K extends string = string> {
 
   public get nearestNodeCtx(): ParserRuleContext {
     for (const ancestor of this.ancestorsAndSelf) {
-      if (ancestor.$ctx !== null) {
-        return ancestor.$ctx;
+      if (ancestor.$antlrParseRuleCtx !== null) {
+        return ancestor.$antlrParseRuleCtx;
       }
     }
     // not possible
@@ -181,39 +167,7 @@ export abstract class AstNode<K extends string = string> {
    * @returns {boolean}
    */
   public isVirtual(): boolean {
-    return this.$ctx === null;
-  }
-
-  public json(): AstJson {
-    let res: AstJson = { $kind: this.$kind, $fields: {} };
-    for (const key of Object.keys(this)) {
-      //@ts-ignore
-      if (
-        key === '$parent' ||
-        key === '$ctx' ||
-        key === '$kind' ||
-        key === '$sourceFile'
-      ) {
-        continue;
-      }
-
-      // @ts-ignore
-      if (AstNode.isNode(this[key])) {
-        // @ts-ignore
-        res.$fields[key] = this[key].json();
-      } else {
-        // @ts-ignore
-        res.$fields[key] = this[key];
-      }
-    }
-    let { $range, $indices } = this;
-    if ($range !== null) {
-      res.$range = $range;
-    }
-    if ($indices !== null) {
-      res.$indices = $indices;
-    }
-    return res;
+    return this.$antlrParseRuleCtx === null;
   }
 
   protected setParentForChildren(): void {
