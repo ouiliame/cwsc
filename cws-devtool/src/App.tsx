@@ -1,13 +1,9 @@
 import React, { useContext, useReducer } from 'react';
-
-import { CWScriptParser, Ast } from 'cwsc';
-import { TreeItem } from '@mui/x-tree-view/TreeItem';
-import { TreeView } from '@mui/x-tree-view/TreeView';
 import './App.css';
 import { AppContext } from './AppContext';
 import CWScriptEditor from './components/CWScriptEditor';
-import AstViz from './components/AstViz';
 import stateReducer, { initialState } from './stateReducer';
+import Inspector from './components/Inspector';
 
 function App() {
   const [state, dispatch] = useReducer(stateReducer, initialState());
@@ -19,12 +15,7 @@ function App() {
           <div id="editor">
             <CWScriptEditor />
           </div>
-          <div id="inspector">
-            <button onClick={() => dispatch({ type: 'parse' })}>
-              Parse AST
-            </button>
-            <AstViz />
-          </div>
+          <Inspector />
         </div>
         <div id="diagnostics">
           <table>

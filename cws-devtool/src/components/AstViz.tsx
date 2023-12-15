@@ -6,6 +6,40 @@ import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import type { Ast } from 'cwsc';
 import { AppContext } from '../AppContext';
+import {
+  EditorSelection,
+  EditorState,
+  useCodeMirror,
+} from '@uiw/react-codemirror';
+
+export type AstVizItemProps = React.PropsWithChildren<{
+  nodeId: string;
+  label: string | undefined;
+  indices?: {
+    start: number;
+    end: number;
+  };
+}>;
+function AstVizItem(props: AstVizItemProps) {
+  const { state, dispatch } = useContext(AppContext);
+  const { nodeId, label, children, indices } = props;
+  return (
+    <TreeItem
+      nodeId={nodeId}
+      label={label}
+      onMouseEnter={() => {
+        if (indices) {
+          dispatch({
+            type: 'setSelection',
+            selection: indices,
+          });
+        }
+      }}
+    >
+      {children}
+    </TreeItem>
+  );
+}
 
 function nodeToTreeItem(
   id: string,
@@ -21,7 +55,7 @@ function nodeToTreeItem(
     node === null
   ) {
     label += node?.toString() ?? 'null';
-    return <TreeItem nodeId={id} label={label} />;
+    return <AstVizItem nodeId={id + 1} label={label} />;
   }
 
   if ('$list' in node) {
@@ -30,25 +64,12 @@ function nodeToTreeItem(
     });
     label += 'List';
     return (
-      <TreeItem
+      <AstVizItem
         nodeId={id}
         label={label}
-        onMouseEnter={(e: any) => {
-          if (node.$range) {
-            let start = node.$range.start;
-            let end = node.$range.end;
-            let range = {
-              startLineNumber: start.line + 1,
-              startColumn: start.character + 1,
-              endLineNumber: end.line + 1,
-              endColumn: end.character + 1,
-            };
-            // TODO: Change editor stuff
-          }
-        }}
-      >
-        {children}
-      </TreeItem>
+        children={children}
+        indices={node.$indices}
+      />
     );
   } else {
     label += node.$kind;
@@ -57,25 +78,12 @@ function nodeToTreeItem(
     }
 
     return (
-      <TreeItem
+      <AstVizItem
         nodeId={id}
         label={label}
-        onMouseEnter={(e) => {
-          if (node.$range) {
-            let start = node.$range.start;
-            let end = node.$range.end;
-            let range = {
-              startLineNumber: start.line + 1,
-              startColumn: start.character + 1,
-              endLineNumber: end.line + 1,
-              endColumn: end.character + 1,
-            };
-            // TODO: Change editor stuff
-          }
-        }}
-      >
-        {children}
-      </TreeItem>
+        children={children}
+        indices={node.$indices}
+      />
     );
   }
 }
@@ -83,6 +91,7 @@ function nodeToTreeItem(
 export default function AstViz() {
   const { state, dispatch } = useContext(AppContext);
   const { astJson } = state;
+  const currentNodeId = useState(0);
 
   if (astJson === undefined) {
     return <div></div>;
@@ -93,7 +102,7 @@ export default function AstViz() {
   return (
     <Box>
       <TreeView
-        aria-label="file system navigator"
+        aria-label="AST Visualizer"
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
       >

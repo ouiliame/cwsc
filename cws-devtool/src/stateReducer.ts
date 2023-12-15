@@ -1,11 +1,20 @@
+import CodeMirror from 'codemirror';
 import { CWScriptParser, type Ast } from 'cwsc';
 
 export type AppState = {
   sourceText: string;
   astJson?: Ast.AstJson;
+  selection?: {
+    start: number;
+    end: number;
+  };
 };
 
-export type AppAction = SetSourceTextAction | SetAstJsonAction | ParseAction;
+export type AppAction =
+  | SetSourceTextAction
+  | SetAstJsonAction
+  | ParseAction
+  | SetSelectionAction;
 
 export interface SetSourceTextAction {
   type: 'setSourceText';
@@ -17,18 +26,16 @@ export interface SetAstJsonAction {
   astJson: Ast.AstJson;
 }
 
-export interface ParseAction {
-  type: 'parse';
+export interface SetSelectionAction {
+  type: 'setSelection';
+  selection: {
+    start: number;
+    end: number;
+  };
 }
 
-export namespace Actions {
-  export function setSourceText(sourceText: string): AppAction {
-    return { type: 'setSourceText', sourceText };
-  }
-
-  export function setAstJson(astJson: Ast.AstJson): AppAction {
-    return { type: 'setAstJson', astJson };
-  }
+export interface ParseAction {
+  type: 'parse';
 }
 
 export function initialState(): AppState {
@@ -45,6 +52,9 @@ export default function stateReducer(state: AppState, action: AppAction) {
     case 'setAstJson':
       console.log('setAst', action.astJson);
       return { ...state, astJson: action.astJson };
+    case 'setSelection':
+      console.log('setSelection', action.selection);
+      return { ...state, selection: action.selection };
     case 'parse':
       console.log('parse', action);
       // get text
