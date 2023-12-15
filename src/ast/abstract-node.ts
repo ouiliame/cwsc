@@ -2,14 +2,23 @@ import { ParserRuleContext } from 'antlr4ts';
 import type { Range } from 'vscode-languageserver';
 import { TextIndices } from '../util/position';
 
-export type AstJson = {
+export type AstJson = NodeJson | ListJson;
+
+export interface NodeJson {
   $kind: string;
   $range?: Range;
   $indices?: TextIndices;
   $fields: {
     [key: string]: AstJson | string | number | boolean | null;
   };
-};
+}
+
+export interface ListJson {
+  $kind: 'List';
+  $range?: Range;
+  $indices?: TextIndices;
+  $list: NodeJson[];
+}
 
 function getIndices(ctx: ParserRuleContext): TextIndices {
   let start = ctx.start.startIndex;

@@ -53,6 +53,7 @@ internal/
 !tests/cases/projects/NodeModulesSearch/**/*
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
+bun.lock
 yarn.lock
 yarn-error.log
 .parallelperf.*
@@ -66,3 +67,4 @@ package-lock.json
 .aider*
 examples/**/target
 dist
+bun.lockb

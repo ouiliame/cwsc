@@ -56,9 +56,8 @@ function nodeToTreeItem(
   ) {
     label += node?.toString() ?? 'null';
     return <AstVizItem nodeId={id + 1} label={label} />;
-  } else if (node.$kind === 'List') {
-    let $children = node.$fields['$children'] as any as Ast.AstJson[];
-    $children.forEach((x, i) => {
+  } else if ('$list' in node) {
+    node.$list.forEach((x, i) => {
       children.push(nodeToTreeItem(`${id}__list[${i}]`, i.toFixed(), x));
     });
     label += 'List';

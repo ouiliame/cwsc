@@ -79,7 +79,7 @@ export class CWScriptParser {
       this.file
     );
     diagnostics.push(...syntaxValidator.visit(ast));
-    const res = new ParseResult(
+    const res = new CWScriptParseResult(
       this.file ?? '',
       this.sourceText,
       ast,

@@ -1,6 +1,6 @@
 import type { TextView, Range, TextIndices } from '../util/position';
-import { AstNode, AstJson } from '../ast/abstract-node';
-import { SourceFile } from '../ast/nodes';
+import { AstNode, AstJson, NodeJson } from '../ast/abstract-node';
+import { SourceFile, List } from '../ast/nodes';
 import type { Diagnostic } from 'vscode-languageserver';
 
 export class CWScriptParseResult {
@@ -16,23 +16,34 @@ export class CWScriptParseResult {
   }
 
   public astToJson(node: AstNode = this.ast): AstJson {
-    let res: AstJson = { $kind: node.$kind, $fields: {} };
-    for (const key of Object.keys(node)) {
-      //@ts-ignore
-      if (
-        key === '$parent' ||
-        key === '$antlrParseRuleCtx' ||
-        key === '$kind'
-      ) {
-        continue;
-      }
-      // @ts-ignore
-      if (AstNode.isNode(node[key])) {
+    let res: AstJson;
+    if (node instanceof List) {
+      res = {
+        $kind: node.$kind,
+        $list: node.$children.map((x) => this.astToJson(x) as NodeJson),
+      };
+    } else {
+      res = {
+        $kind: node.$kind,
+        $fields: {},
+      };
+      for (const key of Object.keys(node)) {
+        //@ts-ignore
+        if (
+          key === '$parent' ||
+          key === '$antlrParseRuleCtx' ||
+          key === '$kind'
+        ) {
+          continue;
+        }
         // @ts-ignore
-        res.$fields[key] = this.astToJson(node[key]);
-      } else {
-        // @ts-ignore
-        res.$fields[key] = node[key];
+        if (AstNode.isNode(node[key])) {
+          // @ts-ignore
+          res.$fields[key] = this.astToJson(node[key]);
+        } else {
+          // @ts-ignore
+          res.$fields[key] = node[key];
+        }
       }
     }
     let { $indices } = node;
