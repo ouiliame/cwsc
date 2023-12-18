@@ -1,36 +1,38 @@
 [dependencies]
+cwscript-runtime = { path = "../cwscript-runtime" }
+cwscript-macro = { path = "../cwscript-macro" }
 cosmwasm-schema = "1.5.0"
 cw-storage-plus = "1.1.0"
 cw2 = "1.1.1"
 schemars = "0.8.15"
 
-  [dependencies.cosmwasm-std]
-  features = [ "cosmwasm_1_3" ]
-  version = "1.5.0"
+[dependencies.cosmwasm-std]
+features = ["cosmwasm_1_3"]
+version = "1.5.0"
 
-  [dependencies.serde]
-  default-features = false
-  features = [ "derive" ]
-  version = "1.0.189"
+[dependencies.serde]
+default-features = false
+features = ["derive"]
+version = "1.0.189"
 
-  [dependencies.thiserror]
-  version = "1.0.49"
+[dependencies.thiserror]
+version = "1.0.49"
 
 [dev-dependencies]
 cw-multi-test = "0.17.0"
 
 [features]
-backtraces = [ "cosmwasm-std/backtraces" ]
-library = [ ]
+backtraces = ["cosmwasm-std/backtraces"]
+library = []
 
 [lib]
-crate-type = [ "cdylib", "rlib" ]
+crate-type = ["cdylib", "rlib"]
 
 [package]
 name = "terraswap-pair"
 version = "0.0.1"
 edition = "2021"
-exclude = [ "contract.wasm", "hash.txt" ]
+exclude = ["contract.wasm", "hash.txt"]
 
 [package.metadata.scripts]
 optimize = """

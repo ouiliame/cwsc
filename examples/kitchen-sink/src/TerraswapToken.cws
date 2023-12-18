@@ -1,0 +1,424 @@
+contract Cw20Base implements Cw20 {
+  event Transfer(from: Addr, to: Addr, amount: U128);
+  event Burn(from: Addr, amount: U128);
+  event Send(from: Addr, to: Addr, amount: U128);
+  event IncreaseAllowance(owner: Addr, spender: Addr, amount: U128);
+  event DecreaseAllowance(owner: Addr, spender: Addr, amount: U128);
+
+  exec #transfer(recipient: String, amount: U128) {
+    if amount == 0 {
+      fail! InvalidZeroAmount();
+    }
+
+    let rcpt_addr = Addr.validate!(recipient);
+    $state.balances[$info.sender] -= amount;
+    $state.balances[rcpt_addr] += amount;
+    emit Transfer($info.sender, rcpt_addr, amount);
+  }
+
+  exec #burn(amount: U128) {
+    if amount == 0 {
+      fail! InvalidZeroAmount();
+    } 
+
+    $state.balances[$info.sender] -= amount;
+    $state.token_info.total_supply -= amount;
+    emit Burn($info.sender, amount);
+  }
+
+  exec #send(contract: String, amount: U128, msg: Wasm.ExecMsg) {
+    if amount == 0 {
+      fail! InvalidZeroAmount();
+    } 
+    let rcpt_addr = Addr.validate!(contract);
+    $state.balances[$info.sender] -= amount;
+    $state.balances[rcpt_addr] += amount;
+    exec! Wasm.#execute(
+      contract=contract,
+      msg=Cw20ReceiveMsg($info.sender, amount, msg),
+    );
+    
+    emit Send($info.sender, contract, amount);
+  }
+
+  exec #increase_allowance(
+    spender: String,
+    amount: U128,
+    expires?: Expiration
+  ) {
+    let spender_addr = Addr.validate!(spender);
+    if spender_addr == info.sender {
+      fail! CannotSetOwnAccount();
+    }
+
+    $state.allowances[[$info.sender, spender_addr]].update(
+      |allow| {
+        if allow? {
+          allow.expires = expires ?? 0;
+        }
+        allow.expires += amount;
+        return allow;
+      }
+    );
+
+    emit IncreaseAllowance($info.sender, spender_addr, amount);
+  }
+
+  exec #decrease_allowance(
+    spender: String,
+    amount: U128,
+    expires?: Expiration
+  ) {
+    let spender_addr = Addr.validate!(spender);
+    if spender_addr == $info.sender {
+      fail! CannotSetOwnAccount();
+    }
+
+    let { get_allow, set_allow, del_allow } = $state.allowances.manage([$info.sender, spender_addr]);
+    let allowance = get_allow();
+
+    if amount < allowance.allowance {
+      set_allow(Allowance {
+        allowance: allowance.allowance - amount,
+        expires: expires ?? allowance.expires
+      });
+    } else {
+      del_allow();
+    }
+    emit DecreaseAllowance($info.sender, spender_addr, amount);
+  }
+
+  fn deduct_allowance!(
+    $,
+    owner: Addr,
+    spender: Addr,
+    block: BlockInfo,
+    amount: U128
+  ) {
+    $state.allowances.update!([owner, spender], |current|! {
+      if current? {
+        if current.expires.is_expired(block) {
+          fail! Expired();
+        }
+        current.allowance -= amount;
+        return a;
+      } else {
+        fail! NoAllowance();
+      }
+    })
+  }
+
+  exec #transfer_from(
+    owner: Addr,
+    recipient: Addr,
+    amount: U128
+  ) {
+    // check doesn't exist on Rust implementation for some reason o.o ??
+    if amount == 0 {
+      fail! InvalidZeroAmount();
+    }
+    $.deduct_allowance!(owner, $info.sender, $env.block, amount);
+
+    $state.balances[owner] -= amount;
+    $state.balances[recipient] += amount;
+    emit TransferFrom(owner, recipient, $info.sender, amount);
+  }
+
+  exec #burn_from(
+    owner: Addr,
+    amount: U128
+  ) {
+    $.deduct_allowance!(owner, $info.sender, block, amount);
+    $state.balances[owner] -= amount; 
+    $state.token_info.total_supply -= amount;
+    emit BurnFrom(owner, owner, $info.sender, amount);
+  }
+
+  exec #send_from(
+    contract: Addr,
+    amount: U128,
+    msg: Wasm.ExecMsg 
+  ) {
+    $.deduct_allowance!(contract, $info.sender, $env.block, amount);
+    $state.balances[owner] -= amount;
+    $state.balances[contract] += amount;
+    exec! Wasm.#execute(
+      contract=contract,
+      msg=Cw20ReceiveMsg($info.sender, amount, msg),
+    );
+    emit SendFrom(owner, contract, $info.sender, amount); 
+  }
+
+  exec #mint(recipient: Addr, amount: U128) {
+    if amount == 0 {
+      fail! InvalidZeroAmount();
+    }
+    
+    let { token_info as config } = $state;
+    if not config.mint? or config.mint?.minter != $info.sender {
+      fail! Unauthorized();
+    }
+
+    // update supply and enforce cap
+    config.total_supply += amount;
+    if config.mint?.cap? {
+      if config.total_supply > config.mint.cap {
+        fail! CannotExceedCap();
+      }
+    }
+
+    $state.token_info = config;
+    $state.balances[recipient] += amount;
+
+    emit Mint(recipient, amount);
+  }
+
+  exec #update_marketing(
+    project?: String,
+    description?: String,
+    marketing?: Addr
+  ) {
+    let { marketing_info } = $state;
+    if not marketing_info?.marketing != $info.sender {
+      fail! Unauthorized();
+    }
+
+    if project? {
+      if project.trim().is_empty() {
+        $state.marketing_info.project = None;
+      } else {
+        $state.marketing_info.project = project;
+      }
+    } // do nothing
+
+    if description? {
+      if description.trim().is_empty() {
+        $state.marketing_info.description = None;
+      } else {
+        $state.marketing_info.description = description;
+      }
+    } // do nothing
+
+    if marketing? {
+      if marketing.trim().is_empty() {
+        $state.marketing_info.marketing = None;
+      } else {
+        $state.marketing_info.marketing = Addr.validate!(marketing);
+      }
+    } // do nothing
+
+    if (not marketing_info.project?
+      and not marketing_info.description?
+      and not marketing_info.marketing?
+      and not marketing_info.logo?
+    ) {
+      $state.marketing_info = None; // instead of delete
+    } else {
+      $state.marketing_info = marketing_info;
+    }
+
+    emit UpdateMarketing()
+  }
+
+  exec #upload_logo([logo: Logo]) {
+    let { marketing_info } = $state;
+    if not marketing_info?.marketing != $info.sender {
+      fail! Unauthorized();
+    }
+
+    $.verify_logo!(logo);
+    $state.logo = logo;
+    $state.marketing_info.logo = logo;
+
+    emit UploadLogo();
+  }
+
+  query #balance(address: Addr) -> U128 {
+    return $state.balances[address] ?? 0;
+  }
+
+  query #token_info() /* -> TokenInfo (inferred) */ {
+    return $state.token_info;
+  }
+
+  query #minter() /* -> MinterResponse? (inferred) */ {
+    let meta = $state.token_info;
+    if meta.mint? {
+      return MinterResponse(m.minter, m.cap);
+    }
+  }
+
+  query #allowance(owner: Addr, spender: Addr) /* -> AllowanceResponse (inferred) */ {
+    let allowance = $state.allowances[[owner, spender]];
+    return AllowanceResponse(allowance.allowance, allowance.expires);
+  }
+
+  const DEFAULT_LIMIT: U32 = 10;
+  const MAX_LIMIT: U32 = 30;
+
+  query #all_allowances(owner: Addr, start_after?: String, limit?: U32) {
+    let limit = min(limit ?? DEFAULT_LIMIT, MAX_LIMIT);
+    let start = if start_after? {
+      Bytes!(start_after)
+    }
+
+    let allowance = $state.allowances.range(
+      prefix=owner,
+      start=start,
+      order=Order.#Ascending,
+      limit=limit
+    ).map(|item| {
+      item.map(|[addr, allow]| AllowanceInfo {
+        spender: addr,
+        allowance: allow.allowance,
+        expires: allow.expires,
+      })
+    });
+
+    return AllAllowancesResponse {
+      allowance
+    };
+  }
+
+  query #all_accounts(start_after?: String, limit?: U32) {
+    let limit = min(limit ?? DEFAULT_LIMIT, MAX_LIMIT);
+    let start = if start_after? {
+      Bytes!(start_after)
+    }
+
+    let accounts = $state.balances.keys(
+      start=start,
+      order=Order.#Ascending,
+      limit=limit
+    );
+
+    return AllAccountsResponse {
+      accounts
+    };
+  }
+
+  query #marketing_info() /* -> MarketingInfo (inferred) */ {
+    return $state.marketing_info;
+  }
+
+  enum Logo {
+    // since we don't use #, this is treated like a namespace
+    Embedded {
+      #Svg([Bytes]),
+      #Png([Bytes]),
+    },
+    #Url([String])
+  }
+
+  query #download_logo() /* -> DownloadLogo (inferred) */ {
+    let { logo } = $state;
+    if logo is Logo.Embedded.#Svg {
+      return DownloadLogoResponse {
+        mime_type: "image/svg+xml",
+        data: logo[0]
+      }
+    } else if logo is Logo.Embedded.#Png {
+      return DownloadLogoResponse {
+        mime_type: "image/png",
+        data: logo[0]
+      }
+    } else if logo is Logo.#Url {
+      fail! NotFound("logo");
+    }
+  }
+
+
+
+}
+
+export contract TerraswapToken extends Cw20Base {
+
+  error DuplicateInitialBalanceAddress();
+
+  state {
+    balances[Addr]: U128;
+  }
+
+  fn get_cap(mint?: MinterResponse) -> U128? {
+    return mint?.cap; 
+  }
+
+  fn validate_instantiate!(name: String, symbol: String, decimals: U8) -> Bool {
+    // validate name
+    let name_bytes = Bytes!(name);
+    if name_bytes.len() < 3 or name_bytes.len() > 50 {
+      fail! "Name is not in the expected format (3-50 UTF-8 bytes)";
+    }
+
+    // validate symbol
+    let symbol_bytes = Bytes!(symbol);
+    if symbol_bytes.len() < 3 or symbol_bytes.len() > 12 {
+      fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}",
+    }
+    for byte in bytes {
+      if (byte != 45
+          and (byte < 65 or byte > 90)
+          and (byte < 97 or byte > 122)) {
+          fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}",
+      }
+    }
+
+    // validate decimals
+    if decimals > 18 {
+      fail! "Decimals must not exceed 18";
+    }
+  }
+
+  #instantiate(
+    name: String,
+    symbol: String
+    decimals: U8,
+    initial_balances: List[Cw20Coin],
+    mint?: MinterResponse
+  ) {
+    // TODO: set contract name & version (CW20)
+    $.validate_instantiate!(name, symbol, decimals);
+    let total_supply = $.create_accounts!(initial_balances);
+    if msg.cap? {
+      if total_supply > limit {
+        fail! "Initial supply greater than cap";
+      }
+    }
+
+    let mint = if mint? {
+      MinterData {
+        minter: Addr.validate!(mint.minter),
+        cap: mint.cap,
+      } 
+    }
+
+    $state.token_info = TokenInfo(
+      name, symbol, decimals, total_supply, mint
+    );
+  }
+
+  // .. exec methods defined in Cw20Base (inherited)
+  
+  fn create_accounts!($, accounts: List[Cw20Coin]) -> U128 {
+    validate_accounts!(accounts);
+
+    let total_supply = U128(0);
+    for row in accounts {
+      let address = Addr.validate!(row.address);
+      $state.balances[address] = row.amount;
+      total_supply += row.amount
+    }
+
+    return total_supply
+  }
+
+
+  fn validate_accounts!(accounts: List[Cw20Coin]) {
+    let addresses = accounts.map(|c| c.address)
+      .sorted()
+      .deduped();
+    if addresses.len() != accounts.len() {
+      fail! DuplicateInitialBalanceAddress();
+    }
+  }
+}

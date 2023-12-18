@@ -1,7 +1,4 @@
 import { AstNode } from './abstract-node';
-import type { TextView } from '../util/position';
-import { Doc } from 'prettier';
-import { LetIdentStmtContext } from 'src/grammar/CWScriptParser';
 export class List<T extends AstNode> extends AstNode<'List'> {
   public $kind: 'List' = 'List';
 
@@ -350,12 +347,14 @@ export type Expr =
   | InExpr
   | ShortTryExpr
   | TryCatchElseExpr
+  | MapExpr
   | ClosureExpr
   | NotExpr
   | QueryExpr
   | QueryNowExpr
   | FailExpr
   | UnitExpr
+  | Literal
   | IdentExpr;
 export class TupleExpr extends AstNode<'TupleExpr'> {
   public $kind: 'TupleExpr' = 'TupleExpr';
@@ -516,6 +515,22 @@ export class CatchClause extends AstNode<'CatchClause'> {
   public $kind: 'CatchClause' = 'CatchClause';
 
   constructor(public ty: TypeExpr, public body: Block) {
+    super();
+  }
+}
+
+export class MapEntry extends AstNode<'MapEntry'> {
+  public $kind: 'MapEntry' = 'MapEntry';
+
+  constructor(public key: Expr, public value: Expr) {
+    super();
+  }
+}
+
+export class MapExpr extends AstNode<'MapExpr'> {
+  public $kind: 'MapExpr' = 'MapExpr';
+
+  constructor(public entries: List<MapEntry>) {
     super();
   }
 }
@@ -906,6 +921,7 @@ export type TypeExpr =
   | ParamzdTypeExpr
   | MemberTypeExpr
   | ArrayTypeExpr
+  | MapTypeExpr
   | StructDefnTypeExpr
   | TupleDefnTypeExpr
   | UnitDefnTypeExpr
@@ -949,6 +965,14 @@ export class ArrayTypeExpr extends AstNode<'ArrayTypeExpr'> {
   public $kind: 'ArrayTypeExpr' = 'ArrayTypeExpr';
 
   constructor(public ty: TypeExpr, public size: IntLit) {
+    super();
+  }
+}
+
+export class MapTypeExpr extends AstNode<'MapTypeExpr'> {
+  public $kind: 'MapTypeExpr' = 'MapTypeExpr';
+
+  constructor(public keyTy: TypeExpr, public valueTy: TypeExpr) {
     super();
   }
 }

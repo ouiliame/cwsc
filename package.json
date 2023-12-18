@@ -27,12 +27,13 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.2.2",
-    "webpack": "^5.89.0",
+    "webpack": "5.1",
     "webpack-cli": "^5.1.4",
     "zod-to-json-schema": "^3.22.1"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
+    "@types/webpack": "5",
     "antlr4ts": "^0.5.0-alpha.4",
     "handlebars": "^4.7.8",
     "immutable": "^5.0.0-beta.4",
@@ -51,7 +52,7 @@
     "antlr": "bun run antlr-lexer && bun run antlr-parser",
     "format": "prettier --check ./src/**/*.ts",
     "format:fix": "prettier --write ./src/**/*.ts",
-    "build:json-schema": "ts-node ./src/generate-cwsproject-json-schema.ts",
+    "build:json-schema": "bun ./src/generate-cwsproject-json-schema.ts",
     "build": "shx rm -rf dist && tsc --module commonjs && webpack --mode production",
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "lint": "eslint ./src/**/*.ts",
@@ -59,9 +60,9 @@
     "size": "size-limit",
     "analyze": "size-limit --why",
     "prepublishOnly": "yarn run build",
-    "e2e": "ts-node src/e2e.ts",
-    "e2e-build": "yarn run e2e && cd examples/kitchen-sink/build/kitchen-sink && cargo wasm",
-    "dev": "cd cws-devtool && yarn start",
+    "e2e": "bun src/e2e.ts",
+    "e2e-build": "bun run e2e && cd examples/kitchen-sink/build/kitchen-sink && cargo wasm",
+    "dev": "cd cws-devtool && bun start",
     "test": "jest"
   },
   "files": [

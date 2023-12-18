@@ -648,6 +648,23 @@ export class AstBuilderVisitor
     return this.visitTryCatchElseExpr_(ctx.tryCatchElseExpr_()).$(ctx);
   }
 
+  visitMapEntry(ctx: P.MapEntryContext): Ast.MapEntry {
+    const key = this.expr(ctx.expr(0));
+    const value = this.expr(ctx.expr(1));
+    return new Ast.MapEntry(key, value).$(ctx);
+  }
+
+  visitMapExpr(ctx: P.MapExprContext): Ast.MapExpr {
+    return this.visitMapExpr_(ctx.mapExpr_()).$(ctx);
+  }
+
+  visitMapExpr_(ctx: P.MapExpr_Context): Ast.MapExpr {
+    const entries = new Ast.List<Ast.MapEntry>(
+      ctx._entries.map((e) => this.visitMapEntry(e))
+    ).$(ctx);
+    return new Ast.MapExpr(entries).$(ctx);
+  }
+
   visitBlockClosureExpr(ctx: P.BlockClosureExprContext): Ast.ClosureExpr {
     const params = this.visitBarsParamList(ctx._params);
     const fallible = ctx._fallible ? true : false;
@@ -751,6 +768,12 @@ export class AstBuilderVisitor
   visitArrayTypeExpr(ctx: P.ArrayTypeExprContext): Ast.ArrayTypeExpr {
     const ty = this.typeExpr(ctx.typeExpr());
     return new Ast.ArrayTypeExpr(ty, this.visitIntLit(ctx._size)).$(ctx);
+  }
+
+  visitMapTypeExpr(ctx: P.MapTypeExprContext): Ast.MapTypeExpr {
+    const keyTy = this.typeExpr(ctx.typeExpr(0));
+    const valueTy = this.typeExpr(ctx.typeExpr(1));
+    return new Ast.MapTypeExpr(keyTy, valueTy).$(ctx);
   }
 
   visitStructDefnTypeExpr(

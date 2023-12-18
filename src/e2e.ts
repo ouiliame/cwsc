@@ -8,7 +8,7 @@ import { StaticAnalysisVisitor } from './semantics/static-analysis-visitor';
 
 import type { Diagnostic } from 'vscode-languageserver';
 import { contractAstToCg } from './e2e-helpers/contract-to-cg';
-import { CwsfmtVisitor } from './cwsfmt';
+import { DiagnosticsPrinter } from './print-diagnostics';
 
 export interface BuildContext {
   sourceFiles: {
@@ -74,6 +74,9 @@ async function main() {
   const { parseResult, diagnostics } = ctx.sourceFiles[contractFile];
   // get contract
   let contract = parseResult!.ast.descendantsOfType(Ast.ContractDefn)[0];
+  let file = path.relative('.', contractFile);
+  let diagnosticsPrinter = new DiagnosticsPrinter(file, diagnostics);
+  diagnosticsPrinter.print();
 
   // make cg model
   let cg = contractAstToCg(contract);

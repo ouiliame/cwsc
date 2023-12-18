@@ -53,6 +53,7 @@ LPAREN: '(';
 RPAREN: ')';
 LBRACK: '[';
 RBRACK: ']';
+H_LBRACE: '#{';
 LBRACE: '{';
 RBRACE: '}';
 BAR: '|';

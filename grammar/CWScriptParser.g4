@@ -270,6 +270,7 @@ expr:
 	| expr OR expr									# OrExpr
 	| ifExpr_										# IfExpr
 	| tryCatchElseExpr_								# TryCatchElseExpr
+	| mapExpr_										# MapExpr
 	| blockClosureExpr								# ClosureExpr
 	| exprClosureExpr								# ClosureExpr
 	| structExpr_									# StructExpr
@@ -292,6 +293,11 @@ tryCatchElseExpr_:
 
 catchClause: CATCH (ty = typeExpr) (body = block);
 
+// mapExpr = #{ 0 => 1 }[0] == 1
+mapEntry: (key = expr) FAT_ARROW (value = expr);
+mapExpr_:
+	H_LBRACE (entries += mapEntry (COMMA entries += mapEntry)*)? RBRACE;
+
 /*
  Unlike Rust, CWS closures have params outside braces.
  
@@ -299,7 +305,8 @@ catchClause: CATCH (ty = typeExpr) (body = block);
  
  CWS (block style): |x, y|! -> Ty { stmt* }
  
- CWS (expr style): |x: Ty, y?: Ty|! expr
+ CWS (expr style): |x: Ty, y?: Ty|! expr NOTE: unlike fn aaa!(), the fallible '!' comes after the
+ param list
  */
 blockClosureExpr:
 	(params = barsParamList) (fallible = BANG)? (
@@ -336,13 +343,16 @@ typeExpr:
 	| typeExpr DOT (memberName = ident)				# MemberTypeExpr
 	| (elements = brackTypeExprList)				# TupleTypeExpr
 	| LBRACK typeExpr SEMI (size = intLit) RBRACK	# ArrayTypeExpr
-	| structDefn									# StructDefnTypeExpr
-	| tupleDefn										# TupleDefnTypeExpr
-	| unitDefn										# UnitDefnTypeExpr
-	| enumDefn										# EnumDefnTypeExpr
-	| typeExpr QUEST								# OptionTypeExpr
-	| typeVar										# TypeVarExpr
-	| ident											# IdentTypeExpr;
+	| H_LBRACE typeExpr FAT_ARROW typeExpr (
+		EQ defaultExpr = expr
+	)? RBRACE			# MapTypeExpr
+	| structDefn		# StructDefnTypeExpr
+	| tupleDefn			# TupleDefnTypeExpr
+	| unitDefn			# UnitDefnTypeExpr
+	| enumDefn			# EnumDefnTypeExpr
+	| typeExpr QUEST	# OptionTypeExpr
+	| typeVar			# TypeVarExpr
+	| ident				# IdentTypeExpr;
 
 typeVar: (doc = docComment)? PercentIdent;
 

@@ -35,6 +35,7 @@ import { AndExprContext } from "./CWScriptParser";
 import { OrExprContext } from "./CWScriptParser";
 import { IfExprContext } from "./CWScriptParser";
 import { TryCatchElseExprContext } from "./CWScriptParser";
+import { MapExprContext } from "./CWScriptParser";
 import { ClosureExprContext } from "./CWScriptParser";
 import { StructExprContext } from "./CWScriptParser";
 import { TupleExprContext } from "./CWScriptParser";
@@ -48,6 +49,7 @@ import { ParameterizedTypeExprContext } from "./CWScriptParser";
 import { MemberTypeExprContext } from "./CWScriptParser";
 import { TupleTypeExprContext } from "./CWScriptParser";
 import { ArrayTypeExprContext } from "./CWScriptParser";
+import { MapTypeExprContext } from "./CWScriptParser";
 import { StructDefnTypeExprContext } from "./CWScriptParser";
 import { TupleDefnTypeExprContext } from "./CWScriptParser";
 import { UnitDefnTypeExprContext } from "./CWScriptParser";
@@ -105,6 +107,8 @@ import { ExprContext } from "./CWScriptParser";
 import { IfExpr_Context } from "./CWScriptParser";
 import { TryCatchElseExpr_Context } from "./CWScriptParser";
 import { CatchClauseContext } from "./CWScriptParser";
+import { MapEntryContext } from "./CWScriptParser";
+import { MapExpr_Context } from "./CWScriptParser";
 import { BlockClosureExprContext } from "./CWScriptParser";
 import { ExprClosureExprContext } from "./CWScriptParser";
 import { StructExpr_Context } from "./CWScriptParser";
@@ -403,6 +407,14 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	visitTryCatchElseExpr?: (ctx: TryCatchElseExprContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `MapExpr`
+	 * labeled alternative in `CWScriptParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMapExpr?: (ctx: MapExprContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `ClosureExpr`
 	 * labeled alternative in `CWScriptParser.expr`.
 	 * @param ctx the parse tree
@@ -505,6 +517,14 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitArrayTypeExpr?: (ctx: ArrayTypeExprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `MapTypeExpr`
+	 * labeled alternative in `CWScriptParser.typeExpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMapTypeExpr?: (ctx: MapTypeExprContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `StructDefnTypeExpr`
@@ -911,6 +931,20 @@ export interface CWScriptParserVisitor<Result> extends ParseTreeVisitor<Result> 
 	 * @return the visitor result
 	 */
 	visitCatchClause?: (ctx: CatchClauseContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.mapEntry`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMapEntry?: (ctx: MapEntryContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CWScriptParser.mapExpr_`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMapExpr_?: (ctx: MapExpr_Context) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CWScriptParser.blockClosureExpr`.
