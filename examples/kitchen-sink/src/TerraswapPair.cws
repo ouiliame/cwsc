@@ -43,8 +43,8 @@ export contract TerraswapPair {
       contract_addr: $env.contract.address,
       liquidity_token: Addr.empty(),
       asset_infos: [
-        String!(msg.asset_infos[0]),
-        String!(msg.asset_infos[1])
+        String!(msg.asset_infos[0]), // CwsString.convert_from(msg.asset_infos[0])
+        String!(msg.asset_infos[1]) 
       ]
     };
 

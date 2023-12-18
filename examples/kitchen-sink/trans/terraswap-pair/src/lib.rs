@@ -140,29 +140,35 @@ pub mod terraswap_pair {
         }
     }
     pub mod types {
+        extern crate cwscript_macro;
         use cosmwasm_schema::cw_serde;
         use cosmwasm_std::*;
-        use cwscript_macro::CwsType;
-        use cwscript_runtime::*;
+        use cwscript_macro::cws_struct;
+        use cwscript_runtime;
         use thiserror::Error;
 
-        #[derive(CwsType)]
+        #[cws_struct]
         pub struct Asset {
             info: AssetInfo,
             amount: Uint128,
         }
 
+        #[cws_enum]
         pub enum AssetInfo {
             Token { contract_addr: String },
             NativeToken { denom: String },
         }
 
-        #[cw_serde]
+        #[cws_struct]
         pub struct PairInfo {
+            #[field]
             pub asset_infos: CwsArray<AssetInfo, 2>, /* [AssetInfo;2] */
-            pub contract_addr: CwsString,            /* String */
-            pub liquidity_token: CwsString,          /* String */
-            pub asset_decimals: CwsArray<u8, 2>,     /* [U8;2] */
+            #[field]
+            pub contract_addr: CwsString, /* String */
+            #[field]
+            pub liquidity_token: CwsString, /* String */
+            #[field]
+            pub asset_decimals: CwsArray<u8, 2>, /* [U8;2] */
         }
 
         impl PairInfo {
