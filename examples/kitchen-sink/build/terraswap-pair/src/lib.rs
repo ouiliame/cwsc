@@ -238,20 +238,8 @@ pub fn exec_swap_impl(ctx: ExecuteCtx, offer_asset: Asset, belief_price: Option<
       assert_sent_native_token_balance(offer_asset, ctx.info.funds.clone());
 let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let pools = query_pools(pair_info, ctx.env.contract.address);
-if offer_asset.info == pools[0].info {
-let offer_pool = Asset { info: pools[0].info, amount: pools[0].amount - offer_asset.amount };
-let ask_pool = pools[1];
-let offer_decimal = pair_info.asset_decimals[0];
-let ask_decimal = pair_info.asset_decimals[1];
-}
-if matches!(offer_asset.info, AssetInfo::NativeToken { .. }) {
-return Err(ContractError::Unauthorized {});
-} else {
-if offer_asset.info == pools[1].info { let offer_pool = Asset { amount: pools[1].amount - offer_asset.amount, info: pools[1].info };
-let ask_pool = pools[0];
-let offer_decimal = pair_info.asset_decimals[1];
-let ask_decimal = pair_info.asset_decimals[0]; } else { return Err(ContractError::AssetMismatch {}); }
-}
+let [offer_pool, ask_pool] = if offer_asset.info == pools[0].info { [Asset { info: pools[0].info, amount: pools[0].amount - offer_asset.amount }, pools[1]] } else { if offer_asset.info == pools[1].info { [Asset { info: pools[1].info, amount: pools[1].amount - offer_asset.amount }, pools[0]] } else { return Err(ContractError::AssetMismatch {}); } };
+let [offer_decimal, ask_decimal] = if offer_asset.info == pools[0].info { [pair_info.asset_decimals[0], pair_info.asset_decimals[1]] } else { [pair_info.asset_decimals[1], pair_info.asset_decimals[0]] };
 let offer_amount = offer_asset.amount;
 let [return_amount, spread_amount, commission_amount] = compute_swap(offer_pool.amount, ask_pool.amount, offer_amount);
 let return_asset = Asset { info: ask_pool.info, amount: return_amount };
@@ -294,11 +282,7 @@ pub fn query_simulation_impl(ctx: QueryCtx, offer_asset: Asset) -> Result<Binary
       let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let contract_addr = pair_info.contract_addr.clone();
 let pools = query_pools(pair_info, contract_addr);
-if offer_asset.info == pools[0].info {
-let [offer_pool, ask_pool] = [pools[0], pools[1]];
-} else {
-if offer_asset.info == pools[1].info { let [offer_pool, ask_pool] = [pools[1], pools[0]]; } else { return Err(ContractError::AssetMismatch {}); }
-}
+let [offer_pool, ask_pool] = if offer_asset.info == pools[0].info { [pools[0], pools[1]] } else { if offer_asset.info == pools[1].info { [pools[1], pools[0]] } else { return Err(ContractError::AssetMismatch {}); } };
 let [return_amount, spread_amount, commission_amount] = compute_swap(offer_pool.amount, ask_pool.amount, offer_asset.amount);
 return Ok(to_json_binary(&(SimulationResponse { return_amount, spread_amount, commission_amount }))?);
     }
@@ -306,11 +290,7 @@ pub fn query_reverse_simulation_impl(ctx: QueryCtx, ask_asset: Asset) -> Result<
       let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let contract_addr = pair_info.contract_addr.clone();
 let pools = query_pools(pair_info, contract_addr);
-if ask_asset.info == pools[0].info {
-let [ask_pool, offer_pool] = [pools[0], pools[1]];
-} else {
-if ask_asset.info == pools[1].info { let [ask_pool, offer_pool] = [pools[1], pools[0]]; } else { return Err(ContractError::AssetMismatch {}); }
-}
+let [ask_pool, offer_pool] = if ask_asset.info == pools[0].info { [pools[0], pools[1]] } else { if ask_asset.info == pools[1].info { [pools[1], pools[0]] } else { return Err(ContractError::AssetMismatch {}); } };
 let [offer_amount, spread_amount, commission_amount] = compute_offer_amount(offer_pool.amount, ask_pool.amount, ask_asset.amount);
 return Ok(to_json_binary(&(ReverseSimulationResponse { offer_amount, spread_amount, commission_amount }))?);
     }

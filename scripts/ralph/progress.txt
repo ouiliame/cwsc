@@ -14,6 +14,8 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - CWScript `else if x?` is parsed as an IfExpr (expression) inside the else block, NOT as an IfStmt — the grammar rule `blockOrExpr: block | expr` routes it through expr path
 - CWScript `$` param in helper functions does NOT inject `ctx` as a Rust param — the block visitor translates `$info` → `ctx.info` but `ctx` is not available. For helper functions needing context, use explicit params instead of `$`
 - `$.method()` strips the `$` and generates a direct function call; `$info.x` generates `ctx.info.x.clone()` — but `ctx` must exist in scope for this to work
+- CWScript variables defined inside `if` blocks are not hoisted to outer scope in generated Rust — restructure as `let [a, b] = if cond { [x, y] } else { [x2, y2] }` to keep vars in outer scope
+- When an `if/else if/else` chain has `fail!` in the else branch, the generated Rust `return Err(...)` has type `!` (never) which is compatible with any type, so it works as an if-expression value
 ---
 
 ## 2026-02-12 - US-001
@@ -85,4 +87,19 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - Fixing scope issues can reveal latent type errors: `asset.info.denom` triggers E0609 (enum field access), `asset.amount != 0` triggers E0277 (Uint128 vs integer)
   - For functions that need to accept variable-length asset collections, making the function take a single Asset and looping at the call site avoids Vec vs array type mismatches
   - Error count: 54 → 52 (4 errors fixed, 2 latent errors revealed, net -2)
+---
+
+## 2026-02-12 - US-007
+- What was implemented: Restructured CWScript source to eliminate if-block variable scoping issues
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - Restructured 3 functions:
+    - `exec #swap`: Replaced two separate if-blocks (one assigning vars for pools[0] match, another for pools[1] match with NativeToken check) with a single `let [offer_pool, ask_pool] = if ... else if ... else { fail! }` + separate `let [offer_decimal, ask_decimal] = if ... else { ... }`
+    - `query #simulation`: Changed `if { let [a,b] = ... } else if { let [a,b] = ... }` to `let [a,b] = if ... else if ... else { fail! }`
+    - `query #reverse_simulation`: Same pattern as simulation
+- **Learnings for future iterations:**
+  - CWScript does NOT hoist `let` bindings from inner blocks to outer scope in the generated Rust — this is a fundamental scoping mismatch
+  - The fix is in the CWScript SOURCE, not the codegen: restructure to use `let [a, b] = if cond { [x, y] } else { [x2, y2] }` pattern
+  - For mixed-type tuples (e.g., Asset + u8), split into separate `let` bindings since `[...]` generates a Rust array which requires homogeneous types
+  - Removing the `if offer_asset is AssetInfo.#NativeToken { fail! Unauthorized() }` block from #swap was correct — it was a semantic error in the original CWScript (checking the wrong condition at the wrong place)
+  - Error count: 52 → 43 (all 14 E0425 undefined variable errors eliminated, but some latent type errors became visible, net -9)
 ---
