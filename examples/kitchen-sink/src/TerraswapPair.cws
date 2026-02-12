@@ -132,7 +132,7 @@ export contract TerraswapPair {
     } else if offer_decimal < return_decimal {
       let diff_decimal = U64(10).pow(return_decimal - offer_decimal);
       [offer_asset.amount * U128!(diff_decimal), return_asset.amount, spread_amount]
-    } else if offer_decimal == return_decimal {
+    } else {
       [offer_asset.amount, return_asset.amount, spread_amount]
     };
 
@@ -141,7 +141,7 @@ export contract TerraswapPair {
       let spread_amount = if expected_return > return_amount {
         expected_return - return_amount
       } else {
-        U256.zero()
+        U128.zero()
       };
       if return_amount < expected_return and Dec.ratio(spread_amount, expected_return) > max_spread {
         fail! MaxSpreadAssertion();
@@ -206,7 +206,7 @@ export contract TerraswapPair {
       }
 
       let to_addr = if to? {
-        Addr.validate!(to.to_addr)
+        Some(Addr.validate!(to))
       } else {
         None
       };

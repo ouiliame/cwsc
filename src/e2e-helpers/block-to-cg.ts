@@ -442,12 +442,16 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
       U256: 'Uint256::from',
       Uint256: 'Uint256::from',
       String: 'String::from',
-      U64: 'u64::from',
     };
     // Uint128 conversion needs try_from since source might be Uint256
     if (fnName === 'U128' || fnName === 'Uint128') {
       const args = node.args.map((a) => this.visitArg(a));
       return `Uint128::try_from(${args.join(', ')}).unwrap()`;
+    }
+    // U64(x) → (x as u64) — u64::from() doesn't accept i32 literals
+    if (fnName === 'U64') {
+      const args = node.args.map((a) => this.visitArg(a));
+      return `(${args[0]} as u64)`;
     }
     const typeCtorName = TYPE_CONSTRUCTORS[fnName];
     if (typeCtorName) {

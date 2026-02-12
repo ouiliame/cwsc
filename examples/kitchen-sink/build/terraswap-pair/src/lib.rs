@@ -166,7 +166,7 @@ if !authorized {
 return Err(ContractError::Unauthorized {});
 }
 let to_addr = if to.is_some() { let to = to.unwrap();
-Addr::unchecked(to.to_addr) } else { None };
+Some(Addr::unchecked(to)) } else { None };
 let asset = Asset { info: AssetInfo::Token { contract_addr }, amount: msg.amount };
 todo!("call swap");
 } else {
@@ -324,14 +324,14 @@ let commission_amount = before_commission_deduction - ask_amount;
 return [Uint128::try_from(offer_amount).unwrap(), Uint128::try_from(spread_amount).unwrap(), Uint128::try_from(commission_amount).unwrap()];
     }
 pub fn assert_max_spread(belief_price: Option<Decimal>, max_spread: Option<Decimal>, offer_asset: Asset, return_asset: Asset, spread_amount: Uint128, offer_decimal: u8, return_decimal: u8) -> Result<(), ContractError> {
-      let [offer_amount, return_amount, spread_amount] = if offer_decimal > return_decimal { let diff_decimal = u64::from(10).pow((offer_decimal - return_decimal) as u32);
-[offer_asset.amount, return_asset.amount * Uint128::try_from(diff_decimal).unwrap(), spread_amount * Uint128::try_from(diff_decimal).unwrap()] } else { if offer_decimal < return_decimal { let diff_decimal = u64::from(10).pow((return_decimal - offer_decimal) as u32);
-[offer_asset.amount * Uint128::try_from(diff_decimal).unwrap(), return_asset.amount, spread_amount] } else { if offer_decimal == return_decimal { [offer_asset.amount, return_asset.amount, spread_amount] } } };
+      let [offer_amount, return_amount, spread_amount] = if offer_decimal > return_decimal { let diff_decimal = (10 as u64).pow((offer_decimal - return_decimal) as u32);
+[offer_asset.amount, return_asset.amount * Uint128::try_from(diff_decimal).unwrap(), spread_amount * Uint128::try_from(diff_decimal).unwrap()] } else { if offer_decimal < return_decimal { let diff_decimal = (10 as u64).pow((return_decimal - offer_decimal) as u32);
+[offer_asset.amount * Uint128::try_from(diff_decimal).unwrap(), return_asset.amount, spread_amount] } else { [offer_asset.amount, return_asset.amount, spread_amount] } };
 if max_spread.is_some() && belief_price.is_some() {
 let max_spread = max_spread.unwrap();
 let belief_price = belief_price.unwrap();
 let expected_return = offer_amount * (Decimal::one() / belief_price);
-let spread_amount = if expected_return > return_amount { expected_return - return_amount } else { Uint256::zero() };
+let spread_amount = if expected_return > return_amount { expected_return - return_amount } else { Uint128::zero() };
 if return_amount < expected_return && Decimal::from_ratio(spread_amount, expected_return) > max_spread {
 return Err(ContractError::MaxSpreadAssertion {});
 }
