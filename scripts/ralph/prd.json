@@ -1,0 +1,227 @@
+{
+  "project": "CWScript Compiler (cwsc-v1)",
+  "branchName": "ralph/terraswap-cargo-check-fixes",
+  "description": "Fix remaining 69 cargo check errors in TerraswapPair.cws generated Rust while keeping Counter.cws clean",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Fix miscellaneous undefined variables in CWScript source",
+      "description": "As a compiler developer, I need to fix 6 remaining E0425 errors caused by wrong variable names in the CWScript source or codegen: msg→asset_info, cw20_msg→msg, deposit→deposits, sender→ctx.info.sender, pool→pools, pair_info→PAIR_INFO.load().",
+      "acceptanceCriteria": [
+        "Fix CWScript source: `msg.asset_infos[0]` in #instantiate → use `asset_info` param directly (lines 46-47 of TerraswapPair.cws)",
+        "Fix CWScript source: `cw20_msg.sender` in #receive → `msg.sender` (line 226 of TerraswapPair.cws)",
+        "Fix CWScript source: `deposit[0]` in #provide_liquidity → `deposits[0]` (line 265 of TerraswapPair.cws)",
+        "Fix codegen or CWScript: `sender` in #swap → `$info.sender` (line 378 of TerraswapPair.cws)",
+        "Fix CWScript source: `pool.map()` in #withdraw_liquidity → `pools.map()` (line 404 of TerraswapPair.cws)",
+        "Fix CWScript source: `pair_info` in #reverse_simulation → load from $state (line 451 of TerraswapPair.cws)",
+        "Run `bun run e2e` — Counter.cws still compiles clean (0 errors)",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — reduced error count"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Fixed 6 undefined variable references in CWScript source. Reduced cargo check errors from 70 to 64."
+    },
+    {
+      "id": "US-002",
+      "title": "Fix PairInfo missing asset_decimals field in initializer",
+      "description": "As a compiler developer, I need the PairInfo initializer in #instantiate to include the asset_decimals field. Currently generates Rust missing this required field (E0063).",
+      "acceptanceCriteria": [
+        "Fix CWScript source: add `asset_decimals` to the PairInfo { ... } in #instantiate (around line 42 of TerraswapPair.cws)",
+        "Generated Rust PairInfo initializer includes asset_decimals field",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — E0063 error gone"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Fix assert_max_spread parameter type (U128 → Asset)",
+      "description": "As a compiler developer, I need assert_max_spread to accept Asset for return_asset (not U128). CWScript source declares return_asset: U128 but call site passes Asset and body accesses .amount. Also fix max_spread Option unwrap.",
+      "acceptanceCriteria": [
+        "Fix CWScript source: change `return_asset: U128` to `return_asset: Asset` in assert_max_spread params (line 122 of TerraswapPair.cws)",
+        "Fixes E0308 on generated line 411 (mismatched types Asset vs Uint128)",
+        "Fixes E0609 on generated lines 601, 611, 616 (no field amount on Uint128)",
+        "Fix `max_spread` comparison — needs unwrap since it's Option<Decimal> (generated line 639)",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 5 fewer errors"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Fix MinimumLiquidityAmountError fields and assert_deadline deadline type",
+      "description": "As a compiler developer, I need to fix: (1) MinimumLiquidityAmountError has no fields but fail! passes args (2 errors), (2) withdraw_liquidity passes u64 deadline where assert_deadline expects Option<u64> (1 error).",
+      "acceptanceCriteria": [
+        "Fix CWScript source: either add fields to MinimumLiquidityAmountError error definition or remove args from the fail! call (line 268 of TerraswapPair.cws)",
+        "Fix CWScript source: change `deadline: U64` to `deadline?: U64` in #withdraw_liquidity params OR wrap in Some() at call site (line 393-395 of TerraswapPair.cws)",
+        "Fixes E0559 on generated lines 318-319",
+        "Fixes E0308 on generated line 434",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 3 fewer errors"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Fix query_pools missing pair_info argument",
+      "description": "As a compiler developer, I need query_pools calls to pass both required arguments. Three call sites pass only 1 arg (contract_addr) but function expects 2 (pair_info, addr).",
+      "acceptanceCriteria": [
+        "Fix CWScript source: change `$.query_pools($env.contract.address)` to `$.query_pools(pair_info, $env.contract.address)` in #receive (line 197), #provide_liquidity (line 245), and #withdraw_liquidity (line 400)",
+        "OR if pair_info isn't in scope at those call sites, load it from $state first",
+        "Fixes the 3 E0061 errors on generated lines 229, 279, 437",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 3 fewer errors"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": "In #receive, config is loaded from $state.pair_info so pass config. In #provide_liquidity, pair_info is loaded. In #withdraw_liquidity, pair_info is loaded."
+    },
+    {
+      "id": "US-006",
+      "title": "Fix assert_sent_native_token_balance signature and call sites",
+      "description": "As a compiler developer, I need assert_sent_native_token_balance to have the correct parameters. The CWScript fn uses `$` (context) and references `assets`, `denom` from caller scope, but generated Rust has no params and body references undefined variables.",
+      "acceptanceCriteria": [
+        "Fix CWScript source: add explicit parameters to assert_sent_native_token_balance (e.g., `assets: [Asset; 2]` and context params)",
+        "OR fix codegen for `$` helper functions to pass context and referenced variables as parameters",
+        "Fixes E0061 on generated line 276 (takes 0 args but 1 supplied)",
+        "Fixes E0425 on generated lines 686, 688, 691 (assets, ctx, denom not in scope)",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 4 fewer errors"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": "The `$` prefix in CWScript means the function takes implicit context. The codegen currently generates a function with no params but a body referencing caller-scope variables."
+    },
+    {
+      "id": "US-007",
+      "title": "Fix variable scoping — if-block variable hoisting",
+      "description": "As a compiler developer, I need variables defined inside `if` blocks (offer_pool, ask_pool, offer_decimal, ask_decimal) to be accessible in the outer scope. CWScript allows variable hoisting but Rust scopes variables to their block. This affects exec_swap_impl, query_simulation_impl, and query_reverse_simulation_impl.",
+      "acceptanceCriteria": [
+        "Detect when variables defined inside if-blocks are used after the if-block in the same function",
+        "Generate pre-declared variables before the if-block: `let offer_pool; let ask_pool;` etc., then assign inside the if-block",
+        "OR restructure as tuple-returning if-expression: `let (offer_pool, ask_pool, ..) = if cond { (..) } else { (..) };`",
+        "Fixes 14 E0425 errors for offer_pool, ask_pool, offer_decimal, ask_decimal across 3 functions",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 14 fewer errors"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": "This is the highest-impact single fix (14 errors). The approach B (pre-declare) is simpler to generate but less idiomatic. Approach A (tuple if-expression) is cleaner but harder. Affected functions: exec_swap_impl (lines 376-398 of Rust), query_simulation_impl (lines 466-473), query_reverse_simulation_impl (lines 498-505)."
+    },
+    {
+      "id": "US-008",
+      "title": "Fix Cw20HookMsg enum destructuring",
+      "description": "As a compiler developer, I need `let { field } = inner` on an enum value to work. Currently generates `inner.belief_price.clone()` etc. which fails because Rust enums don't have fields accessible via dot notation. Need to generate `if let` destructuring.",
+      "acceptanceCriteria": [
+        "In visitLetStructStmt in block-to-cg.ts, when the value is inside an `if matches!(val, EnumType::Variant { .. })` block, generate `if let EnumType::Variant { field1, field2, .. } = val { ... }` pattern",
+        "OR propagate todo!() for all enum destructuring bindings to suppress the 7 field-access errors",
+        "Fixes E0609 errors for inner.belief_price, inner.max_spread, inner.to, inner.deadline, inner.min_assets (generated lines 223-226, 253-254)",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 7 fewer errors"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": "The preceding `if matches!(inner, Cw20HookMsg::Swap { .. })` check provides the variant name needed for destructuring."
+    },
+    {
+      "id": "US-009",
+      "title": "Fix compute_offer_amount Uint128/Uint256 type mixing",
+      "description": "As a compiler developer, I need compute_offer_amount to shadow Uint128 params with Uint256 at function start (like compute_swap already does), since the body uses Uint256 arithmetic internally.",
+      "acceptanceCriteria": [
+        "In the codegen for compute_offer_amount, add `let offer_pool = Uint256::from(offer_pool);` etc. at function start for all 3 params",
+        "Fix return statement to convert back: `[Uint128::try_from(x).unwrap(), ...]`",
+        "Fixes 8 E0277/E0308 errors: Uint256 += Uint128 (line 557), Uint256 * Uint128 (line 564), Uint256 - Uint128 (line 567), if/else type mismatch (line 575), return type (line 579), Uint256 * Decimal (lines 730, 732)",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 8 fewer errors"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": "compute_swap already does this correctly. The pattern is: shadow params with Uint256::from() at start, use Uint256 internally, convert back at return."
+    },
+    {
+      "id": "US-010",
+      "title": "Fix Uint128 literal comparisons and arithmetic",
+      "description": "As a compiler developer, I need integer literals (0, 1) used with Uint128 to be wrapped: `0` → `Uint128::zero()`, `1` → `Uint128::new(1)`. Currently generates bare integers which can't be compared/added with Uint128.",
+      "acceptanceCriteria": [
+        "In codegen (visitBinExpr or visitLiteralExpr in block-to-cg.ts), when a numeric literal is used in comparison/arithmetic with a Uint128-typed expression, wrap it appropriately",
+        "Fixes: `share == 0` → `share == Uint128::zero()` (line 327), `desired_amount += 1` → `desired_amount += Uint128::new(1)` (line 337), `return_amount != 0` → `return_amount != Uint128::zero()` (line 417), `amount: 0` → `amount: Uint128::zero()` (line 678)",
+        "Run `bun run e2e` — Counter.cws still compiles clean (CRITICAL: Counter uses bare 0/1 literals too, test carefully)",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 4 fewer errors"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": "REGRESSION RISK: Counter.cws also uses integer literals. A global fix may break Counter if it wraps literals that should stay as bare integers. Need type awareness or conservative heuristic."
+    },
+    {
+      "id": "US-011",
+      "title": "Fix String/Addr type mismatches",
+      "description": "As a compiler developer, I need to handle String↔Addr conversions. PairInfo fields (contract_addr, liquidity_token) are String, but ctx.env.contract.address and ctx.info.sender are Addr. Generated Rust assigns Addr to String fields and vice versa.",
+      "acceptanceCriteria": [
+        "When `$env.contract.address` is assigned to a String struct field, generate `.to_string()` or `.into_string()`",
+        "When `Addr::unchecked(\"\")` is assigned to a String field, use `String::new()` or `\"\".to_string()` instead",
+        "When `ctx.info.sender.clone()` is used in `unwrap_or()` for Option<String>, add `.to_string()`",
+        "When String values from PairInfo are passed where Addr is expected, wrap in `Addr::unchecked()`",
+        "Fixes 5+ E0308 mismatched type errors involving String/Addr (generated lines 205, 206, 247, 360, 455, 465, 497)",
+        "Run `bun run e2e` — Counter.cws still compiles clean (CRITICAL: previous .to_string() attempt broke Counter)",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 5+ fewer errors"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": "REGRESSION RISK: A previous attempt to add .to_string() to $info.sender globally broke Counter.cws. Need to apply selectively, not globally."
+    },
+    {
+      "id": "US-012",
+      "title": "Fix if/else incompatible types and Option wrapping",
+      "description": "As a compiler developer, I need if/else expressions to return compatible types. Line 241-244: one branch returns Addr, other returns None (need Some() wrap). Line 570-575: spread_amount branches return different numeric types.",
+      "acceptanceCriteria": [
+        "When an if-expression has one branch returning None and the other returning a value, wrap the value branch in Some()",
+        "Fix spread_amount if/else to have consistent Uint256 types in both branches",
+        "Fixes E0308 on generated lines 244 and 575",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 2 fewer errors"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-013",
+      "title": "Fix Option<Decimal> unwrap before multiply and contract_addr/is_native_token",
+      "description": "As a compiler developer, I need to fix: (1) slippage_tolerance is Option<Decimal> but used in multiplication without unwrap (1 error), (2) pool.info.contract_addr field access on AssetInfo enum (1 error), (3) pool.is_native_token() method not found on Asset (1 error).",
+      "acceptanceCriteria": [
+        "After `if slippage_tolerance.is_some()` check, auto-unwrap slippage_tolerance in the body (extend existing visitIfStmt unwrap logic)",
+        "For pool.info.contract_addr on AssetInfo enum — generate todo!() or if-let destructuring",
+        "For pool.is_native_token() — generate `matches!(pool.info, AssetInfo::NativeToken { .. })` inline or add impl method to Asset type",
+        "Fixes E0277 on line 344, E0609 on line 233, E0599 on line 301",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 3 fewer errors"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-014",
+      "title": "Fix query_pools closure refs, type annotations, Uint256::sub, and Decimal::from_ratio",
+      "description": "As a compiler developer, I need to fix remaining individual errors: (1) &AssetInfo vs AssetInfo in query_pools closure (2 errors), (2) type annotation needed on todo!() result (1 error), (3) return 0 → Uint128::zero() in query_pool (1 error), (4) Uint256::sub → checked_sub (1 error), (5) Decimal::from_ratio with Uint256 args (2 errors).",
+      "acceptanceCriteria": [
+        "In query_pools .iter().map() closure, clone ai: `ai.clone()` for struct field and function arg (fixes E0308 on line 527)",
+        "Add type annotation to `let res = todo!(\"query\")` → `let res: cosmwasm_std::BalanceResponse = todo!(\"query\");` (fixes E0282 on line 533)",
+        "Change `return 0` to `return Uint128::zero()` in query_pool else branch (fixes type error on line 542)",
+        "Change `share.sub(MINIMUM_LIQUIDITY_AMOUNT)` to `share.checked_sub(MINIMUM_LIQUIDITY_AMOUNT)` or `share - MINIMUM_LIQUIDITY_AMOUNT` (fixes E0599 on line 316)",
+        "Use `Decimal256::from_ratio()` or convert Uint256→Uint128 before Decimal::from_ratio (fixes E0277 on line 311)",
+        "Run `bun run e2e` — Counter.cws still compiles clean",
+        "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 7 fewer errors"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": "These are grouped because each is a 1-2 line fix. Can be done as individual patches."
+    }
+  ]
+}

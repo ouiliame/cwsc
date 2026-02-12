@@ -1,0 +1,28 @@
+# Ralph Progress Log
+Started: Thu Feb 12 14:42:07 PST 2026
+
+## Codebase Patterns
+- The e2e script takes project and contract as CLI args: `bun run src/e2e.ts <project> <Contract>` (e.g., `kitchen-sink TerraswapPair`)
+- The stash from feat/cwsfmt contains the improved codegen pipeline - must be applied before working on cargo check errors
+- `formatRust()` must be async because prettier.format returns a Promise; `writeToDisk()` must also be async
+- `ctx._args` in ANTLR parse tree can contain null entries - always filter before mapping
+- Counter.cws output has 2 pre-existing errors in schema.rs (wrong import path `counter::msg` vs `counter::counter::msg`) - not in lib.rs
+- CWScript `$info.sender` compiles to Rust `ctx.info.sender.clone()`
+- CWScript `$state.pair_info` compiles to Rust `PAIR_INFO.load(ctx.deps.storage)?`
+- Generated Rust is at `examples/<project>/build/<crate-name>/src/lib.rs`
+---
+
+## 2026-02-12 - US-001
+- What was implemented: Fixed 6 undefined variable references in TerraswapPair.cws source
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - 6 variable name fixes
+  - `src/parser/ast-builder.ts` - null safety in visitCallExpr and visitArg
+  - `src/rust/format.ts` - made formatRust async with error handling
+  - `src/rust/crate.ts` - made writeToDisk async
+- **Learnings for future iterations:**
+  - The codegen pipeline was in a git stash on feat/cwsfmt branch - needed to pop stash to get the 489-line generated Rust (vs 141-line skeleton)
+  - The ralph branch needed to be created from feat/cwsfmt, not main, since all the compiler source (e2e, ast-builder, codegen) lives on that branch
+  - Baseline error count is 70 (not 69 as PRD states) - close enough
+  - CWScript `msg.xxx` in #instantiate refers to the message struct, but params are already destructured - use param names directly
+  - `cw20_msg` is not a valid identifier in the CWScript source; it should be `msg` (the #receive handler param)
+---
