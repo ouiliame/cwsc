@@ -51,6 +51,58 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
     return obj instanceof Ast.IdentExpr && obj.ident.value === '$state';
   }
 
+  /**
+   * Detect pattern: if x is Enum.#Variant { let { field1, field2 } = x; ... }
+   * Returns info needed to generate: if let Enum::Variant { field1, field2, .. } = x { ... }
+   */
+  private extractEnumDestructure(pred: Ast.Expr, body: Ast.Block): {
+    varName: string;
+    enumVariant: string;
+    bindings: string[];
+    remainingStmts: Ast.Stmt[];
+  } | null {
+    // pred must be an IsExpr: x is Enum.#Variant
+    if (!(pred instanceof Ast.IsExpr) || pred.negative) {
+      return null;
+    }
+    // lhs must be a simple identifier
+    if (!(pred.lhs instanceof Ast.IdentExpr)) {
+      return null;
+    }
+    const varName = pred.lhs.ident.value;
+
+    // Get the enum variant type string
+    let enumVariant = '';
+    if (pred.rhs) {
+      enumVariant = mapType(pred.rhs);
+    }
+    if (!enumVariant) {
+      enumVariant = pred.rhs?.$antlrParseRuleCtx?.text || '';
+    }
+    enumVariant = enumVariant.replace(/#/g, '');
+    if (!enumVariant || !enumVariant.includes('::')) {
+      return null;
+    }
+
+    // Look for LetStructStmt in the body that destructures from the same variable
+    const stmtsArray = body.stmts.toArray();
+    const firstStmt = stmtsArray[0];
+    if (!(firstStmt instanceof Ast.LetStructStmt)) {
+      return null;
+    }
+    if (!(firstStmt.value instanceof Ast.IdentExpr)) {
+      return null;
+    }
+    if (firstStmt.value.ident.value !== varName) {
+      return null;
+    }
+
+    const bindings = firstStmt.bindings.map((b) => b.name.value);
+    const remainingStmts = stmtsArray.slice(1);
+
+    return { varName, enumVariant, bindings, remainingStmts };
+  }
+
   // --- Blocks ---
 
   visitBlock(node: Ast.Block): string {
@@ -139,6 +191,20 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
   }
 
   visitIfStmt(node: Ast.IfStmt): string {
+    // Check for enum destructuring pattern: if x is Enum.#Variant { let { fields } = x; ... }
+    const enumDestructure = this.extractEnumDestructure(node.pred, node.thenBody);
+    if (enumDestructure) {
+      const { varName, enumVariant, bindings, remainingStmts } = enumDestructure;
+      const bindingList = bindings.length > 0 ? `${bindings.join(', ')}, ..` : '..';
+      const bodyCode = remainingStmts.map((s) => this.visit(s)).join('\n');
+      const bodyWithExtra = bodyCode;
+      if (node.elseBody) {
+        const elseBody = this.visit(node.elseBody);
+        return `if let ${enumVariant} { ${bindingList} } = ${varName} {\n${bodyWithExtra}\n} else {\n${elseBody}\n}`;
+      }
+      return `if let ${enumVariant} { ${bindingList} } = ${varName} {\n${bodyWithExtra}\n}`;
+    }
+
     const pred = this.visit(node.pred);
     const thenBody = this.visit(node.thenBody);
     // Extract variable names from .is_some() checks and auto-unwrap in body
@@ -458,6 +524,19 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
   }
 
   visitIfExpr(node: Ast.IfExpr): string {
+    // Check for enum destructuring pattern (same as visitIfStmt)
+    const enumDestructure = this.extractEnumDestructure(node.pred, node.thenBody);
+    if (enumDestructure) {
+      const { varName, enumVariant, bindings, remainingStmts } = enumDestructure;
+      const bindingList = bindings.length > 0 ? `${bindings.join(', ')}, ..` : '..';
+      const bodyCode = remainingStmts.map((s) => this.visit(s)).join('\n');
+      if (node.elseBody) {
+        const elseBody = this.visit(node.elseBody);
+        return `if let ${enumVariant} { ${bindingList} } = ${varName} { ${bodyCode} } else { ${elseBody} }`;
+      }
+      return `if let ${enumVariant} { ${bindingList} } = ${varName} { ${bodyCode} }`;
+    }
+
     const pred = this.visit(node.pred);
     const thenBody = this.visit(node.thenBody);
     // Auto-unwrap Option variables checked with .is_some() (same as visitIfStmt)

@@ -153,11 +153,7 @@ Ok(Response::new())
 pub fn exec_receive_impl(ctx: ExecuteCtx, msg: Cw20ReceiveMsg) -> Result<Response, ContractError> {
       let contract_addr = ctx.info.sender.clone();
 let inner = cosmwasm_std::from_json::<Cw20HookMsg>(&msg.msg).unwrap();
-if matches!(inner, Cw20HookMsg::Swap { .. }) {
-let belief_price = inner.belief_price.clone();
-let max_spread = inner.max_spread.clone();
-let to = inner.to.clone();
-let deadline = inner.deadline.clone();
+if let Cw20HookMsg::Swap { belief_price, max_spread, to, deadline, .. } = inner {
 let authorized = false;
 let config = PAIR_INFO.load(ctx.deps.storage)?;
 let pools = query_pools(config, ctx.env.contract.address);
@@ -174,9 +170,7 @@ Addr::unchecked(to.to_addr) } else { None };
 let asset = Asset { info: AssetInfo::Token { contract_addr }, amount: msg.amount };
 todo!("call swap");
 } else {
-if matches!(inner, Cw20HookMsg::WithdrawLiquidity { .. }) { let min_assets = inner.min_assets.clone();
-let deadline = inner.deadline.clone();
-let config = PAIR_INFO.load(ctx.deps.storage)?;
+if let Cw20HookMsg::WithdrawLiquidity { min_assets, deadline, .. } = inner { let config = PAIR_INFO.load(ctx.deps.storage)?;
 if Addr::unchecked(ctx.info.sender.clone()) != config.liquidity_token {
 return Err(ContractError::Unauthorized {});
 }
