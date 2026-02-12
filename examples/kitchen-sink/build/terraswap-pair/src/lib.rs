@@ -139,10 +139,10 @@ use super::types::*;
 use cosmwasm_std::*;
 use cw20::Cw20ReceiveMsg;
 pub const INSTANTIATE_REPLY_ID: u64 = 1;
-pub const COMMISSION_RATE: u64 = 3;
 pub const U256: u64 = 0;
-pub const U64: u64 = 0;
+pub const COMMISSION_RATE: u64 = 3;
 pub const U128: u64 = 0;
+pub const U64: u64 = 0;
 pub const MINIMUM_LIQUIDITY_AMOUNT: Uint128 = Uint128::new(1000);
 pub const CW20: u64 = 0;
 pub fn instantiate_impl(ctx: InstantiateCtx, asset_info: [AssetInfo; 2], token_code_id: u64, asset_decimals: [u8; 2]) -> Result<Response, ContractError> {
@@ -301,7 +301,10 @@ return res.amount.amount; } else { return 0; }
 }
     }
 pub fn compute_offer_amount(offer_pool: Uint128, ask_pool: Uint128, ask_amount: Uint128) -> [Uint128; 3] {
-      let commission_rate = Decimal::permille(COMMISSION_RATE);
+      let offer_pool = Uint256::from(offer_pool);
+let ask_pool = Uint256::from(ask_pool);
+let ask_amount = Uint256::from(ask_amount);
+let commission_rate = Decimal::permille(COMMISSION_RATE);
 let cp = offer_pool * ask_pool;
 let one_minus_commission = Decimal::one() - commission_rate;
 let inv_one_minus_commission = Decimal::one() / one_minus_commission;
@@ -318,7 +321,7 @@ let offer_amount = after_offer_pool - offer_pool;
 let before_spread_deduction = offer_amount * Decimal::from_ratio(ask_pool, offer_pool);
 let spread_amount = if before_spread_deduction > before_commission_deduction { before_commission_deduction - before_commission_deduction } else { Uint256::from(0) };
 let commission_amount = before_commission_deduction - ask_amount;
-return [Uint256::from(offer_amount), Uint256::from(spread_amount), Uint256::from(commission_amount)];
+return [Uint128::try_from(offer_amount).unwrap(), Uint128::try_from(spread_amount).unwrap(), Uint128::try_from(commission_amount).unwrap()];
     }
 pub fn assert_max_spread(belief_price: Option<Decimal>, max_spread: Option<Decimal>, offer_asset: Asset, return_asset: Asset, spread_amount: Uint128, offer_decimal: u8, return_decimal: u8) -> Result<(), ContractError> {
       let [offer_amount, return_amount, spread_amount] = if offer_decimal > return_decimal { let diff_decimal = u64::from(10).pow((offer_decimal - return_decimal) as u32);

@@ -86,6 +86,10 @@ export contract TerraswapPair {
   }
 
   fn compute_offer_amount!(offer_pool: U128, ask_pool: U128, ask_amount: U128) -> [U128, U128, U128] {
+    let offer_pool = U256!(offer_pool);
+    let ask_pool = U256!(ask_pool);
+    let ask_amount = U256!(ask_amount);
+
     let commission_rate = Dec.permille(COMMISSION_RATE);
 
     let cp = offer_pool * ask_pool;
@@ -113,7 +117,7 @@ export contract TerraswapPair {
     };
 
     let commission_amount = before_commission_deduction - ask_amount;
-    return [U256!(offer_amount), U256!(spread_amount), U256!(commission_amount)];
+    return [U128!(offer_amount), U128!(spread_amount), U128!(commission_amount)];
   }
 
   fn assert_max_spread!(

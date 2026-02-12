@@ -16,6 +16,10 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - `$.method()` strips the `$` and generates a direct function call; `$info.x` generates `ctx.info.x.clone()` — but `ctx` must exist in scope for this to work
 - CWScript variables defined inside `if` blocks are not hoisted to outer scope in generated Rust — restructure as `let [a, b] = if cond { [x, y] } else { [x2, y2] }` to keep vars in outer scope
 - When an `if/else if/else` chain has `fail!` in the else branch, the generated Rust `return Err(...)` has type `!` (never) which is compatible with any type, so it works as an if-expression value
+- AST `Block.stmts` is a `List<Stmt>` (custom wrapper), NOT a plain array — use `.toArray()` or `.at(i)` to access elements, not `[i]`
+- To detect enum destructuring patterns, check `extractEnumDestructure()` in both `visitIfStmt` AND `visitIfExpr` since `else if` branches go through IfExpr
+- CWScript `U256!(x)` → Rust `Uint256::from(x)`, `U128!(x)` → Rust `Uint128::try_from(x).unwrap()` — use U256! for shadowing and U128! for conversion back
+- CosmWasm: Uint256 can multiply with Decimal256 but NOT with Decimal; functions that shadow params to Uint256 need all Decimal operations upgraded to Decimal256
 ---
 
 ## 2026-02-12 - US-001
@@ -102,4 +106,27 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - For mixed-type tuples (e.g., Asset + u8), split into separate `let` bindings since `[...]` generates a Rust array which requires homogeneous types
   - Removing the `if offer_asset is AssetInfo.#NativeToken { fail! Unauthorized() }` block from #swap was correct — it was a semantic error in the original CWScript (checking the wrong condition at the wrong place)
   - Error count: 52 → 43 (all 14 E0425 undefined variable errors eliminated, but some latent type errors became visible, net -9)
+---
+
+## 2026-02-12 - US-008
+- What was implemented: Fixed Cw20HookMsg enum destructuring — `let { field } = inner` inside `if inner is Enum.#Variant` blocks now generates `if let Enum::Variant { field, .. } = inner` instead of `inner.field.clone()`
+- Files changed:
+  - `src/e2e-helpers/block-to-cg.ts` — Added `extractEnumDestructure()` helper method to CgBlockVisitor. This detects the pattern where an `IsExpr` predicate tests a variable against an enum variant, and the first statement in the if-body is a `LetStructStmt` destructuring that same variable. When detected, generates `if let Enum::Variant { fields, .. } = var { ... }` instead of `if matches!(var, Enum::Variant { .. }) { let field = var.field.clone(); ... }`. Applied to both `visitIfStmt` and `visitIfExpr`.
+- **Learnings for future iterations:**
+  - AST `Block.stmts` is a `List<Stmt>` (custom class), NOT a plain JS array — `stmts[0]` returns `undefined`! Must use `stmts.toArray()[0]` or `stmts.at(0)` to access elements
+  - The `List<T>` class wraps `$children: T[]` internally and provides `.map()`, `.filter()`, `.toArray()`, `.at()`, `.length` etc. but does NOT support bracket indexing
+  - When enum destructuring reveals new variables, those variables' types come from the enum variant definition — fixing destructuring can reveal latent type errors (e.g., `to.to_addr` where `to` is `Option<String>`, not an object with a `.to_addr` field)
+  - Error count: 43 → 38 (6 E0609 enum field access errors eliminated, 1 latent E0609 `to.to_addr` revealed, net -5)
+---
+
+## 2026-02-12 - US-009
+- What was implemented: Fixed compute_offer_amount Uint128/Uint256 type mixing by adding Uint256 param shadowing (matching compute_swap pattern)
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` — Added `let offer_pool = U256!(offer_pool); let ask_pool = U256!(ask_pool); let ask_amount = U256!(ask_amount);` at start of compute_offer_amount. Changed return from `U256!()` to `U128!()` for correct back-conversion.
+- **Learnings for future iterations:**
+  - The `compute_swap` function is the reference pattern: shadow Uint128 params with Uint256::from() at start, do Uint256 arithmetic internally, convert back with Uint128::try_from().unwrap() at return
+  - Shadowing params with Uint256 fixes most type-mixing errors but introduces Uint256*Decimal errors — CosmWasm doesn't implement Mul<Decimal> for Uint256, only Mul<Decimal256>. This is a cross-cutting issue affecting both compute_swap and compute_offer_amount
+  - CWScript `U256!(x)` generates `Uint256::from(x)` and `U128!(x)` generates `Uint128::try_from(x).unwrap()` — the `!` suffix triggers macro-style codegen
+  - PRD error count estimates can be inaccurate when errors overlap across multiple stories (e.g., Uint256*Decimal is in both US-009 and US-014)
+  - Error count: 38 → 37 (multiple Uint128/Uint256 mixing errors eliminated, 1 new Uint256*Decimal error introduced by shadowing, net -1)
 ---
