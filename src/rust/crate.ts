@@ -8,6 +8,7 @@ export const DEFAULT_CARGO_TOML: CargoToml = {
     'cosmwasm-schema': '1.5.0',
     'cw-storage-plus': '1.1.0',
     cw2: '1.1.1',
+    cw20: '1.1.2',
     schemars: '0.8.15',
     'cosmwasm-std': {
       features: ['cosmwasm_1_3'],

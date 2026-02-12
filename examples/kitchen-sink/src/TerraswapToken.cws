@@ -1,11 +1,25 @@
+interface Cw20 {}
 contract Cw20Base implements Cw20 {
-  event Transfer(from: Addr, to: Addr, amount: U128);
-  event Burn(from: Addr, amount: U128);
-  event Send(from: Addr, to: Addr, amount: U128);
-  event IncreaseAllowance(owner: Addr, spender: Addr, amount: U128);
-  event DecreaseAllowance(owner: Addr, spender: Addr, amount: U128);
+  event Transfer(
+Addr
+to
+Addr
+amount
+U128
+event Burn(
+Addr
+amount
+U128
+event Send(
+Addr
+to
+Addr
+amount
+U128
+event IncreaseAllowance(owner: Addr, spender: Addr, amount: U128);
+event DecreaseAllowance(owner: Addr, spender: Addr, amount: U128);
 
-  exec #transfer(recipient: String, amount: U128) {
+exec #transfer(recipient: String, amount: U128) {
     if amount == 0 {
       fail! InvalidZeroAmount();
     }
@@ -113,7 +127,7 @@ contract Cw20Base implements Cw20 {
     recipient: Addr,
     amount: U128
   ) {
-    // check doesn't exist on Rust implementation for some reason o.o ??
+// check doesn't exist on Rust implementation for some reason o.o ??
     if amount == 0 {
       fail! InvalidZeroAmount();
     }
@@ -159,7 +173,7 @@ contract Cw20Base implements Cw20 {
       fail! Unauthorized();
     }
 
-    // update supply and enforce cap
+// update supply and enforce cap
     config.total_supply += amount;
     if config.mint?.cap? {
       if config.total_supply > config.mint.cap {
@@ -189,7 +203,7 @@ contract Cw20Base implements Cw20 {
       } else {
         $state.marketing_info.project = project;
       }
-    } // do nothing
+} // do nothing
 
     if description? {
       if description.trim().is_empty() {
@@ -197,7 +211,7 @@ contract Cw20Base implements Cw20 {
       } else {
         $state.marketing_info.description = description;
       }
-    } // do nothing
+} // do nothing
 
     if marketing? {
       if marketing.trim().is_empty() {
@@ -205,14 +219,14 @@ contract Cw20Base implements Cw20 {
       } else {
         $state.marketing_info.marketing = Addr.validate!(marketing);
       }
-    } // do nothing
+} // do nothing
 
     if (not marketing_info.project?
       and not marketing_info.description?
       and not marketing_info.marketing?
       and not marketing_info.logo?
     ) {
-      $state.marketing_info = None; // instead of delete
+$state.marketing_info = None; // instead of delete
     } else {
       $state.marketing_info = marketing_info;
     }
@@ -302,7 +316,7 @@ contract Cw20Base implements Cw20 {
   }
 
   enum Logo {
-    // since we don't use #, this is treated like a namespace
+// since we don't use #, this is treated like a namespace
     Embedded {
       #Svg([Bytes]),
       #Png([Bytes]),
@@ -344,13 +358,13 @@ export contract TerraswapToken extends Cw20Base {
   }
 
   fn validate_instantiate!(name: String, symbol: String, decimals: U8) -> Bool {
-    // validate name
+// validate name
     let name_bytes = Bytes!(name);
     if name_bytes.len() < 3 or name_bytes.len() > 50 {
       fail! "Name is not in the expected format (3-50 UTF-8 bytes)";
     }
 
-    // validate symbol
+// validate symbol
     let symbol_bytes = Bytes!(symbol);
     if symbol_bytes.len() < 3 or symbol_bytes.len() > 12 {
       fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}",
@@ -363,7 +377,7 @@ export contract TerraswapToken extends Cw20Base {
       }
     }
 
-    // validate decimals
+// validate decimals
     if decimals > 18 {
       fail! "Decimals must not exceed 18";
     }
@@ -376,7 +390,7 @@ export contract TerraswapToken extends Cw20Base {
     initial_balances: List[Cw20Coin],
     mint?: MinterResponse
   ) {
-    // TODO: set contract name & version (CW20)
+// TODO: set contract name & version (CW20)
     $.validate_instantiate!(name, symbol, decimals);
     let total_supply = $.create_accounts!(initial_balances);
     if msg.cap? {
@@ -397,7 +411,7 @@ export contract TerraswapToken extends Cw20Base {
     );
   }
 
-  // .. exec methods defined in Cw20Base (inherited)
+// .. exec methods defined in Cw20Base (inherited)
   
   fn create_accounts!($, accounts: List[Cw20Coin]) -> U128 {
     validate_accounts!(accounts);

@@ -66,7 +66,7 @@ export contract TerraswapPair {
     ).reply_on_success(gas_limit=None, id=INSTANTIATE_REPLY_ID);
   }
 
-  fn query_pools!($, pair_info: PairInfo, addr: Address) {
+  fn query_pools!($, pair_info: PairInfo, addr: Address) -> List[Asset] {
     pair_info.asset_infos.map!(|ai| {
       return Asset(ai, query_pool!(ai, addr));
     })
@@ -298,7 +298,7 @@ export contract TerraswapPair {
 
       refund_assets.push(Asset(info=pool.info, amount=remain_amount));
       if pool.info is AssetInfo.#NativeToken {
-        if remain_amount != is_zero() {
+        if not remain_amount.is_zero() {
           exec! Bank.#send(to_address=$info.sender, amount=[Coin(remain_amount, pool.info.denom)]);
         }
       } else if pool.info is AssetInfo.#Token {
@@ -313,7 +313,7 @@ export contract TerraswapPair {
     // mint LP token to sender
     let receiver = receiver ?? $info.sender;
     exec! Cw20(pair_info.liquidity_token).#mint(recipient=receiver, amount=share);
-    emit ProvideLiquidity($info.sender, receiver, assets[0], assets[1], share);
+    emit! ProvideLiquidity($info.sender, receiver, assets[0], assets[1], share);
   }
 
   fn compute_swap!(offer_pool: U128, ask_pool: U128, offer_amount: U128) -> [U128; 3] {
@@ -383,7 +383,7 @@ export contract TerraswapPair {
         exec! Bank.#send(to_address, Coin(amount, denom));
       }
     }
-    emit Swap(sender, receiver, offer_asset.info, ask_pool.info, offer_amount, spread_amount, commission_amount);
+    emit! Swap(sender, receiver, offer_asset.info, ask_pool.info, offer_amount, spread_amount, commission_amount);
   }
 
   exec #withdraw_liquidity(
@@ -406,7 +406,7 @@ export contract TerraswapPair {
     $.assert_minimum_assets!(refund_assets, min_assets);
     // TODO: exec refund_assets[0].clone().into_msg(sender.clone())?
     exec! Cw20(pair_info.liquidity_token).#burn(amount);
-    emit WithdrawLiquidity(sender=sender, withdrawn_share=amount, refund_assets);
+    emit! WithdrawLiquidity(sender=sender, withdrawn_share=amount, refund_assets);
   }
 
   query #pair() {
@@ -428,9 +428,9 @@ export contract TerraswapPair {
     let { contract_addr } = pair_info;
 
     let pools = $.query_pools!(pair_info, contract_addr);
-    if offer_asset.info == pools[0] {
+    if offer_asset.info == pools[0].info {
       let [offer_pool, ask_pool] = [pools[0], pools[1]];
-    } else if offer_asset.info == pools[1] {
+    } else if offer_asset.info == pools[1].info {
       let [offer_pool, ask_pool] = [pools[1], pools[0]];
     } else {
       fail! AssetMismatch();
@@ -447,12 +447,12 @@ export contract TerraswapPair {
 
   query #reverse_simulation(ask_asset: Asset) {
     let { contract_addr } = $state.pair_info;
-    
+
     let pools = $.query_pools(pair_info, contract_addr);
 
-    if ask_asset.info == pools[0] {
+    if ask_asset.info == pools[0].info {
       let [ask_pool, offer_pool] = [pools[0], pools[1]];
-    } else if ask_asset.info == pools[1] {
+    } else if ask_asset.info == pools[1].info {
       let [ask_pool, offer_pool] = [pools[1], pools[0]];
     } else {
       fail! AssetMismatch();

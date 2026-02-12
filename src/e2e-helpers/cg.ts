@@ -70,7 +70,13 @@ export class CgStateMod {
           rs.konst(x.name.toUpperCase(), x.ty, rs.raw(`Item::new("${x.name}")`))
         );
       } else if (x.$type === 'map') {
-        // TODO: make map
+        items.push(
+          rs.konst(
+            x.name.toUpperCase(),
+            `Map<${x.idxTy}, ${x.ty}>`,
+            rs.raw(`Map::new("${x.name}")`)
+          )
+        );
       }
     });
     return items;
@@ -78,9 +84,9 @@ export class CgStateMod {
 
   public build(): rs.ModuleDefn {
     const items: rs.RustSyntax[] = [
-      rs.use('schemars::JsonSchema'),
-      rs.use('serde::{Serialize, Deserialize}'),
+      rs.use('cosmwasm_std::*'),
       rs.use('cw_storage_plus::{Item, Map}'),
+      rs.use('super::types::*'),
     ];
 
     const stateFields = this.buildStateFields();
@@ -139,6 +145,8 @@ export class CgMsgMod {
     const items: rs.RustSyntax[] = [
       rs.use('cosmwasm_schema::{cw_serde, QueryResponses}'),
       rs.use('cosmwasm_std::*'),
+      rs.use('cw20::Cw20ReceiveMsg'),
+      rs.use('super::types::*'),
     ];
 
     items.push(
@@ -269,7 +277,7 @@ export class CgContractMod {
         ...x.params.map((p) => rs.identExpr(p.name)),
       ]);
       let paramNames = x.params.map((p) => p.name);
-      call = rs.fnCallExpr('to_json_binary', [rs.tryExpr(rs.refExpr(call))]);
+      // Impl fn already returns Result<Binary, ContractError>, so just call it directly
       return rs.arm(
         `QueryMsg::${x.msgName} { ${paramNames.join(', ')} }`,
         call
@@ -284,7 +292,7 @@ export class CgContractMod {
           rs.fnParam('env', 'Env'),
           rs.fnParam('msg', 'QueryMsg'),
         ],
-        'StdResult<Binary>',
+        'Result<Binary, ContractError>',
         [
           rs.letStmt(
             'ctx',
@@ -336,11 +344,22 @@ export interface CgQueryImplFn {
   body: any[];
 }
 
+export interface CgHelperFn {
+  name: string;
+  params: CgParam[];
+  returnType: string;
+  body: string[];
+  needsCtx: boolean;
+}
+
 export class CgImplentationMod {
+  public extraRawItems: string[] = [];
+
   public constructor(
     public instantiateImplFn: CgInstantiateImplFn,
     public execImplFns: CgExecImplFn[],
-    public queryImplFns: CgQueryImplFn[]
+    public queryImplFns: CgQueryImplFn[],
+    public helperFns: CgHelperFn[] = []
   ) {}
 
   public buildInstantiateImplFn(): rs.FunctionDefn {
@@ -359,11 +378,12 @@ export class CgImplentationMod {
   public buildExecImplFns(): rs.FunctionDefn[] {
     return this.execImplFns.map((x) => {
       const params = x.params.map((x) => rs.fnParam(x.name, x.ty));
+      const body = x.body.map((b) => rs.raw(b));
       return rs.fnDefn(
         `exec_${x.fnName}_impl`,
         [rs.fnParam('ctx', 'ExecuteCtx'), ...params],
         'Result<Response, ContractError>',
-        [rs.fnCallExpr('Ok', [rs.fnCallExpr('Response::new', [])])]
+        [...body, rs.fnCallExpr('Ok', [rs.fnCallExpr('Response::new', [])])]
       );
     });
   }
@@ -371,16 +391,43 @@ export class CgImplentationMod {
   public buildQueryImplFns(): rs.FunctionDefn[] {
     return this.queryImplFns.map((x) => {
       const params = x.params.map((x) => rs.fnParam(x.name, x.ty));
+      const body = x.body.map((b) => rs.raw(b));
+      const bodyStr = x.body.join('\n');
+      const hasReturn = bodyStr.includes('return ');
+      const fallback = hasReturn
+        ? []
+        : [rs.raw(`Ok(to_json_binary(&"TODO")?)`)];
       return rs.fnDefn(
         `query_${x.fnName}_impl`,
         [rs.fnParam('ctx', 'QueryCtx'), ...params],
-        `StdResult<CWSQueryResponse<${x.resType}>>`,
-        [
-          rs.fnCallExpr('Ok', [
-            rs.fnCallExpr(`CWSQueryResponse`, [rs.raw(`String::from("TODO")`)]),
-          ]),
-        ]
+        `Result<Binary, ContractError>`,
+        [...body, ...fallback]
       );
+    });
+  }
+
+  public buildHelperFns(): rs.FunctionDefn[] {
+    return this.helperFns.map((x) => {
+      const params = x.params.map((p) => rs.fnParam(p.name, p.ty));
+      // Don't inject deps/env/info — the $ param just means the function
+      // accesses contract context, which is handled by the block visitor.
+      // Injecting extra params causes arg-count mismatches at call sites.
+      const body = x.body.map((b) => rs.raw(b));
+      const retType = x.returnType || 'Result<Response, ContractError>';
+      // Add appropriate fallback based on return type
+      const bodyStr = x.body.join('\n');
+      const hasReturn = bodyStr.includes('return ');
+      let fallback: rs.RustSyntax[];
+      if (retType === 'Result<(), ContractError>' || retType === 'StdResult<()>') {
+        // Always add Ok(()) for Result<()> functions — return Err(...) is for error
+        // paths, but the success path needs Ok(()) at the end
+        fallback = [rs.raw('Ok(())')];
+      } else if (hasReturn) {
+        fallback = [];
+      } else {
+        fallback = [rs.raw('todo!("helper fn")')];
+      }
+      return rs.fnDefn(x.name, params, retType, [...body, ...fallback]);
     });
   }
 
@@ -390,14 +437,23 @@ export class CgImplentationMod {
       rs.use('super::error::*'),
       rs.use('super::msg::*'),
       rs.use('super::state::*'),
+      rs.use('super::types::*'),
       rs.use('cosmwasm_std::*'),
+      rs.use('cw20::Cw20ReceiveMsg'),
     ];
 
     const instImplFn = this.buildInstantiateImplFn();
     const execImplFns = this.buildExecImplFns();
     const queryImplFns = this.buildQueryImplFns();
+    const helperFns = this.buildHelperFns();
 
-    items.push(instImplFn, ...execImplFns, ...queryImplFns);
+    items.push(
+      ...this.extraRawItems.map((r) => rs.raw(r)),
+      instImplFn,
+      ...execImplFns,
+      ...queryImplFns,
+      ...helperFns
+    );
 
     return rs.mod('implementation', items);
   }
@@ -447,6 +503,8 @@ export interface CgUnit {
 export type CgType = CgStruct | CgTuple | CgUnit | CgEnum | CgTypeAlias;
 
 export class CgTypesMod {
+  public extraRawItems: string[] = [];
+
   constructor(
     public structs: CgStruct[],
     public tuples: CgTuple[],
@@ -457,22 +515,22 @@ export class CgTypesMod {
     public events: CgStruct[]
   ) {}
 
-  public buildStructs(): rs.StructDefn[] {
+  public buildStructs(): rs.Annotated<rs.StructDefn>[] {
     return this.structs.map((x) => {
       const fields = x.fields.map((x) => rs.structField(x.name, x.ty));
-      return rs.structDefn(x.name, fields);
+      return rs.ann('#[cw_serde]', rs.structDefn(x.name, fields));
     });
   }
 
-  public buildTuples(): rs.TupleStructDefn[] {
-    return this.tuples.map((x) => rs.tupleStructDefn(x.name, x.elements));
+  public buildTuples(): rs.Annotated<rs.TupleStructDefn>[] {
+    return this.tuples.map((x) => rs.ann('#[cw_serde]', rs.tupleStructDefn(x.name, x.elements)));
   }
 
-  public buildUnits(): rs.UnitStructDefn[] {
-    return this.units.map((x) => rs.unitStructDefn(x.name));
+  public buildUnits(): rs.Annotated<rs.UnitStructDefn>[] {
+    return this.units.map((x) => rs.ann('#[cw_serde]', rs.unitStructDefn(x.name)));
   }
 
-  public buildEnums(): rs.EnumDefn[] {
+  public buildEnums(): rs.Annotated<rs.EnumDefn>[] {
     return this.enums.map((x) => {
       const variants = x.variants.map((x) => {
         if (x.$type === 'struct') {
@@ -487,7 +545,7 @@ export class CgTypesMod {
           return rs.variantUnit(x.name);
         }
       });
-      return rs.enumDefn(x.name, variants);
+      return rs.ann('#[cw_serde]', rs.enumDefn(x.name, variants));
     });
   }
 
@@ -532,7 +590,8 @@ export class CgTypesMod {
     const tuples = this.buildTuples();
     const units = this.buildUnits();
     const enums = this.buildEnums();
-    const errors = this.buildErrors();
+    // Don't generate ContractError here - it's in the error module
+    // const errors = this.buildErrors();
     const events = this.buildEvents();
     const aliases = this.buildAliases();
     items.push(
@@ -540,9 +599,9 @@ export class CgTypesMod {
       ...tuples,
       ...units,
       ...enums,
-      errors,
       events,
-      ...aliases
+      ...aliases,
+      ...this.extraRawItems.map((r) => rs.raw(r))
     );
     return rs.mod('types', items);
   }

@@ -99,8 +99,8 @@ failStmt: failExpr_ SEMI?;
 
 forStmt:
 	FOR (name = ident) IN (iter = expr) body = block SEMI?					# ForIdentStmt
-	| FOR (names = brackIdentList) (iter = expr) body = block SEMI?			# ForTupleStmt
-	| FOR (bindings = braceBindingList) (iter = expr) body = block SEMI?	# ForStructStmt;
+	| FOR (names = brackIdentList) IN (iter = expr) body = block SEMI?			# ForTupleStmt
+	| FOR (bindings = braceBindingList) IN (iter = expr) body = block SEMI?	# ForStructStmt;
 
 execStmt: EXEC_NOW value = expr SEMI?;
 instantiateStmt: INSTANTIATE_NOW value = expr SEMI?;

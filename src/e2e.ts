@@ -63,13 +63,15 @@ export class CWScriptCompiler {
 }
 
 async function main() {
+  const targetProject = process.argv[2] || 'counter';
+  const targetContract = process.argv[3] || 'Counter';
   const project = await CWScriptProject.fromProjectRoot(
-    'examples/kitchen-sink'
+    `examples/${targetProject}`
   );
   const compiler = new CWScriptCompiler(project);
   const ctx = await compiler.build();
   const contractFile = path.resolve(
-    'examples/kitchen-sink/src/TerraswapPair.cws'
+    `examples/${targetProject}/src/${targetContract}.cws`
   );
   const { parseResult, diagnostics } = ctx.sourceFiles[contractFile];
   // get contract
@@ -78,8 +80,14 @@ async function main() {
   let diagnosticsPrinter = new DiagnosticsPrinter(file, diagnostics);
   diagnosticsPrinter.print();
 
+  // collect top-level (module-scope) struct/enum definitions
+  let topLevelStructs = parseResult!.ast.descendantsOfType(Ast.StructDefn)
+    .filter((s: any) => !(s.$parent instanceof Ast.ContractDefn || s.$parent?.$parent instanceof Ast.ContractDefn));
+  let topLevelEnums = parseResult!.ast.descendantsOfType(Ast.EnumDefn)
+    .filter((e: any) => !(e.$parent instanceof Ast.ContractDefn || e.$parent?.$parent instanceof Ast.ContractDefn));
+
   // make cg model
-  let cg = contractAstToCg(contract);
+  let cg = contractAstToCg(contract, { topLevelStructs, topLevelEnums });
   // make rust crate
   let crate = cg.build();
 
