@@ -40,12 +40,9 @@ export contract TerraswapPair {
     asset_decimals: [U8; 2]
   ) {
     $state.pair_info = PairInfo {
-      contract_addr: $env.contract.address,
-      liquidity_token: Addr.empty(),
-      asset_infos: [
-        String!(asset_info[0]),
-        String!(asset_info[1])
-      ],
+      contract_addr: $env.contract.address.to_string(),
+      liquidity_token: "",
+      asset_infos: asset_info,
       asset_decimals: asset_decimals
     };
 
@@ -191,7 +188,7 @@ export contract TerraswapPair {
   }
 
   exec #receive([msg: Cw20ReceiveMsg]) {
-    let contract_addr = $info.sender;
+    let contract_addr = $info.sender.to_string();
     let inner = deserialize![Cw20HookMsg](msg.msg);
     if inner is Cw20HookMsg.#Swap {
       let { belief_price, max_spread, to, deadline } = inner;
@@ -223,7 +220,7 @@ export contract TerraswapPair {
     } else if inner is Cw20HookMsg.#WithdrawLiquidity {
       let { min_assets, deadline } = inner;
       let config = $state.pair_info;
-      if Addr.canonicalize!($info.sender) != config.liquidity_token {
+      if $info.sender.to_string() != config.liquidity_token {
         fail! Unauthorized();
       }
       let sender_addr = Addr.validate!(msg.sender);
@@ -314,9 +311,9 @@ export contract TerraswapPair {
     }
 
     // mint LP token to sender
-    let receiver = receiver ?? $info.sender;
+    let receiver = receiver ?? $info.sender.to_string();
     exec! Cw20(pair_info.liquidity_token).#mint(recipient=receiver, amount=share);
-    emit! ProvideLiquidity($info.sender, receiver, assets[0], assets[1], share);
+    emit! ProvideLiquidity($info.sender.to_string(), receiver, assets[0], assets[1], share);
   }
 
   fn compute_swap!(offer_pool: U128, ask_pool: U128, offer_amount: U128) -> [U128; 3] {
@@ -412,7 +409,7 @@ export contract TerraswapPair {
   query #pool() {
     let { pair_info } = $state;
     let { contract_addr } = pair_info;
-    let assets = $.query_pools!(pair_info, contract_addr);
+    let assets = $.query_pools!(pair_info, Addr.unchecked(contract_addr));
     let { total_share } = query! CW20(contract_addr).#token_info();
     return PoolResponse {
       assets, total_share
@@ -423,7 +420,7 @@ export contract TerraswapPair {
     let pair_info = $state.pair_info;
     let { contract_addr } = pair_info;
 
-    let pools = $.query_pools!(pair_info, contract_addr);
+    let pools = $.query_pools!(pair_info, Addr.unchecked(contract_addr));
     let [offer_pool, ask_pool] = if offer_asset.info == pools[0].info {
       [pools[0], pools[1]]
     } else if offer_asset.info == pools[1].info {
@@ -445,7 +442,7 @@ export contract TerraswapPair {
     let pair_info = $state.pair_info;
     let { contract_addr } = pair_info;
 
-    let pools = $.query_pools(pair_info, contract_addr);
+    let pools = $.query_pools(pair_info, Addr.unchecked(contract_addr));
 
     let [ask_pool, offer_pool] = if ask_asset.info == pools[0].info {
       [pools[0], pools[1]]

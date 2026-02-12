@@ -20,6 +20,12 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - To detect enum destructuring patterns, check `extractEnumDestructure()` in both `visitIfStmt` AND `visitIfExpr` since `else if` branches go through IfExpr
 - CWScript `U256!(x)` → Rust `Uint256::from(x)`, `U128!(x)` → Rust `Uint128::try_from(x).unwrap()` — use U256! for shadowing and U128! for conversion back
 - CosmWasm: Uint256 can multiply with Decimal256 but NOT with Decimal; functions that shadow params to Uint256 need all Decimal operations upgraded to Decimal256
+- CWScript `U128.zero()` → Rust `Uint128::zero()`, `U128.one()` → Rust `Uint128::one()` — use for Uint128 literal comparisons/arithmetic instead of bare 0/1
+- Fixing type errors can reveal latent ownership errors (E0382/E0507) — when the Rust compiler can't type-check a block, it skips ownership analysis for that block
+- CWScript `x.to_string()` generates Rust `x.to_string()` — use for Addr→String conversions (e.g., `$env.contract.address.to_string()`, `$info.sender.to_string()`)
+- PairInfo fields (contract_addr, liquidity_token) are String type, NOT Addr — when assigning Addr values to these fields, use `.to_string()`; when passing String values where Addr is expected, use `Addr.unchecked(x)`
+- CWScript `Addr.empty()` generates `Addr::unchecked("")` (Addr type) — for String fields use empty string literal `""` instead, which generates `String::from("")`
+- CWScript `String!(x)` generates `String::from(x)` — only works if Rust `From<T>` is implemented for the source type; don't use on AssetInfo or other custom types
 ---
 
 ## 2026-02-12 - US-001
@@ -129,4 +135,41 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - CWScript `U256!(x)` generates `Uint256::from(x)` and `U128!(x)` generates `Uint128::try_from(x).unwrap()` — the `!` suffix triggers macro-style codegen
   - PRD error count estimates can be inaccurate when errors overlap across multiple stories (e.g., Uint256*Decimal is in both US-009 and US-014)
   - Error count: 38 → 37 (multiple Uint128/Uint256 mixing errors eliminated, 1 new Uint256*Decimal error introduced by shadowing, net -1)
+---
+
+## 2026-02-12 - US-010
+- What was implemented: Fixed 4 Uint128/{integer} literal comparison and arithmetic errors by replacing bare 0/1 with U128.zero()/U128.one() in CWScript source
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` — 4 changes:
+    - Line 280: `share == 0` → `share == U128.zero()`
+    - Line 292: `desired_amount += 1` → `desired_amount += U128.one()`
+    - Line 375: `return_amount != 0` → `return_amount != U128.zero()`
+    - Line 188: `asset.amount != 0` → `asset.amount != U128.zero()`
+- **Learnings for future iterations:**
+  - Fixed in CWScript SOURCE, not codegen — the codegen has no type information, so it can't know when a literal should be wrapped. CWScript's `U128.zero()` and `U128.one()` map through the existing `STATIC_TYPE_MAP` + `METHOD_MAP` in visitDotExpr
+  - Counter.cws uses U32 types where bare 0/1 are correct, so source-level fixes in TerraswapPair.cws avoid any regression risk
+  - Fixing type errors reveals latent ownership/move errors: removing 4 type errors revealed 7 E0382/E0507 errors (move out of Vec index, use of moved value) that were previously masked because Rust skips ownership analysis when type errors exist in the same block
+  - The `U128.zero()` / `U128.one()` pattern works through the same codegen path as `Dec.one()` / `Dec.ratio()` — the `STATIC_TYPE_MAP` maps `U128` → `Uint128`, and `METHOD_MAP` maps `zero` → `zero`, `one` → `one`
+  - Error count: 37 → 40 (4 Uint128/{integer} errors eliminated, 7 latent E0382/E0507 ownership errors revealed, net +3)
+---
+
+## 2026-02-12 - US-011
+- What was implemented: Fixed 10 String/Addr type mismatch errors across the TerraswapPair contract
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` — 8 targeted changes:
+    - Line 43: `$env.contract.address` → `$env.contract.address.to_string()` (Addr→String for PairInfo.contract_addr)
+    - Line 44: `Addr.empty()` → `""` (empty string literal for PairInfo.liquidity_token)
+    - Lines 45-48: `[String!(asset_info[0]), String!(asset_info[1])]` → `asset_info` (pass [AssetInfo; 2] directly instead of invalid String::from)
+    - Line 191: `$info.sender` → `$info.sender.to_string()` (Addr→String for AssetInfo::Token.contract_addr)
+    - Line 223: `Addr.canonicalize!($info.sender)` → `$info.sender.to_string()` (Addr→String for comparison with config.liquidity_token)
+    - Line 314: `$info.sender` → `$info.sender.to_string()` in `receiver ?? ...` (Addr→String for Option<String> unwrap_or)
+    - Lines 412, 423, 445: `contract_addr` → `Addr.unchecked(contract_addr)` (String→Addr for query_pools parameter)
+- **Learnings for future iterations:**
+  - CWScript `x.to_string()` chains through visitDotExpr → generic `${obj}.${memberName}` path and generates correct Rust `.to_string()` — no special codegen handling needed
+  - The `to_string` method name is NOT in ITER_METHODS set, so it doesn't get mangled with `.iter().to_string()` — it safely falls through
+  - `$info.sender.to_string()` generates `ctx.info.sender.clone().to_string()` which is valid Rust (clone returns Addr, then .to_string() converts)
+  - String↔Addr conversions are best fixed in CWScript SOURCE, not codegen, because the codegen has no type information to know when a conversion is needed
+  - Counter.cws has no Addr/String mixing issues (no PairInfo struct, no multi-asset patterns) so targeted CWScript fixes don't cause regression
+  - The E0277 `String::from(AssetInfo)` errors were caused by CWScript using `String!(asset_info[0])` — fixed by removing the unnecessary String cast and passing the array directly
+  - Error count: 40 → 38 (10 String/Addr errors eliminated: 8 E0308 + 2 E0277; 8 latent E0507 ownership errors revealed from newly-passing type checks; net -2)
 ---

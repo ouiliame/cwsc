@@ -146,12 +146,12 @@ pub const U64: u64 = 0;
 pub const MINIMUM_LIQUIDITY_AMOUNT: Uint128 = Uint128::new(1000);
 pub const CW20: u64 = 0;
 pub fn instantiate_impl(ctx: InstantiateCtx, asset_info: [AssetInfo; 2], token_code_id: u64, asset_decimals: [u8; 2]) -> Result<Response, ContractError> {
-      PAIR_INFO.save(ctx.deps.storage, &(PairInfo { contract_addr: ctx.env.contract.address, liquidity_token: Addr::unchecked(""), asset_infos: [String::from(asset_info[0]), String::from(asset_info[1])], asset_decimals: asset_decimals }))?;
+      PAIR_INFO.save(ctx.deps.storage, &(PairInfo { contract_addr: ctx.env.contract.address.to_string(), liquidity_token: String::from(""), asset_infos: asset_info, asset_decimals: asset_decimals }))?;
 todo!("exec");
 Ok(Response::new())
     }
 pub fn exec_receive_impl(ctx: ExecuteCtx, msg: Cw20ReceiveMsg) -> Result<Response, ContractError> {
-      let contract_addr = ctx.info.sender.clone();
+      let contract_addr = ctx.info.sender.clone().to_string();
 let inner = cosmwasm_std::from_json::<Cw20HookMsg>(&msg.msg).unwrap();
 if let Cw20HookMsg::Swap { belief_price, max_spread, to, deadline, .. } = inner {
 let authorized = false;
@@ -171,7 +171,7 @@ let asset = Asset { info: AssetInfo::Token { contract_addr }, amount: msg.amount
 todo!("call swap");
 } else {
 if let Cw20HookMsg::WithdrawLiquidity { min_assets, deadline, .. } = inner { let config = PAIR_INFO.load(ctx.deps.storage)?;
-if Addr::unchecked(ctx.info.sender.clone()) != config.liquidity_token {
+if ctx.info.sender.clone().to_string() != config.liquidity_token {
 return Err(ContractError::Unauthorized {});
 }
 let sender_addr = Addr::unchecked(msg.sender);
@@ -223,9 +223,9 @@ todo!("exec");
 if matches!(pool.info, AssetInfo::Token { .. }) { todo!("exec"); }
 }
 }
-let receiver = receiver.unwrap_or(ctx.info.sender.clone());
+let receiver = receiver.unwrap_or(ctx.info.sender.clone().to_string());
 todo!("exec");
-/* emit! ProvideLiquidity(ctx.info.sender.clone(), receiver, assets[0], assets[1], share) */
+/* emit! ProvideLiquidity(ctx.info.sender.clone().to_string(), receiver, assets[0], assets[1], share) */
 Ok(Response::new())
     }
 pub fn exec_swap_impl(ctx: ExecuteCtx, offer_asset: Asset, belief_price: Option<Decimal>, max_spread: Option<Decimal>, to: Option<Addr>, deadline: Option<u64>) -> Result<Response, ContractError> {
@@ -268,14 +268,14 @@ pub fn query_pair_impl(ctx: QueryCtx) -> Result<Binary, ContractError> {
 pub fn query_pool_impl(ctx: QueryCtx) -> Result<Binary, ContractError> {
       let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let contract_addr = pair_info.contract_addr.clone();
-let assets = query_pools(pair_info, contract_addr);
+let assets = query_pools(pair_info, Addr::unchecked(contract_addr));
 let total_share = todo!("total_share");
 return Ok(to_json_binary(&(PoolResponse { assets, total_share }))?);
     }
 pub fn query_simulation_impl(ctx: QueryCtx, offer_asset: Asset) -> Result<Binary, ContractError> {
       let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let contract_addr = pair_info.contract_addr.clone();
-let pools = query_pools(pair_info, contract_addr);
+let pools = query_pools(pair_info, Addr::unchecked(contract_addr));
 let [offer_pool, ask_pool] = if offer_asset.info == pools[0].info { [pools[0], pools[1]] } else { if offer_asset.info == pools[1].info { [pools[1], pools[0]] } else { return Err(ContractError::AssetMismatch {}); } };
 let [return_amount, spread_amount, commission_amount] = compute_swap(offer_pool.amount, ask_pool.amount, offer_asset.amount);
 return Ok(to_json_binary(&(SimulationResponse { return_amount, spread_amount, commission_amount }))?);
@@ -283,7 +283,7 @@ return Ok(to_json_binary(&(SimulationResponse { return_amount, spread_amount, co
 pub fn query_reverse_simulation_impl(ctx: QueryCtx, ask_asset: Asset) -> Result<Binary, ContractError> {
       let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let contract_addr = pair_info.contract_addr.clone();
-let pools = query_pools(pair_info, contract_addr);
+let pools = query_pools(pair_info, Addr::unchecked(contract_addr));
 let [ask_pool, offer_pool] = if ask_asset.info == pools[0].info { [pools[0], pools[1]] } else { if ask_asset.info == pools[1].info { [pools[1], pools[0]] } else { return Err(ContractError::AssetMismatch {}); } };
 let [offer_amount, spread_amount, commission_amount] = compute_offer_amount(offer_pool.amount, ask_pool.amount, ask_asset.amount);
 return Ok(to_json_binary(&(ReverseSimulationResponse { offer_amount, spread_amount, commission_amount }))?);
