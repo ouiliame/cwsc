@@ -199,14 +199,14 @@ let deposit1 = Uint128::try_from(deposits[1]).unwrap();
 let share = Uint256::from(Decimal::from_ratio(deposits[0] * deposit1, Uint256::from(1)).sqrt() * Uint256::from(1));
 todo!("exec");
 share.sub(MINIMUM_LIQUIDITY_AMOUNT).ok_or_else(|| ContractError::MinimumLiquidityAmountError {})?; } else { std::cmp::min(deposits[0].multiply_ratio(total_share, pools[0].amount), deposits[1].multiply_ratio(total_share, pools[1].amount)) };
-if share == 0 {
+if share == Uint128::zero() {
 return Err(ContractError::InvalidZeroAmount {});
 }
 let refund_assets = vec![];
 for (i, pool) in pools.iter().enumerate() {
 let desired_amount = if total_share == 0 { deposits[i] } else { let desired_amount = pool.amount.multiply_ratio(share, total_share);
 if desired_amount.multiply_ratio(total_share, share) != pool.amount {
-desired_amount += 1;
+desired_amount += Uint128::one();
 }
 desired_amount };
 let remain_amount = deposits[i] - desired_amount;
@@ -239,7 +239,7 @@ let [return_amount, spread_amount, commission_amount] = compute_swap(offer_pool.
 let return_asset = Asset { info: ask_pool.info, amount: return_amount };
 assert_max_spread(belief_price, max_spread, offer_asset, return_asset, spread_amount, offer_decimal, ask_decimal);
 let receiver = to.unwrap_or(ctx.info.sender.clone());
-if return_amount != 0 {
+if return_amount != Uint128::zero() {
 if matches!(return_asset.info, AssetInfo::Token { .. }) {
 todo!("exec");
 } else {
@@ -377,7 +377,7 @@ return Err(ContractError::StdError(StdError::generic_err("Native token balance m
 }
 }
 } else {
-if asset.amount != 0 { return Err(ContractError::StdError(StdError::generic_err("Native token balance mismatch between the argument and the transferred"))); }
+if asset.amount != Uint128::zero() { return Err(ContractError::StdError(StdError::generic_err("Native token balance mismatch between the argument and the transferred"))); }
 }
 Ok(())
     }
