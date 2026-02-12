@@ -26,3 +26,13 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - CWScript `msg.xxx` in #instantiate refers to the message struct, but params are already destructured - use param names directly
   - `cw20_msg` is not a valid identifier in the CWScript source; it should be `msg` (the #receive handler param)
 ---
+
+## 2026-02-12 - US-002
+- What was implemented: Added missing `asset_decimals` field to PairInfo struct initializer in #instantiate
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - added `asset_decimals: asset_decimals` to PairInfo initializer (line 49)
+- **Learnings for future iterations:**
+  - CWScript struct initializers map directly to Rust struct initializers — missing fields in CWScript = E0063 in Rust
+  - The `asset_decimals` param was already passed to #instantiate but wasn't used in the PairInfo constructor
+  - Error count: 64 → 63 (1 E0063 eliminated)
+---

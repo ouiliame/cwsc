@@ -146,7 +146,7 @@ pub const U128: u64 = 0;
 pub const MINIMUM_LIQUIDITY_AMOUNT: Uint128 = Uint128::new(1000);
 pub const CW20: u64 = 0;
 pub fn instantiate_impl(ctx: InstantiateCtx, asset_info: [AssetInfo; 2], token_code_id: u64, asset_decimals: [u8; 2]) -> Result<Response, ContractError> {
-      PAIR_INFO.save(ctx.deps.storage, &(PairInfo { contract_addr: ctx.env.contract.address, liquidity_token: Addr::unchecked(""), asset_infos: [String::from(asset_info[0]), String::from(asset_info[1])] }))?;
+      PAIR_INFO.save(ctx.deps.storage, &(PairInfo { contract_addr: ctx.env.contract.address, liquidity_token: Addr::unchecked(""), asset_infos: [String::from(asset_info[0]), String::from(asset_info[1])], asset_decimals: asset_decimals }))?;
 todo!("exec");
 Ok(Response::new())
     }

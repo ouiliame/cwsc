@@ -44,8 +44,9 @@ export contract TerraswapPair {
       liquidity_token: Addr.empty(),
       asset_infos: [
         String!(asset_info[0]),
-        String!(asset_info[1]) 
-      ]
+        String!(asset_info[1])
+      ],
+      asset_decimals: asset_decimals
     };
 
     exec! Wasm.#instantiate(

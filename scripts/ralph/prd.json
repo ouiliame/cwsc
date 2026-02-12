@@ -32,8 +32,8 @@
         "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — E0063 error gone"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added asset_decimals field to PairInfo initializer in #instantiate. Reduced cargo check errors from 64 to 63."
     },
     {
       "id": "US-003",
