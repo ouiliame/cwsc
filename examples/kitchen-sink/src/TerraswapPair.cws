@@ -195,7 +195,7 @@ export contract TerraswapPair {
       let { belief_price, max_spread, to, deadline } = inner;
       let authorized = false;
       let config = $state.pair_info;
-      let pools = $.query_pools($env.contract.address);
+      let pools = $.query_pools(config, $env.contract.address);
       for pool in pools {
         if pool.info is AssetInfo.#Token and pool.info.contract_addr == $info.sender {
           authorized = true;
@@ -243,7 +243,7 @@ export contract TerraswapPair {
     }
 
     let { pair_info } = $state;
-    let pools = $.query_pools($env.contract.address);
+    let pools = $.query_pools(pair_info, $env.contract.address);
     
     let deposits = [
       assets.find(|a| a.info == pools[0].info).map(|a| a.amount) ?? fail! "wrong asset info is given",
@@ -398,7 +398,7 @@ export contract TerraswapPair {
     let { pair_info } = $state;
     let liquidity_addr = Addr.humanize!(pair_info.liquidity_token);
     
-    let pools = $.query_pools!($env.contract.address);
+    let pools = $.query_pools!(pair_info, $env.contract.address);
     let { total_share } = $.query_token_info!(liquidity_addr);
 
     let share_ratio = Dec.ratio(amount, total_share);

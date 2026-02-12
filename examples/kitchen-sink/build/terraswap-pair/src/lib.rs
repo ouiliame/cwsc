@@ -160,7 +160,7 @@ let to = inner.to.clone();
 let deadline = inner.deadline.clone();
 let authorized = false;
 let config = PAIR_INFO.load(ctx.deps.storage)?;
-let pools = query_pools(ctx.env.contract.address);
+let pools = query_pools(config, ctx.env.contract.address);
 for pool in pools {
 if matches!(pool.info, AssetInfo::Token { .. }) && pool.info.contract_addr == ctx.info.sender.clone() {
 authorized = true;
@@ -191,7 +191,7 @@ for asset in assets {
 assert_sent_native_token_balance(ctx.info);
 }
 let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
-let pools = query_pools(ctx.env.contract.address);
+let pools = query_pools(pair_info, ctx.env.contract.address);
 let deposits = [assets.iter().find(|a| { a.info == pools[0].info }).map(|a| { a.amount }).ok_or_else(|| ContractError::StdError(StdError::generic_err("wrong asset info is given")))?, assets.iter().find(|a| { a.info == pools[1].info }).map(|a| { a.amount }).ok_or_else(|| ContractError::StdError(StdError::generic_err("wrong asset info is given")))?];
 for (i, pool) in pools.iter().enumerate() {
 if pool.is_native_token() {
@@ -271,7 +271,7 @@ pub fn exec_withdraw_liquidity_impl(ctx: ExecuteCtx, sender: Addr, amount: Uint1
       assert_deadline(ctx.env.block.time.seconds(), deadline)?;
 let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let liquidity_addr = Addr::unchecked(pair_info.liquidity_token);
-let pools = query_pools(ctx.env.contract.address);
+let pools = query_pools(pair_info, ctx.env.contract.address);
 let total_share = todo!("total_share");
 let share_ratio = Decimal::from_ratio(amount, total_share);
 let refund_assets = pools.iter().map(|a| { Asset { info: a.info, amount: a.amount * share_ratio } }).collect::<Vec<_>>();

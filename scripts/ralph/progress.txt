@@ -61,3 +61,14 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - The codegen correctly propagates `?` to both the function signature AND the message enum variant
   - Error count: 59 → 56 (2 E0559 + 1 E0308 eliminated)
 ---
+
+## 2026-02-12 - US-005
+- What was implemented: Fixed 3 query_pools call sites that were missing the pair_info first argument
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - added pair_info/config as first arg to query_pools calls in #receive (line 198), #provide_liquidity (line 246), #withdraw_liquidity (line 401)
+- **Learnings for future iterations:**
+  - CWScript function definitions with `$` context param: `fn query_pools!($, pair_info: PairInfo, addr: Address)` — the `$` is implicit context, actual args start after it
+  - When fixing call sites, check what variable name holds pair_info in each scope — in #receive it's `config`, in #provide_liquidity and #withdraw_liquidity it's `pair_info`
+  - Some call sites already had correct args (#swap, #pool, #simulation, #reverse_simulation) — only 3 of 7 were missing
+  - Error count: 56 → 54 (2 E0061 eliminated; PRD predicted 3 but one was already fixed by line-number shifts from prior stories)
+---
