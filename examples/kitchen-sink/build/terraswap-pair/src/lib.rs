@@ -72,7 +72,7 @@ WithdrawLiquidity {
       sender: Addr,
 amount: Uint128,
 min_assets: Option<[Asset; 2]>,
-deadline: u64
+deadline: Option<u64>
     }
     }
 #[cw_serde] pub enum QueryMsg {
@@ -204,7 +204,7 @@ let share = if total_share == 0 { let deposit0 = Uint128::try_from(deposits[0]).
 let deposit1 = Uint128::try_from(deposits[1]).unwrap();
 let share = Uint256::from(Decimal::from_ratio(deposits[0] * deposit1, Uint256::from(1)).sqrt() * Uint256::from(1));
 todo!("exec");
-share.sub(MINIMUM_LIQUIDITY_AMOUNT).ok_or_else(|| ContractError::MinimumLiquidityAmountError { MINIMUM_LIQUIDITY_AMOUNT, share })?; } else { std::cmp::min(deposits[0].multiply_ratio(total_share, pools[0].amount), deposits[1].multiply_ratio(total_share, pools[1].amount)) };
+share.sub(MINIMUM_LIQUIDITY_AMOUNT).ok_or_else(|| ContractError::MinimumLiquidityAmountError {})?; } else { std::cmp::min(deposits[0].multiply_ratio(total_share, pools[0].amount), deposits[1].multiply_ratio(total_share, pools[1].amount)) };
 if share == 0 {
 return Err(ContractError::InvalidZeroAmount {});
 }
@@ -267,7 +267,7 @@ todo!("exec");
 /* emit! Swap(sender, receiver, offer_asset.info, ask_pool.info, offer_amount, spread_amount, commission_amount) */
 Ok(Response::new())
     }
-pub fn exec_withdraw_liquidity_impl(ctx: ExecuteCtx, sender: Addr, amount: Uint128, min_assets: Option<[Asset; 2]>, deadline: u64) -> Result<Response, ContractError> {
+pub fn exec_withdraw_liquidity_impl(ctx: ExecuteCtx, sender: Addr, amount: Uint128, min_assets: Option<[Asset; 2]>, deadline: Option<u64>) -> Result<Response, ContractError> {
       assert_deadline(ctx.env.block.time.seconds(), deadline)?;
 let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let liquidity_addr = Addr::unchecked(pair_info.liquidity_token);

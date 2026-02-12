@@ -266,7 +266,7 @@ export contract TerraswapPair {
         Dec.ratio(deposits[0] * deposit1, U256(1)).sqrt() * U256(1)
       )
       exec! Cw20(liquidity_token).#mint(recipient=$env.contract.address, amount=MINIMUM_LIQUIDITY_AMOUNT);
-      share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail! MinimumLiquidityAmountError(MINIMUM_LIQUIDITY_AMOUNT, share);
+      share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail! MinimumLiquidityAmountError();
     } else {
       min[U128](
         deposits[0].multiply_ratio(total_share, pools[0].amount),
@@ -391,7 +391,7 @@ export contract TerraswapPair {
     sender: Addr,
     amount: U128,
     min_assets: [Asset; 2]?,
-    deadline: U64
+    deadline?: U64
   ) {
     $.assert_deadline!($env.block.time.seconds(), deadline)?;
     

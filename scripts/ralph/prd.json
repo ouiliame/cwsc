@@ -64,8 +64,8 @@
         "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 3 fewer errors"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Removed positional args from MinimumLiquidityAmountError fail! call (error variant has no fields). Changed deadline param from U64 to U64? in #withdraw_liquidity. Reduced cargo check errors from 59 to 56."
     },
     {
       "id": "US-005",

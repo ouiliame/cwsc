@@ -50,3 +50,14 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - Fixing type errors can reveal latent errors — changing return_asset type exposed an E0317 (missing else clause) that was previously masked
   - Error count: 63 → 59 (5 errors fixed, 1 latent E0317 revealed, net -4)
 ---
+
+## 2026-02-12 - US-004
+- What was implemented: Fixed MinimumLiquidityAmountError positional args and deadline type in #withdraw_liquidity
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - removed positional args from `fail! MinimumLiquidityAmountError()` (line 269), changed `deadline: U64` to `deadline?: U64` in #withdraw_liquidity params (line 394)
+- **Learnings for future iterations:**
+  - CWScript `fail! ErrorName(arg1, arg2)` generates Rust `ContractError::ErrorName { arg1, arg2 }` — if the error variant has no fields, the args must be removed from the CWScript source
+  - CWScript `param?: Type` generates Rust `Option<Type>` — this is how optional params work, and it must match what calling functions expect
+  - The codegen correctly propagates `?` to both the function signature AND the message enum variant
+  - Error count: 59 → 56 (2 E0559 + 1 E0308 eliminated)
+---
