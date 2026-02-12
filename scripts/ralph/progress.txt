@@ -12,6 +12,8 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - Generated Rust is at `examples/<project>/build/<crate-name>/src/lib.rs`
 - `visitIfExpr` in block-to-cg.ts handles `else if` branches; `visitIfStmt` handles top-level if statements — both need auto-unwrap logic for `.is_some()` checks
 - CWScript `else if x?` is parsed as an IfExpr (expression) inside the else block, NOT as an IfStmt — the grammar rule `blockOrExpr: block | expr` routes it through expr path
+- CWScript `$` param in helper functions does NOT inject `ctx` as a Rust param — the block visitor translates `$info` → `ctx.info` but `ctx` is not available. For helper functions needing context, use explicit params instead of `$`
+- `$.method()` strips the `$` and generates a direct function call; `$info.x` generates `ctx.info.x.clone()` — but `ctx` must exist in scope for this to work
 ---
 
 ## 2026-02-12 - US-001
@@ -71,4 +73,16 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - When fixing call sites, check what variable name holds pair_info in each scope — in #receive it's `config`, in #provide_liquidity and #withdraw_liquidity it's `pair_info`
   - Some call sites already had correct args (#swap, #pool, #simulation, #reverse_simulation) — only 3 of 7 were missing
   - Error count: 56 → 54 (2 E0061 eliminated; PRD predicted 3 but one was already fixed by line-number shifts from prior stories)
+---
+
+## 2026-02-12 - US-006
+- What was implemented: Fixed assert_sent_native_token_balance function signature and call sites
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - Removed `$` from fn signature, added explicit `asset: Asset` and `funds: List[Coin]` params; fixed `denom` → `asset.info.denom`; updated call sites in #provide_liquidity (loop over assets calling per-asset) and #swap (pass offer_asset directly)
+- **Learnings for future iterations:**
+  - CWScript `$` helper functions do NOT get `ctx` injected as a Rust param — the block visitor translates `$info` → `ctx.info` but `ctx` doesn't exist in the generated function. Workaround: use explicit params instead of `$`
+  - When a function referenced caller-scope variables (`assets`, `denom`), the fix is to pass them as explicit parameters
+  - Fixing scope issues can reveal latent type errors: `asset.info.denom` triggers E0609 (enum field access), `asset.amount != 0` triggers E0277 (Uint128 vs integer)
+  - For functions that need to accept variable-length asset collections, making the function take a single Asset and looping at the call site avoids Vec vs array type mismatches
+  - Error count: 54 → 52 (4 errors fixed, 2 latent errors revealed, net -2)
 ---

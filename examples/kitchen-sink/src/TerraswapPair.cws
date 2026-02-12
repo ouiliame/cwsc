@@ -173,18 +173,16 @@ export contract TerraswapPair {
     }
   }
 
-  fn assert_sent_native_token_balance!($) {
-    for asset in assets {
-      if asset is AssetInfo.#NativeToken {
-        let coin = $info.funds.find(|x| x.denom == denom);
-        if coin? {
-          if asset.amount != coin.amount {
-            fail! "Native token balance mismatch between the argument and the transferred";
-          }
+  fn assert_sent_native_token_balance!(asset: Asset, funds: List[Coin]) {
+    if asset.info is AssetInfo.#NativeToken {
+      let coin = funds.find(|x| x.denom == asset.info.denom);
+      if coin? {
+        if asset.amount != coin.amount {
+          fail! "Native token balance mismatch between the argument and the transferred";
         }
-      } else if asset.amount != 0 {
-        fail! "Native token balance mismatch between the argument and the transferred";
       }
+    } else if asset.amount != 0 {
+      fail! "Native token balance mismatch between the argument and the transferred";
     }
   }
 
@@ -239,7 +237,7 @@ export contract TerraswapPair {
     $.assert_deadline!($env.block.time.seconds(), deadline);
 
     for asset in assets {
-      $.assert_sent_native_token_balance($info);
+      assert_sent_native_token_balance!(asset, $info.funds);
     }
 
     let { pair_info } = $state;
@@ -343,7 +341,7 @@ export contract TerraswapPair {
     to?: Addr,
     deadline?: U64
   ) {
-    assert_sent_native_token_balance!();
+    assert_sent_native_token_balance!(offer_asset, $info.funds);
     let { pair_info } = $state;
     let pools = $.query_pools!(pair_info, $env.contract.address);
 

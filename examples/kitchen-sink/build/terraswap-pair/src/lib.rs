@@ -188,7 +188,7 @@ Ok(Response::new())
 pub fn exec_provide_liquidity_impl(ctx: ExecuteCtx, assets: [Asset; 2], receiver: Option<String>, deadline: Option<u64>, slippage_tolerance: Option<Decimal>) -> Result<Response, ContractError> {
       assert_deadline(ctx.env.block.time.seconds(), deadline);
 for asset in assets {
-assert_sent_native_token_balance(ctx.info);
+assert_sent_native_token_balance(asset, ctx.info.funds.clone());
 }
 let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let pools = query_pools(pair_info, ctx.env.contract.address);
@@ -235,7 +235,7 @@ todo!("exec");
 Ok(Response::new())
     }
 pub fn exec_swap_impl(ctx: ExecuteCtx, offer_asset: Asset, belief_price: Option<Decimal>, max_spread: Option<Decimal>, to: Option<Addr>, deadline: Option<u64>) -> Result<Response, ContractError> {
-      assert_sent_native_token_balance();
+      assert_sent_native_token_balance(offer_asset, ctx.info.funds.clone());
 let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let pools = query_pools(pair_info, ctx.env.contract.address);
 if offer_asset.info == pools[0].info {
@@ -390,10 +390,9 @@ return Err(ContractError::MinAmountAssetion { min_asset: format!("{:?}", min_ass
 }
 Ok(())
     }
-pub fn assert_sent_native_token_balance() -> Result<(), ContractError> {
-      for asset in assets {
-if matches!(asset.info, AssetInfo::NativeToken { .. }) {
-let coin = ctx.info.funds.clone().iter().find(|x| { x.denom == denom });
+pub fn assert_sent_native_token_balance(asset: Asset, funds: Vec<Coin>) -> Result<(), ContractError> {
+      if matches!(asset.info, AssetInfo::NativeToken { .. }) {
+let coin = funds.iter().find(|x| { x.denom == asset.info.denom });
 if coin.is_some() {
 let coin = coin.unwrap();
 if asset.amount != coin.amount {
@@ -402,7 +401,6 @@ return Err(ContractError::StdError(StdError::generic_err("Native token balance m
 }
 } else {
 if asset.amount != 0 { return Err(ContractError::StdError(StdError::generic_err("Native token balance mismatch between the argument and the transferred"))); }
-}
 }
 Ok(())
     }
