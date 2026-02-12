@@ -120,7 +120,7 @@ export contract TerraswapPair {
     belief_price: Dec?,
     max_spread: Dec?,
     offer_asset: Asset,
-    return_asset: U128,
+    return_asset: Asset,
     spread_amount: U128,
     offer_decimal: U8,
     return_decimal: U8

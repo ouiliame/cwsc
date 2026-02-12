@@ -10,6 +10,8 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - CWScript `$info.sender` compiles to Rust `ctx.info.sender.clone()`
 - CWScript `$state.pair_info` compiles to Rust `PAIR_INFO.load(ctx.deps.storage)?`
 - Generated Rust is at `examples/<project>/build/<crate-name>/src/lib.rs`
+- `visitIfExpr` in block-to-cg.ts handles `else if` branches; `visitIfStmt` handles top-level if statements — both need auto-unwrap logic for `.is_some()` checks
+- CWScript `else if x?` is parsed as an IfExpr (expression) inside the else block, NOT as an IfStmt — the grammar rule `blockOrExpr: block | expr` routes it through expr path
 ---
 
 ## 2026-02-12 - US-001
@@ -35,4 +37,16 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - CWScript struct initializers map directly to Rust struct initializers — missing fields in CWScript = E0063 in Rust
   - The `asset_decimals` param was already passed to #instantiate but wasn't used in the PairInfo constructor
   - Error count: 64 → 63 (1 E0063 eliminated)
+---
+
+## 2026-02-12 - US-003
+- What was implemented: Fixed assert_max_spread parameter type and Option unwrap in else-if branch
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` - changed `return_asset: U128` to `return_asset: Asset` on line 123
+  - `src/e2e-helpers/block-to-cg.ts` - added auto-unwrap logic to `visitIfExpr` for `.is_some()` checks (matching existing `visitIfStmt` behavior)
+- **Learnings for future iterations:**
+  - CWScript `else if x?` routes through `visitIfExpr`, not `visitIfStmt` — any feature added to IfStmt auto-unwrap must also be added to IfExpr
+  - The `mapType()` function correctly maps `Asset` as a pass-through type (not in PRIMITIVE_TYPE_MAP, so it gets returned as-is via IdentTypeExpr)
+  - Fixing type errors can reveal latent errors — changing return_asset type exposed an E0317 (missing else clause) that was previously masked
+  - Error count: 63 → 59 (5 errors fixed, 1 latent E0317 revealed, net -4)
 ---

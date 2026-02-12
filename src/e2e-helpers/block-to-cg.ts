@@ -460,11 +460,15 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
   visitIfExpr(node: Ast.IfExpr): string {
     const pred = this.visit(node.pred);
     const thenBody = this.visit(node.thenBody);
+    // Auto-unwrap Option variables checked with .is_some() (same as visitIfStmt)
+    const isSomeMatches = [...pred.matchAll(/(\w+)\.is_some\(\)/g)];
+    const unwrapLines = isSomeMatches.map(m => `let ${m[1]} = ${m[1]}.unwrap();`).join('\n');
+    const bodyWithUnwraps = unwrapLines ? `${unwrapLines}\n${thenBody}` : thenBody;
     if (node.elseBody) {
       const elseBody = this.visit(node.elseBody);
-      return `if ${pred} { ${thenBody} } else { ${elseBody} }`;
+      return `if ${pred} { ${bodyWithUnwraps} } else { ${elseBody} }`;
     }
-    return `if ${pred} { ${thenBody} }`;
+    return `if ${pred} { ${bodyWithUnwraps} }`;
   }
 
   visitShortTryExpr(node: Ast.ShortTryExpr): string {

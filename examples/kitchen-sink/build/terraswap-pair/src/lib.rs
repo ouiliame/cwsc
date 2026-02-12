@@ -169,7 +169,8 @@ authorized = true;
 if !authorized {
 return Err(ContractError::Unauthorized {});
 }
-let to_addr = if to.is_some() { Addr::unchecked(to.to_addr) } else { None };
+let to_addr = if to.is_some() { let to = to.unwrap();
+Addr::unchecked(to.to_addr) } else { None };
 let asset = Asset { info: AssetInfo::Token { contract_addr }, amount: msg.amount };
 todo!("call swap");
 } else {
@@ -345,7 +346,7 @@ let spread_amount = if before_spread_deduction > before_commission_deduction { b
 let commission_amount = before_commission_deduction - ask_amount;
 return [Uint256::from(offer_amount), Uint256::from(spread_amount), Uint256::from(commission_amount)];
     }
-pub fn assert_max_spread(belief_price: Option<Decimal>, max_spread: Option<Decimal>, offer_asset: Asset, return_asset: Uint128, spread_amount: Uint128, offer_decimal: u8, return_decimal: u8) -> Result<(), ContractError> {
+pub fn assert_max_spread(belief_price: Option<Decimal>, max_spread: Option<Decimal>, offer_asset: Asset, return_asset: Asset, spread_amount: Uint128, offer_decimal: u8, return_decimal: u8) -> Result<(), ContractError> {
       let [offer_amount, return_amount, spread_amount] = if offer_decimal > return_decimal { let diff_decimal = u64::from(10).pow((offer_decimal - return_decimal) as u32);
 [offer_asset.amount, return_asset.amount * Uint128::try_from(diff_decimal).unwrap(), spread_amount * Uint128::try_from(diff_decimal).unwrap()] } else { if offer_decimal < return_decimal { let diff_decimal = u64::from(10).pow((return_decimal - offer_decimal) as u32);
 [offer_asset.amount * Uint128::try_from(diff_decimal).unwrap(), return_asset.amount, spread_amount] } else { if offer_decimal == return_decimal { [offer_asset.amount, return_asset.amount, spread_amount] } } };
@@ -358,7 +359,8 @@ if return_amount < expected_return && Decimal::from_ratio(spread_amount, expecte
 return Err(ContractError::MaxSpreadAssertion {});
 }
 } else {
-if max_spread.is_some() { if Decimal::from_ratio(spread_amount, return_amount + spread_amount) > max_spread {
+if max_spread.is_some() { let max_spread = max_spread.unwrap();
+if Decimal::from_ratio(spread_amount, return_amount + spread_amount) > max_spread {
 return Err(ContractError::MaxSpreadAssertion {});
 } }
 }

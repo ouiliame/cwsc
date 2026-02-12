@@ -48,8 +48,8 @@
         "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 5 fewer errors"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Changed return_asset type from U128 to Asset in CWScript source. Added auto-unwrap logic to visitIfExpr in block-to-cg.ts for else-if branches with .is_some() checks. Reduced cargo check errors from 63 to 59 (4 net reduction; 5 errors fixed but 1 latent E0317 revealed)."
     },
     {
       "id": "US-004",
