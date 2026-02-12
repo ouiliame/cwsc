@@ -161,19 +161,16 @@ export class RustCrate {
     return toml.stringify(this.config as any);
   }
 
-  public writeToDisk(parentDir: string) {
+  public async writeToDisk(parentDir: string) {
     let root = path.resolve(parentDir);
     let crateDir = path.join(root, this.config.package.name);
-    writeFile(path.join(crateDir, 'Cargo.toml'), this.cargoToml());
+    await writeFile(path.join(crateDir, 'Cargo.toml'), this.cargoToml());
     for (let filePath in this.files) {
       let file = this.getFile(filePath);
-      // if directory for file does not exist, create it
-      let dir = path.dirname(filePath);
       if (filePath.endsWith('.rs')) {
-        // format rust
-        file = formatRust(file);
+        file = await formatRust(file);
       }
-      writeFile(path.join(crateDir, filePath), file);
+      await writeFile(path.join(crateDir, filePath), file);
     }
   }
 }

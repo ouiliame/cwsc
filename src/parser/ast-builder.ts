@@ -569,7 +569,7 @@ export class AstBuilderVisitor
     const typeArgs = ctx._typeArgs
       ? this.visitBrackTypeExprList(ctx._typeArgs)
       : Ast.List.empty<Ast.TypeExpr>().$(ctx);
-    const args = new Ast.List(ctx._args.map((a) => this.visitArg(a))).$(ctx);
+    const args = new Ast.List(ctx._args.filter((a) => a != null).map((a) => this.visitArg(a)).filter((a): a is Ast.Arg => a != null)).$(ctx);
     return new Ast.CallExpr(fn, fallible, typeArgs, args).$(ctx);
   }
 
@@ -839,14 +839,16 @@ export class AstBuilderVisitor
     return new Ast.Field(name, value).$(ctx);
   }
 
-  visitArg(ctx: P.ArgContext): Ast.Arg {
+  visitArg(ctx: P.ArgContext): Ast.Arg | null {
     const namedArg = ctx.namedArg();
     if (namedArg) {
       const name = this.visitIdent(namedArg._name);
       const value = this.expr(namedArg._value);
       return new Ast.Arg(name, value).$(ctx);
     } else {
-      const value = this.expr(ctx.expr()!);
+      const exprCtx = ctx.expr();
+      if (!exprCtx) return null;
+      const value = this.expr(exprCtx);
       return new Ast.Arg(null, value).$(ctx);
     }
   }
