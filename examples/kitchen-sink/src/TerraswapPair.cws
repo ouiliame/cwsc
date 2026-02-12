@@ -43,8 +43,8 @@ export contract TerraswapPair {
       contract_addr: $env.contract.address,
       liquidity_token: Addr.empty(),
       asset_infos: [
-        String!(msg.asset_infos[0]), // CwsString.convert_from(msg.asset_infos[0])
-        String!(msg.asset_infos[1]) 
+        String!(asset_info[0]),
+        String!(asset_info[1]) 
       ]
     };
 
@@ -223,7 +223,7 @@ export contract TerraswapPair {
       if Addr.canonicalize!($info.sender) != config.liquidity_token {
         fail! Unauthorized();
       }
-      let sender_addr = Addr.validate!(cw20_msg.sender);
+      let sender_addr = Addr.validate!(msg.sender);
 
       $.withdraw_liquidity(sender_addr, msg.amount, min_assets, deadline);
     }
@@ -262,7 +262,7 @@ export contract TerraswapPair {
       let deposit0 = U128!(deposits[0]);
       let deposit1 = U128!(deposits[1]);
       let share = U256!(
-        Dec.ratio(deposit[0] * deposit1, U256(1)).sqrt() * U256(1)
+        Dec.ratio(deposits[0] * deposit1, U256(1)).sqrt() * U256(1)
       )
       exec! Cw20(liquidity_token).#mint(recipient=$env.contract.address, amount=MINIMUM_LIQUIDITY_AMOUNT);
       share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail! MinimumLiquidityAmountError(MINIMUM_LIQUIDITY_AMOUNT, share);
@@ -375,7 +375,7 @@ export contract TerraswapPair {
     let return_asset = Asset(ask_pool.info, return_amount);
     $.assert_max_spread!(belief_price, max_spread, offer_asset, return_asset, spread_amount, offer_decimal, ask_decimal);
     
-    let receiver = to ?? sender;
+    let receiver = to ?? $info.sender;
     if return_amount != 0 {
       if return_asset is AssetInfo.#Token {
         exec! Wasm.#execute(return_asset.contract_addr, CW20.#transfer(recipient, amount));
@@ -401,7 +401,7 @@ export contract TerraswapPair {
     let { total_share } = $.query_token_info!(liquidity_addr);
 
     let share_ratio = Dec.ratio(amount, total_share);
-    let refund_assets = pool.map(|a| Asset(info=a.info, amount=a.amount * share_ratio));
+    let refund_assets = pools.map(|a| Asset(info=a.info, amount=a.amount * share_ratio));
     
     $.assert_minimum_assets!(refund_assets, min_assets);
     // TODO: exec refund_assets[0].clone().into_msg(sender.clone())?
@@ -446,7 +446,8 @@ export contract TerraswapPair {
   }
 
   query #reverse_simulation(ask_asset: Asset) {
-    let { contract_addr } = $state.pair_info;
+    let pair_info = $state.pair_info;
+    let { contract_addr } = pair_info;
 
     let pools = $.query_pools(pair_info, contract_addr);
 
