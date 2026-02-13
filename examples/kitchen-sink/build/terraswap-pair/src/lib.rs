@@ -35,9 +35,6 @@ asset: String
     },
 #[error("AssetMismatch")] AssetMismatch {
       
-    },
-#[error("MinimumLiquidityAmountError")] MinimumLiquidityAmountError {
-      
     }
     }
     }
@@ -139,9 +136,9 @@ use super::types::*;
 use cosmwasm_std::*;
 use cw20::Cw20ReceiveMsg;
 pub const INSTANTIATE_REPLY_ID: u64 = 1;
+pub const U128: u64 = 0;
 pub const U256: u64 = 0;
 pub const COMMISSION_RATE: u64 = 3;
-pub const U128: u64 = 0;
 pub const U64: u64 = 0;
 pub const MINIMUM_LIQUIDITY_AMOUNT: Uint128 = Uint128::new(1000);
 pub const CW20: u64 = 0;
@@ -198,9 +195,9 @@ let liquidity_token = pair_info.liquidity_token.clone();
 let total_share = todo!("total_share");
 let share = if total_share == 0 { let deposit0 = Uint128::try_from(deposits[0]).unwrap();
 let deposit1 = Uint128::try_from(deposits[1]).unwrap();
-let share = Uint256::from(Decimal::from_ratio(deposits[0] * deposit1, Uint256::from(1)).sqrt() * Uint256::from(1));
+let share = Uint256::from(Decimal::from_ratio(deposits[0] * deposit1, Uint256::from(1u128)).sqrt() * Uint256::from(1u128));
 todo!("exec");
-share.sub(MINIMUM_LIQUIDITY_AMOUNT).ok_or_else(|| ContractError::MinimumLiquidityAmountError {})?; } else { std::cmp::min(deposits[0].multiply_ratio(total_share, pools[0].amount), deposits[1].multiply_ratio(total_share, pools[1].amount)) };
+share - Uint256::from(MINIMUM_LIQUIDITY_AMOUNT) } else { std::cmp::min(deposits[0].multiply_ratio(total_share, pools[0].amount), deposits[1].multiply_ratio(total_share, pools[1].amount)) };
 if share == Uint128::zero() {
 return Err(ContractError::InvalidZeroAmount {});
 }
@@ -293,37 +290,37 @@ let [offer_amount, spread_amount, commission_amount] = compute_offer_amount(offe
 return Ok(to_json_binary(&(ReverseSimulationResponse { offer_amount, spread_amount, commission_amount }))?);
     }
 pub fn query_pools(pair_info: PairInfo, addr: Addr) -> Vec<Asset> {
-      pair_info.asset_infos.iter().map(|ai| { return Asset { info: ai, amount: query_pool(ai, addr) }; }).collect::<Vec<_>>()
+      pair_info.asset_infos.iter().map(|ai| { return Asset { info: ai.clone(), amount: query_pool(ai.clone(), addr.clone()) }; }).collect::<Vec<_>>()
     }
 pub fn query_pool(asset_info: AssetInfo, addr: Addr) -> Uint128 {
       if matches!(asset_info, AssetInfo::Token { .. }) {
 let res = /* query! Bank.balance(asset_info.contract_addr, BALANCE.load(ctx.deps.storage, &(addr))?) */ todo!("query");
-return res.balance;
+return todo!("balance");
 } else {
 if matches!(asset_info, AssetInfo::NativeToken { .. }) { let res = /* query! Bank.balance(addr, asset_info.denom) */ todo!("query");
-return res.amount.amount; } else { return 0; }
+return todo!("amount"); } else { return Uint128::zero(); }
 }
     }
 pub fn compute_offer_amount(offer_pool: Uint128, ask_pool: Uint128, ask_amount: Uint128) -> [Uint128; 3] {
       let offer_pool = Uint256::from(offer_pool);
 let ask_pool = Uint256::from(ask_pool);
 let ask_amount = Uint256::from(ask_amount);
-let commission_rate = Decimal::permille(COMMISSION_RATE);
+let commission_rate = Decimal256::permille(COMMISSION_RATE);
 let cp = offer_pool * ask_pool;
-let one_minus_commission = Decimal::one() - commission_rate;
-let inv_one_minus_commission = Decimal::one() / one_minus_commission;
+let one_minus_commission = Decimal256::one() - commission_rate;
+let inv_one_minus_commission = Decimal256::one() / one_minus_commission;
 let before_commission_deduction = ask_amount * inv_one_minus_commission;
 if before_commission_deduction * one_minus_commission != ask_amount {
-before_commission_deduction += Uint256::from(1);
+before_commission_deduction += Uint256::from(1u128);
 }
 let after_ask_pool = ask_pool - before_commission_deduction;
-let after_offer_pool = Uint256::from(1).multiply_ratio(cp, after_ask_pool);
+let after_offer_pool = Uint256::from(1u128).multiply_ratio(cp, after_ask_pool);
 if after_offer_pool * (ask_pool - before_commission_deduction) != cp {
-after_offer_pool += Uint256::from(1);
+after_offer_pool += Uint256::from(1u128);
 }
 let offer_amount = after_offer_pool - offer_pool;
-let before_spread_deduction = offer_amount * Decimal::from_ratio(ask_pool, offer_pool);
-let spread_amount = if before_spread_deduction > before_commission_deduction { before_commission_deduction - before_commission_deduction } else { Uint256::from(0) };
+let before_spread_deduction = offer_amount * Decimal256::from_ratio(ask_pool, offer_pool);
+let spread_amount = if before_spread_deduction > before_commission_deduction { before_commission_deduction - before_commission_deduction } else { Uint256::from(0u128) };
 let commission_amount = before_commission_deduction - ask_amount;
 return [Uint128::try_from(offer_amount).unwrap(), Uint128::try_from(spread_amount).unwrap(), Uint128::try_from(commission_amount).unwrap()];
     }
@@ -365,7 +362,7 @@ if asset.amount < min_asset.amount {
 return Err(ContractError::MinAmountAssertion { min_asset: format!("{:?}", min_asset), asset: format!("{:?}", asset) });
 }
 } else {
-return Err(ContractError::MinAmountAssetion { min_asset: format!("{:?}", min_asset), asset: format!("{:?}", Asset { info: min_asset.info, amount: 0 }) });
+return Err(ContractError::MinAmountAssetion { min_asset: format!("{:?}", min_asset), asset: format!("{:?}", Asset { info: min_asset.info, amount: Uint128::zero() }) });
 }
 }
 }
@@ -389,12 +386,12 @@ pub fn compute_swap(offer_pool: Uint128, ask_pool: Uint128, offer_amount: Uint12
       let offer_pool = Uint256::from(offer_pool);
 let ask_pool = Uint256::from(ask_pool);
 let offer_amount = Uint256::from(offer_amount);
-let commission_rate = Decimal::permille(COMMISSION_RATE);
+let commission_rate = Decimal256::permille(COMMISSION_RATE);
 let return_amount = (ask_pool * offer_amount) / (offer_pool + offer_amount);
-let spread_amount = ((offer_amount * Decimal::from_ratio(ask_pool, offer_pool)) - return_amount);
+let spread_amount = ((offer_amount * Decimal256::from_ratio(ask_pool, offer_pool)) - return_amount);
 let commission_amount = return_amount * commission_rate;
-if return_amount != (commission_amount * (Decimal::one() / commission_rate)) {
-commission_amount += Uint256::from(128);
+if return_amount != (commission_amount * (Decimal256::one() / commission_rate)) {
+commission_amount += Uint256::from(128u128);
 }
 return_amount -= commission_amount;
 return [Uint128::try_from(return_amount).unwrap(), Uint128::try_from(spread_amount).unwrap(), Uint128::try_from(commission_amount).unwrap()];

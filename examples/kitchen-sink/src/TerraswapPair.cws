@@ -66,7 +66,7 @@ export contract TerraswapPair {
 
   fn query_pools!($, pair_info: PairInfo, addr: Address) -> List[Asset] {
     pair_info.asset_infos.map!(|ai| {
-      return Asset(ai, query_pool!(ai, addr));
+      return Asset(ai.clone(), query_pool!(ai.clone(), addr.clone()));
     })
   }
 
@@ -78,7 +78,7 @@ export contract TerraswapPair {
       let res = query! Bank.#balance(addr, asset_info.denom);
       return res.amount.amount;
     } else {
-      return 0;
+      return U128.zero();
     }
   }
 
@@ -87,11 +87,11 @@ export contract TerraswapPair {
     let ask_pool = U256!(ask_pool);
     let ask_amount = U256!(ask_amount);
 
-    let commission_rate = Dec.permille(COMMISSION_RATE);
+    let commission_rate = Dec256.permille(COMMISSION_RATE);
 
     let cp = offer_pool * ask_pool;
-    let one_minus_commission = Dec.one() - commission_rate;
-    let inv_one_minus_commission = Dec.one() / one_minus_commission;
+    let one_minus_commission = Dec256.one() - commission_rate;
+    let inv_one_minus_commission = Dec256.one() / one_minus_commission;
     let before_commission_deduction = ask_amount * inv_one_minus_commission;
     if before_commission_deduction * one_minus_commission != ask_amount {
       before_commission_deduction += U256(1);
@@ -105,7 +105,7 @@ export contract TerraswapPair {
     }
 
     let offer_amount = after_offer_pool - offer_pool;
-    let before_spread_deduction = offer_amount * Dec.ratio(ask_pool, offer_pool);
+    let before_spread_deduction = offer_amount * Dec256.ratio(ask_pool, offer_pool);
 
     let spread_amount = if before_spread_deduction > before_commission_deduction {
       before_commission_deduction - before_commission_deduction
@@ -168,7 +168,7 @@ export contract TerraswapPair {
             fail! MinAmountAssertion(min_asset=min_asset, asset=asset);
           }
         } else {
-          fail! MinAmountAssetion(min_asset=min_asset, asset=Asset(info=min_asset.info, amount=0));
+          fail! MinAmountAssetion(min_asset=min_asset, asset=Asset(info=min_asset.info, amount=U128.zero()));
         }
       }
     }
@@ -268,7 +268,7 @@ export contract TerraswapPair {
         Dec.ratio(deposits[0] * deposit1, U256(1)).sqrt() * U256(1)
       )
       exec! Cw20(liquidity_token).#mint(recipient=$env.contract.address, amount=MINIMUM_LIQUIDITY_AMOUNT);
-      share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail! MinimumLiquidityAmountError();
+      share - U256!(MINIMUM_LIQUIDITY_AMOUNT)
     } else {
       min[U128](
         deposits[0].multiply_ratio(total_share, pools[0].amount),
@@ -325,14 +325,14 @@ export contract TerraswapPair {
     let offer_pool = U256!(offer_pool);
     let ask_pool = U256!(ask_pool);
     let offer_amount = U256!(offer_amount);
-    
-    let commission_rate = Dec.permille(COMMISSION_RATE);
+
+    let commission_rate = Dec256.permille(COMMISSION_RATE);
     let return_amount = (ask_pool * offer_amount) / (offer_pool + offer_amount);
     let spread_amount = (
-      (offer_amount * Dec.ratio!(ask_pool, offer_pool)) - return_amount
+      (offer_amount * Dec256.ratio(ask_pool, offer_pool)) - return_amount
     );
     let commission_amount = return_amount * commission_rate;
-    if return_amount != (commission_amount * (Dec.one() / commission_rate)) {
+    if return_amount != (commission_amount * (Dec256.one() / commission_rate)) {
       commission_amount += U256(128);
     }
     // commission will be returned to the pool

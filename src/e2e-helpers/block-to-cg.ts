@@ -20,6 +20,8 @@ const STATIC_TYPE_MAP: Record<string, string> = {
   Addr: 'Addr',
   Dec: 'Decimal',
   Decimal: 'Decimal',
+  Dec256: 'Decimal256',
+  Decimal256: 'Decimal256',
   U128: 'Uint128',
   U256: 'Uint256',
   Uint128: 'Uint128',
@@ -27,6 +29,8 @@ const STATIC_TYPE_MAP: Record<string, string> = {
 };
 
 export class CgBlockVisitor extends Ast.AstVisitor<string> {
+  private _todoVars = new Set<string>();
+
   constructor(public ctx: CgBlockContext) {
     super();
   }
@@ -134,6 +138,10 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
   visitLetIdentStmt(node: Ast.LetIdentStmt): string {
     const name = node.name.value;
     const value = this.visit(node.value);
+    // If value is a todo!(), track it so subsequent field accesses propagate todo
+    if (value.includes('todo!(')) {
+      this._todoVars.add(name);
+    }
     return `let ${name} = ${value};`;
   }
 
@@ -156,6 +164,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
     const value = this.visit(node.value);
     // If the value is a todo!() / query placeholder, don't access fields on it
     if (value.includes('todo!(')) {
+      bindings.forEach((name) => this._todoVars.add(name));
       return bindings.map((name) => `let ${name} = todo!("${name}");`).join('\n');
     }
     // If value is an enum (identified by matches!() pattern), field access won't work
@@ -353,6 +362,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
         // Translate specific method names
         const METHOD_MAP: Record<string, Record<string, string>> = {
           Decimal: { ratio: 'from_ratio', permille: 'permille', one: 'one', zero: 'zero' },
+          Decimal256: { ratio: 'from_ratio', permille: 'permille', one: 'one', zero: 'zero' },
           Addr: { empty: 'unchecked', validate: 'unchecked', canonicalize: 'unchecked', humanize: 'unchecked', unchecked: 'unchecked' },
           Uint128: { zero: 'zero', one: 'one' },
           Uint256: { zero: 'zero', one: 'one' },
@@ -385,6 +395,10 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
     const obj = this.visit(node.obj);
     // If obj contains todo!(), propagate it — accessing fields on ! type fails
     if (obj.includes('todo!(')) {
+      return `todo!("${memberName}")`;
+    }
+    // If obj is a variable known to be assigned from todo!(), propagate todo
+    if (node.obj instanceof Ast.IdentExpr && this._todoVars.has(node.obj.ident.value)) {
       return `todo!("${memberName}")`;
     }
     return `${obj}.${memberName}`;
@@ -457,10 +471,18 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
       return `${fnName} { ${fields.join(', ')} }`;
     }
 
-    // Type constructors: U128(x) → Uint128 conversion, U256(x) → Uint256::from(x)
+    // Type constructors: U256(x) → Uint256::from(x)
+    // For integer literals, add u128 suffix since Uint256 doesn't implement From<i32>
+    if (fnName === 'U256' || fnName === 'Uint256') {
+      const args = node.args.map((a) => this.visitArg(a));
+      const arg = args[0];
+      // Check if arg is a numeric literal
+      if (/^\d+$/.test(arg)) {
+        return `Uint256::from(${arg}u128)`;
+      }
+      return `Uint256::from(${arg})`;
+    }
     const TYPE_CONSTRUCTORS: Record<string, string> = {
-      U256: 'Uint256::from',
-      Uint256: 'Uint256::from',
       String: 'String::from',
     };
     // Uint128 conversion needs try_from since source might be Uint256
@@ -654,7 +676,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
       const callExpr = parent.$parent as Ast.CallExpr;
       const fnText = callExpr.fn.$antlrParseRuleCtx?.text || '';
       // If the fn is a map!/map call, params are likely references → clone them
-      if (fnText.endsWith('.map') || fnText.endsWith('.map!')) {
+      if (fnText.endsWith('.map') || fnText.endsWith('.map!') || fnText.endsWith('.map(') || fnText.endsWith('.map!(')) {
         const cloneLines = params.map(p => `let ${p} = ${p}.clone();`).join('\n');
         return `|${params.join(', ')}| { ${cloneLines}\n${body} }`;
       }
