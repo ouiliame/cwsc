@@ -33,6 +33,11 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - CWScript `if x? and y > z { ... }` uses `x` in the condition BEFORE auto-unwrap fires in the body — split into nested `if x? { if y > z { ... } }` to fix
 - CWScript `x.is_native_token()` doesn't exist on Asset — use `x.info is AssetInfo.#NativeToken` instead
 - Fixing type errors can also reveal latent E0384 (immutable variable reassignment) — CWScript `let x = false; ... x = true;` needs `let mut x` in Rust
+- CWScript `Dec256.ratio(x, y)` → Rust `Decimal256::from_ratio(x, y)` — use Dec256 instead of Dec when operands are Uint256 (Uint256 can multiply Decimal256 but NOT Decimal)
+- CWScript `Dec256.permille(x)` → Rust `Decimal256::permille(x)`, `Dec256.one()` → `Decimal256::one()` — same pattern as Dec but for Decimal256
+- `U256(n)` with integer literals now generates `Uint256::from(nu128)` — Uint256 doesn't implement From<i32>, needs u128 suffix
+- `_todoVars` tracking in CgBlockVisitor: when a let-binding assigns from todo!(), subsequent `.field` accesses propagate to `todo!("field")` instead of generating type errors
+- Fixing type errors can reveal latent E0596 (cannot borrow as mutable) — CWScript `x += y` generates `x += y` but Rust needs `let mut x` for `+=`
 ---
 
 ## 2026-02-12 - US-001
@@ -215,4 +220,34 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - `pool.is_native_token()` is a TerraSwap-specific method that doesn't exist on the generated Asset struct — use `pool.info is AssetInfo.#NativeToken` instead (generates `matches!()`)
   - Fixing the `pool.info.contract_addr` E0609 error revealed a latent E0384 (cannot assign twice to immutable `authorized`) — CWScript codegen always generates `let` (immutable), but reassignment needs `let mut`
   - Error count: 35 → 33 (3 target errors eliminated: E0277 Option<Decimal> multiply, E0609 contract_addr, E0599 is_native_token; 1 latent E0384 revealed; net -2)
+---
+
+## 2026-02-12 - US-014
+- What was implemented: Fixed 8 target errors: query_pools closure refs, todo!() type propagation, return 0 → Uint128::zero(), share.sub() → subtraction, Decimal→Decimal256 for Uint256 arithmetic, U256 integer literal codegen
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` — 8 changes:
+    - Line 69: Added `.clone()` to `ai` and `addr` in query_pools closure (fixes &AssetInfo vs AssetInfo)
+    - Line 81: `return 0` → `return U128.zero()` (fixes integer vs Uint128 type error)
+    - Lines 90, 93-94, 108: `Dec.permille/one/ratio` → `Dec256.permille/one/ratio` in compute_offer_amount (fixes Uint256*Decimal and Decimal::from_ratio with Uint256)
+    - Lines 329, 332, 334-335: `Dec.permille/ratio/one` → `Dec256.permille/ratio/one` in compute_swap (same fix)
+    - Line 171: `amount=0` → `amount=U128.zero()` in assert_minimum_assets (fixes Asset amount type)
+    - Line 271: `share.sub!(MINIMUM_LIQUIDITY_AMOUNT) ?? fail!...` → `share - U256!(MINIMUM_LIQUIDITY_AMOUNT)` (fixes E0599 no method sub on Uint256)
+  - `src/e2e-helpers/block-to-cg.ts` — 6 changes:
+    - Added `Dec256`/`Decimal256` to STATIC_TYPE_MAP for Decimal256 static method support
+    - Added `Decimal256` to METHOD_MAP with same methods as Decimal (from_ratio, permille, one, zero)
+    - Added `_todoVars` Set to CgBlockVisitor to track variables assigned from todo!()
+    - In visitLetIdentStmt: detect todo!() values and add name to _todoVars
+    - In visitLetStructStmt: add destructured names to _todoVars when value is todo!()
+    - In visitDotExpr: check _todoVars for IdentExpr objects to propagate todo!()
+    - U256/Uint256 constructor: moved to dedicated handler with u128 suffix for numeric literals (Uint256 doesn't implement From<i32>)
+    - Closure visitor: added `.map(` and `.map!(` to fnText endsWith checks (broadened detection)
+  - `examples/kitchen-sink/build/terraswap-pair/src/lib.rs` — Regenerated output
+- **Learnings for future iterations:**
+  - Uint256 doesn't implement From<i32> — `Uint256::from(1)` fails, need `Uint256::from(1u128)` or `Uint256::from(1u64)`
+  - Decimal256 is exported from `cosmwasm_std::*` and has the same API as Decimal (from_ratio, permille, one, zero, sqrt)
+  - Uint256 * Decimal256 works but Uint256 * Decimal does NOT — when doing Uint256 arithmetic, all Decimal types must be upgraded to Decimal256
+  - `Uint256::checked_sub()` returns `Result<Uint256, OverflowError>`, not `Option<Uint256>` — can't use `.ok_or_else()` on it; simpler to use `-` operator
+  - Variables assigned from `todo!()` need propagation tracking — without it, `let res = todo!(); res.field` generates E0282 because Rust can't infer the type of `res`
+  - The closure visitor's `.map` detection via `fnText.endsWith('.map')` works because the ANTLR `CallExpr` rule has `fn` (DotExpr) separate from `fallible` (`!`), so `fnText` is the dot expression text without the `!`
+  - Error count: 33 → 25 (8 target errors eliminated: 2 E0308 closure refs, 1 E0282 type annotation, 1 E0308 return 0, 1 E0599 sub method, 3 E0277 Decimal*Uint256/from_ratio; plus 1 bonus E0308 amount:0. 4 latent E0596 immutable-borrow errors revealed. Net -8)
 ---

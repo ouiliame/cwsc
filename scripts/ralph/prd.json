@@ -220,8 +220,8 @@
         "Run `bun src/e2e.ts kitchen-sink TerraswapPair` then `cargo check` — 7 fewer errors"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": "These are grouped because each is a 1-2 line fix. Can be done as individual patches."
+      "passes": true,
+      "notes": "Fixed 8 target errors: (1) query_pools closure: added .clone() to ai and addr in CWScript source to fix &AssetInfo vs AssetInfo (2 E0308). (2) todo!() type annotation: added _todoVars tracking in CgBlockVisitor to propagate todo!() through field accesses (1 E0282). (3) return 0 → U128.zero() in query_pool (1 E0308). (4) share.sub() → share - U256!(MINIMUM_LIQUIDITY_AMOUNT) using subtraction operator (1 E0599). (5) Dec.ratio/permille/one → Dec256.ratio/permille/one in compute_swap and compute_offer_amount for Uint256 compatibility (4 E0277). Also fixed: U256(n) codegen adds u128 suffix for integer literals, amount: 0 → U128.zero() in assert_minimum_assets. 4 latent E0596 (immutable variable reassignment) revealed by successful type checking. Counter.cws unaffected. Reduced cargo check errors from 33 to 25 (net -8)."
     }
   ]
 }
