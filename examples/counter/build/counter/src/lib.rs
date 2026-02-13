@@ -94,27 +94,31 @@ use super::types::*;
 use cosmwasm_std::*;
 use cw20::Cw20ReceiveMsg;
 pub fn instantiate_impl(ctx: InstantiateCtx, count: Option<u32>, owner: Option<Addr>) -> Result<Response, ContractError> {
-      COUNT.save(ctx.deps.storage, &(count.unwrap_or(0)))?;
+      let mut _response = Response::new();
+COUNT.save(ctx.deps.storage, &(count.unwrap_or(0)))?;
 OWNER.save(ctx.deps.storage, &(owner.unwrap_or(ctx.info.sender.clone())))?;
-Ok(Response::new())
+Ok(_response)
     }
 pub fn exec_increment_impl(ctx: ExecuteCtx) -> Result<Response, ContractError> {
-      COUNT.update(ctx.deps.storage, |mut c| -> StdResult<_> { c += 1; Ok(c) })?;
-Ok(Response::new())
+      let mut _response = Response::new();
+COUNT.update(ctx.deps.storage, |mut c| -> StdResult<_> { c += 1; Ok(c) })?;
+Ok(_response)
     }
 pub fn exec_decrement_impl(ctx: ExecuteCtx) -> Result<Response, ContractError> {
-      let current_count = COUNT.load(ctx.deps.storage)?;
+      let mut _response = Response::new();
+let current_count = COUNT.load(ctx.deps.storage)?;
 if current_count == 0 {
 return Err(ContractError::CountIsZeroError {});
 }
-Ok(Response::new())
+Ok(_response)
     }
 pub fn exec_reset_impl(ctx: ExecuteCtx, count: Option<u32>) -> Result<Response, ContractError> {
-      if ctx.info.sender.clone() != OWNER.load(ctx.deps.storage)? {
+      let mut _response = Response::new();
+if ctx.info.sender.clone() != OWNER.load(ctx.deps.storage)? {
 return Err(ContractError::Unauthorized {});
 }
 COUNT.save(ctx.deps.storage, &(count.unwrap_or(0)))?;
-Ok(Response::new())
+Ok(_response)
     }
 pub fn query_count_impl(ctx: QueryCtx) -> Result<Binary, ContractError> {
       return Ok(to_json_binary(&(COUNT.load(ctx.deps.storage)?))?);

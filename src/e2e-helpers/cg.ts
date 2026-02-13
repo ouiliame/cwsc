@@ -371,7 +371,7 @@ export class CgImplentationMod {
       'instantiate_impl',
       [rs.fnParam('ctx', 'InstantiateCtx'), ...params],
       'Result<Response, ContractError>',
-      [...body, rs.fnCallExpr('Ok', [rs.fnCallExpr('Response::new', [])])]
+      [rs.raw('let mut _response = Response::new();'), ...body, rs.raw('Ok(_response)')]
     );
   }
 
@@ -383,7 +383,7 @@ export class CgImplentationMod {
         `exec_${x.fnName}_impl`,
         [rs.fnParam('ctx', 'ExecuteCtx'), ...params],
         'Result<Response, ContractError>',
-        [...body, rs.fnCallExpr('Ok', [rs.fnCallExpr('Response::new', [])])]
+        [rs.raw('let mut _response = Response::new();'), ...body, rs.raw('Ok(_response)')]
       );
     });
   }

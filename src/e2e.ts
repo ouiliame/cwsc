@@ -86,8 +86,12 @@ async function main() {
   let topLevelEnums = parseResult!.ast.descendantsOfType(Ast.EnumDefn)
     .filter((e: any) => !(e.$parent instanceof Ast.ContractDefn || e.$parent?.$parent instanceof Ast.ContractDefn));
 
+  // collect top-level const declarations
+  let topLevelConsts = parseResult!.ast.descendantsOfType(Ast.ConstIdentStmt)
+    .filter((c: any) => !(c.$parent instanceof Ast.ContractDefn || c.$parent?.$parent instanceof Ast.ContractDefn));
+
   // make cg model
-  let cg = contractAstToCg(contract, { topLevelStructs, topLevelEnums });
+  let cg = contractAstToCg(contract, { topLevelStructs, topLevelEnums, topLevelConsts });
   // make rust crate
   let crate = cg.build();
 

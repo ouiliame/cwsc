@@ -263,12 +263,59 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
   }
 
   visitExecStmt(node: Ast.ExecStmt): string {
-    // exec! involves cross-contract calls (Wasm, Bank, Cw20) that can't be
-    // directly translated to Rust. Generate todo!() placeholder.
-    return `todo!("exec");`;
+    // exec! Bank.#send(addr, coins) → BankMsg::Send { to_address, amount }
+    // exec! Bank.#burn(coins) → BankMsg::Burn { amount }
+    // exec! other → todo!()
+    if (node.value instanceof Ast.CallExpr && node.value.fn instanceof Ast.DotExpr) {
+      const dotExpr = node.value.fn;
+      if (dotExpr.obj instanceof Ast.IdentExpr) {
+        const target = dotExpr.obj.ident.value;
+        const method = this.stripHash(dotExpr.memberName.value);
+        const args = node.value.args;
+
+        if (target === 'Bank' && method === 'send' && args.length >= 2) {
+          const toAddr = this.visit(args.at(0)!.value);
+          const coins = this.visit(args.at(1)!.value);
+          return `_response = _response.add_message(CosmosMsg::Bank(BankMsg::Send { to_address: (${toAddr}).to_string(), amount: ${coins}.to_vec() }));`;
+        }
+        if (target === 'Bank' && method === 'burn' && args.length >= 1) {
+          const coins = this.visit(args.at(0)!.value);
+          return `_response = _response.add_message(CosmosMsg::Bank(BankMsg::Burn { amount: ${coins}.to_vec() }));`;
+        }
+        return `todo!("exec! ${target}.${method}");`;
+      }
+    }
+    return `todo!("exec!");`;
   }
 
   visitEmitStmt(node: Ast.EmitStmt): string {
+    // emit! event(key=value, ...) → anonymous event, add attributes to response
+    // emit! EventName(key=value, ...) → named event, add Event to response
+    if (node.value instanceof Ast.CallExpr && node.value.fn instanceof Ast.IdentExpr) {
+      const name = node.value.fn.ident.value;
+      const args = node.value.args;
+
+      if (name === 'event') {
+        // Anonymous event → _response = _response.add_attribute("key", val)
+        const lines: string[] = [];
+        args.map((a) => {
+          const val = this.visit(a.value);
+          const key = a.name ? a.name.value : 'value';
+          lines.push(`_response = _response.add_attribute("${key}", format!("{}", ${val}));`);
+        });
+        return lines.join('\n');
+      } else {
+        // Named event → _response = _response.add_event(Event::new("snake_name").add_attribute(...))
+        const snakeName = name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+        let eventExpr = `Event::new("${snakeName}")`;
+        args.map((a) => {
+          const val = this.visit(a.value);
+          const key = a.name ? a.name.value : 'value';
+          eventExpr += `.add_attribute("${key}", format!("{}", ${val}))`;
+        });
+        return `_response = _response.add_event(${eventExpr});`;
+      }
+    }
     const value = this.visit(node.value);
     return `/* emit! ${value} */`;
   }
@@ -415,7 +462,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
 
     const obj = this.visit(node.obj);
     const index = this.visit(node.index);
-    return `${obj}[${index}]`;
+    return `${obj}[${index} as usize].clone()`;
   }
 
   visitIdentExpr(node: Ast.IdentExpr): string {
@@ -658,9 +705,16 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
     const tyText = mapType(node.ty);
     const fields = node.fields.map((f) => {
       if (f.value) {
-        return `${f.name.value}: ${this.visit(f.value)}`;
+        const val = this.visit(f.value);
+        // Clone local variable identifiers to avoid Rust move issues
+        // (CWScript semantics: values are implicitly cloned when passed)
+        if (f.value instanceof Ast.IdentExpr && !f.value.ident.value.startsWith('$')) {
+          return `${f.name.value}: ${val}.clone()`;
+        }
+        return `${f.name.value}: ${val}`;
       }
-      return f.name.value;
+      // Shorthand field: clone the variable to avoid moves
+      return `${f.name.value}: ${f.name.value}.clone()`;
     });
     return `${tyText} { ${fields.join(', ')} }`;
   }

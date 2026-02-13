@@ -199,6 +199,7 @@ export function indexContractNodes(ast: Ast.ContractDefn): ContractNodes {
 export interface TopLevelTypes {
   topLevelStructs?: Ast.StructDefn[];
   topLevelEnums?: Ast.EnumDefn[];
+  topLevelConsts?: Ast.ConstIdentStmt[];
 }
 
 export function contractAstToCg(ast: Ast.ContractDefn, topLevel?: TopLevelTypes): CgContractCrate {
@@ -546,12 +547,39 @@ export function contractAstToCg(ast: Ast.ContractDefn, topLevel?: TopLevelTypes)
     events
   );
 
+  // Generate top-level const declarations from source file
+  const topLevelConstNames = new Set<string>();
+  if (topLevel?.topLevelConsts) {
+    for (const c of topLevel.topLevelConsts) {
+      const constName = c.name.value;
+      topLevelConstNames.add(constName);
+      // Infer type from the value expression
+      let constType = '&str';
+      let constVal = '';
+      if (c.value instanceof Ast.StringLit) {
+        constType = '&str';
+        constVal = c.value.value; // already quoted
+      } else if (c.value instanceof Ast.IntLit) {
+        constType = 'u64';
+        constVal = c.value.value;
+      } else if (c.value instanceof Ast.BoolLit) {
+        constType = 'bool';
+        constVal = c.value.value ? 'true' : 'false';
+      } else {
+        constType = '&str';
+        constVal = '"unknown"';
+      }
+      implMod.extraRawItems.push(`pub const ${constName}: ${constType} = ${constVal};`);
+    }
+  }
+
   // Scan for undeclared constants (ALL_CAPS identifiers) and generate stubs
   const definedNames = new Set([
     ...stateDefns.map((s) => s.name.value.toUpperCase()),
     ...structDefns.map((s) => s.name.value),
     ...enumDefns.map((e) => e.name.value),
     ...errorDefns.map((e) => e.name.value),
+    ...topLevelConstNames,
   ]);
   const constantRefs = new Set<string>();
   for (const ident of ast.descendantsOfType(Ast.IdentExpr)) {

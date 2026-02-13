@@ -1,0 +1,56 @@
+const CONTRACT_NAME = "crates.io:atomic-swap"
+const CONTRACT_VERSION = "0.0.1"
+
+contract AtomicSwap {
+  state {
+    config: struct SwapConfig {
+      owner: Addr,
+      allowed_denom: String
+    }
+    cache: struct SwapCache {
+      sender_address: Addr,
+      deposited_amount: Coin
+    }
+  }
+
+  error NotEnoughFunds()
+  error Unauthorized()
+  error InvalidDenom()
+
+  event SwapInitiated(sender: String, amount: String)
+
+  #instantiate(allowed_denom: String) {
+    let config = SwapConfig {
+      owner: $info.sender,
+      allowed_denom
+    }
+    $state.config = config
+    emit! event(method="instantiate", owner=$info.sender)
+  }
+
+  exec #deposit() {
+    let { config } = $state
+    if $info.funds.is_empty() {
+      fail! NotEnoughFunds()
+    }
+    let deposit = $info.funds[0]
+    $state.cache = SwapCache { sender_address: $info.sender, deposited_amount: deposit }
+    emit! SwapInitiated(sender=$info.sender, amount=deposit.amount)
+  }
+
+  exec #withdraw() {
+    let { config, cache } = $state
+    if $info.sender != config.owner {
+      fail! Unauthorized()
+    }
+    exec! Bank.#send(cache.sender_address, [cache.deposited_amount])
+  }
+
+  query #config() -> SwapConfig {
+    return $state.config
+  }
+
+  query #cache() -> SwapCache {
+    return $state.cache
+  }
+}

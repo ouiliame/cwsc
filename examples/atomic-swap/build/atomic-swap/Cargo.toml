@@ -28,7 +28,7 @@ library = [ ]
 crate-type = [ "cdylib", "rlib" ]
 
 [package]
-name = "kitchen-sink"
+name = "atomic-swap"
 version = "0.0.1"
 edition = "2021"
 exclude = [ "contract.wasm", "hash.txt" ]
