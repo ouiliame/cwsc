@@ -24,8 +24,15 @@ Started: Thu Feb 12 14:42:07 PST 2026
 - Fixing type errors can reveal latent ownership errors (E0382/E0507) — when the Rust compiler can't type-check a block, it skips ownership analysis for that block
 - CWScript `x.to_string()` generates Rust `x.to_string()` — use for Addr→String conversions (e.g., `$env.contract.address.to_string()`, `$info.sender.to_string()`)
 - PairInfo fields (contract_addr, liquidity_token) are String type, NOT Addr — when assigning Addr values to these fields, use `.to_string()`; when passing String values where Addr is expected, use `Addr.unchecked(x)`
+- CWScript `U64(x)` generates `(x as u64)` (NOT `u64::from(x)`) — `u64::from()` doesn't accept i32 literals
+- When an if/else chain's final `else if` condition is always true (exhaustive), change it to bare `else` to avoid E0317 "missing else clause"
+- CWScript `Some(expr)` generates Rust `Some(expr)` — use in CWScript source to wrap if-branch values when else-branch is None
 - CWScript `Addr.empty()` generates `Addr::unchecked("")` (Addr type) — for String fields use empty string literal `""` instead, which generates `String::from("")`
 - CWScript `String!(x)` generates `String::from(x)` — only works if Rust `From<T>` is implemented for the source type; don't use on AssetInfo or other custom types
+- `extractEnumDestructure()` now supports DotExpr LHS (e.g., `pool.info is AssetInfo.#Token { let { contract_addr } = pool.info; ... }` → `if let AssetInfo::Token { contract_addr, .. } = pool.info { ... }`)
+- CWScript `if x? and y > z { ... }` uses `x` in the condition BEFORE auto-unwrap fires in the body — split into nested `if x? { if y > z { ... } }` to fix
+- CWScript `x.is_native_token()` doesn't exist on Asset — use `x.info is AssetInfo.#NativeToken` instead
+- Fixing type errors can also reveal latent E0384 (immutable variable reassignment) — CWScript `let x = false; ... x = true;` needs `let mut x` in Rust
 ---
 
 ## 2026-02-12 - US-001
@@ -172,4 +179,40 @@ Started: Thu Feb 12 14:42:07 PST 2026
   - Counter.cws has no Addr/String mixing issues (no PairInfo struct, no multi-asset patterns) so targeted CWScript fixes don't cause regression
   - The E0277 `String::from(AssetInfo)` errors were caused by CWScript using `String!(asset_info[0])` — fixed by removing the unnecessary String cast and passing the array directly
   - Error count: 40 → 38 (10 String/Addr errors eliminated: 8 E0308 + 2 E0277; 8 latent E0507 ownership errors revealed from newly-passing type checks; net -2)
+---
+
+## 2026-02-12 - US-012
+- What was implemented: Fixed 3 if/else type incompatibility errors and U64() codegen issue
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` — 3 changes:
+    - Line 208: `Addr.validate!(to.to_addr)` → `Some(Addr.validate!(to))` (wrap in Some() for Option<Addr> consistency)
+    - Line 135: `else if offer_decimal == return_decimal` → `else` (exhaustive else, eliminates E0317)
+    - Line 144: `U256.zero()` → `U128.zero()` (match Uint128 type from if-branch)
+  - `src/e2e-helpers/block-to-cg.ts` — Changed U64() codegen from `u64::from(x)` to `(x as u64)` to handle integer literals
+  - `examples/kitchen-sink/build/terraswap-pair/src/lib.rs` — Regenerated output
+- **Learnings for future iterations:**
+  - CWScript `U64(x)` was generating `u64::from(x)` which fails for integer literals (Rust i32) because `u64` doesn't implement `From<i32>`. Changed codegen to `(x as u64)` which works universally
+  - When an `else if` with a condition that's always true (exhaustive) has no else clause, Rust reports E0317 "if may be missing an else clause" — fix by removing the redundant condition
+  - Fixing E0317 (missing else clause) can reveal latent errors that were masked — Rust skips type-checking branches inside an if-expression that's missing its else clause
+  - CWScript `Some(expr)` generates `Some(expr)` correctly — `Some` is in the FUNC_NAMES list so it bypasses struct construction logic
+  - When an if/else returns None in one branch and a value in the other, wrapping the value branch in Some() in the CWScript source is the cleanest fix (vs codegen which has no type info)
+  - Error count: 38 → 35 (3 errors fixed: 1 E0308 if/else incompatible types, 1 E0317 missing else, 1 E0308 Uint128/Uint256 mismatch; 2 latent E0277 u64::from(i32) revealed and fixed; net -3)
+---
+
+## 2026-02-12 - US-013
+- What was implemented: Fixed 3 target errors: Option<Decimal> unwrap before multiply, pool.info.contract_addr enum field access, pool.is_native_token() method not found
+- Files changed:
+  - `examples/kitchen-sink/src/TerraswapPair.cws` — 3 changes:
+    - Line 199: `if pool.info is AssetInfo.#Token and pool.info.contract_addr == $info.sender` → split into nested `if pool.info is AssetInfo.#Token { let { contract_addr } = pool.info; if contract_addr == $info.sender.to_string() { ... } }`
+    - Line 255: `if pool.is_native_token()` → `if pool.info is AssetInfo.#NativeToken`
+    - Line 297: `if slippage_tolerance? and remain_amount > deposits[i] * slippage_tolerance` → nested `if slippage_tolerance? { if remain_amount > deposits[i] * slippage_tolerance { ... } }`
+  - `src/e2e-helpers/block-to-cg.ts` — Extended `extractEnumDestructure()` to handle DotExpr LHS in IsExpr (e.g., `pool.info is AssetInfo.#Token` where `pool.info` is a DotExpr, not just a simple identifier). Now generates `if let AssetInfo::Token { contract_addr, .. } = pool.info` instead of `matches!()` + `pool.info.contract_addr`
+  - `examples/kitchen-sink/build/terraswap-pair/src/lib.rs` — Regenerated output
+- **Learnings for future iterations:**
+  - `extractEnumDestructure()` previously only matched `IdentExpr` as the IsExpr LHS — DotExpr like `pool.info` was falling through to `matches!()` + dot field access which fails on enums
+  - When extending `extractEnumDestructure` for DotExpr, need to `this.visit()` the LHS to get the Rust expression string, then compare the LetStructStmt value the same way
+  - CWScript `if x? and condition_using_x` cannot be a single `if` because auto-unwrap happens inside the body, not in the condition. Must split into nested ifs.
+  - `pool.is_native_token()` is a TerraSwap-specific method that doesn't exist on the generated Asset struct — use `pool.info is AssetInfo.#NativeToken` instead (generates `matches!()`)
+  - Fixing the `pool.info.contract_addr` E0609 error revealed a latent E0384 (cannot assign twice to immutable `authorized`) — CWScript codegen always generates `let` (immutable), but reassignment needs `let mut`
+  - Error count: 35 → 33 (3 target errors eliminated: E0277 Option<Decimal> multiply, E0609 contract_addr, E0599 is_native_token; 1 latent E0384 revealed; net -2)
 ---

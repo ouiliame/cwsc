@@ -53,6 +53,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
 
   /**
    * Detect pattern: if x is Enum.#Variant { let { field1, field2 } = x; ... }
+   * Also handles: if x.field is Enum.#Variant { let { field1, field2 } = x.field; ... }
    * Returns info needed to generate: if let Enum::Variant { field1, field2, .. } = x { ... }
    */
   private extractEnumDestructure(pred: Ast.Expr, body: Ast.Block): {
@@ -65,11 +66,17 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
     if (!(pred instanceof Ast.IsExpr) || pred.negative) {
       return null;
     }
-    // lhs must be a simple identifier
-    if (!(pred.lhs instanceof Ast.IdentExpr)) {
+
+    // lhs can be a simple identifier OR a dot expression (e.g., pool.info)
+    let varName = '';
+    if (pred.lhs instanceof Ast.IdentExpr) {
+      varName = pred.lhs.ident.value;
+    } else if (pred.lhs instanceof Ast.DotExpr) {
+      // For dot expressions, visit to get the Rust expression string
+      varName = this.visit(pred.lhs);
+    } else {
       return null;
     }
-    const varName = pred.lhs.ident.value;
 
     // Get the enum variant type string
     let enumVariant = '';
@@ -90,11 +97,24 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
     if (!(firstStmt instanceof Ast.LetStructStmt)) {
       return null;
     }
-    if (!(firstStmt.value instanceof Ast.IdentExpr)) {
+
+    // Check that destructure source matches the IsExpr LHS
+    // For IdentExpr: firstStmt.value must be the same identifier
+    // For DotExpr: visit firstStmt.value and compare strings
+    let destructureSource = '';
+    if (firstStmt.value instanceof Ast.IdentExpr) {
+      destructureSource = firstStmt.value.ident.value;
+    } else if (firstStmt.value instanceof Ast.DotExpr) {
+      destructureSource = this.visit(firstStmt.value);
+    } else {
       return null;
     }
-    if (firstStmt.value.ident.value !== varName) {
-      return null;
+
+    // Compare: for simple idents, compare directly; for dot exprs, compare visited strings
+    if (pred.lhs instanceof Ast.IdentExpr) {
+      if (destructureSource !== varName) return null;
+    } else {
+      if (destructureSource !== varName) return null;
     }
 
     const bindings = firstStmt.bindings.map((b) => b.name.value);

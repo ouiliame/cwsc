@@ -158,8 +158,10 @@ let authorized = false;
 let config = PAIR_INFO.load(ctx.deps.storage)?;
 let pools = query_pools(config, ctx.env.contract.address);
 for pool in pools {
-if matches!(pool.info, AssetInfo::Token { .. }) && pool.info.contract_addr == ctx.info.sender.clone() {
+if let AssetInfo::Token { contract_addr, .. } = pool.info {
+if contract_addr == ctx.info.sender.clone().to_string() {
 authorized = true;
+}
 }
 }
 if !authorized {
@@ -188,7 +190,7 @@ let pair_info = PAIR_INFO.load(ctx.deps.storage)?;
 let pools = query_pools(pair_info, ctx.env.contract.address);
 let deposits = [assets.iter().find(|a| { a.info == pools[0].info }).map(|a| { a.amount }).ok_or_else(|| ContractError::StdError(StdError::generic_err("wrong asset info is given")))?, assets.iter().find(|a| { a.info == pools[1].info }).map(|a| { a.amount }).ok_or_else(|| ContractError::StdError(StdError::generic_err("wrong asset info is given")))?];
 for (i, pool) in pools.iter().enumerate() {
-if pool.is_native_token() {
+if matches!(pool.info, AssetInfo::NativeToken { .. }) {
 pool.amount -= deposits[i];
 }
 }
@@ -210,9 +212,11 @@ desired_amount += Uint128::one();
 }
 desired_amount };
 let remain_amount = deposits[i] - desired_amount;
-if slippage_tolerance.is_some() && remain_amount > deposits[i] * slippage_tolerance {
+if slippage_tolerance.is_some() {
 let slippage_tolerance = slippage_tolerance.unwrap();
+if remain_amount > deposits[i] * slippage_tolerance {
 return Err(ContractError::MaxSlippageAssertion {});
+}
 }
 refund_assets.push(Asset { info: pool.info, amount: remain_amount });
 if matches!(pool.info, AssetInfo::NativeToken { .. }) {

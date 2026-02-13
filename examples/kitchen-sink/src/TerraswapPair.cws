@@ -196,8 +196,11 @@ export contract TerraswapPair {
       let config = $state.pair_info;
       let pools = $.query_pools(config, $env.contract.address);
       for pool in pools {
-        if pool.info is AssetInfo.#Token and pool.info.contract_addr == $info.sender {
-          authorized = true;
+        if pool.info is AssetInfo.#Token {
+          let { contract_addr } = pool.info;
+          if contract_addr == $info.sender.to_string() {
+            authorized = true;
+          }
         }
       }
 
@@ -250,7 +253,7 @@ export contract TerraswapPair {
     ];
 
     for [i, pool] in pools.enumerate() {
-      if pool.is_native_token() {
+      if pool.info is AssetInfo.#NativeToken {
         pool.amount -= deposits[i];
       }
     }
@@ -292,8 +295,10 @@ export contract TerraswapPair {
       }
 
       let remain_amount = deposits[i] - desired_amount;
-      if slippage_tolerance? and remain_amount > deposits[i] * slippage_tolerance {
-        fail! MaxSlippageAssertion();
+      if slippage_tolerance? {
+        if remain_amount > deposits[i] * slippage_tolerance {
+          fail! MaxSlippageAssertion();
+        }
       }
 
       refund_assets.push(Asset(info=pool.info, amount=remain_amount));
