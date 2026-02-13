@@ -1,0 +1,5 @@
+{
+  "name": "nameservice",
+  "version": "0.0.1",
+  "description": "Simplified CosmWasm name service"
+}

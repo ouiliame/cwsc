@@ -1,0 +1,54 @@
+const CONTRACT_NAME = "crates.io:nameservice"
+const CONTRACT_VERSION = "0.0.1"
+
+struct NameRecord {
+  owner: Addr
+}
+
+contract Nameservice {
+  state {
+    config: struct NameserviceConfig {
+      purchase_price: Coin,
+      transfer_price: Coin
+    }
+    names[String]: NameRecord
+  }
+
+  error NameTaken()
+  error Unauthorized()
+  error InsufficientFunds()
+
+  event Register(name: String, owner: String)
+  event TransferName(name: String, sender: String, recipient: String)
+
+  #instantiate(purchase_price: Coin, transfer_price: Coin) {
+    let config = NameserviceConfig { purchase_price, transfer_price }
+    $state.config = config
+  }
+
+  exec #register(name: String) {
+    if $info.funds.is_empty() {
+      fail! InsufficientFunds()
+    }
+    let record = NameRecord { owner: $info.sender }
+    $state.names[name] = record
+    emit! Register(name=name, owner=$info.sender)
+  }
+
+  exec #transfer(name: String, recipient: Addr) {
+    let record = $state.names[name]
+    if $info.sender != record.owner {
+      fail! Unauthorized()
+    }
+    $state.names[name] = NameRecord { owner: recipient }
+    emit! TransferName(name=name, sender=$info.sender, recipient=recipient)
+  }
+
+  query #resolve(name: String) -> NameRecord {
+    return $state.names[name]
+  }
+
+  query #config() -> NameserviceConfig {
+    return $state.config
+  }
+}

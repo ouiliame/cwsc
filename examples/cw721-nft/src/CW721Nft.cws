@@ -1,0 +1,72 @@
+const CONTRACT_NAME = "crates.io:cw721-nft"
+const CONTRACT_VERSION = "0.0.1"
+
+struct NftToken {
+  owner: Addr,
+  token_uri: String
+}
+
+contract CW721Nft {
+  state {
+    collection: struct CollectionInfo {
+      name: String,
+      symbol: String
+    }
+    num_tokens: U64
+    minter: Addr
+    tokens[String]: NftToken
+  }
+
+  error Unauthorized()
+  error TokenNotFound()
+
+  event Mint(token_id: String, owner: String)
+  event Transfer(token_id: String, sender: String, recipient: String)
+  event Burn(token_id: String)
+
+  #instantiate(name: String, symbol: String) {
+    let collection = CollectionInfo { name, symbol }
+    $state.collection = collection
+    $state.num_tokens = 0
+    $state.minter = $info.sender
+  }
+
+  exec #mint(token_id: String, owner: Addr, token_uri: String) {
+    if $info.sender != $state.minter {
+      fail! Unauthorized()
+    }
+    let token = NftToken { owner, token_uri }
+    $state.tokens[token_id] = token
+    $state.num_tokens += 1
+    emit! Mint(token_id=token_id, owner=owner)
+  }
+
+  exec #transfer_nft(recipient: Addr, token_id: String) {
+    let token = $state.tokens[token_id]
+    if $info.sender != token.owner {
+      fail! Unauthorized()
+    }
+    $state.tokens[token_id] = NftToken { owner: recipient, token_uri: token.token_uri }
+    emit! Transfer(token_id=token_id, sender=$info.sender, recipient=recipient)
+  }
+
+  exec #burn(token_id: String) {
+    let token = $state.tokens[token_id]
+    if $info.sender != token.owner {
+      fail! Unauthorized()
+    }
+    emit! Burn(token_id=token_id)
+  }
+
+  query #owner_of(token_id: String) -> NftToken {
+    return $state.tokens[token_id]
+  }
+
+  query #num_tokens() -> U64 {
+    return $state.num_tokens
+  }
+
+  query #collection_info() -> CollectionInfo {
+    return $state.collection
+  }
+}

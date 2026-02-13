@@ -1,0 +1,69 @@
+const CONTRACT_NAME = "crates.io:cw1-whitelist"
+const CONTRACT_VERSION = "0.0.1"
+
+contract CW1Whitelist {
+  state {
+    admin_config: struct AdminConfig {
+      owner: Addr,
+      frozen: Bool
+    }
+    admins[Addr]: Bool
+  }
+
+  error Unauthorized()
+  error ContractFrozen()
+
+  event Freeze(sender: String)
+  event AdminAdded(admin: String)
+  event AdminRemoved(admin: String)
+
+  #instantiate() {
+    let config = AdminConfig { owner: $info.sender, frozen: false }
+    $state.admin_config = config
+    $state.admins[$info.sender] = true
+  }
+
+  exec #freeze() {
+    let config = $state.admin_config
+    if $info.sender != config.owner {
+      fail! Unauthorized()
+    }
+    if config.frozen {
+      fail! ContractFrozen()
+    }
+    $state.admin_config = AdminConfig { owner: config.owner, frozen: true }
+    emit! Freeze(sender=$info.sender)
+  }
+
+  exec #add_admin(admin: Addr) {
+    let config = $state.admin_config
+    if $info.sender != config.owner {
+      fail! Unauthorized()
+    }
+    if config.frozen {
+      fail! ContractFrozen()
+    }
+    $state.admins[admin] = true
+    emit! AdminAdded(admin=admin)
+  }
+
+  exec #remove_admin(admin: Addr) {
+    let config = $state.admin_config
+    if $info.sender != config.owner {
+      fail! Unauthorized()
+    }
+    if config.frozen {
+      fail! ContractFrozen()
+    }
+    $state.admins[admin] = false
+    emit! AdminRemoved(admin=admin)
+  }
+
+  query #admin_config() -> AdminConfig {
+    return $state.admin_config
+  }
+
+  query #is_admin(address: Addr) -> Bool {
+    return $state.admins[address]
+  }
+}

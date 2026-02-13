@@ -1,0 +1,5 @@
+{
+  "name": "cw20-token",
+  "version": "0.0.1",
+  "description": "Simplified CW20 fungible token"
+}

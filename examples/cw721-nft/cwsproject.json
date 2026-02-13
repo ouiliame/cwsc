@@ -1,0 +1,5 @@
+{
+  "name": "cw721-nft",
+  "version": "0.0.1",
+  "description": "Simplified CW721 NFT contract"
+}

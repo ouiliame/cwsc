@@ -1,0 +1,69 @@
+const CONTRACT_NAME = "crates.io:cw20-token"
+const CONTRACT_VERSION = "0.0.1"
+
+contract CW20Token {
+  state {
+    token_info: struct TokenInfo {
+      name: String,
+      symbol: String,
+      decimals: U8,
+      total_supply: U64
+    }
+    balances[Addr]: U64
+  }
+
+  error Unauthorized()
+  error InsufficientFunds()
+  error InvalidZeroAmount()
+
+  event Transfer(sender: String, recipient: String, amount: String)
+  event Burn(sender: String, amount: String)
+  event Mint(recipient: String, amount: String)
+
+  #instantiate(name: String, symbol: String, decimals: U8, initial_amount: U64) {
+    let token = TokenInfo { name, symbol, decimals, total_supply: initial_amount }
+    $state.token_info = token
+    $state.balances[$info.sender] = initial_amount
+  }
+
+  exec #transfer(recipient: Addr, amount: U64) {
+    if amount == 0 {
+      fail! InvalidZeroAmount()
+    }
+    let sender_bal = $state.balances[$info.sender]
+    if sender_bal < amount {
+      fail! InsufficientFunds()
+    }
+    $state.balances[$info.sender] = sender_bal - amount
+    $state.balances[recipient] = amount
+    emit! Transfer(sender=$info.sender, recipient=recipient, amount=amount)
+  }
+
+  exec #burn(amount: U64) {
+    if amount == 0 {
+      fail! InvalidZeroAmount()
+    }
+    let sender_bal = $state.balances[$info.sender]
+    if sender_bal < amount {
+      fail! InsufficientFunds()
+    }
+    $state.balances[$info.sender] = sender_bal - amount
+    emit! Burn(sender=$info.sender, amount=amount)
+  }
+
+  exec #mint(recipient: Addr, amount: U64) {
+    if amount == 0 {
+      fail! InvalidZeroAmount()
+    }
+    $state.balances[recipient] = amount
+    emit! Mint(recipient=recipient, amount=amount)
+  }
+
+  query #balance(address: Addr) -> U64 {
+    return $state.balances[address]
+  }
+
+  query #token_info() -> TokenInfo {
+    return $state.token_info
+  }
+}

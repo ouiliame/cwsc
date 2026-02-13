@@ -210,7 +210,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
       const constName = fieldName.toUpperCase();
       const key = this.visit(node.index);
       const value = this.visit(node.value);
-      return `${constName}.save(ctx.deps.storage, &(${key}), &(${value}))?;`;
+      return `${constName}.save(ctx.deps.storage, (${key}).clone(), &(${value}))?;`;
     }
 
     const obj = this.visit(node.obj);
@@ -457,7 +457,7 @@ export class CgBlockVisitor extends Ast.AstVisitor<string> {
       const fieldName = this.stripHash(node.obj.memberName.value);
       const constName = fieldName.toUpperCase();
       const key = this.visit(node.index);
-      return `${constName}.load(ctx.deps.storage, &(${key}))?`;
+      return `${constName}.load(ctx.deps.storage, (${key}).clone())?`;
     }
 
     const obj = this.visit(node.obj);
