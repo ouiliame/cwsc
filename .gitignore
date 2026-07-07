@@ -68,3 +68,5 @@ package-lock.json
 examples/**/target
 dist
 bun.lockb
+# cargo check cache for spec-runner
+.cargo-target/

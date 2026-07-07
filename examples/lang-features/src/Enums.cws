@@ -1,0 +1,71 @@
+// Spec: "Enum Definitions" (DOCS/language.md)
+// All variant shapes, hybrid enums, generics, and every construction form
+// (brace, positional, named-arg, unit) plus `is` variant checks.
+
+// Top-level enum with named-field ("struct") variants in both syntaxes
+enum EnAssetInfo {
+  #Token(contract_addr: String),
+  #NativeToken(denom: String)
+}
+
+contract Enums {
+  // Every variant shape
+  enum EnFruit {
+    #Apple { x: String, b: Bool },   // Struct variant (brace)
+    #Orange(peel: Int),              // Struct variant (paren / positional)
+    #Banana                          // Unit variant
+  }
+
+  // Hybrid representations are allowed
+  enum EnOrderType {
+    #BuyAtomic,
+    #SellAtomic,
+    #Limit { price: Dec, quantity: Dec }
+  }
+
+  // Tuple variants (unnamed element types) and empty shapes
+  enum EnShapes {
+    #StructEmpty {},
+    #ParenEmpty(),
+    #TupleVariant([Int, String]),
+    #TupleEmpty([]),
+    #Unit
+  }
+
+  // Generic enum
+  enum EnMaybe[%T] {
+    #Just(value: %T),
+    #Nothing
+  }
+
+  state {
+    asset: EnAssetInfo;
+  }
+
+  #instantiate() {
+    // Creating enum values: EnumType.#Variant notation
+    let a = EnAssetInfo.#Token { contract_addr: "terra1abc" };
+    let b = EnAssetInfo.#Token("terra1abc");             // Shorthand positional
+    let c = EnAssetInfo.#NativeToken(denom="uusd");      // Named argument
+    let o = EnOrderType.#BuyAtomic;                      // Unit variant
+    let l = EnOrderType.#Limit { price: 1.5, quantity: 2.0 };
+    let f = EnFruit.#Apple { x: "red", b: true };
+    let g = EnFruit.#Orange(3);
+    let j = EnMaybe.#Just(42);
+
+    // Enum-variant type checks
+    if a is EnAssetInfo.#Token {
+      $state.asset = a;
+    }
+    if o is EnOrderType.#BuyAtomic {
+      $state.asset = b;
+    }
+    if a is not EnAssetInfo.#NativeToken {
+      $state.asset = a;
+    }
+  }
+
+  query #asset() -> EnAssetInfo {
+    return $state.asset;
+  }
+}

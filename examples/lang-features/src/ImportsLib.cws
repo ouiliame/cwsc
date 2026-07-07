@@ -1,0 +1,25 @@
+// Helper library for Imports.cws — exercises `export` on top-level
+// definitions (spec: "The `export` modifier makes a contract visible to
+// importers"; the grammar extends this to structs/enums/consts/fns).
+// This file intentionally contains no contract; it exists to be imported.
+
+export struct ImpAsset {
+  info: String,
+  amount: U128
+}
+
+export struct ImpMinterData {
+  minter: String,
+  cap?: U128
+}
+
+export enum ImpAssetInfo {
+  #Token(contract_addr: String),
+  #NativeToken(denom: String)
+}
+
+export const IMP_MAX_SUPPLY = 1_000_000
+
+export fn imp_double(x: U128) -> U128 {
+  return x * 2;
+}

@@ -1,5 +1,6 @@
 import toml from '@iarna/toml';
 import * as path from 'path';
+import { promises as fs } from 'fs';
 import { formatRust } from './format';
 import { writeFile } from '../util/filesystem';
 
@@ -9,6 +10,7 @@ export const DEFAULT_CARGO_TOML: CargoToml = {
     'cw-storage-plus': '1.1.0',
     cw2: '1.1.1',
     cw20: '1.1.2',
+    'cw-utils': '1.0.3',
     schemars: '0.8.15',
     'cosmwasm-std': {
       features: ['cosmwasm_1_3'],
@@ -165,6 +167,9 @@ export class RustCrate {
   public async writeToDisk(parentDir: string) {
     let root = path.resolve(parentDir);
     let crateDir = path.join(root, this.config.package.name);
+    // remove any previous build so stale files (old sources, leftover bins)
+    // can never leak into a fresh crate
+    await fs.rm(crateDir, { recursive: true, force: true });
     await writeFile(path.join(crateDir, 'Cargo.toml'), this.cargoToml());
     for (let filePath in this.files) {
       let file = this.getFile(filePath);

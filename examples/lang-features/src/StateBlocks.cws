@@ -1,0 +1,83 @@
+// Spec: "State Blocks" (DOCS/language.md)
+// Item storage, map storage, inline struct definitions in state,
+// and $state read / write / destructure / map access.
+
+contract StateBlocks {
+  state {
+    // Item storage (single value)
+    count: U32;
+    owner: Addr;
+
+    // Map storage (key: Addr, value: U128)
+    balances[Addr]: U128;
+
+    // Map storage with a String key
+    names[String]: Addr;
+
+    // Inline struct definitions within the state block
+    config: struct StateBlocksConfig {
+      market_id: String,
+      owner: Addr,
+      base_denom: String,
+      quote_denom: String
+    }
+
+    cache: struct StateBlocksCache {
+      sender_address: String,
+      deposited_amount: Coin
+    }
+
+    // Inline struct with fixed-size array fields and trailing commas
+    pair_info: struct StateBlocksPairInfo {
+      asset_names: [String; 2],
+      contract_addr: String,
+      liquidity_token: String,
+      asset_decimals: [U8; 2],
+    }
+  }
+
+  #instantiate(market_id: String, base_denom: String, quote_denom: String) {
+    // Write item state
+    $state.count = 10;
+    $state.owner = $info.sender;
+
+    // Write inline-struct state (shorthand field init)
+    $state.config = StateBlocksConfig {
+      market_id,
+      owner: $info.sender,
+      base_denom,
+      quote_denom
+    };
+
+    // Map write and compound-assign map access
+    $state.balances[$info.sender] = 0;
+    $state.balances[$info.sender] += 100;
+    $state.names["genesis"] = $info.sender;
+  }
+
+  exec #touch() {
+    // Read item state
+    let x = $state.count;
+    $state.count = x + 1;
+
+    // Destructure $state
+    let { config } = $state;
+    let { config as cfg, cache } = $state;
+
+    // Nested member reads off destructured state
+    let denom = config.base_denom;
+    let who = cache.sender_address;
+
+    // Map read
+    let bal = $state.balances[$info.sender];
+    $state.balances[$info.sender] -= 1;
+  }
+
+  query #count() -> U32 {
+    return $state.count;
+  }
+
+  query #pair() {
+    return $state.pair_info;
+  }
+}

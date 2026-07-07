@@ -1,5 +1,7 @@
 {
   "name": "lang-features",
   "version": "0.0.1",
-  "description": "A collection of tests for language features"
+  "description": "Spec-coverage test suite: one contract per DOCS/language.md feature area",
+  "sourceDir": "src",
+  "buildDir": "build"
 }

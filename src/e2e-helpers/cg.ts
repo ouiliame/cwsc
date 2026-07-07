@@ -22,6 +22,7 @@ export class CgErrorMod {
 
   public build(): rs.ModuleDefn {
     const items: rs.RustSyntax[] = [
+      rs.use('cosmwasm_std::*'),
       rs.use('cosmwasm_std::StdError'),
       rs.use('thiserror::Error'),
     ];
@@ -86,6 +87,7 @@ export class CgStateMod {
     const items: rs.RustSyntax[] = [
       rs.use('cosmwasm_std::*'),
       rs.use('cw_storage_plus::{Item, Map}'),
+      rs.use('std::collections::HashMap'),
       rs.use('super::types::*'),
     ];
 
@@ -112,7 +114,9 @@ export class CgMsgMod {
   constructor(
     public instantiateMsg: CgInstantiateMsg,
     public execMsg: CgExecMsg,
-    public queryMsg: CgQueryMsg
+    public queryMsg: CgQueryMsg,
+    /** null → no migrate() handler in the contract */
+    public migrateMsg: CgInstantiateMsg | null = null
   ) {}
 
   public buildInstantiateMsg(): rs.Annotated<rs.StructDefn> {
@@ -146,6 +150,7 @@ export class CgMsgMod {
       rs.use('cosmwasm_schema::{cw_serde, QueryResponses}'),
       rs.use('cosmwasm_std::*'),
       rs.use('cw20::Cw20ReceiveMsg'),
+      rs.use('std::collections::HashMap'),
       rs.use('super::types::*'),
     ];
 
@@ -154,6 +159,17 @@ export class CgMsgMod {
       this.buildExecMsg(),
       this.buildQueryMsg()
     );
+    if (this.migrateMsg) {
+      items.push(
+        rs.ann(
+          '#[cw_serde]',
+          rs.structDefn(
+            'MigrateMsg',
+            this.migrateMsg.params.map((x) => rs.structField(x.name, x.ty))
+          )
+        )
+      );
+    }
 
     return rs.mod('msg', items);
   }
@@ -184,12 +200,71 @@ export interface CgQueryEntrypoint {
   variants: CgQueryFn[];
 }
 
+export interface CgReplyHandler {
+  name: string;
+  id: number;
+  kind: string; // 'success' | 'error' | 'always'
+}
+
 export class CgContractMod {
   constructor(
     public instantiateEntrypoint: CgInstantiateEntrypoint,
     public execEntrypoint: CgExecEntrypoint,
-    public queryEntrypoint: CgQueryEntrypoint
+    public queryEntrypoint: CgQueryEntrypoint,
+    public replyHandlers: CgReplyHandler[] = [],
+    /** null → no migrate() handler */
+    public migrateParams: CgParam[] | null = null
   ) {}
+
+  public buildReplyEntrypoint(): rs.Annotated<rs.FunctionDefn> {
+    const arms = this.replyHandlers.map((r) =>
+      rs.arm(`${r.id}u64`, rs.identExpr(`reply_${r.name}_impl(ctx, msg)`))
+    );
+    arms.push(
+      rs.arm(
+        '_',
+        rs.identExpr(
+          'Err(ContractError::StdError(StdError::generic_err(format!("unknown reply id: {}", msg.id))))'
+        )
+      )
+    );
+    return this.entryPoint(
+      rs.fnDefn(
+        'reply',
+        [
+          rs.fnParam('deps', 'DepsMut'),
+          rs.fnParam('env', 'Env'),
+          rs.fnParam('msg', 'Reply'),
+        ],
+        'Result<Response, ContractError>',
+        [
+          rs.raw('let ctx = ReplyCtx { deps, env };'),
+          rs.matchExpr(rs.identExpr('msg.id'), arms),
+        ]
+      )
+    );
+  }
+
+  public buildMigrateEntrypoint(): rs.Annotated<rs.FunctionDefn> {
+    const args = (this.migrateParams || [])
+      .map((p) => `, msg.${p.name}`)
+      .join('');
+    return this.entryPoint(
+      rs.fnDefn(
+        'migrate',
+        [
+          rs.fnParam('deps', 'DepsMut'),
+          rs.fnParam('env', 'Env'),
+          rs.fnParam('msg', 'MigrateMsg'),
+        ],
+        'Result<Response, ContractError>',
+        [
+          rs.raw('let ctx = MigrateCtx { deps, env };'),
+          rs.raw(`migrate_impl(ctx${args})`),
+        ]
+      )
+    );
+  }
 
   public buildInstantiateEntrypoint(): rs.Annotated<rs.FunctionDefn> {
     const instantiateImplCall = rs.fnCallExpr('instantiate_impl', [
@@ -320,6 +395,12 @@ export class CgContractMod {
       this.buildExecEntrypoint(),
       this.buildQueryEntrypoint(),
     ];
+    if (this.replyHandlers.length > 0) {
+      items.push(this.buildReplyEntrypoint());
+    }
+    if (this.migrateParams) {
+      items.push(this.buildMigrateEntrypoint());
+    }
     return rs.mod('contract', items);
   }
 }
@@ -352,6 +433,18 @@ export interface CgHelperFn {
   needsCtx: boolean;
 }
 
+export interface CgReplyImplFn {
+  name: string;
+  id: number;
+  kind: string; // 'success' | 'error' | 'always'
+  body: string[];
+}
+
+export interface CgMigrateImplFn {
+  params: CgParam[];
+  body: string[];
+}
+
 export class CgImplentationMod {
   public extraRawItems: string[] = [];
 
@@ -359,17 +452,68 @@ export class CgImplentationMod {
     public instantiateImplFn: CgInstantiateImplFn,
     public execImplFns: CgExecImplFn[],
     public queryImplFns: CgQueryImplFn[],
-    public helperFns: CgHelperFn[] = []
+    public helperFns: CgHelperFn[] = [],
+    public replyImplFns: CgReplyImplFn[] = [],
+    public migrateImplFn: CgMigrateImplFn | null = null
   ) {}
+
+  public buildReplyImplFns(): rs.FunctionDefn[] {
+    return this.replyImplFns.map((x) => {
+      const body = CgImplentationMod.terminateBody(x.body).map((b) => rs.raw(b));
+      return rs.fnDefn(
+        `reply_${x.name}_impl`,
+        [rs.fnParam('mut ctx', 'ReplyCtx'), rs.fnParam('msg', 'Reply')],
+        'Result<Response, ContractError>',
+        [
+          rs.raw('let mut _response = Response::new();'),
+          ...body,
+          rs.raw('Ok(_response)'),
+        ]
+      );
+    });
+  }
+
+  public buildMigrateImplFn(): rs.FunctionDefn | null {
+    if (!this.migrateImplFn) return null;
+    const params = this.migrateImplFn.params.map((p) => rs.fnParam(p.name, p.ty));
+    const body = CgImplentationMod.terminateBody(this.migrateImplFn.body).map(
+      (b) => rs.raw(b)
+    );
+    return rs.fnDefn(
+      'migrate_impl',
+      [rs.fnParam('mut ctx', 'MigrateCtx'), ...params],
+      'Result<Response, ContractError>',
+      [
+        rs.raw('let mut _response = Response::new();'),
+        ...body,
+        rs.raw('Ok(_response)'),
+      ]
+    );
+  }
+
+  /**
+   * When a fallback expression (e.g. `Ok(_response)`) is appended after the
+   * body, the body's trailing statement must be terminated — otherwise a
+   * trailing block expression would be syntactically glued to the fallback.
+   */
+  private static terminateBody(body: string[]): string[] {
+    if (body.length === 0) return body;
+    const out = [...body];
+    const last = out[out.length - 1].trimEnd();
+    if (last.length > 0 && !last.endsWith(';') && !last.endsWith('}')) {
+      out[out.length - 1] = `${last};`;
+    }
+    return out;
+  }
 
   public buildInstantiateImplFn(): rs.FunctionDefn {
     const params = this.instantiateImplFn.params.map((x) =>
       rs.fnParam(x.name, x.ty)
     );
-    const body = this.instantiateImplFn.body.map((x) => rs.raw(x));
+    const body = CgImplentationMod.terminateBody(this.instantiateImplFn.body).map((x) => rs.raw(x));
     return rs.fnDefn(
       'instantiate_impl',
-      [rs.fnParam('ctx', 'InstantiateCtx'), ...params],
+      [rs.fnParam('mut ctx', 'InstantiateCtx'), ...params],
       'Result<Response, ContractError>',
       [rs.raw('let mut _response = Response::new();'), ...body, rs.raw('Ok(_response)')]
     );
@@ -378,10 +522,10 @@ export class CgImplentationMod {
   public buildExecImplFns(): rs.FunctionDefn[] {
     return this.execImplFns.map((x) => {
       const params = x.params.map((x) => rs.fnParam(x.name, x.ty));
-      const body = x.body.map((b) => rs.raw(b));
+      const body = CgImplentationMod.terminateBody(x.body).map((b) => rs.raw(b));
       return rs.fnDefn(
         `exec_${x.fnName}_impl`,
-        [rs.fnParam('ctx', 'ExecuteCtx'), ...params],
+        [rs.fnParam('mut ctx', 'ExecuteCtx'), ...params],
         'Result<Response, ContractError>',
         [rs.raw('let mut _response = Response::new();'), ...body, rs.raw('Ok(_response)')]
       );
@@ -391,15 +535,16 @@ export class CgImplentationMod {
   public buildQueryImplFns(): rs.FunctionDefn[] {
     return this.queryImplFns.map((x) => {
       const params = x.params.map((x) => rs.fnParam(x.name, x.ty));
-      const body = x.body.map((b) => rs.raw(b));
       const bodyStr = x.body.join('\n');
       const hasReturn = bodyStr.includes('return ');
       const fallback = hasReturn
         ? []
         : [rs.raw(`Ok(to_json_binary(&"TODO")?)`)];
+      const bodyLines = hasReturn ? x.body : CgImplentationMod.terminateBody(x.body);
+      const body = bodyLines.map((b) => rs.raw(b));
       return rs.fnDefn(
         `query_${x.fnName}_impl`,
-        [rs.fnParam('ctx', 'QueryCtx'), ...params],
+        [rs.fnParam('mut ctx', 'QueryCtx'), ...params],
         `Result<Binary, ContractError>`,
         [...body, ...fallback]
       );
@@ -412,7 +557,6 @@ export class CgImplentationMod {
       // Don't inject deps/env/info — the $ param just means the function
       // accesses contract context, which is handled by the block visitor.
       // Injecting extra params causes arg-count mismatches at call sites.
-      const body = x.body.map((b) => rs.raw(b));
       const retType = x.returnType || 'Result<Response, ContractError>';
       // Add appropriate fallback based on return type
       const bodyStr = x.body.join('\n');
@@ -422,11 +566,18 @@ export class CgImplentationMod {
         // Always add Ok(()) for Result<()> functions — return Err(...) is for error
         // paths, but the success path needs Ok(()) at the end
         fallback = [rs.raw('Ok(())')];
+      } else if (retType === '()') {
+        fallback = [];
       } else if (hasReturn) {
         fallback = [];
       } else {
         fallback = [rs.raw('todo!("helper fn")')];
       }
+      const bodyLines =
+        fallback.length > 0 || retType === '()'
+          ? CgImplentationMod.terminateBody(x.body)
+          : x.body;
+      const body = bodyLines.map((b) => rs.raw(b));
       return rs.fnDefn(x.name, params, retType, [...body, ...fallback]);
     });
   }
@@ -440,18 +591,23 @@ export class CgImplentationMod {
       rs.use('super::types::*'),
       rs.use('cosmwasm_std::*'),
       rs.use('cw20::Cw20ReceiveMsg'),
+      rs.use('std::collections::HashMap'),
     ];
 
     const instImplFn = this.buildInstantiateImplFn();
     const execImplFns = this.buildExecImplFns();
     const queryImplFns = this.buildQueryImplFns();
     const helperFns = this.buildHelperFns();
+    const replyImplFns = this.buildReplyImplFns();
+    const migrateImplFn = this.buildMigrateImplFn();
 
     items.push(
       ...this.extraRawItems.map((r) => rs.raw(r)),
       instImplFn,
       ...execImplFns,
       ...queryImplFns,
+      ...(migrateImplFn ? [migrateImplFn] : []),
+      ...replyImplFns,
       ...helperFns
     );
 
@@ -530,6 +686,54 @@ export class CgTypesMod {
     return this.units.map((x) => rs.ann('#[cw_serde]', rs.unitStructDefn(x.name)));
   }
 
+  /**
+   * Generate accessor methods for enum struct-variant fields, so that
+   * CWScript member access on enum values (e.g. `asset_info.denom`) can be
+   * rendered as a method call (`asset_info.denom()`). Panics at runtime when
+   * called on a variant without the field — mirrors CWScript's dynamic
+   * variant-field access.
+   */
+  public buildEnumAccessors(): rs.RustSyntax[] {
+    const impls: rs.RustSyntax[] = [];
+    for (const e of this.enums) {
+      // field name → { variant name → field type }
+      const fieldVariants: Record<string, { variant: string; ty: string }[]> = {};
+      for (const v of e.variants) {
+        if (v.$type !== 'struct') continue;
+        for (const f of v.fields) {
+          (fieldVariants[f.name] ||= []).push({ variant: v.name, ty: f.ty });
+        }
+      }
+      const methods: string[] = [];
+      for (const [field, occurrences] of Object.entries(fieldVariants)) {
+        const ty = occurrences[0].ty;
+        const bareName = e.name.replace(/<.*>$/, '');
+        // Variants whose same-named field has a different type can't share
+        // the accessor's return type — they fall into the panic arm.
+        const arms = occurrences
+          .filter((o) => o.ty === ty)
+          .map((o) => `${bareName}::${o.variant} { ${field}, .. } => ${field}.clone()`)
+          .join(',\n');
+        methods.push(
+          `pub fn ${field}(&self) -> ${ty} {\nmatch self {\n${arms},\n#[allow(unreachable_patterns)] _ => panic!("no field ${field} on this variant of ${bareName}")\n}\n}`
+        );
+      }
+      if (methods.length > 0) {
+        // Generic enums (name like `Foo<T>`) need generics on the impl too;
+        // accessor bodies clone fields, so bound the params by Clone.
+        const m = e.name.match(/^([A-Za-z0-9_]+)<(.+)>$/);
+        const implHead = m
+          ? `impl<${m[2]
+              .split(',')
+              .map((g) => `${g.trim()}: Clone`)
+              .join(', ')}> ${e.name}`
+          : `impl ${e.name}`;
+        impls.push(rs.raw(`${implHead} {\n${methods.join('\n')}\n}`));
+      }
+    }
+    return impls;
+  }
+
   public buildEnums(): rs.Annotated<rs.EnumDefn>[] {
     return this.enums.map((x) => {
       const variants = x.variants.map((x) => {
@@ -585,11 +789,13 @@ export class CgTypesMod {
       rs.use('cosmwasm_schema::cw_serde'),
       rs.use('cosmwasm_std::*'),
       rs.use('thiserror::Error'),
+      rs.use('std::collections::HashMap'),
     ];
     const structs = this.buildStructs();
     const tuples = this.buildTuples();
     const units = this.buildUnits();
     const enums = this.buildEnums();
+    const enumAccessors = this.buildEnumAccessors();
     // Don't generate ContractError here - it's in the error module
     // const errors = this.buildErrors();
     const events = this.buildEvents();
@@ -599,6 +805,7 @@ export class CgTypesMod {
       ...tuples,
       ...units,
       ...enums,
+      ...enumAccessors,
       events,
       ...aliases,
       ...this.extraRawItems.map((r) => rs.raw(r))
@@ -610,20 +817,23 @@ export class CgTypesMod {
 export const CWS_MOD = rs.mod('cws', [
   rs.use('cosmwasm_schema::cw_serde'),
   rs.use('cosmwasm_std::*'),
-  rs.structDefn("InstantiateCtx<'a>", [
-    rs.structField('deps', "DepsMut<'a>"),
-    rs.structField('env', 'Env'),
-    rs.structField('info', 'MessageInfo'),
-  ]),
   rs.structDefn("ExecuteCtx<'a>", [
     rs.structField('deps', "DepsMut<'a>"),
     rs.structField('env', 'Env'),
     rs.structField('info', 'MessageInfo'),
   ]),
+  // Instantiate shares the execute context shape so helpers taking
+  // `&mut ExecuteCtx` can be called from both entrypoints.
+  rs.typeAliasDefn("InstantiateCtx<'a>", "ExecuteCtx<'a>"),
   rs.structDefn("QueryCtx<'a>", [
     rs.structField('deps', "Deps<'a>"),
     rs.structField('env', 'Env'),
   ]),
+  rs.structDefn("ReplyCtx<'a>", [
+    rs.structField('deps', "DepsMut<'a>"),
+    rs.structField('env', 'Env'),
+  ]),
+  rs.typeAliasDefn("MigrateCtx<'a>", "ReplyCtx<'a>"),
   rs.ann('#[cw_serde]', rs.tupleStructDefn('CWSQueryResponse<T>', ['T'])),
 ]);
 
@@ -666,7 +876,13 @@ export class CgContractCrate {
       this.typesMod.build(),
       CWS_MOD, // TODO: runtime should be a separate crate
     ]);
-    const code = mod.render();
+    // Crate-level lint allowances: generated code prioritizes correctness
+    // over lint cleanliness.
+    const allows =
+      '#![allow(unused_imports, unused_variables, unused_mut, unused_assignments, ' +
+      'unused_parens, dead_code, unreachable_code, unreachable_patterns, ' +
+      'path_statements, non_camel_case_types, non_snake_case, clippy::all)]\n\n';
+    const code = allows + mod.render();
     crate.setFile('src/lib.rs', code);
     return crate;
   }

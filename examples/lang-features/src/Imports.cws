@@ -1,0 +1,32 @@
+// Spec: "Imports" (DOCS/language.md)
+// Local .cws imports, multi-binding imports, aliasing with `as`, and
+// external module import paths.
+//
+// NOTE: imports PARSE cleanly, but the compiler currently performs no import
+// resolution (each file is parsed and analyzed independently), so whether
+// "./ImportsLib.cws" or "injective/modules" actually resolves is untested.
+// External module imports (injective/*, cosmwasm/*) are string paths and are
+// grammar-identical to local ones.
+
+import { ImpAsset, ImpMinterData } from "./ImportsLib.cws";
+import { ImpAssetInfo as MyAssetInfo } from "./ImportsLib.cws";
+import { Exchange } from "injective/modules";
+import { SubaccountId, MarketId } from "injective/types";
+import { FPDecimal } from "injective/math";
+import { CW2 } from "cosmwasm/stds";
+
+contract Imports {
+  state {
+    reserve: ImpAsset;
+  }
+
+  #instantiate(amount: U128) {
+    let asset = ImpAsset { info: "uusd", amount };
+    let info = MyAssetInfo.#NativeToken(denom="uusd");
+    $state.reserve = asset;
+  }
+
+  query #reserve() -> ImpAsset {
+    return $state.reserve;
+  }
+}

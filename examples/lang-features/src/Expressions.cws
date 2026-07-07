@@ -1,0 +1,111 @@
+// Spec: "Expressions" — literals, operators (including power `**`), type
+// checks, destructuring (DOCS/language.md)
+//
+// NOT EXERCISED (non-spec):
+//   a %= b    -- accepted by the grammar (MOD_EQ in assignStmt) but not listed
+//                in the spec, and the AST builder crashes on it
+//                ("Invalid assign operator: %="); omitted on both grounds.
+
+contract Expressions {
+  state {
+    total: U128;
+  }
+
+  enum ExKind {
+    #Nice(level: Int),
+    #Naughty
+  }
+
+  struct ExPoint { x: Int, y: Int }
+
+  #instantiate(name: String?) {
+    // --- Literals ---
+    let int_lit = 42;
+    let separated = 1_000_000;              // Integer with separators
+    let dec_lit = 3.14;
+    let t = true;
+    let f = false;
+    let nothing = None;
+    let plain = "hello";
+    let interp = "hello {plain}";            // Interpolated (double quotes)
+    let nested_interp = "sum is {int_lit + 1}";
+    let raw = 'raw string {not interpolated}'; // Raw (single quotes)
+
+    // --- Arithmetic ---
+    let sum = 1 + 2;
+    let diff = 5 - 3;
+    let prod = 4 * 6;
+    let quot = 8 / 2;
+    let rem = 9 % 4;
+    let powed = 2 ** 10;                     // Power operator
+    let pow_chain = 2 ** 3 ** 2;             // Right-associative
+    let pow_prec = 2 * 3 ** 2 + 1;           // Binds tighter than * and +
+    let grouped = (1 + 2) * 3;
+
+    // --- Comparison ---
+    let eq = sum == 3;
+    let neq = sum != 4;
+    let lt = 1 < 2;
+    let gt = 2 > 1;
+    let lte = 1 <= 1;
+    let gte = 2 >= 2;
+
+    // --- Logical ---
+    let both = eq and neq;
+    let either = eq or f;
+    let negated = not f;
+    let mixed = eq and not f or lt;
+
+    // --- Assignment operators ---
+    let a = 10;
+    a = 5;
+    a += 1;
+    a -= 1;
+    a *= 2;
+    a /= 2;
+
+    // Member and index assignment forms
+    $state.total = 0;
+    $state.total += 10;
+    let arr = [1, 2, 3];
+    arr[0] = 9;
+    arr[1] += 1;
+
+    // --- Special operators ---
+    let coalesced = name ?? "anonymous";     // Null coalescing / try-else
+    let has_name = name?;                    // Exists check (not None/Error)
+    if name? {
+      let n = name;
+    }
+
+    // Membership
+    let found = 2 in arr;
+    let missing = 7 not in arr;
+
+    // --- Type checks ---
+    let k = ExKind.#Nice(3);
+    if k is ExKind.#Nice {
+      a += 1;
+    }
+    if k is not ExKind.#Naughty {
+      a += 1;
+    }
+    let p = ExPoint { x: 1, y: 2 };
+    if p is ExPoint {
+      a += 1;
+    }
+
+    // --- Member / index access ---
+    let px = p.x;
+    let first = arr[0];
+
+    // --- Destructuring ---
+    let { x, y } = p;
+    let { x as ex_x } = p;
+    let [m, n, o] = arr;
+  }
+
+  query #total() -> U128 {
+    return $state.total;
+  }
+}

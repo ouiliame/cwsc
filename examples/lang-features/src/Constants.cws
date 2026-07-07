@@ -1,0 +1,36 @@
+// Spec: "Constants" (DOCS/language.md)
+// Top-level constants declared with `const`.
+
+const CONTRACT_NAME = "crates.io:lang-features-constants"
+const CONTRACT_VERSION = "0.0.1"
+const COMMISSION_RATE = 3  // 3 permille
+const SEPARATED = 1_000_000
+const RATE_DEC = 0.5
+
+// Typed constant (grammar: `const name : typeExpr = expr`)
+const MAX_SLOTS: U32 = 64
+
+// Exported constant (grammar allows `export const`)
+export const PUBLIC_LIMIT = 10
+
+contract Constants {
+  state {
+    name: String;
+    commission: Dec;
+    limit: U32;
+  }
+
+  #instantiate() {
+    $state.name = CONTRACT_NAME;
+    $state.commission = Dec.permille(COMMISSION_RATE);
+    $state.limit = MAX_SLOTS;
+  }
+
+  query #version() -> String {
+    return CONTRACT_VERSION;
+  }
+
+  query #separated() -> U64 {
+    return SEPARATED;
+  }
+}

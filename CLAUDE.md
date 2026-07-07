@@ -3,12 +3,12 @@
 ## Quick Start
 
 ```bash
-bun install          # Install dependencies
-bun run e2e          # Run end-to-end compilation (currently broken)
-bun run test         # Run jest tests (currently no test files)
-bun run antlr        # Regenerate ANTLR parser from grammar
-bun run antlr-lexer  # Regenerate lexer only
-bun run antlr-parser # Regenerate parser only
+bun install                     # Install dependencies
+bun src/e2e.ts <proj> <Contract> # Compile one contract, e.g. `bun src/e2e.ts counter Counter`
+scripts/spec-runner.sh          # Acceptance harness: e2e + cargo check every example (must be all-pass)
+bun run antlr                   # Regenerate ANTLR parser from grammar (needs the JVM — see Gotchas)
+bun run antlr-lexer             # Regenerate lexer only
+bun run antlr-parser            # Regenerate parser only
 ```
 
 ## What This Project Is
@@ -46,19 +46,41 @@ examples/terraswap/   Real-world TerraSwap contracts
 
 ## Current Status
 
-- **Parser:** Works for most syntax, but crashes on some complex expressions
-- **AST Builder:** Functional but has a bug in `visitCallExpr` (line 572 of ast-builder.ts)
-- **Code Generation:** Structural scaffolding works, but TYPE() returns placeholder "String" for all types
-- **Block Codegen:** `blockToCg()` returns TODO comments for most statements
-- **Tests:** Jest configured with ts-jest, but all test files were deleted
-- **E2E:** Crashes with `TypeError: undefined is not an object (evaluating 'tree.accept')`
+The compiler is end-to-end functional across the full language spec. `scripts/spec-runner.sh`
+is the acceptance harness: it e2e-compiles every `.cws` under `examples/**` and runs
+`cargo check` on every generated crate. As of the last full pass it is **fully green** —
+all 36 example contracts + the 22-file `examples/lang-features/` spec-coverage suite compile
+to real Rust that passes `cargo check`.
 
-## Known Bugs
+- **Parser / AST Builder:** Robust — no crashes on any example. Optional/error-recovered
+  grammar children go through placeholder helpers in `ast-builder.ts` rather than crashing.
+- **Grammar:** Covers the entire spec, including reply handler defns, `@annotations`,
+  `delegate_exec!`, `migrate()`, `mut` params/args, `**`, paren tuple types, body-less
+  interface signatures, anonymous inline struct return types, and the inline `send…reply` form.
+- **Code Generation:** Real type mapping, generics (`%T`→`<T>`), enum accessors, try/catch/else,
+  `??` chains, cross-contract `exec!`/`query!`/`delegate_exec!`, reply/migrate entry points,
+  impl-block operator overloads, string interpolation, and CW2/Addr/Dec utilities all generate
+  genuine Rust. `todo!()` appears only for genuinely unresolvable externals (e.g. `injective/*`
+  module imports).
+- **Verification:** `cargo` is available via rustup; the harness caches builds in
+  `.cargo-target/` (git-ignored).
 
-1. `src/parser/ast-builder.ts:572` — `ctx._args` can contain undefined elements, causing crash in `visitArg`. Fix: filter nulls before mapping.
-2. `src/e2e-helpers/contract-to-cg.ts:28` — `TYPE()` returns `String` placeholder instead of real types.
-3. `src/e2e-helpers/block-to-cg.ts` — Most visitor methods return TODO comments.
-4. `src/e2e-helpers/cg.ts:73` — Map state fields not implemented (has TODO comment).
+## Spec-coverage suite
+
+`examples/lang-features/src/*.cws` has one contract per spec section (Structs, Enums, Replies,
+CrossContract, ControlFlow, ErrorHandling, Interfaces, ImplBlocks, …). It is the regression
+gate — when adding a language feature, add/extend its coverage contract there and keep
+`scripts/spec-runner.sh` green.
+
+## Gotchas
+
+- **Regenerating the parser needs a JVM.** `bun run antlr` shells out to the ANTLR jar, which
+  needs Java. Install once with `brew install openjdk` and put `/opt/homebrew/opt/openjdk/bin`
+  on `PATH` before running `bun run antlr`. Never hand-edit `src/grammar/**` — regenerate.
+- `RustCrate.writeToDisk` wipes the target crate dir before writing, so stale files from a
+  previous build can never leak into a fresh crate.
+- `src/e2e-helpers/ir/*` is an unused stub with pre-existing `tsc` errors; it is not on the
+  live pipeline. Ignore those errors when checking `bunx tsc --noEmit`.
 
 ## Key Files by Compiler Phase
 
@@ -82,14 +104,17 @@ examples/terraswap/   Real-world TerraSwap contracts
 - AST nodes use `$kind` discriminator, `$parent` references, and `$(ctx)` for linking to parse context
 - Identifier prefixes: `#` = enum variants/handlers, `$` = context variables, `%` = type parameters
 
-## Recommended Development Order
+## Working on the compiler
 
-1. Fix parser crash (ast-builder.ts:572 null filter)
-2. Get Counter.cws compiling end-to-end (simplest contract)
-3. Implement real type mapping (replace TYPE() placeholder)
-4. Implement statement codegen in blockToCg
-5. Get KitchenSink.cws compiling
-6. Get TerraswapPair.cws compiling
+The core language is implemented; work is now incremental. To add or fix a feature:
+
+1. Add/extend a coverage contract in `examples/lang-features/src/` that exercises it.
+2. If it is new syntax, extend `grammar/*.g4`, run `bun run antlr` (needs the JVM — see Gotchas),
+   then add the AST node (`src/ast/nodes.ts`), visitor method (`src/parser/ast-builder.ts`),
+   and any validator rule (`src/parser/syntax-validator.ts`).
+3. Implement codegen in `src/e2e-helpers/{contract-to-cg,block-to-cg,cg}.ts`.
+4. Run `scripts/spec-runner.sh` (optionally with a project-name filter, e.g.
+   `scripts/spec-runner.sh lang-features`) until every line reports `pass`.
 
 ## Documentation
 

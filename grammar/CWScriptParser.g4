@@ -22,8 +22,11 @@ stmt:
 	| tryCatchElseStmt
 	| forStmt
 	| execStmt
+	| delegateExecStmt
 	| instantiateStmt
 	| emitStmt
+	| sendStmt
+	| annotStmt
 	| failStmt
 	| returnStmt
 	| exprStmt;
@@ -103,8 +106,24 @@ forStmt:
 	| FOR (bindings = braceBindingList) IN (iter = expr) body = block SEMI?	# ForStructStmt;
 
 execStmt: EXEC_NOW value = expr SEMI?;
+delegateExecStmt: DELEGATE_EXEC value = expr SEMI?;
 instantiateStmt: INSTANTIATE_NOW value = expr SEMI?;
-emitStmt: EMIT value = expr SEMI?;
+emitStmt: (EMIT | EMIT_KW) value = expr SEMI?;
+
+// Annotations preceding a statement, e.g.
+//   @gas_limit(5000000)
+//   @reply.success(handle_atomic_order)
+//   exec! Exchange.#create_spot_market_order(contract, order);
+annotStmt: (annotations += annotation)+ (inner = stmt);
+annotation: AT (value = expr);
+
+// Inline reply form:
+//   send Wasm::Instantiate { ... } reply(env, events, data) on success { ... }
+sendStmt: SEND (value = expr) (reply = inlineReply)? SEMI?;
+inlineReply:
+	REPLY (params = parenParamList) ON (kind = ident) (
+		body = block
+	);
 
 // END STATEMENTS
 
@@ -123,6 +142,8 @@ defn:
 	| execTupleDefn
 	| queryDefn
 	| queryTupleDefn
+	| replyDefn
+	| migrateDefn
 	| errorDefn
 	| eventDefn
 	| stateBlockDefn
@@ -143,7 +164,7 @@ interfaceDefn:
 structDefn:
 	(doc = docComment)? (exported = EXPORT)? STRUCT (
 		name = ident
-	) (typeParams = brackTypeParamList)? (
+	)? (typeParams = brackTypeParamList)? (
 		fields = braceParamList
 	) SEMI? # StructDefnBrace
 	| (doc = docComment)? (exported = EXPORT)? STRUCT (
@@ -191,29 +212,47 @@ fnDefn:
 		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
+// NOTE: `body` is optional on entrypoint definitions so interfaces can
+// declare body-less entrypoint signatures, e.g.
+//   exec #transfer(recipient: String, amount: Int)
 instantiateDefn:
 	(doc = docComment)? H_INSTANTIATE (fallible = BANG)? (
 		params = parenParamList
-	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	) (ARROW (returnTy = typeExpr))? (body = block)? SEMI?;
 
 execDefn:
 	(doc = docComment)? EXEC (name = ident) (fallible = BANG)? (
 		params = parenParamList
-	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	) (ARROW (returnTy = typeExpr))? (body = block)? SEMI?;
 
 execTupleDefn:
 	(doc = docComment)? EXEC (name = ident) (fallible = BANG)? (
 		params = tupleParamList
-	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	) (ARROW (returnTy = typeExpr))? (body = block)? SEMI?;
 
 queryDefn:
 	(doc = docComment)? QUERY (name = ident) (fallible = BANG)? (
 		params = parenParamList
-	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
+	) (ARROW (returnTy = typeExpr))? (body = block)? SEMI?;
 
 queryTupleDefn:
 	(doc = docComment)? QUERY (name = ident) (fallible = BANG)? (
 		params = tupleParamList
+	) (ARROW (returnTy = typeExpr))? (body = block)? SEMI?;
+
+// Reply handler definitions:
+//   reply.success handle_atomic_order() { ... }
+//   reply.error handle_failed_order() { ... }
+replyDefn:
+	(doc = docComment)? REPLY DOT (kind = ident) (name = ident) (
+		params = parenParamList
+	) (body = block) SEMI?;
+
+// Migration handler:
+//   migrate() { ... }
+migrateDefn:
+	(doc = docComment)? MIGRATE (fallible = BANG)? (
+		params = parenParamList
 	) (ARROW (returnTy = typeExpr))? (body = block) SEMI?;
 
 errorDefn: (doc = docComment)? (exported = EXPORT)? ERROR (
@@ -258,6 +297,7 @@ expr:
 	| expr LBRACK (index = expr) RBRACK				# IndexExpr
 	| expr QUEST									# ExistsExpr
 	| NOT expr										# NotExpr
+	| <assoc = right> expr (op = POW) expr			# PowExpr
 	| expr (op = (MUL | DIV | MOD)) expr			# MulExpr
 	| expr (op = (PLUS | MINUS)) expr				# AddExpr
 	| expr (op = (LT | GT | LT_EQ | GT_EQ)) expr	# CompExpr
@@ -339,8 +379,10 @@ noneLit: NONE;
 // TYPE EXPRESSIONS
 typeExpr:
 	LPAREN typeExpr RPAREN							# GroupedTypeExpr
+	| LPAREN typeExpr (COMMA typeExpr)+ COMMA? RPAREN	# ParenTupleTypeExpr
 	| typeExpr (typeArgs = brackTypeExprList)		# ParameterizedTypeExpr
 	| typeExpr DOT (memberName = ident)				# MemberTypeExpr
+	| typeExpr D_COLON (memberName = ident)			# PathTypeExpr
 	| (elements = brackTypeExprList)				# TupleTypeExpr
 	| LBRACK typeExpr SEMI (size = intLit) RBRACK	# ArrayTypeExpr
 	| H_LBRACE typeExpr FAT_ARROW typeExpr (
@@ -366,12 +408,12 @@ ident:
 	| Ident
 	| EscapedIdent
 	| keywordIdent;
-param: (doc = docComment)? (name = ident) (optional = QUEST)? (
-		COLON (ty = typeExpr)
-	)?;
+param: (doc = docComment)? (mut = MUT)? (name = ident) (
+		optional = QUEST
+	)? (COLON (ty = typeExpr))?;
 field: (name = ident) (COLON (value = expr))?;
 namedArg: (name = ident) EQ (value = expr);
-arg: (expr | namedArg);
+arg: (mut = MUT)? (expr | namedArg);
 
 identList: (ident (COMMA ident)*);
 parenParamList: LPAREN (param (COMMA param)*)? RPAREN;
@@ -421,6 +463,11 @@ keywordIdent:
 	| TUPLE
 	| UNIT
 	| ENUM
-	| TYPE;
+	| TYPE
+	| EMIT_KW
+	| MUT
+	| MIGRATE
+	| SEND
+	| ON;
 
 // END COMMON ELEMENTS

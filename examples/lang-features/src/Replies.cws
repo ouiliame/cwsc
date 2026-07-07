@@ -1,0 +1,59 @@
+// Spec: "Reply Handlers" + "With Reply Handlers" (DOCS/language.md)
+//
+// Exercises all three ways of wiring submessages to reply handlers:
+//   1. Method chaining:  exec! ... .reply_on_success(gas_limit=None, id=ID);
+//   2. Annotations:      @reply.success(handler) exec! ...;   (see Annotations.cws)
+//   3. Inline reply:     send Wasm::Instantiate { ... } reply(env, events, data) on success { ... }
+// plus reply handler definitions themselves:
+//   reply.success handler() { ... $data ... $events ... }
+//   reply.error handler() { ... $error ... }
+
+const REPLY_ID = 1
+
+contract Replies {
+  state {
+    token_code_id: U64;
+    liquidity_token: String;
+    last_error: String;
+  }
+
+  #instantiate(token_code_id: U64) {
+    $state.token_code_id = token_code_id;
+    $state.liquidity_token = "";
+    $state.last_error = "";
+  }
+
+  exec #create_pair(init_msg: Binary) {
+    // Method chaining style: connect a submessage to a reply handler
+    exec! Wasm.#instantiate(
+      admin=None,
+      code_id=$state.token_code_id,
+      msg=init_msg,
+      funds=[],
+      label="lp"
+    ).reply_on_success(gas_limit=None, id=REPLY_ID);
+
+    // Annotation style: wire this submessage to the reply handlers below
+    @reply.success(post_instantiate)
+    exec! Wasm.#instantiate(admin=None, code_id=$state.token_code_id, msg=init_msg, funds=[], label="lp2");
+
+    // Inline reply form
+    send Wasm::Instantiate { code_id: $state.token_code_id, label: "lp3" } reply(env, events, data) on success {
+      $state.liquidity_token = "pending";
+    };
+  }
+
+  // Success replies have access to $env, $state, $data (Binary response),
+  // and $events.
+  reply.success post_instantiate() {
+    let res = Wasm.#instantiate.parse_response!($data);
+    let evs = $events;
+    let addr = $env.contract.address;
+    $state.liquidity_token = res.contract_address;
+  }
+
+  // Error replies have access to $env, $state, and $error (the error string).
+  reply.error handle_failed_order() {
+    $state.last_error = $error;
+  }
+}

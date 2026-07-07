@@ -36,6 +36,13 @@ const RESERVED_KEYWORDS = [
   'unit',
 ];
 
+/** Context-parameter forms mandated by the spec ("Passing Context to
+ * Functions"): `$`, `$state` (optionally with a `mut` modifier). */
+const CONTEXT_PARAM_NAMES = ['$', '$state'];
+
+/** Valid kinds for reply handler definitions (`reply.<kind> name() {}`). */
+const REPLY_KINDS = ['success', 'error'];
+
 export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
   public readonly SOURCE = 'cwscript/parser/syntax-validator';
   // SKIP: SourceFile
@@ -150,7 +157,8 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
 
   visitStructDefn(node: Ast.StructDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
-    if (!isPascalCase(node.name.value)) {
+    // Anonymous inline structs (`-> struct { balance: Int }`) have no name.
+    if (node.name && !isPascalCase(node.name.value)) {
       diagnostics.push(
         this.makeWarning(node.name, 'Struct names should be PascalCase')
       );
@@ -332,6 +340,29 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
     return diagnostics;
   }
 
+  visitReplyDefn(node: Ast.ReplyDefn): Diagnostic[] {
+    let diagnostics = this.defaultVisit(node);
+    if (!REPLY_KINDS.includes(node.kind.value)) {
+      diagnostics.push(
+        this.makeError(
+          node.kind,
+          `Unknown reply kind '${node.kind.value}' (expected 'success' or 'error')`
+        )
+      );
+    }
+    if (node.name.isHashIdent || node.name.isDollarIdent) {
+      diagnostics.push(
+        this.makeError(node.name, 'Reply handler names cannot start with # or $')
+      );
+    }
+    if (!isSnakeCase(node.name.value)) {
+      diagnostics.push(
+        this.makeWarning(node.name, 'Reply handler names should be snake_case')
+      );
+    }
+    return diagnostics;
+  }
+
   visitErrorDefn(node: Ast.ErrorDefn): Diagnostic[] {
     let diagnostics = this.defaultVisit(node);
     if (node.name.isHashIdent) {
@@ -505,9 +536,19 @@ export class SyntaxValidatorVisitor extends Ast.AstValidatorVisitor {
       );
     }
     if (node.name.isDollarIdent) {
-      diagnostics.push(
-        this.makeError(node.name, 'Parameter names cannot start with $')
-      );
+      // The spec ("Passing Context to Functions") mandates the context
+      // parameter forms `$`, `$state`, and `mut $state`. Only reject
+      // arbitrary `$foo` parameter names.
+      if (!CONTEXT_PARAM_NAMES.includes(node.name.value)) {
+        diagnostics.push(
+          this.makeError(
+            node.name,
+            "Parameter names cannot start with $ (only the context parameters '$' and '$state' are allowed)"
+          )
+        );
+      }
+      // Context params are exempt from snake_case / type-annotation checks.
+      return diagnostics;
     }
     if (!isSnakeCase(node.name.value)) {
       diagnostics.push(

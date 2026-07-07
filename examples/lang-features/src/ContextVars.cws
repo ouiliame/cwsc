@@ -1,0 +1,73 @@
+// Spec: "Special Context Variables ($)" (DOCS/language.md)
+// $info, $env, $state, $res, and passing context to functions via the
+// context-parameter forms `$`, `$state`, and `mut $state`.
+//
+// $data / $events / $error are only legal inside reply handlers — see
+// Replies.cws.
+
+contract ContextVars {
+  state {
+    count: U32;
+    owner: Addr;
+  }
+
+  #instantiate() {
+    // $info: MessageInfo — sender and funds
+    let who = $info.sender;
+    let funds = $info.funds;
+
+    // $env: Env — contract address, block time / height
+    let addr = $env.contract.address;
+    let time = $env.block.time;
+    let height = $env.block.height;
+    let secs = $env.block.time.seconds();
+
+    $state.count = 0;
+    $state.owner = who;
+  }
+
+  exec #spend() {
+    if $info.funds.is_empty() {
+      fail! "No funds deposited!";
+    }
+    let first_amount = $info.funds[0].amount;
+
+    // Calling context-taking helpers through `$.`
+    $.bump!(1);
+    $.assert_deadline!($env.block.time.seconds(), 100);
+
+    // $res: manual response manipulation
+    $res.data = None;
+    let evs = $res.events;
+    let attrs = $res.attributes;
+    let msgs = $res.msgs;
+  }
+
+  query #count() -> U32 {
+    // Queries have $env and $state (no $info)
+    let h = $env.block.height;
+    return $state.count;
+  }
+
+  // Full context via `$` parameter
+  fn bump!($, by: U32) {
+    $state.count += by;
+  }
+
+  // Read-only state access
+  fn current($state) -> U32 {
+    return $state.count;
+  }
+
+  // Context + plain args
+  fn assert_deadline!($, now: U64, deadline: U64) {
+    if now > deadline {
+      fail! "deadline {deadline} exceeded at {now}";
+    }
+  }
+
+  // Mutable state access
+  fn mutable_fn(mut $state) {
+    $state.count = 1;
+  }
+}

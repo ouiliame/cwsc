@@ -1,0 +1,84 @@
+// Spec: "Error Handling" — fail!, try-catch-else, try-else short form,
+// ?? chains, and `expr ?? fail! "msg"` (DOCS/language.md)
+
+error EhDivideByZero()
+error EhOverflow(limit: U128)
+
+contract ErrorHandling {
+  state {
+    value: U128;
+  }
+
+  error EhUnauthorized()
+
+  #instantiate() {
+    $state.value = 0;
+  }
+
+  exec #run(amount: U128?, market_id: String) {
+    // fail! with a defined error type
+    if $info.sender != $info.sender {
+      fail! EhUnauthorized();
+    }
+
+    // fail! with a plain string
+    if market_id == "" {
+      fail! "error message";
+    }
+
+    // fail! with an interpolated string
+    let min_deposit = 100;
+    let message_deposit = 50;
+    if message_deposit < min_deposit {
+      fail! "Deposit: {message_deposit} below min_deposit: {min_deposit}";
+    }
+
+    // Try-catch-else
+    try {
+      $.divide!(10, 2);
+    } catch EhDivideByZero {
+      $state.value = 0;
+    } else {
+      $state.value = 1;
+    }
+
+    // Multiple catch clauses
+    try {
+      $.divide!(10, 0);
+    } catch EhDivideByZero {
+      $state.value = 2;
+    } catch EhOverflow {
+      $state.value = 3;
+    }
+
+    // Try-else (short form)
+    let market = try {
+      $.lookup!(market_id)
+    } else fail! "Market with id: {market_id} not found";
+
+    // Null coalescing / short-try chains
+    let result = $.divide!(5, 0) ?? $.divide!(3, 0) ?? 0;
+
+    // ?? with a fail! fallback
+    let trade_data = amount ?? fail! "No trade data";
+
+    $state.value = trade_data;
+  }
+
+  fn divide!(a: U128, b: U128) -> U128 {
+    if b == 0 {
+      fail! EhDivideByZero();
+    }
+    if a > 1000 {
+      fail! EhOverflow(limit=1000);
+    }
+    return a / b;
+  }
+
+  fn lookup!(id: String) -> U128 {
+    if id == "missing" {
+      fail! "not found";
+    }
+    return 7;
+  }
+}

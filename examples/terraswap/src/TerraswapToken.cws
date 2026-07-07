@@ -81,8 +81,8 @@ contract TerraswapToken implements CW20 {
   struct Timestamp(value: U64)
 
   enum Expiration {
-    #Never
-  	#AtTime(at: U64)
+    #Never,
+  	#AtTime(at: U64),
   	#AtHeight(at: Timestamp)
   }
 
@@ -106,11 +106,8 @@ contract TerraswapToken implements CW20 {
 
   state {
     token_info: TokenInfo
-    balances[owner: Address]: Int = 0
-    // every map must have a default -- this makes it impossible to have a may_load error
-    // there cannot be a case where we try to load something and it fail! due to the key
-    // not existing.
-    allowances[owner: Address, spender: Address]: AllowanceResponse? = None
+    balances[Address]: Int
+    allowances[[Address, Address]]: AllowanceResponse?
   }
 
   // notice that this function ends in a ! -- this is actually part of the
@@ -202,7 +199,7 @@ contract TerraswapToken implements CW20 {
     // config.mint! - we can use "!" to "unwrap" a value, here
     // config.mint could be None. if it is None and you it is
     // unwrapped by "!", it would cause an error
-    if config.mint!.minter != $info.sender {
+    if config.mint?.minter != $info.sender {
       fail! Unauthorized();
     }
 
@@ -248,13 +245,13 @@ contract TerraswapToken implements CW20 {
       fail! CannotSetOwnAccount();
     }
 
-    let allow = $state.allowances[env.sender, spender_addr]
+    let allow = $state.allowances[[$env.sender, spender_addr]]
     if expires? {
       allow.expires = expires
     }
 
     allow.allowance += amount
-    $state.allowance[$info.sender, spender_addr] = allow
+    $state.allowance[[$info.sender, spender_addr]] = allow
     emit IncreaseAllowance($info.sender, spender, amount)
   }
 
@@ -264,7 +261,7 @@ contract TerraswapToken implements CW20 {
       fail! CannotSetOwnAccount();
     }
 
-    let allowance = $state.allowances[$info.sender, spender_addr]
+    let allowance = $state.allowances[[$info.sender, spender_addr]]
 
     if amount < allowance.allowance {
       allowance.allowance -= amount
@@ -273,7 +270,7 @@ contract TerraswapToken implements CW20 {
         // will be now defined
         allowance.expires = expires
       }
-      $state.allowances[$info.sender, spender_addr] = allowance
+      $state.allowances[[$info.sender, spender_addr]] = allowance
     } else {
       // we call remove!() which must be accessed using '::' instead of
       // "." -- this is because '::' is used for reflection. CWScript will
@@ -281,7 +278,7 @@ contract TerraswapToken implements CW20 {
       // which is the smart state object that abstracts access to state.allowances
       // at that the key for $state.allowances[$info.sender, spender_addr].
       // then ::remove!() deletes the key
-      $state.allowances[$info.sender, spender_addr].remove!()
+      $state.allowances[[$info.sender, spender_addr]].remove!()
     }
 
     emit DecreaseAllowance($info.sender, spender, amount)
@@ -326,9 +323,9 @@ contract TerraswapToken implements CW20 {
     let address = Address!(address)
     let balance = state.balances[address]
 
-    // we don't need to name the return type, it will get matched by the
-    // type analyzer to resolve it to the one corresponding to the required interface
-    return {
+    // the return type gets matched by the type analyzer to resolve it to the
+    // one corresponding to the required interface
+    return BalanceResponse {
       balance
     }
   }
@@ -344,7 +341,7 @@ contract TerraswapToken implements CW20 {
   query #allowance(owner: String, spender: String) {
     let owner_addr = Address!(owner)
     let spender_addr = Address!(spender)
-    return $state.allowances[owner_addr, spender_addr]
+    return $state.allowances[[owner_addr, spender_addr]]
   }
 
   query #all_allowances(owner: String, start_after?: String, limit?: Int) -> AllowanceResponse {
@@ -356,7 +353,7 @@ contract TerraswapToken implements CW20 {
           allowance: allow.allowance,
           expires: allow.expires
        }))
-    return {
+    return AllAllowancesResponse {
       allowances
     }
   }

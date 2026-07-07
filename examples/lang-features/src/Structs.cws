@@ -1,0 +1,60 @@
+// Spec: "Struct Definitions" (DOCS/language.md)
+// Brace structs, positional (paren) structs, generic structs, and all three
+// construction forms plus shorthand field init.
+// (Folds in the former src/structs/Basic.cws example.)
+
+// Top-level structs
+struct SPoint { x: Int, y: Int }
+struct SCoin(amount: U128, denom: String)
+struct SPair[%T, %U] { first: %T, second: %U }
+
+contract Structs {
+  state {
+    origin: SPoint;
+  }
+
+  // Contract-scoped struct definitions
+  struct SEmptyBrace {}
+  struct SEmptyParen()
+  struct SConfig {
+    market_id: String,
+    base_denom: String,
+    owner: Addr,
+  }
+
+  #instantiate(market_id: String) {
+    // Brace (named-field) construction
+    let p = SPoint { x: 1, y: 2 };
+
+    // Positional constructor — every struct is callable like a function
+    let c = SCoin(100, "uusd");
+    let p2 = SPoint(1, 2);
+
+    // Named-argument constructor
+    let c2 = SCoin(amount=100, denom="uusd");
+
+    // Both syntaxes are interchangeable
+    let same = p == p2;
+
+    // Shorthand field initialization (like JS)
+    let config = SConfig {
+      market_id,
+      base_denom: "uusd",
+      owner: $info.sender,
+    };
+
+    // Generic struct construction
+    let g = SPair { first: 1, second: "one" };
+    let g2 = SPair(2, "two");
+
+    // Empty structs
+    let e1 = SEmptyBrace {};
+    let e2 = SEmptyParen();
+
+    $state.origin = p;
+  }
+
+  query #origin() -> SPoint {
+    return $state.origin;
+  }
+}

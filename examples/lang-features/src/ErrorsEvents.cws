@@ -1,0 +1,62 @@
+// Spec: "Error and Event Definitions", "Emit Events", "Log Attributes"
+// (DOCS/language.md)
+//
+// NOTE: the spec's prose examples write `emit Transfer(...)`, but the lexer
+// token is EMIT = 'emit!' — the grammar-valid keyword is `emit!` (as used by
+// the newer examples). `emit` without `!` lexes as a plain identifier.
+
+// Top-level error definitions, with and without fields
+error EeUnauthorized()
+error EeInsufficientFunds(required: U128, available: U128)
+
+// Top-level event definitions
+event EeTransfer(from: Addr, to: Addr, amount: U128)
+event EeProvideLiquidity(
+  sender: String,
+  receiver: String,
+  share: String,
+  refund_assets: [String; 2]
+)
+
+contract ErrorsEvents {
+  // Contract-scoped error and event definitions
+  error EeMaxSpreadAssertion()
+  error EeInvalidZeroAmount()
+  event EeSwap(sender: String, offer: String, return_amount: U128)
+
+  state {
+    owner: Addr;
+  }
+
+  #instantiate() {
+    $state.owner = $info.sender;
+    // Anonymous event (ad-hoc key-value pairs)
+    emit! event(method="instantiate", owner=$info.sender);
+  }
+
+  exec #transfer(recipient: Addr, amount: U128) {
+    if amount == 0 {
+      fail! EeInvalidZeroAmount();
+    }
+    if $info.sender != $state.owner {
+      fail! EeUnauthorized();
+    }
+    if amount > 100 {
+      fail! EeInsufficientFunds(required=amount, available=100);
+    }
+
+    // Named event with named arguments
+    emit! EeTransfer(from=$info.sender, to=recipient, amount=amount);
+
+    // Named event with positional arguments
+    emit! EeSwap("sender", "uusd", amount);
+
+    // Log attributes (including shorthand)
+    log {
+      action: "transfer",
+      from: $info.sender,
+      to: recipient,
+      amount
+    }
+  }
+}

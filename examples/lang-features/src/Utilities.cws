@@ -1,0 +1,34 @@
+// Spec: "Address Utilities" and "Decimal Utilities" (DOCS/language.md)
+
+const UT_COMMISSION_RATE = 3  // permille
+
+contract Utilities {
+  state {
+    owner: Addr;
+    rate: Dec;
+  }
+
+  #instantiate(to_addr: String, liquidity_token: String) {
+    // --- Address utilities ---
+    let validated = Addr.validate!(to_addr);          // Validate address string
+    let unchecked = Addr.unchecked(to_addr);          // Create unchecked address
+    let canonical = Addr.canonicalize!($info.sender); // Canonicalize address
+    let human = Addr.humanize!(canonical);            // Humanize canonical address
+    let empty = Addr.empty();                         // Empty address placeholder
+    let sub = SubaccountId.default($env.contract.address, 0); // Default subaccount
+
+    // --- Decimal utilities ---
+    let one = Dec.one();                          // 1.0
+    let zero = Dec.zero();                        // 0.0
+    let permille = Dec.permille(UT_COMMISSION_RATE); // parts per thousand
+    let ratio = Dec.ratio(1, 3);                  // a / b as decimal
+    let ratio_f = Dec.ratio!(1, 3);               // fallible decimal ratio
+
+    $state.owner = validated;
+    $state.rate = permille;
+  }
+
+  query #rate() -> Dec {
+    return $state.rate;
+  }
+}

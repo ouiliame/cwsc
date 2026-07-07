@@ -1,0 +1,57 @@
+// Spec: "Impl Blocks" (DOCS/language.md)
+// (Folds in the former src/structs/Methods.cws example.)
+//
+// SPEC-GRAMMAR GAP: the spec writes `impl Point { ... }`, but implDefn in
+// grammar/CWScriptParser.g4 makes the bracketed type-parameter list
+// MANDATORY (`IMPL name brackTypeParamList block`), so the bare spec form is
+// a syntax error ("no viable alternative"). The grammar-valid form
+// `impl Point[] { ... }` (empty type-param list) is used below.
+
+struct IbPoint {
+  x: Int,
+  y: Int
+}
+
+// Methods for types are implemented in a dedicated `impl` block
+impl IbPoint[] {
+  fn __add__(self, other: IbPoint) -> IbPoint {
+    return IbPoint(self.x + other.x, self.y + other.y);
+  }
+
+  fn magnitude_squared(self) -> Int {
+    return self.x * self.x + self.y * self.y;
+  }
+}
+
+// Generic impl block
+struct IbBox[%T] { value: %T }
+
+impl IbBox[%T] {
+  fn get(self) -> %T {
+    return self.value;
+  }
+}
+
+contract ImplBlocks {
+  state {
+    origin: IbPoint;
+  }
+
+  #instantiate() {
+    let a = IbPoint(1, 2);
+    let b = IbPoint { x: 3, y: 4 };
+
+    // Operator method defined via __add__
+    let c = a + b;
+    let m = c.magnitude_squared();
+
+    let boxed = IbBox { value: 5 };
+    let unboxed = boxed.get();
+
+    $state.origin = c;
+  }
+
+  query #origin() -> IbPoint {
+    return $state.origin;
+  }
+}

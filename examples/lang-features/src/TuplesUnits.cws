@@ -1,0 +1,33 @@
+// Spec: "Tuple Definitions" and "Unit Definitions" (DOCS/language.md)
+
+// Top-level tuple and unit definitions
+tuple TuPair([Int, String]);
+tuple TuTriple[%T]([%T, Int, %T]);
+unit TuEmpty;
+
+contract TuplesUnits {
+  // Contract-scoped definitions
+  tuple TuNone([]);
+  tuple TuSingle([U128]);
+  unit TuMarker;
+
+  state {
+    latest: TuPair;
+  }
+
+  #instantiate() {
+    // Tuple construction (callable, like structs)
+    let p = TuPair(1, "one");
+    let s = TuSingle(100);
+
+    // Unit values
+    let m = TuMarker;
+    let e = TuEmpty;
+
+    $state.latest = p;
+  }
+
+  query #latest() -> TuPair {
+    return $state.latest;
+  }
+}

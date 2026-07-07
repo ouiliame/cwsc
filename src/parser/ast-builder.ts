@@ -64,9 +64,106 @@ export class AstBuilderVisitor
     return res as Ast.Stmt;
   }
 
+  /**
+   * Visits a grammar child that is required by the grammar but may be absent
+   * on the parse tree when ANTLR error recovery kicked in (a SyntaxError
+   * diagnostic has already been emitted by the error listener). Returns a
+   * placeholder `NoneLit` expression instead of crashing, positioned at the
+   * parent context.
+   */
+  exprOrPlaceholder(
+    ctx: ParserRuleContext | undefined,
+    parent: ParserRuleContext
+  ): Ast.Expr {
+    if (!ctx) {
+      return new Ast.NoneLit().$(parent) as unknown as Ast.Expr;
+    }
+    return this.expr(ctx);
+  }
+
+  /**
+   * Same as {@link exprOrPlaceholder} but for required type expressions.
+   */
+  typeExprOrPlaceholder(
+    ctx: ParserRuleContext | undefined,
+    parent: ParserRuleContext
+  ): Ast.TypeExpr {
+    if (!ctx) {
+      return new Ast.IdentTypeExpr(new Ast.Ident('<error>').$(parent)).$(
+        parent
+      ) as unknown as Ast.TypeExpr;
+    }
+    return this.typeExpr(ctx);
+  }
+
+  /**
+   * Same as {@link exprOrPlaceholder} but for required blocks: returns an
+   * empty block when the child is absent (e.g. body-less declarations inside
+   * interfaces, or ANTLR error recovery).
+   */
+  blockOrEmpty(
+    ctx: P.BlockContext | undefined,
+    parent: ParserRuleContext
+  ): Ast.Block {
+    if (!ctx) {
+      return new Ast.Block(Ast.List.empty<Ast.Stmt>().$(parent)).$(parent);
+    }
+    return this.visitBlock(ctx);
+  }
+
+  /**
+   * Same as {@link exprOrPlaceholder} but for required identifiers.
+   */
+  identOrPlaceholder(
+    ctx: P.IdentContext | undefined,
+    parent: ParserRuleContext
+  ): Ast.Ident {
+    if (!ctx) {
+      return new Ast.Ident('<error>').$(parent);
+    }
+    return this.visitIdent(ctx);
+  }
+
+  /**
+   * Safely extracts the two operands of a binary construct. Under ANTLR
+   * error recovery the second operand may be absent; `ctx.expr(1)` would
+   * throw, so we index into the array form instead.
+   */
+  exprPair(
+    exprs: ParserRuleContext[],
+    parent: ParserRuleContext
+  ): [Ast.Expr, Ast.Expr] {
+    return [
+      this.exprOrPlaceholder(exprs[0], parent),
+      this.exprOrPlaceholder(exprs[1], parent),
+    ];
+  }
+
+  /**
+   * Safely visits the sole `expr` child of a context. The generated
+   * single-child accessors (`ctx.expr()`) throw when the child is absent
+   * under ANTLR error recovery, so we use `tryGetRuleContext` instead.
+   */
+  firstExprOrPlaceholder(ctx: ParserRuleContext): Ast.Expr {
+    return this.exprOrPlaceholder(
+      ctx.tryGetRuleContext(0, P.ExprContext),
+      ctx
+    );
+  }
+
+  /**
+   * Same as {@link firstExprOrPlaceholder} but for the sole `typeExpr` child.
+   */
+  firstTypeExprOrPlaceholder(ctx: ParserRuleContext): Ast.TypeExpr {
+    return this.typeExprOrPlaceholder(
+      ctx.tryGetRuleContext(0, P.TypeExprContext),
+      ctx
+    );
+  }
+
   //#region Statements
   visitBinding(ctx: P.BindingContext): Ast.Binding {
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const alias = ctx._alias ? this.visitIdent(ctx._alias) : null;
     return new Ast.Binding(name, alias).$(ctx);
   }
@@ -80,85 +177,101 @@ export class AstBuilderVisitor
   }
 
   visitImportStmt(ctx: P.ImportStmtContext): Ast.ImportStmt {
-    const bindings = this.visitBraceBindingList(ctx._bindings);
-    const src = this.visitStringLit(ctx._src);
+    const bindings = ctx._bindings
+      ? this.visitBraceBindingList(ctx._bindings)
+      : Ast.List.empty<Ast.Binding>().$(ctx);
+    const src = ctx._src
+      ? this.visitStringLit(ctx._src)
+      : new Ast.StringLit('').$(ctx);
     return new Ast.ImportStmt(bindings, src).$(ctx);
   }
   visitExportStmt(ctx: P.ExportStmtContext): Ast.ExportStmt {
-    const fields = this.visitBraceFieldList(ctx._fields);
+    const fields = ctx._fields
+      ? this.visitBraceFieldList(ctx._fields)
+      : Ast.List.empty<Ast.Field>().$(ctx);
     return new Ast.ExportStmt(fields).$(ctx);
   }
 
   visitLetIdentStmt(ctx: P.LetIdentStmtContext): Ast.LetIdentStmt {
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.expr(ctx._value);
+    // `_value` is required by the grammar but absent when the source omits
+    // the initializer (e.g. `let share: U128;`) and ANTLR error-recovers.
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.LetIdentStmt(name, ty, value).$(ctx);
   }
 
   visitLetTupleStmt(ctx: P.LetTupleStmtContext): Ast.LetTupleStmt {
-    const names = this.visitBrackIdentList(ctx._names);
+    const names = ctx._names
+      ? this.visitBrackIdentList(ctx._names)
+      : Ast.List.empty<Ast.Ident>().$(ctx);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.LetTupleStmt(names, ty, value).$(ctx);
   }
 
   visitLetStructStmt(ctx: P.LetStructStmtContext): Ast.LetStructStmt {
-    const bindings = this.visitBraceBindingList(ctx._bindings);
+    const bindings = ctx._bindings
+      ? this.visitBraceBindingList(ctx._bindings)
+      : Ast.List.empty<Ast.Binding>().$(ctx);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.LetStructStmt(bindings, ty, value).$(ctx);
   }
 
   visitConstIdentStmt(ctx: P.ConstIdentStmtContext): Ast.ConstIdentStmt {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.visit(ctx._value) as Ast.Expr;
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.ConstIdentStmt(doc, exported, name, ty, value).$(ctx);
   }
 
   visitConstTupleStmt(ctx: P.ConstTupleStmtContext): Ast.ConstTupleStmt {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const names = this.visitBrackIdentList(ctx._names);
+    const names = ctx._names
+      ? this.visitBrackIdentList(ctx._names)
+      : Ast.List.empty<Ast.Ident>().$(ctx);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.visit(ctx._value) as Ast.Expr;
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.ConstTupleStmt(doc, exported, names, ty, value).$(ctx);
   }
 
   visitConstStructStmt(ctx: P.ConstStructStmtContext): Ast.ConstStructStmt {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const bindings = this.visitBraceBindingList(ctx._bindings);
+    const bindings = ctx._bindings
+      ? this.visitBraceBindingList(ctx._bindings)
+      : Ast.List.empty<Ast.Binding>().$(ctx);
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    const value = this.visit(ctx._value) as Ast.Expr;
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.ConstStructStmt(doc, exported, bindings, ty, value).$(ctx);
   }
 
   visitAssignStmt(ctx: P.AssignStmtContext): Ast.AssignStmt {
-    const name = this.visitIdent(ctx._name);
-    const op = ctx._assignOp.text ?? '=';
-    const value = this.expr(ctx._value);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const op = ctx._assignOp?.text ?? '=';
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.AssignStmt(name, assignOpFromText(op), value).$(ctx);
   }
 
   visitMemberAssignStmt(ctx: P.MemberAssignStmtContext): Ast.MemberAssignStmt {
-    const obj = this.visit(ctx._obj) as Ast.Expr;
-    const name = this.visitIdent(ctx._memberName);
-    const op = ctx._assignOp.text ?? '=';
-    const value = this.expr(ctx._value);
+    const obj = this.exprOrPlaceholder(ctx._obj, ctx);
+    const name = this.identOrPlaceholder(ctx._memberName, ctx);
+    const op = ctx._assignOp?.text ?? '=';
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.MemberAssignStmt(obj, name, assignOpFromText(op), value).$(
       ctx
     );
   }
 
   visitIndexAssignStmt(ctx: P.IndexAssignStmtContext): Ast.IndexAssignStmt {
-    const obj = this.expr(ctx._obj);
-    const index = this.expr(ctx._index);
-    const op = ctx._assignOp.text ?? '=';
-    const value = this.expr(ctx._value);
+    const obj = this.exprOrPlaceholder(ctx._obj, ctx);
+    const index = this.exprOrPlaceholder(ctx._index, ctx);
+    const op = ctx._assignOp?.text ?? '=';
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.IndexAssignStmt(obj, index, assignOpFromText(op), value).$(
       ctx
     );
@@ -188,38 +301,82 @@ export class AstBuilderVisitor
   }
 
   visitForIdentStmt(ctx: P.ForIdentStmtContext): Ast.ForIdentStmt {
-    const name = this.visitIdent(ctx._name);
-    const iter = this.expr(ctx._iter);
-    const body = this.visitBlock(ctx._body);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const iter = this.exprOrPlaceholder(ctx._iter, ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ForIdentStmt(name, iter, body).$(ctx);
   }
 
   visitForTupleStmt(ctx: P.ForTupleStmtContext): Ast.ForTupleStmt {
-    const names = this.visitIdentList(ctx._names);
-    const iter = this.expr(ctx._iter);
-    const body = this.visitBlock(ctx._body);
+    const names = ctx._names
+      ? this.visitIdentList(ctx._names)
+      : Ast.List.empty<Ast.Ident>().$(ctx);
+    const iter = this.exprOrPlaceholder(ctx._iter, ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ForTupleStmt(names, iter, body).$(ctx);
   }
 
   visitForStructStmt(ctx: P.ForStructStmtContext): Ast.ForStructStmt {
-    const bindings = this.visitBraceBindingList(ctx._bindings);
-    const iter = this.expr(ctx._iter);
-    const body = this.visitBlock(ctx._body);
+    const bindings = ctx._bindings
+      ? this.visitBraceBindingList(ctx._bindings)
+      : Ast.List.empty<Ast.Binding>().$(ctx);
+    const iter = this.exprOrPlaceholder(ctx._iter, ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ForStructStmt(bindings, iter, body).$(ctx);
   }
 
   visitExecStmt(ctx: P.ExecStmtContext): Ast.ExecStmt {
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.ExecStmt(value).$(ctx);
   }
 
+  visitDelegateExecStmt(ctx: P.DelegateExecStmtContext): Ast.DelegateExecStmt {
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
+    return new Ast.DelegateExecStmt(value).$(ctx);
+  }
+
+  visitAnnotation(ctx: P.AnnotationContext): Ast.Annotation {
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
+    return new Ast.Annotation(value).$(ctx);
+  }
+
+  visitAnnotStmt(ctx: P.AnnotStmtContext): Ast.AnnotStmt {
+    const annotations = new Ast.List(
+      ctx._annotations.filter((a) => a != null).map((a) => this.visitAnnotation(a))
+    ).$(ctx);
+    // `_inner` is required by the grammar but may be absent under ANTLR
+    // error recovery (e.g. a dangling annotation at end of block).
+    const inner: Ast.Stmt = ctx._inner
+      ? this.stmt(ctx._inner)
+      : (new Ast.ExprStmt(
+          new Ast.NoneLit().$(ctx) as unknown as Ast.Expr,
+          false
+        ).$(ctx) as Ast.Stmt);
+    return new Ast.AnnotStmt(annotations, inner).$(ctx);
+  }
+
+  visitInlineReply(ctx: P.InlineReplyContext): Ast.InlineReply {
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
+    const kind = this.identOrPlaceholder(ctx._kind, ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
+    return new Ast.InlineReply(params, kind, body).$(ctx);
+  }
+
+  visitSendStmt(ctx: P.SendStmtContext): Ast.SendStmt {
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
+    const reply = ctx._reply ? this.visitInlineReply(ctx._reply) : null;
+    return new Ast.SendStmt(value, reply).$(ctx);
+  }
+
   visitInstantiateStmt(ctx: P.InstantiateStmtContext): Ast.InstantiateStmt {
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.InstantiateStmt(value).$(ctx);
   }
 
   visitEmitStmt(ctx: P.EmitStmtContext): Ast.EmitStmt {
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.EmitStmt(value).$(ctx);
   }
 
@@ -231,18 +388,20 @@ export class AstBuilderVisitor
   //#endregion Statements
 
   visitReturnExpr_(ctx: P.ReturnExpr_Context): Ast.ReturnExpr {
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.ReturnExpr(value).$(ctx);
   }
 
   visitFailExpr_(ctx: P.FailExpr_Context): Ast.FailExpr {
-    const value = this.expr(ctx._value);
+    const value = this.exprOrPlaceholder(ctx._value, ctx);
     return new Ast.FailExpr(value).$(ctx);
   }
 
   visitIfExpr_(ctx: P.IfExpr_Context): Ast.IfExpr {
-    const pred = this.expr(ctx._pred);
-    const thenBody = this.visitBlockOrExpr(ctx._thenBody);
+    const pred = this.exprOrPlaceholder(ctx._pred, ctx);
+    const thenBody = ctx._thenBody
+      ? this.visitBlockOrExpr(ctx._thenBody)
+      : new Ast.Block(Ast.List.empty<Ast.Stmt>().$(ctx)).$(ctx);
     const elseBody = ctx._elseBody
       ? this.visitBlockOrExpr(ctx._elseBody)
       : null;
@@ -252,7 +411,7 @@ export class AstBuilderVisitor
   visitTryCatchElseExpr_(
     ctx: P.TryCatchElseExpr_Context
   ): Ast.TryCatchElseExpr {
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     const catchClauses = ctx._catchClauses
       ? new Ast.List(ctx._catchClauses.map((s) => this.visitCatchClause(s))).$(
           ctx
@@ -263,8 +422,8 @@ export class AstBuilderVisitor
   }
 
   visitCatchClause(ctx: P.CatchClauseContext): Ast.CatchClause {
-    const ty = this.typeExpr(ctx._ty);
-    const body = this.visitBlock(ctx._body);
+    const ty = this.typeExprOrPlaceholder(ctx._ty, ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.CatchClause(ty, body).$(ctx);
   }
 
@@ -272,12 +431,12 @@ export class AstBuilderVisitor
   visitContractDefn(ctx: P.ContractDefnContext): Ast.ContractDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const base = ctx._base ? this.typeExpr(ctx._base) : null;
     const interfaces = ctx._interfaces
       ? this.visitTypeExprList(ctx._interfaces)
       : Ast.List.empty<Ast.TypeExpr>().$(ctx);
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ContractDefn(doc, exported, name, base, interfaces, body).$(
       ctx
     );
@@ -286,51 +445,58 @@ export class AstBuilderVisitor
   visitInterfaceDefn(ctx: P.InterfaceDefnContext): Ast.InterfaceDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const extend = ctx._baseInterfaces
       ? this.visitTypeExprList(ctx._baseInterfaces)
       : Ast.List.empty<Ast.TypeExpr>().$(ctx);
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.InterfaceDefn(doc, exported, name, extend, body).$(ctx);
   }
 
   visitStructDefnBrace(ctx: P.StructDefnBraceContext): Ast.StructDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    // Anonymous inline structs (`-> struct { balance: Int }`) have no name.
+    const name = ctx._name ? this.visitIdent(ctx._name) : null;
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
-    const fields = this.visitBraceParamList(ctx._fields);
+    const fields = ctx._fields
+      ? this.visitBraceParamList(ctx._fields)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     return new Ast.StructDefn(doc, exported, name, typeParams, fields).$(ctx);
   }
 
   visitStructDefnParen(ctx: P.StructDefnParenContext): Ast.StructDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
-    const fields = this.visitParenParamList(ctx._fields);
+    const fields = ctx._fields
+      ? this.visitParenParamList(ctx._fields)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     return new Ast.StructDefn(doc, exported, name, typeParams, fields).$(ctx);
   }
 
   visitTupleDefn(ctx: P.TupleDefnContext): Ast.TupleDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
-    const elements = this.visitBrackTypeExprList(ctx._elements);
+    const elements = ctx._elements
+      ? this.visitBrackTypeExprList(ctx._elements)
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     return new Ast.TupleDefn(doc, exported, name, typeParams, elements).$(ctx);
   }
 
   visitUnitDefn(ctx: P.UnitDefnContext): Ast.UnitDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
@@ -340,7 +506,7 @@ export class AstBuilderVisitor
   visitEnumDefn(ctx: P.EnumDefnContext): Ast.EnumDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
@@ -362,8 +528,10 @@ export class AstBuilderVisitor
     ctx: P.EnumVariantStructDefnBraceContext
   ): Ast.EnumVariantStructDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
-    const fields = this.visitBraceParamList(ctx._fields);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const fields = ctx._fields
+      ? this.visitBraceParamList(ctx._fields)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     return new Ast.EnumVariantStructDefn(doc, name, fields).$(ctx);
   }
 
@@ -371,8 +539,10 @@ export class AstBuilderVisitor
     ctx: P.EnumVariantStructDefnParenContext
   ): Ast.EnumVariantStructDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
-    const fields = this.visitParenParamList(ctx._fields);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const fields = ctx._fields
+      ? this.visitParenParamList(ctx._fields)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     return new Ast.EnumVariantStructDefn(doc, name, fields).$(ctx);
   }
 
@@ -380,8 +550,10 @@ export class AstBuilderVisitor
     ctx: P.EnumVariantTupleDefnContext
   ): Ast.EnumVariantTupleDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
-    const elements = this.visitBrackTypeExprList(ctx._elements);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const elements = ctx._elements
+      ? this.visitBrackTypeExprList(ctx._elements)
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     return new Ast.EnumVariantTupleDefn(doc, name, elements).$(ctx);
   }
 
@@ -389,32 +561,44 @@ export class AstBuilderVisitor
     ctx: P.EnumVariantUnitDefnContext
   ): Ast.EnumVariantUnitDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     return new Ast.EnumVariantUnitDefn(doc, name).$(ctx);
   }
 
   visitTypeAliasDefn(ctx: P.TypeAliasDefnContext): Ast.TypeAliasDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
-    const ty = this.typeExpr(ctx._ty);
+    const ty = this.typeExprOrPlaceholder(ctx._ty, ctx);
     return new Ast.TypeAliasDefn(doc, exported, name, typeParams, ty).$(ctx);
+  }
+
+  visitImplDefn(ctx: P.ImplDefnContext): Ast.ImplDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const typeParams = ctx._typeParams
+      ? this.visitBrackTypeParamList(ctx._typeParams)
+      : Ast.List.empty<Ast.TypeVar>().$(ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
+    return new Ast.ImplDefn(doc, name, typeParams, body).$(ctx);
   }
 
   visitFnDefn(ctx: P.FnDefnContext): Ast.FnDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const fallible = ctx._fallible ? true : false;
     const typeParams = ctx._typeParams
       ? this.visitBrackTypeParamList(ctx._typeParams)
       : Ast.List.empty<Ast.TypeVar>().$(ctx);
-    const params = this.visitParenParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.FnDefn(
       doc,
       exported,
@@ -430,9 +614,11 @@ export class AstBuilderVisitor
   visitInstantiateDefn(ctx: P.InstantiateDefnContext): Ast.InstantiateDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const fallible = ctx._fallible ? true : false;
-    const params = this.visitParenParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.InstantiateDefn(doc, fallible, params, returnTy, body).$(
       ctx
     );
@@ -440,11 +626,13 @@ export class AstBuilderVisitor
 
   visitExecDefn(ctx: P.ExecDefnContext): Ast.ExecDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const fallible = ctx._fallible ? true : false;
-    const params = this.visitParenParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ExecDefn(
       doc,
       name,
@@ -458,11 +646,13 @@ export class AstBuilderVisitor
 
   visitExecTupleDefn(ctx: P.ExecTupleDefnContext): Ast.ExecDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const fallible = ctx._fallible ? true : false;
-    const params = this.visitTupleParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitTupleParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ExecDefn(
       doc,
       name,
@@ -476,11 +666,13 @@ export class AstBuilderVisitor
 
   visitQueryDefn(ctx: P.QueryDefnContext): Ast.QueryDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const fallible = ctx._fallible ? true : false;
-    const params = this.visitParenParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.QueryDefn(
       doc,
       name,
@@ -494,11 +686,13 @@ export class AstBuilderVisitor
 
   visitQueryTupleDefn(ctx: P.QueryTupleDefnContext): Ast.QueryDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const fallible = ctx._fallible ? true : false;
-    const params = this.visitTupleParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitTupleParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.QueryDefn(
       doc,
       name,
@@ -510,25 +704,56 @@ export class AstBuilderVisitor
     ).$(ctx);
   }
 
+  visitReplyDefn(ctx: P.ReplyDefnContext): Ast.ReplyDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const kind = this.identOrPlaceholder(ctx._kind, ctx);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
+    const body = this.blockOrEmpty(ctx._body, ctx);
+    return new Ast.ReplyDefn(doc, kind, name, params, body).$(ctx);
+  }
+
+  visitMigrateDefn(ctx: P.MigrateDefnContext): Ast.MigrateDefn {
+    const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
+    const fallible = ctx._fallible ? true : false;
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
+    const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
+    const body = this.blockOrEmpty(ctx._body, ctx);
+    return new Ast.MigrateDefn(doc, fallible, params, returnTy, body).$(ctx);
+  }
+
   visitErrorDefn(ctx: P.ErrorDefnContext): Ast.ErrorDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
-    const params = this.visitParenParamList(ctx._params);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     return new Ast.ErrorDefn(doc, exported, name, params).$(ctx);
   }
 
   visitEventDefn(ctx: P.EventDefnContext): Ast.EventDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
     const exported = ctx._exported ? true : false;
-    const name = this.visitIdent(ctx._name);
-    const params = this.visitParenParamList(ctx._params);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const params = ctx._params
+      ? this.visitParenParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     return new Ast.EventDefn(doc, exported, name, params).$(ctx);
   }
 
   visitStateBlockDefn(ctx: P.StateBlockDefnContext): Ast.StateBlockDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const stateFields = ctx._stateFields.map((f) => this.visitStateDefn(f));
+    // Under ANTLR error recovery a stateDefn child may be present but have
+    // neither an item nor a map alternative populated — skip those (the
+    // syntax error diagnostic has already been emitted).
+    const stateFields = ctx._stateFields
+      .filter((f) => f != null && (f.stateItemDefn() ?? f.stateMapDefn()) != null)
+      .map((f) => this.visitStateDefn(f));
     return new Ast.StateBlockDefn(doc, new Ast.List(stateFields).$(ctx)).$(ctx);
   }
 
@@ -541,16 +766,18 @@ export class AstBuilderVisitor
 
   visitStateItemDefn(ctx: P.StateItemDefnContext): Ast.StateItemDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
-    const ty = this.typeExpr(ctx._ty);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    const ty = this.typeExprOrPlaceholder(ctx._ty, ctx);
     return new Ast.StateItemDefn(doc, name, ty).$(ctx);
   }
 
   visitStateMapDefn(ctx: P.StateMapDefnContext): Ast.StateMapDefn {
     const doc = ctx._doc ? this.visitDocComment(ctx._doc) : null;
-    const name = this.visitIdent(ctx._name);
-    const indexTy = this.typeExpr(ctx._indexTy);
-    const ty = this.typeExpr(ctx._ty);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
+    // Named map keys (`balances[owner: Address]`) and defaults (`= 0`) are
+    // not in the grammar; error recovery can leave these children absent.
+    const indexTy = this.typeExprOrPlaceholder(ctx._indexTy, ctx);
+    const ty = this.typeExprOrPlaceholder(ctx._ty, ctx);
     return new Ast.StateMapDefn(doc, name, indexTy, ty).$(ctx);
   }
 
@@ -559,7 +786,7 @@ export class AstBuilderVisitor
   //#region Expressions
   visitDotExpr(ctx: P.DotExprContext): Ast.DotExpr {
     const obj = this.expr(ctx.expr());
-    const memberName = this.visitIdent(ctx._memberName);
+    const memberName = this.identOrPlaceholder(ctx._memberName, ctx);
     return new Ast.DotExpr(obj, memberName).$(ctx);
   }
 
@@ -569,12 +796,16 @@ export class AstBuilderVisitor
     const typeArgs = ctx._typeArgs
       ? this.visitBrackTypeExprList(ctx._typeArgs)
       : Ast.List.empty<Ast.TypeExpr>().$(ctx);
-    const args = new Ast.List(ctx._args.filter((a) => a != null).map((a) => this.visitArg(a)).filter((a): a is Ast.Arg => a != null)).$(ctx);
+    // `_args` can contain undefined elements when ANTLR error recovery ran
+    // inside the argument list — filter them before visiting.
+    const args = new Ast.List(
+      ctx._args.filter((a) => a != null).map((a) => this.visitArg(a))
+    ).$(ctx);
     return new Ast.CallExpr(fn, fallible, typeArgs, args).$(ctx);
   }
 
   visitIndexExpr(ctx: P.IndexExprContext): Ast.IndexExpr {
-    const [obj, index] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [obj, index] = this.exprPair(ctx.expr(), ctx);
     return new Ast.IndexExpr(obj, index).$(ctx);
   }
 
@@ -583,60 +814,68 @@ export class AstBuilderVisitor
     return new Ast.ExistsExpr(expr).$(ctx);
   }
 
+  visitPowExpr(ctx: P.PowExprContext): Ast.BinOpExpr {
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
+    return new Ast.BinOpExpr(lhs, Ast.Op.POW, rhs).$(ctx);
+  }
+
   visitMulExpr(ctx: P.MulExprContext): Ast.BinOpExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
   visitAddExpr(ctx: P.AddExprContext): Ast.BinOpExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
   visitCompExpr(ctx: P.CompExprContext): Ast.BinOpExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
   visitQueryExpr(ctx: P.QueryExprContext): Ast.QueryExpr {
-    const expr = this.expr(ctx.expr());
+    const expr = this.firstExprOrPlaceholder(ctx);
     return new Ast.QueryExpr(expr).$(ctx);
   }
 
   visitShortTryExpr(ctx: P.ShortTryExprContext): Ast.ShortTryExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.ShortTryExpr(lhs, rhs).$(ctx);
   }
 
   visitIsExpr(ctx: P.IsExprContext): Ast.IsExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr()), this.typeExpr(ctx._ty)];
+    const [lhs, rhs] = [
+      this.exprOrPlaceholder(ctx.expr(), ctx),
+      this.typeExprOrPlaceholder(ctx._ty, ctx),
+    ];
     const negative = ctx._negative ? true : false;
     return new Ast.IsExpr(negative, lhs, rhs).$(ctx);
   }
 
   visitInExpr(ctx: P.InExprContext): Ast.InExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     const negative = ctx._negative ? true : false;
     return new Ast.InExpr(negative, lhs, rhs).$(ctx);
   }
 
   visitEqExpr(ctx: P.EqExprContext): Ast.BinOpExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.BinOpExpr(lhs, ctx._op.text! as Ast.Op, rhs).$(ctx);
   }
 
   visitNotExpr(ctx: P.NotExprContext): Ast.NotExpr {
-    const expr = this.expr(ctx.expr());
+    const expr = this.firstExprOrPlaceholder(ctx);
     return new Ast.NotExpr(expr).$(ctx);
   }
 
   visitAndExpr(ctx: P.AndExprContext): Ast.AndExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.AndExpr(lhs, rhs).$(ctx);
   }
 
   visitOrExpr(ctx: P.OrExprContext): Ast.OrExpr {
-    const [lhs, rhs] = [this.expr(ctx.expr(0)), this.expr(ctx.expr(1))];
+    const [lhs, rhs] = this.exprPair(ctx.expr(), ctx);
     return new Ast.OrExpr(lhs, rhs).$(ctx);
   }
 
@@ -649,8 +888,7 @@ export class AstBuilderVisitor
   }
 
   visitMapEntry(ctx: P.MapEntryContext): Ast.MapEntry {
-    const key = this.expr(ctx.expr(0));
-    const value = this.expr(ctx.expr(1));
+    const [key, value] = this.exprPair(ctx.expr(), ctx);
     return new Ast.MapEntry(key, value).$(ctx);
   }
 
@@ -666,22 +904,29 @@ export class AstBuilderVisitor
   }
 
   visitBlockClosureExpr(ctx: P.BlockClosureExprContext): Ast.ClosureExpr {
-    const params = this.visitBarsParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitBarsParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const fallible = ctx._fallible ? true : false;
     const returnTy = ctx._returnTy ? this.typeExpr(ctx._returnTy) : null;
-    const body = this.visitBlock(ctx._body);
+    const body = this.blockOrEmpty(ctx._body, ctx);
     return new Ast.ClosureExpr(params, fallible, returnTy, body).$(ctx);
   }
 
   visitExprClosureExpr(ctx: P.ExprClosureExprContext): Ast.ClosureExpr {
-    const params = this.visitBarsParamList(ctx._params);
+    const params = ctx._params
+      ? this.visitBarsParamList(ctx._params)
+      : Ast.List.empty<Ast.Param>().$(ctx);
     const fallible = ctx._fallible ? true : false;
-    const exprStmt = this.visitExprStmt(ctx._body);
+    const bodyCtx = ctx._body ?? ctx;
+    const stmts: Ast.Stmt[] = ctx._body
+      ? [this.visitExprStmt(ctx._body)]
+      : [];
     return new Ast.ClosureExpr(
       params,
       fallible,
       null,
-      new Ast.Block(new Ast.List([exprStmt]).$(ctx._body)).$(ctx._body)
+      new Ast.Block(new Ast.List(stmts).$(bodyCtx)).$(bodyCtx)
     ).$(ctx);
   }
 
@@ -690,8 +935,10 @@ export class AstBuilderVisitor
   }
 
   visitStructExpr_(ctx: P.StructExpr_Context): Ast.StructExpr {
-    let ty = this.typeExpr(ctx._ty).$(ctx);
-    let fields = this.visitBraceFieldList(ctx._fields);
+    let ty = this.typeExprOrPlaceholder(ctx._ty, ctx).$(ctx);
+    let fields = ctx._fields
+      ? this.visitBraceFieldList(ctx._fields)
+      : Ast.List.empty<Ast.Field>().$(ctx);
     return new Ast.StructExpr(ty, fields).$(ctx);
   }
 
@@ -714,7 +961,7 @@ export class AstBuilderVisitor
   }
 
   visitGroupedExpr(ctx: P.GroupedExprContext): Ast.GroupedExpr {
-    return new Ast.GroupedExpr(this.expr(ctx.expr())).$(ctx);
+    return new Ast.GroupedExpr(this.firstExprOrPlaceholder(ctx)).$(ctx);
   }
 
   //#endregion Expressions
@@ -743,36 +990,63 @@ export class AstBuilderVisitor
 
   //#region Type Expressions
   visitGroupedTypeExpr(ctx: P.GroupedTypeExprContext): Ast.GroupedTypeExpr {
-    return new Ast.GroupedTypeExpr(this.typeExpr(ctx.typeExpr())).$(ctx);
+    return new Ast.GroupedTypeExpr(this.firstTypeExprOrPlaceholder(ctx)).$(
+      ctx
+    );
   }
 
   visitParameterizedTypeExpr(
     ctx: P.ParameterizedTypeExprContext
   ): Ast.ParamzdTypeExpr {
     const ty = this.typeExpr(ctx.typeExpr());
-    const typeArgs = this.visitTypeExprList(ctx._typeArgs);
+    const typeArgs = ctx._typeArgs
+      ? this.visitTypeExprList(ctx._typeArgs)
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     return new Ast.ParamzdTypeExpr(ty, typeArgs).$(ctx);
   }
 
   visitMemberTypeExpr(ctx: P.MemberTypeExprContext): Ast.MemberTypeExpr {
     const ty = this.typeExpr(ctx.typeExpr());
-    const memberName = this.visitIdent(ctx._memberName);
+    const memberName = this.identOrPlaceholder(ctx._memberName, ctx);
+    return new Ast.MemberTypeExpr(ty, memberName).$(ctx);
+  }
+
+  visitParenTupleTypeExpr(
+    ctx: P.ParenTupleTypeExprContext
+  ): Ast.TupleTypeExpr {
+    const elements = new Ast.List(
+      ctx.typeExpr().map((t) => this.typeExpr(t))
+    ).$(ctx);
+    return new Ast.TupleTypeExpr(elements).$(ctx);
+  }
+
+  visitPathTypeExpr(ctx: P.PathTypeExprContext): Ast.MemberTypeExpr {
+    // `A::B` paths (e.g. `Wasm::Instantiate`) are represented as member
+    // type expressions, same as `A.B`.
+    const ty = this.firstTypeExprOrPlaceholder(ctx);
+    const memberName = this.identOrPlaceholder(ctx._memberName, ctx);
     return new Ast.MemberTypeExpr(ty, memberName).$(ctx);
   }
 
   visitTupleTypeExpr(ctx: P.TupleTypeExprContext): Ast.TupleTypeExpr {
-    const elements = this.visitBrackTypeExprList(ctx._elements);
+    const elements = ctx._elements
+      ? this.visitBrackTypeExprList(ctx._elements)
+      : Ast.List.empty<Ast.TypeExpr>().$(ctx);
     return new Ast.TupleTypeExpr(elements).$(ctx);
   }
 
   visitArrayTypeExpr(ctx: P.ArrayTypeExprContext): Ast.ArrayTypeExpr {
-    const ty = this.typeExpr(ctx.typeExpr());
-    return new Ast.ArrayTypeExpr(ty, this.visitIntLit(ctx._size)).$(ctx);
+    const ty = this.firstTypeExprOrPlaceholder(ctx);
+    const size = ctx._size
+      ? this.visitIntLit(ctx._size)
+      : new Ast.IntLit('0').$(ctx);
+    return new Ast.ArrayTypeExpr(ty, size).$(ctx);
   }
 
   visitMapTypeExpr(ctx: P.MapTypeExprContext): Ast.MapTypeExpr {
-    const keyTy = this.typeExpr(ctx.typeExpr(0));
-    const valueTy = this.typeExpr(ctx.typeExpr(1));
+    const tys = ctx.typeExpr();
+    const keyTy = this.typeExprOrPlaceholder(tys[0], ctx);
+    const valueTy = this.typeExprOrPlaceholder(tys[1], ctx);
     return new Ast.MapTypeExpr(keyTy, valueTy).$(ctx);
   }
 
@@ -827,29 +1101,31 @@ export class AstBuilderVisitor
   }
 
   visitParam(ctx: P.ParamContext): Ast.Param {
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const optional = ctx._optional ? true : false;
     const ty = ctx._ty ? this.typeExpr(ctx._ty) : null;
-    return new Ast.Param(name, optional, ty).$(ctx);
+    const mut = ctx._mut ? true : false;
+    return new Ast.Param(name, optional, ty, mut).$(ctx);
   }
 
   visitField(ctx: P.FieldContext): Ast.Field {
-    const name = this.visitIdent(ctx._name);
+    const name = this.identOrPlaceholder(ctx._name, ctx);
     const value = ctx._value ? this.expr(ctx._value) : null;
     return new Ast.Field(name, value).$(ctx);
   }
 
-  visitArg(ctx: P.ArgContext): Ast.Arg | null {
+  visitArg(ctx: P.ArgContext): Ast.Arg {
+    const mut = ctx._mut ? true : false;
     const namedArg = ctx.namedArg();
     if (namedArg) {
-      const name = this.visitIdent(namedArg._name);
-      const value = this.expr(namedArg._value);
-      return new Ast.Arg(name, value).$(ctx);
+      const name = this.identOrPlaceholder(namedArg._name, namedArg);
+      const value = this.exprOrPlaceholder(namedArg._value, namedArg);
+      return new Ast.Arg(name, value, mut).$(ctx);
     } else {
-      const exprCtx = ctx.expr();
-      if (!exprCtx) return null;
-      const value = this.expr(exprCtx);
-      return new Ast.Arg(null, value).$(ctx);
+      // `ctx.expr()` may be absent under ANTLR error recovery (e.g. a
+      // trailing comma in an argument list); fall back to a placeholder.
+      const value = this.exprOrPlaceholder(ctx.expr(), ctx);
+      return new Ast.Arg(null, value, mut).$(ctx);
     }
   }
 
@@ -894,10 +1170,54 @@ export class AstBuilderVisitor
   }
 
   visitBlock(ctx: P.BlockContext): Ast.Block {
-    const stmts = new Ast.List<Ast.Stmt>(ctx._stmts.map((s) => this.stmt(s))).$(
-      ctx
-    );
+    const raw = ctx._stmts.map((s) => this.stmt(s));
+    const stmts = new Ast.List<Ast.Stmt>(this.fuseTryElseShortForm(raw)).$(ctx);
     return new Ast.Block(stmts).$(ctx);
+  }
+
+  /**
+   * The spec's try-else SHORT form (`try { ... } else fail! "..."` — no
+   * braces around the else expression) is not representable in the grammar
+   * (the else clause requires a block), so ANTLR error-recovers it into
+   * three consecutive statements:
+   *   <stmt containing TryCatchElseExpr with elseBody == null>
+   *   ExprStmt(IdentExpr 'else')
+   *   <the else statement (typically FailStmt)>
+   * Fuse them back into a proper else clause.
+   */
+  private fuseTryElseShortForm(stmts: Ast.Stmt[]): Ast.Stmt[] {
+    const out: Ast.Stmt[] = [];
+    for (let i = 0; i < stmts.length; i++) {
+      const s = stmts[i];
+      const marker = stmts[i + 1];
+      const elseStmt = stmts[i + 2];
+      const isElseMarker =
+        marker instanceof Ast.ExprStmt &&
+        marker.value instanceof Ast.IdentExpr &&
+        marker.value.ident.value === 'else';
+      if (isElseMarker && elseStmt) {
+        // find a try expression missing its else clause inside `s`
+        const tries = [
+          ...(s instanceof Ast.TryCatchElseStmt ? [s] : []),
+          ...s.descendantsOfType(Ast.TryCatchElseExpr),
+          ...s.descendantsOfType(Ast.TryCatchElseStmt),
+        ].filter((t) => t.elseBody === null && t.catchClauses.toArray().length === 0);
+        if (tries.length > 0) {
+          const t = tries[tries.length - 1];
+          const list = new Ast.List<Ast.Stmt>([elseStmt]);
+          elseStmt.setParent(list);
+          const blk = new Ast.Block(list);
+          list.setParent(blk);
+          blk.setParent(t);
+          t.elseBody = blk;
+          out.push(s);
+          i += 2; // consume the marker and the else statement
+          continue;
+        }
+      }
+      out.push(s);
+    }
+    return out;
   }
 
   visitBlockOrExpr(ctx: P.BlockOrExprContext): Ast.Block {
@@ -912,7 +1232,9 @@ export class AstBuilderVisitor
         ]).$(ctx)
       ).$(ctx);
     }
-    throw new Error('Unreachable');
+    // Neither alternative present: only possible under ANTLR error recovery
+    // (a SyntaxError diagnostic has already been emitted).
+    return new Ast.Block(Ast.List.empty<Ast.Stmt>().$(ctx)).$(ctx);
   }
 
   //#endregion Common

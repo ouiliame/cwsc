@@ -46,7 +46,12 @@ UNIT: 'unit';
 ENUM: 'enum';
 TYPE: 'type';
 EMIT: 'emit!';
+EMIT_KW: 'emit';
 AS: 'as';
+MUT: 'mut';
+MIGRATE: 'migrate';
+SEND: 'send';
+ON: 'on';
 
 // PUNCTUATION
 LPAREN: '(';
@@ -63,6 +68,7 @@ D_QUEST: '??';
 QUEST: '?';
 BANG: '!';
 SEMI: ';';
+D_COLON: '::';
 COLON: ':';
 AT: '@';
 AMP: '&';

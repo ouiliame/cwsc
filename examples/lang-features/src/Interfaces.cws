@@ -1,0 +1,91 @@
+// Spec: "Interfaces" (DOCS/language.md)
+// Interface definitions with body-less entrypoint signatures, namespaced
+// structs, inline (named and anonymous) struct return types, implementation,
+// and interface inheritance.
+
+// The compiled contract (first ContractDefn in file, per the e2e runner)
+contract Interfaces implements IfCw20 {
+  state {
+    total: U128;
+  }
+
+  #instantiate(
+    name: String,
+    symbol: String,
+    decimals: U8,
+    initial_balances: List[IfCw20.Coin],
+    mint: struct IfMinterData {
+      minter: String,
+      cap?: U128
+    }
+  ) {
+    $state.total = 0;
+  }
+
+  exec #transfer(recipient: String, amount: Int) { }
+  exec #burn(amount: Int) { }
+  exec #mint(recipient: String, amount: Int) { }
+  exec #send(contract: String, amount: Int, msg: Binary) { }
+
+  query #balance(address: String) -> struct IfBalanceResponse { balance: Int } {
+    return IfBalanceResponse(0);
+  }
+
+  query #token_info() -> struct IfTokenInfoResponse {
+    name: String,
+    symbol: String,
+    decimals: U8,
+    total_supply: Int,
+  } {
+    return IfTokenInfoResponse("n", "s", 6, 0);
+  }
+
+  query #minter() -> IfCw20.MinterResponse? {
+    return None;
+  }
+}
+
+// Interface with body-less entrypoint signatures and a namespaced struct
+interface IfCw20 {
+  #instantiate(
+    name: String,
+    symbol: String,
+    decimals: U8,
+    initial_balances: List[IfCw20.Coin],
+    mint: struct IfMinterResponseSig {
+      minter: String,
+      cap?: U128
+    }
+  )
+
+  exec #transfer(recipient: String, amount: Int)
+  exec #burn(amount: Int)
+  exec #mint(recipient: String, amount: Int)
+  exec #send(contract: String, amount: Int, msg: Binary)
+
+  // Anonymous inline struct return type
+  query #balance(address: String) -> struct { balance: Int }
+  query #token_info() -> struct {
+    name: String,
+    symbol: String,
+    decimals: U8,
+    total_supply: Int,
+  }
+  query #minter() -> IfCw20.MinterResponse?
+
+  // Namespaced struct definitions
+  struct Coin {
+    address: String,
+    amount: U128
+  }
+
+  struct MinterResponse {
+    minter: String,
+    cap?: U128
+  }
+}
+
+// Interface inheritance
+interface IfParent1 {}
+interface IfParent2 {}
+interface IfChild extends IfParent1, IfParent2 {}

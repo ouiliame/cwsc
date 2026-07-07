@@ -1,23 +1,10 @@
 interface Cw20 {}
 contract Cw20Base implements Cw20 {
-  event Transfer(
-Addr
-to
-Addr
-amount
-U128
-event Burn(
-Addr
-amount
-U128
-event Send(
-Addr
-to
-Addr
-amount
-U128
-event IncreaseAllowance(owner: Addr, spender: Addr, amount: U128);
-event DecreaseAllowance(owner: Addr, spender: Addr, amount: U128);
+  event Transfer(from: Addr, to: Addr, amount: U128);
+  event Burn(from: Addr, amount: U128);
+  event Send(from: Addr, to: Addr, amount: U128);
+  event IncreaseAllowance(owner: Addr, spender: Addr, amount: U128);
+  event DecreaseAllowance(owner: Addr, spender: Addr, amount: U128);
 
 exec #transfer(recipient: String, amount: U128) {
     if amount == 0 {
@@ -49,7 +36,7 @@ exec #transfer(recipient: String, amount: U128) {
     $state.balances[rcpt_addr] += amount;
     exec! Wasm.#execute(
       contract=contract,
-      msg=Cw20ReceiveMsg($info.sender, amount, msg),
+      msg=Cw20ReceiveMsg($info.sender, amount, msg)
     );
     
     emit Send($info.sender, contract, amount);
@@ -158,7 +145,7 @@ exec #transfer(recipient: String, amount: U128) {
     $state.balances[contract] += amount;
     exec! Wasm.#execute(
       contract=contract,
-      msg=Cw20ReceiveMsg($info.sender, amount, msg),
+      msg=Cw20ReceiveMsg($info.sender, amount, msg)
     );
     emit SendFrom(owner, contract, $info.sender, amount); 
   }
@@ -282,10 +269,10 @@ $state.marketing_info = None; // instead of delete
       order=Order.#Ascending,
       limit=limit
     ).map(|item| {
-      item.map(|[addr, allow]| AllowanceInfo {
-        spender: addr,
-        allowance: allow.allowance,
-        expires: allow.expires,
+      item.map(|entry| AllowanceInfo {
+        spender: entry[0],
+        allowance: entry[1].allowance,
+        expires: entry[1].expires,
       })
     });
 
@@ -316,22 +303,19 @@ $state.marketing_info = None; // instead of delete
   }
 
   enum Logo {
-// since we don't use #, this is treated like a namespace
-    Embedded {
-      #Svg([Bytes]),
-      #Png([Bytes]),
-    },
+    #EmbeddedSvg([Bytes]),
+    #EmbeddedPng([Bytes]),
     #Url([String])
   }
 
   query #download_logo() /* -> DownloadLogo (inferred) */ {
     let { logo } = $state;
-    if logo is Logo.Embedded.#Svg {
+    if logo is Logo.#EmbeddedSvg {
       return DownloadLogoResponse {
         mime_type: "image/svg+xml",
         data: logo[0]
       }
-    } else if logo is Logo.Embedded.#Png {
+    } else if logo is Logo.#EmbeddedPng {
       return DownloadLogoResponse {
         mime_type: "image/png",
         data: logo[0]
@@ -367,13 +351,13 @@ export contract TerraswapToken extends Cw20Base {
 // validate symbol
     let symbol_bytes = Bytes!(symbol);
     if symbol_bytes.len() < 3 or symbol_bytes.len() > 12 {
-      fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}",
+      fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}";
     }
     for byte in bytes {
       if (byte != 45
           and (byte < 65 or byte > 90)
           and (byte < 97 or byte > 122)) {
-          fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}",
+          fail! "Ticker symbol is not in expected format [a-zA-Z\\-]\{3,12\}";
       }
     }
 
@@ -385,7 +369,7 @@ export contract TerraswapToken extends Cw20Base {
 
   #instantiate(
     name: String,
-    symbol: String
+    symbol: String,
     decimals: U8,
     initial_balances: List[Cw20Coin],
     mint?: MinterResponse

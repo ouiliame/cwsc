@@ -1,0 +1,108 @@
+// Spec: "Control Flow" — if/else (statement + expression), multi-branch,
+// for-in loops (all destructuring forms, .enumerate()), and closures
+// (DOCS/language.md)
+
+contract ControlFlow {
+  state {
+    acc: U128;
+  }
+
+  struct CfAsset { name: String, amount: U128 }
+
+  #instantiate() {
+    $state.acc = 0;
+  }
+
+  exec #branches(cond: Bool, x: U128) {
+    // If as statement
+    if cond {
+      $state.acc += 1;
+    }
+
+    // If-else statement with else-if chain
+    if x > 100 {
+      $state.acc += 2;
+    } else if x > 10 {
+      $state.acc += 1;
+    } else {
+      $state.acc = 0;
+    }
+
+    // If-else as expression (block bodies)
+    let y = if cond { 1 } else { 2 };
+
+    // If-else as expression (bare-expression bodies)
+    let z = if cond 10 else 20;
+
+    // Multi-branch if expression
+    let spread_amount = if x > 50 {
+      x - 50
+    } else if x > 25 {
+      x - 25
+    } else {
+      0
+    };
+    $state.acc += spread_amount;
+  }
+
+  exec #loops() {
+    let items = [1, 2, 3];
+    let pairs = [[1, 2], [3, 4]];
+    let assets = [
+      CfAsset { name: "a", amount: 1 },
+      CfAsset { name: "b", amount: 2 }
+    ];
+
+    // Plain for-in
+    for item in items {
+      $state.acc += item;
+    }
+
+    // Tuple destructuring
+    for [x, y] in pairs {
+      $state.acc += x + y;
+    }
+
+    // Enumerate
+    for [i, pool] in items.enumerate() {
+      $state.acc += pool;
+    }
+
+    // Struct destructuring with alias
+    for { name as asset_name, amount } in assets {
+      $state.acc += amount;
+    }
+  }
+
+  exec #closures() {
+    let items = [1, 2, 3];
+
+    // Expression closures
+    let bumped = items.map(|x| x + 1);
+    let positive = items.filter(|x| x > 0);
+    let found = items.find(|x| x == 2);
+
+    // Closure with typed parameter
+    let doubled = items.map(|x: U128| x * 2);
+
+    // Fallible closure via .map! with block body
+    let checked = items.map!(|x| {
+      return $.check!(x);
+    });
+
+    // Block closure with declared fallibility and return type
+    let verbose = items.map(|x|! -> U128 {
+      return x + 10;
+    });
+
+    // Zero-parameter closure
+    let thunk = || 42;
+  }
+
+  fn check!(x: U128) -> U128 {
+    if x == 0 {
+      fail! "zero not allowed";
+    }
+    return x;
+  }
+}

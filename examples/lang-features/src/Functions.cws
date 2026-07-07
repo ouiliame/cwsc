@@ -1,0 +1,63 @@
+// Spec: "Functions" (DOCS/language.md)
+// Plain fns, return types, fallible fn!, generic fn[%T], fallible generic
+// fn![%T], array return types, and fallible call syntax.
+
+contract Functions {
+  state {
+    result: U128;
+  }
+
+  #instantiate() {
+    $state.result = 0;
+
+    // Calling: plain, fallible (`!` propagates errors), generic
+    hello();
+    let s = add(1, 2);
+    let m = might_fail!();
+    let arr = compute_swap!(10, 20, 5);
+    let [ret, spread, commission] = compute_swap!(10, 20, 5);
+    generic(42);
+    let fg = fallible_generic!("x");
+  }
+
+  // Simple function
+  fn hello() { }
+
+  // With params and return type
+  fn add(a: Int, b: Int) -> Int {
+    return a + b;
+  }
+
+  // Fallible function (can fail!)
+  fn might_fail!() -> U128 {
+    fail! "always fails";
+  }
+
+  // Generic function
+  fn generic[%T](x: %T) { }
+
+  // Generic with multiple type params
+  fn pair_up[%T, %U](a: %T, b: %U) { }
+
+  // Fallible generic
+  fn fallible_generic![%T](x: %T) -> %T {
+    return x;
+  }
+
+  // Fixed-size array return type
+  fn compute_swap!(offer_pool: U128, ask_pool: U128, offer_amount: U128) -> [U128; 3] {
+    return [offer_amount, offer_pool, ask_pool];
+  }
+
+  // Pure validation-style fn with optional param types
+  fn assert_max_spread!(
+    belief_price: Dec?,
+    max_spread: Dec?,
+    return_amount: U128,
+    spread_amount: U128
+  ) {
+    if max_spread? {
+      fail! "MaxSpreadAssertion";
+    }
+  }
+}

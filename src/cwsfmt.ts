@@ -153,7 +153,7 @@ export class CwsfmtVisitor extends Ast.AstVisitor<Seq> {
   visitStructDefn(node: Ast.StructDefn) {
     return seq(
       'struct ',
-      this.visitIdent(node.name),
+      node.name ? this.visitIdent(node.name) : '',
       ' {',
       this.INDENT,
       this.NL,

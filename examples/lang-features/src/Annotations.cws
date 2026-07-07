@@ -1,0 +1,37 @@
+// Spec: "Annotations" (DOCS/language.md)
+//
+// Annotations tag AST nodes for compiler middleware extensions. One or more
+// `@...` annotations precede the statement they decorate (typically an
+// `exec!` submessage statement).
+
+contract Annotations {
+  state {
+    market_id: String;
+    filled: Bool;
+  }
+
+  #instantiate(market_id: String) {
+    $state.market_id = market_id;
+    $state.filled = false;
+  }
+
+  exec #do_thing(contract: Addr, order: Binary) {
+    // Single annotation
+    @reply.success(handle_atomic_order)
+    exec! Exchange.#create_spot_market_order(contract, order);
+
+    // Stacked annotations on one statement
+    @gas_limit(5000000)
+    @reply.on_success(handle_reply)
+    exec! SomeContract.#do_thing();
+  }
+
+  reply.success handle_atomic_order() {
+    let order_response = Exchange.#create_spot_market_order.parse_response!($data);
+    $state.filled = true;
+  }
+
+  reply.success handle_reply() {
+    $state.filled = true;
+  }
+}

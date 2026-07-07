@@ -1,0 +1,90 @@
+// Spec: "Entry Points (Message Handlers)" (DOCS/language.md)
+// #instantiate, exec handlers, query handlers (with and without return
+// types), the migrate() handler, doc comments on params, and
+// tuple-parameter syntax. (reply.success / reply.error — see Replies.cws)
+
+contract Entrypoints {
+  state {
+    count: U32;
+    owner: Addr;
+    last_memo: String;
+  }
+
+  error Unauthorized()
+
+  struct EpReceiveMsg {
+    sender: String,
+    amount: U128,
+    msg: Binary
+  }
+
+  enum EpHookMsg {
+    #Deposit,
+    #Withdraw(amount: U128)
+  }
+
+  /// Instantiate with optional params and null-coalescing defaults.
+  #instantiate(count: U32?, owner: Addr?) {
+    $state.count = count ?? 0;
+    $state.owner = owner ?? $info.sender;
+    $state.last_memo = "init";
+  }
+
+  // Execute handler without params
+  exec #increment() {
+    $state.count += 1;
+  }
+
+  // Execute handler with optional param
+  exec #reset(count: U32?) {
+    if $info.sender != $state.owner {
+      fail! Unauthorized();
+    }
+    $state.count = count ?? 0;
+  }
+
+  // Execute handler with doc comments on parameters
+  exec #configure(
+    /// A short human-readable memo
+    memo: String,
+    /// New owner of the contract
+    new_owner: Addr
+  ) {
+    $state.last_memo = memo;
+    $state.owner = new_owner;
+  }
+
+  // Tuple-parameter syntax: params destructured from the message
+  exec #receive([msg: EpReceiveMsg]) {
+    let contract_addr = $info.sender;
+    let inner = deserialize![EpHookMsg](msg.msg);
+    if inner is EpHookMsg.#Deposit {
+      $state.count += 1;
+    }
+  }
+
+  // Migration handler — called during contract migration (MsgMigrateContract)
+  migrate() {
+    $state.last_memo = "migrated";
+  }
+
+  // Query with a return type
+  query #count() -> U32 {
+    return $state.count;
+  }
+
+  // Query without an explicit return type
+  query #memo() {
+    return $state.last_memo;
+  }
+
+  // Query with params and an inline named-struct return type
+  query #summary(verbose: Bool) -> struct EpSummary { count: U32, memo: String } {
+    return EpSummary($state.count, $state.last_memo);
+  }
+
+  // Tuple-parameter query
+  query #probe([msg: EpReceiveMsg]) -> U128 {
+    return msg.amount;
+  }
+}

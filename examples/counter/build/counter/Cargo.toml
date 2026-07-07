@@ -3,6 +3,7 @@ cosmwasm-schema = "1.5.0"
 cw-storage-plus = "1.1.0"
 cw2 = "1.1.1"
 cw20 = "1.1.2"
+cw-utils = "1.0.3"
 schemars = "0.8.15"
 
   [dependencies.cosmwasm-std]

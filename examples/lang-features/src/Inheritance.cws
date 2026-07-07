@@ -1,0 +1,55 @@
+// Spec: "Contracts" — single inheritance (`extends`), multiple interface
+// implementation, and the `export` modifier (DOCS/language.md)
+
+// The compiled contract (first ContractDefn in file, per the e2e runner):
+// extends a parent contract AND implements interfaces simultaneously.
+export contract Inheritance extends InhParent implements InhInterface1, InhInterface2 {
+  state {
+    extra: U32;
+  }
+
+  #instantiate() {
+    $state.extra = 0;
+  }
+
+  exec #ping() {
+    $state.extra += 1;
+  }
+
+  exec #pong() {
+    $state.extra -= 1;
+  }
+
+  query #extra() -> U32 {
+    return $state.extra;
+  }
+}
+
+// Parent contract to inherit from
+contract InhParent {
+  state {
+    base_value: U32;
+  }
+
+  #instantiate() {
+    $state.base_value = 1;
+  }
+
+  query #base_value() -> U32 {
+    return $state.base_value;
+  }
+}
+
+// Interfaces for the `implements` clause (empty bodies: signature-only
+// entrypoints are a grammar gap — see Interfaces.cws)
+interface InhInterface1 {
+  exec #ping() {}
+}
+
+interface InhInterface2 {
+  exec #pong() {}
+}
+
+// Spec also shows inheriting from a standard-library contract:
+//   contract AtomicOrderExample extends CW2 { ... }
+// — exercised in CrossContract.cws.

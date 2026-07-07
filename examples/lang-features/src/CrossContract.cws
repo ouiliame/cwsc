@@ -1,0 +1,104 @@
+// Spec: "Cross-Contract Calls" — exec!, delegate_exec!, query!, module
+// contracts (Wasm/Bank/Exchange), deserialize!, parse_response!, CW2 with a
+// `mut $` context argument, and plain `emit` within handlers
+// (DOCS/language.md)
+
+const CC_NAME = "crates.io:lang-features-cross-contract"
+const CC_VERSION = "0.0.1"
+
+contract CrossContract extends CW2 {
+  state {
+    token_addr: String;
+    market_id: String;
+  }
+
+  enum CcHookMsg {
+    #Swap { belief_price: Dec?, to: Addr? },
+    #WithdrawLiquidity
+  }
+
+  struct CcReceiveMsg {
+    sender: String,
+    amount: U128,
+    msg: Binary
+  }
+
+  #instantiate(token_addr: String, market_id: String) {
+    $state.token_addr = token_addr;
+    $state.market_id = market_id;
+
+    // CW2 version management with a mutable context argument
+    CW2.set_contract_version!(mut $, CC_NAME, CC_VERSION);
+
+    // Anonymous event (ad-hoc key-value pairs); `emit!` is the legacy
+    // spelling and remains accepted.
+    emit event(method="instantiate", owner=$info.sender);
+    emit! event(method="instantiate_legacy", owner=$info.sender);
+  }
+
+  exec #spawn(code_id: U64, init_msg: Binary) {
+    // exec! with the Wasm module contract, named args
+    exec! Wasm.#instantiate(admin=None, code_id=code_id, msg=init_msg, funds=[], label="lp");
+
+    // exec! Wasm.#execute
+    exec! Wasm.#execute($state.token_addr, init_msg);
+  }
+
+  exec #payout(recipient: Addr, amount: U128) {
+    // exec! with the Bank module contract
+    exec! Bank.#send(to_address=recipient, amount=[Coin(amount, "uusd")]);
+
+    // exec! on an external contract instance: Contract(addr).#handler
+    exec! Cw20($state.token_addr).#transfer(recipient=recipient, amount=amount);
+
+    // exec! with positional args (Exchange module contract)
+    exec! Exchange.#deposit($env.contract.address, "subaccount", [Coin(amount, "uusd")]);
+
+    // Calling one of this contract's own handlers as a submessage
+    delegate_exec! #something_else(1);
+
+    // Named event
+    emit CcPayout(recipient=recipient, amount=amount);
+  }
+
+  exec #something_else(x: U128) { }
+
+  exec #receive([msg: CcReceiveMsg]) {
+    let contract_addr = $info.sender;
+
+    // Deserialization
+    let inner = deserialize![CcHookMsg](msg.msg);
+    if inner is CcHookMsg.#WithdrawLiquidity {
+      exec! Cw20($state.token_addr).#burn(amount=msg.amount);
+    }
+  }
+
+  exec #settle(data: Binary) {
+    // Parse a submessage response
+    let order_response = Exchange.#create_spot_market_order.parse_response!(data);
+    let results = order_response.results ?? fail! "No trade data in order response";
+  }
+
+  query #balances(addr: Addr, denom: String) -> U128 {
+    // query! with a module contract
+    let bank_balance = query! Bank.#balance(addr, denom);
+
+    // query! on an external contract instance
+    let info = query! Cw20($state.token_addr).#token_info();
+    let { total_supply } = query! Cw20($state.token_addr).#token_info();
+
+    // query! Exchange module
+    let market = query! Exchange.#market($state.market_id);
+
+    // query! against this contract's own query handler
+    let own = query! $.#decimals(denom);
+
+    return bank_balance;
+  }
+
+  query #decimals(denom: String) -> U8 {
+    return 6;
+  }
+
+  event CcPayout(recipient: Addr, amount: U128)
+}

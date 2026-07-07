@@ -69,9 +69,12 @@ export type Stmt =
   | ForTupleStmt
   | ForStructStmt
   | ExecStmt
+  | DelegateExecStmt
   | InstantiateStmt
   | ExprStmt
   | EmitStmt
+  | SendStmt
+  | AnnotStmt
   | FailStmt
   | ReturnStmt;
 
@@ -288,6 +291,63 @@ export class ExecStmt extends AstNode<'ExecStmt'> {
   }
 }
 
+/** `delegate_exec! #handler(args);` — call one of the contract's own
+ * handlers as a submessage. */
+export class DelegateExecStmt extends AstNode<'DelegateExecStmt'> {
+  public $kind: 'DelegateExecStmt' = 'DelegateExecStmt';
+
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+/** A single `@annotation(...)` — the value is typically a call expression
+ * such as `gas_limit(5000000)` or `reply.success(handle_atomic_order)`. */
+export class Annotation extends AstNode<'Annotation'> {
+  public $kind: 'Annotation' = 'Annotation';
+
+  constructor(public value: Expr) {
+    super();
+  }
+}
+
+/** One or more annotations applied to a statement:
+ *   @gas_limit(5000000)
+ *   @reply.success(handle_atomic_order)
+ *   exec! Exchange.#create_spot_market_order(contract, order);
+ */
+export class AnnotStmt extends AstNode<'AnnotStmt'> {
+  public $kind: 'AnnotStmt' = 'AnnotStmt';
+
+  constructor(public annotations: List<Annotation>, public inner: Stmt) {
+    super();
+  }
+}
+
+/** Inline reply clause of a `send` statement:
+ *   reply(env, events, data) on success { ... }
+ */
+export class InlineReply extends AstNode<'InlineReply'> {
+  public $kind: 'InlineReply' = 'InlineReply';
+
+  constructor(
+    public params: List<Param>,
+    public kind: Ident,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+/** `send <expr> [reply(...) on <kind> { ... }];` */
+export class SendStmt extends AstNode<'SendStmt'> {
+  public $kind: 'SendStmt' = 'SendStmt';
+
+  constructor(public value: Expr, public reply: InlineReply | null) {
+    super();
+  }
+}
+
 export class InstantiateStmt extends AstNode<'InstantiateStmt'> {
   public $kind: 'InstantiateStmt' = 'InstantiateStmt';
 
@@ -446,6 +506,7 @@ export enum Op {
   MUL = '*',
   DIV = '/',
   MOD = '%',
+  POW = '**',
 }
 
 export class BinOpExpr extends AstNode<'BinOpExpr'> {
@@ -627,10 +688,13 @@ export type Defn =
   | UnitDefn
   | EnumDefn
   | TypeAliasDefn
+  | ImplDefn
   | FnDefn
   | InstantiateDefn
   | ExecDefn
   | QueryDefn
+  | ReplyDefn
+  | MigrateDefn
   | ErrorDefn
   | EventDefn
   | StateBlockDefn
@@ -679,7 +743,8 @@ export class StructDefn extends AstNode<'StructDefn'> {
   constructor(
     public doc: DocComment | null,
     public exported: boolean,
-    public name: Ident,
+    /** `null` for anonymous inline structs, e.g. `-> struct { balance: Int }` */
+    public name: Ident | null,
     public typeParams: List<TypeVar>,
     public fields: List<Param>
   ) {
@@ -791,6 +856,22 @@ export class TypeAliasDefn extends AstNode<'TypeAliasDefn'> {
   }
 }
 
+/** `impl TypeName[%T, ...] { fn method(self, ...) { ... } }` — methods for a
+ * struct/tuple type. The (possibly empty) bracketed type-param list is
+ * mandatory in the grammar. */
+export class ImplDefn extends AstNode<'ImplDefn'> {
+  public $kind: 'ImplDefn' = 'ImplDefn';
+
+  constructor(
+    public doc: DocComment | null,
+    public name: Ident,
+    public typeParams: List<TypeVar>,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
 export class FnDefn extends AstNode<'FnDefn'> {
   public $kind: 'FnDefn' = 'FnDefn';
 
@@ -846,6 +927,39 @@ export class QueryDefn extends AstNode<'QueryDefn'> {
     public name: Ident,
     public fallible: boolean,
     public isTuple: boolean,
+    public params: List<Param>,
+    public returnTy: TypeExpr | null,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+/** Reply handler definition:
+ *   reply.success handle_atomic_order() { ... }   (kind = "success")
+ *   reply.error handle_failed_order() { ... }     (kind = "error")
+ */
+export class ReplyDefn extends AstNode<'ReplyDefn'> {
+  public $kind: 'ReplyDefn' = 'ReplyDefn';
+
+  constructor(
+    public doc: DocComment | null,
+    public kind: Ident,
+    public name: Ident,
+    public params: List<Param>,
+    public body: Block
+  ) {
+    super();
+  }
+}
+
+/** Migration handler: `migrate() { ... }` */
+export class MigrateDefn extends AstNode<'MigrateDefn'> {
+  public $kind: 'MigrateDefn' = 'MigrateDefn';
+
+  constructor(
+    public doc: DocComment | null,
+    public fallible: boolean,
     public params: List<Param>,
     public returnTy: TypeExpr | null,
     public body: Block
@@ -922,6 +1036,7 @@ export type TypeExpr =
   | MemberTypeExpr
   | ArrayTypeExpr
   | MapTypeExpr
+  | TupleTypeExpr
   | StructDefnTypeExpr
   | TupleDefnTypeExpr
   | UnitDefnTypeExpr
@@ -1119,7 +1234,9 @@ export class Param extends AstNode<'Param'> {
   constructor(
     public name: Ident,
     public optional: boolean,
-    public ty: TypeExpr | null
+    public ty: TypeExpr | null,
+    /** `mut` modifier for context parameters, e.g. `fn f(mut $state)` */
+    public mut: boolean = false
   ) {
     super();
   }
@@ -1136,7 +1253,12 @@ export class Field extends AstNode<'Field'> {
 export class Arg extends AstNode<'Arg'> {
   public $kind: 'Arg' = 'Arg';
 
-  constructor(public name: Ident | null, public value: Expr) {
+  constructor(
+    public name: Ident | null,
+    public value: Expr,
+    /** `mut` modifier, e.g. `set_contract_version!(mut $, NAME, VERSION)` */
+    public mut: boolean = false
+  ) {
     super();
   }
 }

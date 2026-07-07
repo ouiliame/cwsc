@@ -1,0 +1,75 @@
+// Spec: "Type System" (DOCS/language.md)
+// Primitives, Option T?, arrays [T; N], List[T], map types #{K => V},
+// tuple types `(T1, T2)` (the bracket form `[T1, T2]` is also accepted),
+// type aliases, and fallible type conversion T!(x).
+
+// Type aliases (top level)
+type TypesAmount = U128;
+type TypesPair[%T] = struct TypesInlinePair { a: %T, b: %T };
+
+contract Types {
+  state {
+    // Primitives
+    p_u8: U8;
+    p_u16: U16;
+    p_u32: U32;
+    p_u64: U64;
+    p_u128: U128;
+    p_u256: U256;
+    p_int: Int;
+    p_string: String;
+    p_bool: Bool;
+    p_addr: Addr;
+    p_address: Address;
+    p_dec: Dec;
+    p_binary: Binary;
+    p_coin: Coin;
+
+    // Composite types
+    opt: U32?;                    // Option
+    arr: [U8; 2];                 // Fixed-size array
+    lst: List[U128];              // Dynamic list
+    tbl: #{String => U128};       // Map type
+    nested: #{Addr => #{String => U128}};
+    tup: (U32, String);           // Tuple type (spec paren form)
+    tup_brack: [U32, String];     // Tuple type (bracket form)
+    aliased: TypesAmount;         // Type alias
+  }
+
+  // Contract-scoped type alias
+  type Slot = U16;
+
+  #instantiate() {
+    $state.p_u32 = 1;
+    $state.opt = None;
+    $state.p_string = "hello";
+    $state.p_bool = true;
+
+    // Optional local binding with explicit type
+    let maybe: U32? = None;
+    let fixed: [U8; 2] = [1, 2];
+    let both: (U32, String) = [7, "seven"];
+    let both_brack: [U32, String] = [7, "seven"];
+
+    // Fallible type conversion — types used as conversion functions
+    let x = U128!("100");
+    let y = Dec!(1);
+    let z = String!(42);
+    let a = Addr!("terra1...");
+
+    // Generic alias usage
+    let p = TypesInlinePair { a: 1, b: 2 };
+  }
+
+  query #optional() -> U32? {
+    return $state.opt;
+  }
+
+  query #listed() -> List[U128] {
+    return $state.lst;
+  }
+
+  fn takes_alias(v: TypesAmount, s: Slot) -> TypesAmount {
+    return v;
+  }
+}
